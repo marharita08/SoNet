@@ -1,0 +1,11 @@
+{
+  "post": {
+    "photo": "images/flower.jpg",
+    "description": "Flower and sunlight)",
+    "author": {
+      "name": "Peggy Peggy",
+      "photo": "images/Peggy.jpg"
+    },
+    "likes": 11
+  }
+}

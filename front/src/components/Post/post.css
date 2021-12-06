@@ -1,0 +1,33 @@
+.circle {
+    border-radius: 50%;
+}
+.inline {
+    display: inline-block;
+    vertical-align: middle;
+}
+.name {
+    font-weight: bold;
+}
+.outer {
+    text-align: center;
+    width: 70%;
+    background-color: white;
+    display: inline-block;
+}
+.inner {
+    display: inline-block;
+    text-align: left;
+    margin: 50px;
+}
+
+.margin {
+    margin: 5px;
+}
+
+span {
+    padding-right: 5px;
+}
+
+p {
+    margin: 0;
+}
