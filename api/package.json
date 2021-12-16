@@ -28,6 +28,10 @@
     "prettier": "2.5.1"
   },
   "lint-staged": {
-    "src/": "./node_modules/.bin/eslint"
+    "*.js": [
+      "./node_modules/.bin/eslint",
+      "npx prettier --write",
+      "git add"
+    ]
   }
 }
