@@ -1,0 +1,31 @@
+version: '3.5'
+
+services:
+  db:
+    image: postgres
+    container_name: pg_container
+    restart: always
+    environment:
+      POSTGRES_HOST: ${DB_HOST}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_DATABASE}
+    volumes:
+      - ./tmp/db_data:/var/lib/postgresql/data
+    ports:
+      - ${DB_PORT}:${DB_PORT}
+  adminer:
+    image: adminer
+    container_name: db_adminer
+    restart: always
+    ports:
+      - ${ADMINER_PORT}:${ADMINER_PORT}
+    depends_on:
+      - db
+  api:
+    build: .
+    container_name: network-api
+    ports:
+      - ${APP_PORT}:${APP_PORT}
+    depends_on:
+      - db
