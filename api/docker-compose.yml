@@ -13,19 +13,23 @@ services:
     volumes:
       - ./tmp/db_data:/var/lib/postgresql/data
     ports:
-      - ${DB_PORT}:${DB_PORT}
+      - ${DB_PORT}:5432
   adminer:
     image: adminer
     container_name: db_adminer
     restart: always
     ports:
-      - ${ADMINER_PORT}:${ADMINER_PORT}
+      - ${ADMINER_PORT}:8080
     depends_on:
       - db
   api:
-    build: .
+    image: node:12
     container_name: network-api
+    working_dir: /api
+    volumes:
+      - .:/api/
     ports:
-      - ${APP_PORT}:${APP_PORT}
+      - ${APP_PORT}:3001
     depends_on:
       - db
+    command: "npm run start:dev"
