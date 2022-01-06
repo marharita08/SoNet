@@ -5,13 +5,6 @@ router.get('/', async (req, res) => {
   res.send(await db.select().from('article_likes').orderBy('article_id'));
 });
 
-router.get('/:id', async (req, res) => {
-  const id = parseInt(req.params.id, 10);
-  res.send(
-    await db.select().from('article_likes').where('article_id', '=', id)
-  );
-});
-
 router.post('/', async (req, res) => {
   const { articleID, userID } = req.body;
   await db('article_likes').insert({

@@ -42,4 +42,22 @@ router.delete('/:id', async (req, res) => {
   res.send('Article was deleted successfully.');
 });
 
+router.get('/:id/likes', async (req, res) => {
+  const id = parseInt(req.params.id, 10);
+  res.send(
+    await db.select().from('article_likes').where('article_id', '=', id)
+  );
+});
+
+router.get('/:id/comments', async (req, res) => {
+  const id = parseInt(req.params.id, 10);
+  res.send(
+    await db
+      .select()
+      .from('comments')
+      .where('article_id', '=', id)
+      .orderBy('path')
+  );
+});
+
 module.exports = router;

@@ -7,9 +7,7 @@ router.get('/', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
   const id = parseInt(req.params.id, 10);
-  res.send(
-    await db.select().from('comments').where('article_id', id).orderBy('path')
-  );
+  res.send(await db.select().from('comments').where('comment_id', id));
 });
 
 router.post('/', async (req, res) => {
@@ -69,6 +67,11 @@ router.delete('/:id', async (req, res) => {
   const id = parseInt(req.params.id, 10);
   await db('comments').delete().where('comment_id', id);
   res.send('Comment was deleted successfully.');
+});
+
+router.get('/:id/likes', async (req, res) => {
+  const id = parseInt(req.params.id, 10);
+  res.send(await db.select().from('comment_likes').where('comment_id', id));
 });
 
 module.exports = router;
