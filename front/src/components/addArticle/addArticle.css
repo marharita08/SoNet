@@ -1,0 +1,38 @@
+textarea {
+    min-width: 90%;
+    max-width: 90%;
+    min-height: 100px;
+}
+
+.add_article_outer {
+    text-align: center;
+    width: 100%;
+    display: inline-block;
+}
+.add_article_inner {
+    text-align: center;
+    border-style: solid;
+    border-width: thin;
+    border-color: #001a4d;
+    border-radius: 7px;
+    display: inline-block;
+    margin: 10px;
+    width: 40%;
+}
+
+.add {
+    float: right;
+}
+
+.cancel {
+    float: left;
+}
+
+.buttons {
+    width: 50%;
+}
+
+.available {
+    width: 90%;
+}
+
