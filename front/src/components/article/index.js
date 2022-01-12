@@ -1,13 +1,13 @@
-import './articles.css';
+import './article.css';
 
-export function Articles() {
+export function Article({id}) {
     return (
         <div>
             <div className="article_outer">
                 <div className="article_inner">
                     <div>
                         <div className="inline margin">
-                            <img alt={"user image"} className="circle" width={50} src={"images/user.png"}/>
+                            <img alt={"user image"} className="circle" width={50} src={"/images/user.png"}/>
                         </div>
                         <div className="inline name">
                             Username
@@ -17,7 +17,7 @@ export function Articles() {
                         date time
                     </div>
                     <div className="margin">
-                        text
+                        {id} text
                     </div>
                     <div className="line" align={"center"}>
                         <div className="inline margin comments">
@@ -29,7 +29,7 @@ export function Articles() {
                         </button>
                         </div>
                         <div className="likes">
-                            <img alt={"like"} width={20} src="images/like.svg" className="inline margin"/>
+                            <img alt={"like"} width={20} src="/images/like.svg" className="inline margin"/>
                             <div className="inline margin">likes</div>
                         </div>
                     </div>
