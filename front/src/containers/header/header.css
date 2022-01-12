@@ -1,0 +1,27 @@
+header {
+    padding: 2px 5px;
+    text-align: center;
+    background-color: #001a4d;
+}
+.articles {
+    float: left;
+}
+.profile {
+    float: right;
+}
+header button {
+    padding: 10px 20px;
+    background-color: #001a4d;
+    color: white;
+    border-width: thin;
+    border-color: #00ffff;
+    border-style: solid;
+    border-radius: 10px;
+    margin: 5px;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+}
+header button:hover {
+    color: #00ffff;
+}
