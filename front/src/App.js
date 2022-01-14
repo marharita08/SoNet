@@ -19,9 +19,7 @@ function App() {
           <HeaderContainer/>
           <Routes>
             <Route path="/" element={<ArticlesContainer/>}/>
-            <Route path="/article/:id(\\d+)" element={<ArticleContainer/>}/>
-            <Route path="/article/:id(\\[A-Z]+)" element={<ArticleContainer/>}/>
-            <Route path="/article/:id(\\^w+.[doc|pdf|jpeg]$)" element={<ArticleContainer/>}/>
+            <Route path="/article/:id" element={<ArticleContainer/>}/>
             <Route path="/article" element={<AddArticleContainer/>}/>
             <Route path="/profile" element={<ProfileContainer/>} />
           </Routes>
