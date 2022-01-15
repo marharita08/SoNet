@@ -8,13 +8,13 @@ export function HeaderContainer() {
     return (
         <header>
             <Link to={"/"}>
-                <button className={"articles"}>Articles</button>
+                <button className={"left"}>Articles</button>
             </Link>
             <Link to={"/article"}>
                 <button>Add article</button>
             </Link>
-            <Link to={"/profile"}>
-                <button className={"profile"}>Profile</button>
+            <Link to={"/profile/1"}>
+                <button className={"right"}>Profile</button>
             </Link>
         </header>
     );

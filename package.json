@@ -19,5 +19,8 @@
   "homepage": "https://github.com/marharita08/my_project#readme",
   "devDependencies": {
     "husky": "^7.0.4"
+  },
+  "dependencies": {
+    "dateformat": "^5.0.2"
   }
 }

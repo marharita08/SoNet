@@ -3,6 +3,7 @@
 }
 .name {
     font-weight: bold;
+    padding: 1px;
 }
 .article_outer {
     text-align: center;
@@ -22,14 +23,8 @@
     color: gray;
 }
 
-.likes {
-    float: right;
-}
 .line {
     border-top-color: #f2f2f2;
     border-top-style: solid;
     border-top-width: thin;
-}
-.comments {
-    float: left;
 }
