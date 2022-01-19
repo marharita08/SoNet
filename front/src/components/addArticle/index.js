@@ -1,6 +1,8 @@
+import PropTypes from 'prop-types';
+
 import './addArticle.css';
 
-export function AddArticle() {
+const AddArticle = ({visibilities}) => {
     return (
         <div className={"add_article_outer"}>
             <div className={"add_article_inner"}>
@@ -13,7 +15,9 @@ export function AddArticle() {
                                 <div className={"margin"} align={"left"}>
                                     Available to
                                     <select className={"margin"}>
-                                        <option>...</option>
+                                        {visibilities.map((visibility, i) =>
+                                            <option key={i} value={visibility.id}>{visibility.name}</option>
+                                        )}
                                     </select>
                                 </div>
                             </div>
@@ -30,3 +34,12 @@ export function AddArticle() {
         </div>
     );
 }
+
+AddArticle.propTypes = {
+    visibilities: PropTypes.arrayOf(PropTypes.shape({
+        id: PropTypes.number.isRequired,
+        name: PropTypes.string.isRequired
+    }))
+}
+
+export default AddArticle;

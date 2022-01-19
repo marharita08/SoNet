@@ -3,12 +3,7 @@ header {
     text-align: center;
     background-color: #001a4d;
 }
-.articles {
-    float: left;
-}
-.profile {
-    float: right;
-}
+
 header button {
     padding: 10px 20px;
     background-color: #001a4d;

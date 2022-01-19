@@ -37,3 +37,15 @@ input, select, textarea {
   padding: 3px;
   border-color: #001a4d;
 }
+
+a {
+  color: black;
+}
+
+.left {
+  float: left;
+}
+
+.right {
+  float: right;
+}
