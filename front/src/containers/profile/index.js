@@ -1,56 +1,34 @@
 import React from 'react';
+import ReactLoading from 'react-loading';
 
 import Profile from '../../components/profile';
 import ErrorBoundary from "../../components/ErrorBoundary";
 import {useParams} from "react-router-dom";
+import {useQuery} from "react-query";
+import {getUniversities, getUser, getUsers, getVisibilities} from "./api/crud";
+import Users from "../../components/users";
 
 export function ProfileContainer() {
     let {id} = useParams();
-    let user = {
-        id: id,
-        username: {
-            value: 'username',
-            availableTo: 1
-        },
-        email: {
-            value: 'example@gmail.com',
-            availableTo: 1
-        },
-        phone: {
-            value: '+380xxxxxxxxx',
-            availableTo: 1
-        },
-        university: {
-            id: 1,
-            availableTo: 1
-        },
-        avatar: '/images/user.png'
-    };
-    let universities = [
-        {
-            id: 0,
-            name: 'Not chosen'
-        },
-        {
-            id: 1,
-            name: 'Sumy State University'
-        }];
-    let visibilities = [
-        {
-            id: 1,
-            name: 'All'
-        },
-        {
-            id: 2,
-            name: 'Friends'
-        },
-        {
-            id: 3,
-            name: 'Me'
-        }];
+    const {isFetching: userFetching, data: userData} = useQuery('user', () => getUser(id));
+    const {isFetching: uFetching, data: uData} = useQuery('universities', () => getUniversities());
+    const {isFetching: vFetching, data: vData} = useQuery('visibilities', () => getVisibilities());
+    const {isFetching: fFetching, data: fData} = useQuery('users', () => getUsers());
+    let users = userData?.data;
+    let universities = uData?.data;
+    let visibilities = vData?.data;
+    let friends = fData?.data;
+
     return (
-        <ErrorBoundary>
-            <Profile user={user} universities={universities} visibilities={visibilities}/>
-        </ErrorBoundary>
+        <>
+            {(userFetching || uFetching || vFetching) && <ReactLoading type={'balls'} color='#001a4d'/>}
+            {users?.map((user) =>
+                <ErrorBoundary key={user.user_id}>
+                    <Profile user={user} universities={universities} visibilities={visibilities}/>
+                </ErrorBoundary>
+            )}
+            <Users users={friends} header={'Friends'}/>
+            {fFetching && <ReactLoading type={'balls'} color='#001a4d'/>}
+        </>
     );
 }

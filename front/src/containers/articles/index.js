@@ -1,45 +1,27 @@
 import React from 'react';
-import dateFormat from "dateformat";
+import { useQuery } from 'react-query';
+import {getArticles} from "./api/crud";
 
 import Article from '../../components/article';
 import ErrorBoundary from "../../components/ErrorBoundary";
 import {Link} from "react-router-dom";
+import ReactLoading from "react-loading";
 
 
 export function ArticlesContainer() {
-    const date = dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss");
-    let articles = [
-        {
-            id: 1,
-            user: {
-                id: 1,
-                username: "username",
-                avatar: "/images/user.png"
-            },
-            text: "text 1",
-            createdAt: date.toString(),
-            likes: 153,
-            comments: 15
-        },
-        {
-            id: 2,
-            user: {
-                id: 1,
-                username: "username",
-                avatar: "/images/user.png"
-            },
-            text: "text 2",
-            createdAt: date.toString(),
-            likes: 153,
-            comments: 15
-        }
-    ]
+    const {isFetching, data } = useQuery('articles', () => getArticles());
+    const articles = data?.data;
 
     return (
         <div>
-            {articles.map((article, i) =>
-                <ErrorBoundary key={i}>
-                    <Link to={"/article/" + article.id}>
+            {isFetching &&
+                <div align={"center"}>
+                    <ReactLoading type={'balls'} color='#001a4d'/>
+                </div>
+            }
+            {articles?.map((article) =>
+                <ErrorBoundary key={article.article_id}>
+                    <Link to={"/article/" + article.article_id}>
                         <Article article={article}/>
                     </Link>
                 </ErrorBoundary>

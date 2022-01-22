@@ -15,8 +15,10 @@ const AddArticle = ({visibilities}) => {
                                 <div className={"margin"} align={"left"}>
                                     Available to
                                     <select className={"margin"}>
-                                        {visibilities.map((visibility, i) =>
-                                            <option key={i} value={visibility.id}>{visibility.name}</option>
+                                        {visibilities.map((visibility) =>
+                                            <option key={visibility.visibility_id} value={visibility.visibility_id}>
+                                                {visibility.visibility}
+                                            </option>
                                         )}
                                     </select>
                                 </div>
@@ -37,8 +39,8 @@ const AddArticle = ({visibilities}) => {
 
 AddArticle.propTypes = {
     visibilities: PropTypes.arrayOf(PropTypes.shape({
-        id: PropTypes.number.isRequired,
-        name: PropTypes.string.isRequired
+        visibility_id: PropTypes.number.isRequired,
+        visibility: PropTypes.string.isRequired
     }))
 }
 
