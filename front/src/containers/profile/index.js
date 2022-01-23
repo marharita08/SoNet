@@ -5,30 +5,32 @@ import Profile from '../../components/profile';
 import ErrorBoundary from "../../components/ErrorBoundary";
 import {useParams} from "react-router-dom";
 import {useQuery} from "react-query";
-import {getUniversities, getUser, getUsers, getVisibilities} from "./api/crud";
+import {getUser, getUsers} from "../api/usersCrud";
+import {getUniversities} from "../api/universitiesCrud";
+import {getFieldVisibilities} from "../api/visibilitiesCrud";
 import Users from "../../components/users";
 
 export function ProfileContainer() {
     let {id} = useParams();
     const {isFetching: userFetching, data: userData} = useQuery('user', () => getUser(id));
-    const {isFetching: uFetching, data: uData} = useQuery('universities', () => getUniversities());
-    const {isFetching: vFetching, data: vData} = useQuery('visibilities', () => getVisibilities());
-    const {isFetching: fFetching, data: fData} = useQuery('users', () => getUsers());
+    const {isFetching: universitiesFetching, data: universitiesData} = useQuery('universities', () => getUniversities());
+    const {isFetching: visibilitiesFetching, data: visibilitiesData} = useQuery('visibilities', () => getFieldVisibilities());
+    const {isFetching: friendsFetching, data: friendsData} = useQuery('users', () => getUsers());
     let users = userData?.data;
-    let universities = uData?.data;
-    let visibilities = vData?.data;
-    let friends = fData?.data;
+    let universities = universitiesData?.data;
+    let visibilities = visibilitiesData?.data;
+    let friends = friendsData?.data;
 
     return (
         <>
-            {(userFetching || uFetching || vFetching) && <ReactLoading type={'balls'} color='#001a4d'/>}
+            {(userFetching || universitiesFetching || visibilitiesFetching) && <ReactLoading type={'balls'} color='#001a4d'/>}
             {users?.map((user) =>
                 <ErrorBoundary key={user.user_id}>
                     <Profile user={user} universities={universities} visibilities={visibilities}/>
                 </ErrorBoundary>
             )}
             <Users users={friends} header={'Friends'}/>
-            {fFetching && <ReactLoading type={'balls'} color='#001a4d'/>}
+            {friendsFetching && <ReactLoading type={'balls'} color='#001a4d'/>}
         </>
     );
 }

@@ -3,10 +3,10 @@ import React from 'react';
 import AddArticle from '../../components/addArticle';
 import ErrorBoundary from "../../components/ErrorBoundary";
 import {useQuery} from "react-query";
-import {getVisibilities} from "./api/crud";
+import {getArticleVisibilities} from "../api/visibilitiesCrud";
 
 export function AddArticleContainer() {
-    const { data } = useQuery('visibilities', () => getVisibilities());
+    const { data } = useQuery('visibilities', () => getArticleVisibilities());
     const visibilities = data?.data;
 
     return (

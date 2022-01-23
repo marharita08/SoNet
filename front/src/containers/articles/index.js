@@ -1,6 +1,6 @@
 import React from 'react';
 import { useQuery } from 'react-query';
-import {getArticles} from "./api/crud";
+import {getArticles} from "../api/articlesCrud";
 
 import Article from '../../components/article';
 import ErrorBoundary from "../../components/ErrorBoundary";

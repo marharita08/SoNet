@@ -4,20 +4,20 @@ import Article from '../../components/article';
 import {useParams} from "react-router-dom";
 import ErrorBoundary from "../../components/ErrorBoundary";
 import {useQuery} from "react-query";
-import {getArticle, getComments} from "./api/crud";
+import {getArticle, getComments} from "../api/articlesCrud";
 import Comment from "../../components/comment";
 import ReactLoading from "react-loading";
 
 export function ArticleContainer() {
     let {id} = useParams();
-    const {isFetching:aFetching, data:aData } = useQuery('article', () => getArticle(id));
-    const {isFetching:cFetching, data:cData } = useQuery('comments', () => getComments(id));
-    const articles = aData?.data;
-    const comments = cData?.data;
+    const {isFetching:articleFetching, data:articleData } = useQuery('article', () => getArticle(id));
+    const {isFetching:commentsFetching, data:commentsData } = useQuery('comments', () => getComments(id));
+    const articles = articleData?.data;
+    const comments = commentsData?.data;
 
     return (
         <div>
-            {(aFetching || cFetching) &&
+            {(articleFetching || commentsFetching) &&
                 <div align={"center"}>
                     <ReactLoading type={'balls'} color='#001a4d'/>
                 </div>
