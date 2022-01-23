@@ -1,0 +1,20 @@
+.comment_width {
+    width: 70%;
+}
+
+.inline_top{
+    display: inline-block;
+    vertical-align: top;
+}
+
+.comment_outer {
+    text-align: center;
+    width: 100%;
+    display: inline-block;
+}
+.comment_inner {
+    background-color: white;
+    display: inline-block;
+    text-align: left;
+    width: 40%;
+}

@@ -7,7 +7,13 @@ router.get('/', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
   const id = parseInt(req.params.id, 10);
-  res.send(await db.select().from('users').where('user_id', '=', id));
+  res.send(
+    await db
+      .select()
+      .from({ u: 'users' })
+      .join({ us: 'user_settings' }, 'u.user_id', 'us.user_id')
+      .where('u.user_id', id)
+  );
 });
 
 router.post('/', async (req, res) => {

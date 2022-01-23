@@ -8,18 +8,18 @@ const Article = ({article}) => {
         <div>
             <div className="article_outer">
                 <div className="article_inner">
-                    <Link to={"/profile/" + article.user.id}>
                     <div>
+                        <Link to={"/profile/" + article.user_id}>
                         <div className="inline margin">
-                            <img alt={"user image"} className="circle" width={50} src={article.user.avatar}/>
+                            <img alt={"user image"} className="circle" width={50} src={article.avatar}/>
                         </div>
                         <div className="inline name">
-                            {article.user.username}
+                            {article.name}
                         </div>
+                        </Link>
                     </div>
-                    </Link>
                     <div className="date margin">
-                        {article.createdAt}
+                        {article.created_at}
                     </div>
                     <div className="margin">
                         {article.text}
@@ -46,14 +46,12 @@ const Article = ({article}) => {
 
 Article.propTypes = {
     article: PropTypes.shape({
-        id: PropTypes.number.isRequired,
-        user: PropTypes.shape({
-            id: PropTypes.number.isRequired,
-            username: PropTypes.string.isRequired,
-            avatar: PropTypes.string.isRequired
-        }),
+        article_id: PropTypes.number.isRequired,
+        user_id: PropTypes.number.isRequired,
+        name: PropTypes.string.isRequired,
+        avatar: PropTypes.string.isRequired,
         text: PropTypes.string.isRequired,
-        createdAt: PropTypes.string.isRequired,
+        created_at: PropTypes.string.isRequired,
         likes: PropTypes.number.isRequired,
         comments: PropTypes.number.isRequired
     })

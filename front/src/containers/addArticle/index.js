@@ -2,21 +2,13 @@ import React from 'react';
 
 import AddArticle from '../../components/addArticle';
 import ErrorBoundary from "../../components/ErrorBoundary";
+import {useQuery} from "react-query";
+import {getArticleVisibilities} from "../api/visibilitiesCrud";
 
 export function AddArticleContainer() {
-    let visibilities = [
-        {
-            id: 1,
-            name: 'All'
-        },
-        {
-            id: 2,
-            name: 'Friends'
-        },
-        {
-            id: 3,
-            name: 'Me'
-        }];
+    const { data } = useQuery('visibilities', () => getArticleVisibilities());
+    const visibilities = data?.data;
+
     return (
         <ErrorBoundary>
             <AddArticle visibilities={visibilities}/>

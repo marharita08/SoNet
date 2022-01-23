@@ -1,9 +1,22 @@
-.level1 {
-    margin-left: 5px;
+.background {
+    background-color: white;
 }
-.level2 {
-    margin-left: 10px;
+
+.padding {
+    padding: 5px;
 }
-.level3 {
+
+.closebtn {
     margin-left: 15px;
+    color: black;
+    font-weight: bold;
+    float: right;
+    font-size: 26px;
+    line-height: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.width_100 {
+    width: 20%;
 }

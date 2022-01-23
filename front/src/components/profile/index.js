@@ -13,44 +13,45 @@ const Profile = ({user, universities, visibilities}) => {
                         </div>
                         <label className={"margin"}>Available to</label>
                         <br/>
-                        <input className={"margin"} value={user.username.value}/>
-                        <select className={"margin visibility"} value={user.username.availableTo}>
-                            {visibilities.map((visibility, i) =>
-                                <option key={i} value={visibility.id}>{visibility.name}</option>
+                        <input className={"margin"} value={user.name}/>
+                        <select className={"margin visibility"} value={user.name_visibility_id}>
+                            {visibilities?.map((visibility, i) =>
+                                <option key={i} value={visibility.visibility_id}>{visibility.visibility}</option>
                             )}
                         </select>
                     </div>
                     <div>
                         <label className={"margin"}>Email</label>
                         <br/>
-                        <input className={"margin"} value={user.email.value} disabled/>
-                        <select className={"margin visibility"} value={user.email.availableTo}>
-                            {visibilities.map((visibility, i) =>
-                                <option key={i} value={visibility.id}>{visibility.name}</option>
+                        <input className={"margin"} value={user.email} disabled/>
+                        <select className={"margin visibility"} value={user.email_visibility_id}>
+                            {visibilities?.map((visibility, i) =>
+                                <option key={i} value={visibility.visibility_id}>{visibility.visibility}</option>
                             )}
                         </select>
                     </div>
                     <div>
                         <label className={"margin"}>Phone</label>
                         <br/>
-                        <input className={"margin"} value={user.phone.value}/>
-                        <select className={"margin visibility"} value={user.phone.availableTo}>
-                            {visibilities.map((visibility, i) =>
-                                <option key={i} value={visibility.id}>{visibility.name}</option>
+                        <input className={"margin"} value={user.phone}/>
+                        <select className={"margin visibility"} value={user.phone_visibility_id}>
+                            {visibilities?.map((visibility, i) =>
+                                <option key={i} value={visibility.visibility_id}>{visibility.visibility}</option>
                             )}
                         </select>
                     </div>
                     <div>
                         <label className={"margin"}>University</label>
                         <br/>
-                        <select className={"margin university"} value={user.university.id}>
-                            {universities.map((university, i) =>
-                                <option key={i} value={university.id}>{university.name}</option>
+                        <select className={"margin university"} value={user.university_id}>
+                            <option value={undefined}>Not chosen</option>
+                            {universities?.map((university, i) =>
+                                <option key={i} value={university.university_id}>{university.name}</option>
                             )}
                         </select>
-                        <select className={"margin visibility"} value={user.university.availableTo}>
-                            {visibilities.map((visibility, i) =>
-                                <option key={i} value={visibility.id}>{visibility.name}</option>
+                        <select className={"margin visibility"} value={user.university_visibility_id}>
+                            {visibilities?.map((visibility, i) =>
+                                <option key={i} value={visibility.visibility_id}>{visibility.visibility}</option>
                             )}
                         </select>
                     </div>
