@@ -52,7 +52,7 @@ router.get('/:id', async (req, res) => {
 });
 
 router.post('/', async (req, res) => {
-  const { userID, text, visibilityID } = req.body;
+  const { user_id: userID, text, visibility_id: visibilityID } = req.body;
   const date = new Date().toLocaleString('ua', {
     timeZone: 'Europe/Kiev',
   });
@@ -66,7 +66,7 @@ router.post('/', async (req, res) => {
 });
 
 router.put('/:id', async (req, res) => {
-  const { text, visibilityID } = req.body;
+  const { text, visibility_id: visibilityID } = req.body;
   const id = parseInt(req.params.id, 10);
   await db('articles')
     .update({

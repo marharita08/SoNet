@@ -6,7 +6,7 @@ router.get('/', async (req, res) => {
 });
 
 router.post('/', async (req, res) => {
-  const { articleID, userID } = req.body;
+  const { article_id: articleID, user_id: userID } = req.body;
   await db('article_likes').insert({
     article_id: articleID,
     user_id: userID,
@@ -15,7 +15,7 @@ router.post('/', async (req, res) => {
 });
 
 router.delete('/', async (req, res) => {
-  const { articleID, userID } = req.body;
+  const { article_id: articleID, user_id: userID } = req.body;
   await db('article_likes')
     .delete()
     .where('article_id', articleID)

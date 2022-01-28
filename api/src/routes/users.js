@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const db = require('../services/db');
+const upload = require('../services/multerConfig');
 
 router.get('/', async (req, res) => {
   res.send(await db.select().from('users').orderBy('user_id'));
@@ -17,7 +18,7 @@ router.get('/:id', async (req, res) => {
 });
 
 router.post('/', async (req, res) => {
-  const { name, email, phone, universityID, avatar } = req.body;
+  const { name, email, phone, university_id: universityID, avatar } = req.body;
   await db('users').insert({
     name,
     email,
@@ -28,8 +29,9 @@ router.post('/', async (req, res) => {
   res.send('User was created successfully.');
 });
 
-router.put('/:id', async (req, res) => {
-  const { name, email, phone, universityID, avatar } = req.body;
+router.put('/:id', upload.single('file'), async (req, res) => {
+  const { name, email, phone, university_id: universityID } = req.body;
+  const fileData = req.file;
   const id = parseInt(req.params.id, 10);
   await db('users')
     .update({
@@ -37,9 +39,13 @@ router.put('/:id', async (req, res) => {
       email,
       phone,
       university_id: universityID,
-      avatar,
     })
     .where('user_id', id);
+  if (fileData) {
+    const filePath = fileData.path;
+    const path = filePath.substr(filePath.indexOf('/'), filePath.length);
+    await db('users').update({ avatar: path }).where('user_id', id);
+  }
   res.send('User was updated successfully.');
 });
 

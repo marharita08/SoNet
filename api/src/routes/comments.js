@@ -11,7 +11,12 @@ router.get('/:id', async (req, res) => {
 });
 
 router.post('/', async (req, res) => {
-  const { articleID, userID, text, parentID } = req.body;
+  const {
+    article_id: articleID,
+    user_id: userID,
+    text,
+    parent_id: parentID,
+  } = req.body;
   const date = new Date().toLocaleString('ua', {
     timeZone: 'Europe/Kiev',
   });
