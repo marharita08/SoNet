@@ -11,3 +11,11 @@ export const getArticle = async (id) => {
 export const getComments = async (id) => {
     return apiClient.get(`/articles/${id}/comments`);
 }
+
+export const insertArticle = async (article) => {
+    return apiClient.post('/articles', article);
+}
+
+export const updateArticle = async (article) => {
+    return apiClient.put(`/articles/${article.article_id}`, article);
+}
