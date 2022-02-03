@@ -1,6 +1,15 @@
 import PropTypes from 'prop-types';
 import {Formik, Form, Field, ErrorMessage} from "formik";
-import {Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, MenuItem} from "@mui/material";
+import {
+    Button,
+    CircularProgress,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    IconButton,
+    MenuItem
+} from "@mui/material";
 
 import './addArticle.css';
 import {Select} from "formik-mui";
@@ -9,6 +18,7 @@ import {modalState} from "../../containers/header";
 import {useState} from "react";
 import * as Yup from "yup";
 import {insertArticle, updateArticle} from "../../containers/api/articlesCrud";
+import {useMutation} from "react-query";
 
 const initArticle = {
     text: "",
@@ -29,20 +39,45 @@ const AddArticle = ({visibilities}) => {
     const {article, setArticle, addArticle, setAddArticle} = useBetween(articleState);
     const {open, setOpen} = useBetween(modalState);
 
+    let title;
+    if (addArticle) {
+        title = "Add article";
+    } else {
+        title = "Edit article";
+    }
+
     const schema = Yup.object().shape({
         text: Yup.string().required("Text is required"),
+        visibility_id: Yup.number().min(1).max(visibilities?.length),
     })
 
+    const { mutate: updateMutate, isLoading: updateLoading } = useMutation(
+        updateArticle, {
+        onSuccess: data => {
+            console.log(data);
+            alert(data.data)
+        },
+        onError: () => {
+            alert("Updating was failed.");
+        }
+    });
+
+    const { mutate: insertMutate, isLoading: insertLoading } = useMutation(
+        insertArticle, {
+            onSuccess: data => {
+                console.log(data);
+                alert(data.data)
+            },
+            onError: () => {
+                alert("Adding was failed.");
+            }
+        });
+
     const onFormSubmit = (data) => {
-        console.log(data);
         if (addArticle) {
-            insertArticle(article)
-                .then(r => console.log(r))
-                .catch((err) => {console.log(err);});
+            insertMutate(data);
         } else {
-            updateArticle(article)
-                .then(r => console.log(r))
-                .catch((err) => {console.log(err);});
+            updateMutate(data);
         }
         setOpen(false);
         setArticle(initArticle);
@@ -72,8 +107,7 @@ const AddArticle = ({visibilities}) => {
                         <IconButton className="closebtn margin" onClick={handleClose}>
                             <span>&times;</span>
                         </IconButton>
-                        {addArticle && <DialogTitle>Add article</DialogTitle>}
-                        {!addArticle && <DialogTitle>Edit article</DialogTitle>}
+                        <DialogTitle>{title}</DialogTitle>
                         <DialogContent>
                             <ErrorMessage name="text" render={msg => <div className="error">{msg}</div>}/>
                             <Field as={"textarea"} name={"text"} />
@@ -100,7 +134,17 @@ const AddArticle = ({visibilities}) => {
                             <Button sx={{margin:"5px"}} variant="outlined" onClick={handleClose}>
                                 Cancel
                             </Button>
-                            <Button sx={{margin:"5px"}} type={"submit"} variant="contained">
+                            <Button
+                                sx={{margin:"5px"}}
+                                type={"submit"}
+                                variant="contained"
+                                disabled={insertLoading||updateLoading}
+                                startIcon={
+                                    insertLoading||updateLoading ? (
+                                        <CircularProgress color="inherit" size={25} />
+                                    ) : null
+                                }
+                            >
                                 Save
                             </Button>
                         </DialogActions>

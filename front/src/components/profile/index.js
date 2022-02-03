@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
 import { Formik, Form, Field} from 'formik';
-import {MenuItem, Button, Avatar} from "@mui/material";
+import {MenuItem, Button, Avatar, CircularProgress} from "@mui/material";
 import { TextField, Select } from 'formik-mui';
 
 import './profile.css';
@@ -8,6 +8,7 @@ import {ProfilePropTypes} from "./profilePropTypes";
 import env from "../../config/envConfig";
 import {useState} from "react";
 import {updateUser} from "../../containers/api/usersCrud";
+import {useMutation} from "react-query";
 
 const Profile = ({user, universities, visibilities}) => {
 
@@ -17,9 +18,25 @@ const Profile = ({user, universities, visibilities}) => {
 
     const schema = Yup.object().shape({
         name: Yup.string().required("Name is required").max(255, "Mast be no more than 255 symbols"),
-        email: Yup.string(),
-        phone: Yup.string().required("Phone number is required").matches(/^[+]380[\d]{9}$/, "Must match +380xxxxxxxxx")
+        name_visibility_id: Yup.number().min(1).max(visibilities.length),
+        email: Yup.string().required("Email is required"),
+        email_visibility_id: Yup.number().min(1).max(visibilities.length),
+        phone: Yup.string().required("Phone number is required").matches(/^[+]380[\d]{9}$/, "Must match +380xxxxxxxxx"),
+        phone_visibility_id: Yup.number().min(1).max(visibilities.length),
+        university_id: Yup.number().min(0).max(universities.length),
+        university_visibility_id: Yup.number().min(1).max(visibilities.length),
     })
+
+    const { mutate, isLoading } = useMutation(
+        updateUser, {
+            onSuccess: data => {
+                console.log(data);
+                alert(data.data)
+            },
+            onError: () => {
+                alert("Updating was failed.");
+            }
+        });
 
     const onFormSubmit = (data) => {
         console.log(data);
@@ -27,9 +44,7 @@ const Profile = ({user, universities, visibilities}) => {
         for ( var key in data ) {
             formData.append(key, data[key]);
         }
-        updateUser(formData)
-            .then(r => console.log(r))
-            .catch((err) => {console.log(err);});
+        mutate(data);
     }
 
     const [imgState, setImgState] = useState({
@@ -85,7 +100,18 @@ const Profile = ({user, universities, visibilities}) => {
                                 </Field>
                             </div>
                             <div align={"center"}>
-                                <Button variant="contained" type={"submit"}>Save</Button>
+                                <Button
+                                    variant="contained"
+                                    type={"submit"}
+                                    disabled={isLoading}
+                                    startIcon={
+                                        isLoading ? (
+                                            <CircularProgress color="inherit" size={25} />
+                                        ) : null
+                                    }
+                                >
+                                    Save
+                                </Button>
                             </div>
                         </div>
                         <div className={"user_img"}>
