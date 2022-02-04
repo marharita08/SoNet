@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const fs = require('fs');
 const db = require('../services/db');
 const upload = require('../services/multerConfig');
 
@@ -42,6 +43,14 @@ router.put('/:id', upload.single('file'), async (req, res) => {
     })
     .where('user_id', id);
   if (fileData) {
+    const oldFile = await db('users').select('avatar').where('user_id', id);
+    fs.unlink(`public${oldFile[0].avatar}`, (err) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log('Old avatar was deleted');
+      }
+    });
     const filePath = fileData.path;
     const path = filePath.substr(filePath.indexOf('/'), filePath.length);
     await db('users').update({ avatar: path }).where('user_id', id);
