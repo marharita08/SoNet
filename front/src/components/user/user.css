@@ -6,17 +6,6 @@
     padding: 5px;
 }
 
-.closebtn {
-    margin-left: 15px;
-    color: black;
-    font-weight: bold;
-    float: right;
-    font-size: 26px;
-    line-height: 20px;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
 .width_100 {
     width: 20%;
 }

@@ -1,17 +1,9 @@
-.circle {
-    border-radius: 50%;
-}
-.name {
-    font-weight: bold;
-    padding: 1px;
-}
 .article_outer {
     text-align: center;
     width: 100%;
     display: inline-block;
 }
 .article_inner {
-    background-color: white;
     display: inline-block;
     text-align: left;
     margin: 10px;
@@ -24,8 +16,3 @@
     color: gray;
 }
 
-.line {
-    border-top-color: #f2f2f2;
-    border-top-style: solid;
-    border-top-width: thin;
-}

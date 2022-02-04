@@ -1,5 +1,5 @@
 .university {
-    width: 170px;
+    width: 222.4px;
 }
 
 .save {
@@ -11,9 +11,18 @@
 }
 
 .visibility {
-    width: 90px;
+    width: 120px;
 }
 
 .user_img {
     vertical-align: top;
+    display: inline-block;
+}
+
+.file {
+    display: block;
+}
+
+.fields_margin {
+    margin: 10px;
 }

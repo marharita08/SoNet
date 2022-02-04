@@ -22,10 +22,10 @@ function App() {
         <QueryClientProvider client={queryClient}>
           <BrowserRouter>
             <HeaderContainer/>
+            <AddArticleContainer/>
             <Routes>
               <Route path="/" element={<ArticlesContainer/>}/>
               <Route path="/article/:id" element={<ArticleContainer/>}/>
-              <Route path="/article" element={<AddArticleContainer/>}/>
               <Route path="/profile/:id" element={<ProfileContainer/>} />
             </Routes>
           </BrowserRouter>

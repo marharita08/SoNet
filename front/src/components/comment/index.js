@@ -1,39 +1,66 @@
 import './comment.css';
 import {Link} from "react-router-dom";
 import moment from "moment";
+import env from "../../config/envConfig";
+import {Avatar, Button, Card, CardContent, CardHeader, Typography} from "@mui/material";
+
 
 const Comment = ({comment}) => {
     return (
         <div>
-            <div className={"line"}>
-                <div className="comment_outer">
-                    <div className="comment_inner">
-                <div style={{paddingLeft:(comment.level - 1) * 30}}>
-                    <div className="inline_top margin">
-                        <img alt={"user image"} className="circle" width={30} src={comment.avatar}/>
-                    </div>
-                    <div className={"inline width_80"}>
-                        <div className="name inline">
-                            {comment.name}
+            <div className="comment_outer">
+                <div className="comment_inner">
+                    <Card>
+                        <div style={{paddingLeft:(comment.level - 1) * 40}}>
+                            <CardHeader
+                                avatar={
+                                    <Avatar
+                                        alt={"user image"}
+                                        src={`${env.apiUrl}${comment.avatar}`}
+                                        sx={{ width: 30, height: 30 }}
+                                    />
+                                }
+                                action={
+                                    <Button>Reply</Button>
+                                }
+                                title={
+                                    <div>
+                                        <div className="name inline">
+                                            {comment.name}
+                                        </div>
+                                        {
+                                            comment.level !==1 &&
+                                            <div className={"inline"} style={{"margin-left":"5px"}}>
+                                                to:
+                                                <Link
+                                                    to={'/profile/' + comment.p_user_id}
+                                                    style={{"margin-left":"5px"}}
+                                                >
+                                                    {comment.to}
+                                                </Link>
+                                            </div>
+                                        }
+                                    </div>
+                                }
+                                subheader={
+                                    <Typography
+                                        sx={{
+                                            "font-size": "10px",
+                                            "color": "gray"
+                                        }}
+                                    >
+                                        {moment(comment.commented_at).fromNow()}
+                                    </Typography>
+                                }
+                                sx={{"padding":"10px","padding-bottom":"5px"}}
+                            />
+                            <CardContent sx={{"padding":"10px","padding-top":"5px"}}>
+                                <Typography variant="body2">
+                                    {comment.text}
+                                </Typography>
+                            </CardContent>
                         </div>
-                        { comment.level !==1 &&
-                            <div className={"inline margin"}>
-                                to:
-                                <Link to={'/profile/' + comment.p_user_id} className={"margin"}>{comment.to}</Link>
-                            </div>
-                        }
-                        <div className={"margin"}>
-                            {comment.text}
-                        </div>
-                    </div>
-                    <div className={"inline right"} align={"right"}>
-                        <div className={"date margin"}>
-                            {moment(comment.commented_at).fromNow()}
-                        </div>
-                        <button className={"body_button"}>Reply</button>
-                    </div>
-                </div>
-                    </div>
+                    </Card>
                 </div>
             </div>
         </div>
