@@ -1,8 +1,8 @@
 const db = require('../services/db');
 
-const errorHandler = async (err, req, res, next) => {
+const errorHandler = (logTable) => async (err, req, res, next) => {
   const status = 'error';
-  const { method, originalUrl: url, logTable } = req;
+  const { method, originalUrl: url } = req;
   const { message, stack } = err;
   const date = new Date().toLocaleString('ua', {
     timeZone: 'Europe/Kiev',

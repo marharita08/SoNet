@@ -16,17 +16,11 @@ const port = config.appPort;
 
 const app = express();
 
-const setTable = (req, res, next) => {
-  req.logTable = 'logger';
-  next();
-};
-
-app.use(setTable);
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors());
 app.use(express.static(`public`));
-app.use(logger);
+app.use(logger('logger'));
 
 app.use('/users', usersRoutes);
 app.use('/articles', articlesRoutes);
@@ -35,7 +29,7 @@ app.use('/comments', commentsRoutes);
 app.use('/universities', universitiesRoutes);
 app.use('/visibilities', visibilitiesRoutes);
 
-app.use(errorHandler);
+app.use(errorHandler('logger'));
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
