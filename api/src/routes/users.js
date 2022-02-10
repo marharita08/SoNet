@@ -87,4 +87,70 @@ router.delete(
   })
 );
 
+router.get(
+  '/:id/friends',
+  asyncHandler(async (req, res) => {
+    const id = parseInt(req.params.id, 10);
+    res.send(
+      await db
+        .select('user_id', 'name', 'avatar')
+        .from('users')
+        .join({ f: 'friends' }, function () {
+          this.on(db.raw('(user_id=from_user_id or user_id=to_user_id)')).andOn(
+            db.raw(`(from_user_id=${id} or to_user_id=${id})`)
+          );
+        })
+        .join({ s: 'status' }, function () {
+          this.on('s.status_id', 'f.status_id').andOnVal(
+            's.status',
+            'Accepted'
+          );
+        })
+        .where('user_id', '!=', id)
+    );
+  })
+);
+
+router.get(
+  '/:id/incoming-requests',
+  asyncHandler(async (req, res) => {
+    const id = parseInt(req.params.id, 10);
+    res.send(
+      await db
+        .select('user_id', 'name', 'avatar')
+        .from('users')
+        .join({ f: 'friends' }, function () {
+          this.on('user_id', 'from_user_id').andOnVal('to_user_id', id);
+        })
+        .join({ s: 'status' }, function () {
+          this.on('s.status_id', 'f.status_id').andOnVal(
+            's.status',
+            'Under consideration'
+          );
+        })
+    );
+  })
+);
+
+router.get(
+  '/:id/outgoing-requests',
+  asyncHandler(async (req, res) => {
+    const id = parseInt(req.params.id, 10);
+    res.send(
+      await db
+        .select('user_id', 'name', 'avatar')
+        .from('users')
+        .join({ f: 'friends' }, function () {
+          this.on('user_id', 'to_user_id').andOnVal('from_user_id', id);
+        })
+        .join({ s: 'status' }, function () {
+          this.on('s.status_id', 'f.status_id').andOnVal(
+            's.status',
+            'Under consideration'
+          );
+        })
+    );
+  })
+);
+
 module.exports = router;
