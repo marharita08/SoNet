@@ -16,3 +16,15 @@ export const updateUser = async (formData) => {
         },
     });
 }
+
+export const getFriends = async (id) => {
+    return apiClient.get(`/users/${id}/friends`);
+}
+
+export const getIncomingRequests = async (id) => {
+    return apiClient.get(`/users/${id}/incoming-requests`);
+}
+
+export const getOutgoingRequests = async (id) => {
+    return apiClient.get(`/users/${id}/outgoing-requests`);
+}
