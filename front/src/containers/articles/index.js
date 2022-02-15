@@ -1,19 +1,32 @@
-import React from 'react';
+import React from "react";
 import { useQuery } from 'react-query';
 import {getArticles} from "../api/articlesCrud";
 
-import Article, {commentsExpandState} from "../../components/article";
+import Article from "../../components/article";
 import ErrorBoundary from "../../components/ErrorBoundary";
 import {Link} from "react-router-dom";
 import ReactLoading from "react-loading";
-import {useBetween} from "use-between";
 
 
-export function ArticlesContainer() {
+
+export function ArticlesContainer({setOpenModal, commentsExpanded, setCommentsExpanded, setArticle, setAddArticle}) {
     const {isFetching, data } = useQuery('articles', () => getArticles());
     const articles = data?.data;
-    const {setExpanded} = useBetween(commentsExpandState);
-    setExpanded(false);
+    setCommentsExpanded(false);
+
+    const handleExpandClick = () => {
+        setCommentsExpanded(!commentsExpanded);
+    };
+
+    const handleLikeClick = (event) => {
+        event.preventDefault();
+    };
+
+    const handleEdit = (article) => {
+        setArticle(article);
+        setAddArticle(false);
+        setOpenModal(true);
+    }
 
     return (
         <div>
@@ -25,7 +38,13 @@ export function ArticlesContainer() {
             {articles?.map((article) =>
                 <ErrorBoundary key={article.article_id}>
                     <Link to={`/article/${article.article_id}`}>
-                        <Article article={article}/>
+                        <Article
+                            article={article}
+                            commentsExpanded={commentsExpanded}
+                            handleEdit={handleEdit}
+                            handleExpandClick={handleExpandClick}
+                            handleLikeClick={handleLikeClick}
+                        />
                     </Link>
                 </ErrorBoundary>
             )}

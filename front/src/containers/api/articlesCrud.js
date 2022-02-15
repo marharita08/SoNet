@@ -13,9 +13,19 @@ export const getComments = async (id) => {
 }
 
 export const insertArticle = async (article) => {
-    return apiClient.post('/articles', article);
+    return apiClient.post('/articles', article, {
+        headers: {
+            "Content-Type": "multipart/form-data",
+            "File-Destination": "article",
+        },
+    });
 }
 
 export const updateArticle = async (article) => {
-    return apiClient.put(`/articles/${article.article_id}`, article);
+    return apiClient.put(`/articles/${article.get('article_id')}`, article, {
+        headers: {
+            "Content-Type": "multipart/form-data",
+            "File-Destination": "article",
+        },
+    });
 }

@@ -1,21 +1,22 @@
-import React, {useState} from "react";
+import React from "react";
 
 import './header.css';
 import {Link} from "react-router-dom";
-import {useBetween} from "use-between";
 
-export const modalState = () => {
-    const [open, setOpen] = useState(false);
-    return {
-        open, setOpen
-    }
-}
 
-export function HeaderContainer() {
-    const {setOpen} = useBetween(modalState);
+export function HeaderContainer({setOpenModal, setAddArticle, setArticle}) {
 
     const handleClickOpen = () => {
-        setOpen(true);
+        setOpenModal(true);
+        setAddArticle(true);
+        setArticle({
+            text: "",
+            user_id: 1,
+            visibility: {
+                value: 1,
+                label: "All",
+            }
+        })
     };
 
     return (

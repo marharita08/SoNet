@@ -17,7 +17,7 @@ const User = ({user}) => {
                     <CardHeader
                         avatar={
                             <Avatar
-                                alt={"user image"}
+                                alt={user?.name}
                                 src={`${env.apiUrl}${user.avatar}`}
                                 sx={{ width: 50, height: 50 }}
                             />

@@ -1,5 +1,9 @@
-.university {
-    width: 222.4px;
+.fields_width {
+    width: 250px;
+}
+
+.fields_height {
+    height: 56px;
 }
 
 .save {
@@ -11,7 +15,7 @@
 }
 
 .visibility {
-    width: 120px;
+    width: 150px;
 }
 
 .user_img {
@@ -25,4 +29,5 @@
 
 .fields_margin {
     margin: 10px;
+    margin-bottom: 30px;
 }
