@@ -3,6 +3,7 @@ import {Link} from "react-router-dom";
 import moment from "moment";
 import env from "../../config/envConfig";
 import {Avatar, Button, Card, CardContent, CardHeader, Typography} from "@mui/material";
+import PropTypes from "prop-types";
 
 
 const Comment = ({comment}) => {
@@ -15,7 +16,7 @@ const Comment = ({comment}) => {
                             <CardHeader
                                 avatar={
                                     <Avatar
-                                        alt={"user image"}
+                                        alt={comment.name}
                                         src={`${env.apiUrl}${comment.avatar}`}
                                         sx={{ width: 30, height: 30 }}
                                     />
@@ -67,5 +68,15 @@ const Comment = ({comment}) => {
     );
 }
 
+Comment.propTypes = {
+    comment: PropTypes.shape({
+        level: PropTypes.number.isRequired,
+        name: PropTypes.string.isRequired,
+        avatar: PropTypes.string,
+        to: PropTypes.string,
+        commented_at: PropTypes.string.isRequired,
+        text: PropTypes.string.isRequired
+    })
+}
 
 export default Comment;

@@ -8,7 +8,7 @@ import {
     Card,
     CardActions,
     CardContent,
-    CardHeader, Divider,
+    CardHeader, CardMedia, Divider,
     IconButton,
     Menu,
     MenuItem,
@@ -19,11 +19,8 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import CommentIcon from '@mui/icons-material/Comment';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import {useState} from "react";
-import {useBetween} from "use-between";
-import {articleState} from "../addArticle";
-import {modalState} from "../../containers/header";
 import {Link} from "react-router-dom";
+import {useState} from "react";
 
 const ExpandMore = styled((props) => {
     const { expand, ...other } = props;
@@ -36,26 +33,14 @@ const ExpandMore = styled((props) => {
     }),
 }));
 
-export const commentsExpandState = () => {
-    const [expanded, setExpanded] = useState(false);
-    return {
-        expanded, setExpanded
-    }
-}
-
-const Article = ({article}) => {
+const Article = ({
+    article,
+    commentsExpanded,
+    handleEdit,
+    handleExpandClick,
+    handleLikeClick,
+}) => {
     const [anchorEl, setAnchorEl] = useState(null);
-    const {expanded, setExpanded} = useBetween(commentsExpandState);
-    const {setArticle, setAddArticle} = useBetween(articleState);
-    const {setOpen} = useBetween(modalState);
-
-    const handleExpandClick = () => {
-        setExpanded(!expanded);
-    };
-
-    const handleLikeClick = (event) => {
-        event.preventDefault();
-    };
 
     const handleMenu = (event) => {
         event.preventDefault();
@@ -66,12 +51,10 @@ const Article = ({article}) => {
         setAnchorEl(null);
     };
 
-    const handleEdit = (event) => {
+    const editOnClick = (event) => {
         event.preventDefault();
-        setArticle(article);
-        setAddArticle(false)
-        setOpen(true)
         setAnchorEl(null);
+        handleEdit(article);
     }
 
     return (
@@ -82,7 +65,7 @@ const Article = ({article}) => {
                         <CardHeader
                             avatar={
                                 <Avatar
-                                    alt={"user image"}
+                                    alt={article?.name}
                                     src={`${env.apiUrl}${article.avatar}`}
                                     sx={{ width: 60, height: 60 }}
                                 />
@@ -115,8 +98,15 @@ const Article = ({article}) => {
                         open={Boolean(anchorEl)}
                         onClose={handleClose}
                     >
-                        <MenuItem onClick={handleEdit}>Edit</MenuItem>
+                        <MenuItem onClick={editOnClick}>{`Edit`}</MenuItem>
                     </Menu>
+                    {
+                        article.image!==undefined && article.image &&
+                        <CardMedia
+                            component={"img"}
+                            image={`${env.apiUrl}${article.image}`}
+                        />
+                    }
                     <CardContent>
                         <Typography>
                             {article.text}
@@ -126,12 +116,12 @@ const Article = ({article}) => {
                     <CardActions disableSpacing>
                         <IconButton
                             onClick={handleExpandClick}
-                            aria-expanded={expanded}
+                            aria-expanded={commentsExpanded}
                             aria-label="show more"
                         >
                             {article.comments}
                             <CommentIcon/>
-                            <ExpandMore expand={expanded}>
+                            <ExpandMore expand={commentsExpanded}>
                                 <ExpandMoreIcon />
                             </ExpandMore>
                         </IconButton>
@@ -155,7 +145,7 @@ Article.propTypes = {
         text: PropTypes.string.isRequired,
         created_at: PropTypes.string.isRequired,
         likes: PropTypes.number.isRequired,
-        comments: PropTypes.number.isRequired
+        comments: PropTypes.number.isRequired,
     })
 };
 

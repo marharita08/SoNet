@@ -8,12 +8,13 @@ export const getUsers = async () => {
     return apiClient.get('/users');
 }
 
-export const updateUser = async (user) => {
-    return apiClient.put(`/users/${user.user_id}`, user, {
+export const updateUser = async (formData) => {
+    return apiClient.put(`/users/${formData.get('user_id')}`, formData, {
         headers: {
             "Content-Type": "multipart/form-data",
+            "File-Destination": "avatar",
         },
-    })
+    });
 }
 
 export const getFriends = async (id) => {

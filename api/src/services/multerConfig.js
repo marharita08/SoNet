@@ -2,11 +2,16 @@ const multer = require('multer');
 
 const storageConfig = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, 'public/images');
+    const { 'file-destination': fileDestination } = req.headers;
+    cb(null, `public/images/${fileDestination}`);
   },
   filename: (req, file, cb) => {
     const ext = file.mimetype.split('/')[1];
-    cb(null, `${req.params.id}.${ext}`);
+    if (req.method === 'PUT') {
+      cb(null, `${req.params.id}.${ext}`);
+    } else {
+      cb(null, `${req.body.article_id}.${ext}`);
+    }
   },
 });
 
