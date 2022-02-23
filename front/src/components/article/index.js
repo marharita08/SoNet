@@ -39,6 +39,7 @@ const Article = ({
     handleEdit,
     handleExpandClick,
     handleLikeClick,
+    isCurrentUser,
 }) => {
     const [anchorEl, setAnchorEl] = useState(null);
 
@@ -71,6 +72,7 @@ const Article = ({
                                 />
                             }
                             action={
+                                isCurrentUser &&
                                 <IconButton aria-label="settings">
                                     <MoreVertIcon onClick={handleMenu} />
                                 </IconButton>
@@ -146,7 +148,12 @@ Article.propTypes = {
         created_at: PropTypes.string.isRequired,
         likes: PropTypes.number.isRequired,
         comments: PropTypes.number.isRequired,
-    })
+    }),
+    commentsExpanded: PropTypes.bool.isRequired,
+    handleEdit: PropTypes.func.isRequired,
+    handleExpandClick: PropTypes.func.isRequired,
+    handleLikeClick: PropTypes.func.isRequired,
+    isCurrentUser: PropTypes.bool.isRequired
 };
 
 export default Article;
