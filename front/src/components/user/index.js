@@ -2,13 +2,34 @@ import './user.css';
 import {Link} from "react-router-dom";
 import PropTypes from "prop-types";
 import env from "../../config/envConfig";
-import {Avatar, Card, CardHeader, IconButton, Typography} from "@mui/material";
+import {Avatar, Card, CardHeader, IconButton, Menu, MenuItem, Typography} from "@mui/material";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import {useState} from "react";
 
-const User = ({user}) => {
+const User = ({user, handleClose, menu, approve, decline}) => {
 
-    const handleClose = (event) => {
+    const [anchorEl, setAnchorEl] = useState(null);
+
+    const handleMenu = (event) => {
         event.preventDefault();
+        setAnchorEl(event.currentTarget);
     };
+
+    const handleMenuClose = () => {
+        setAnchorEl(null);
+    };
+
+    const approveOnClick = (event) => {
+        event.preventDefault();
+        setAnchorEl(null);
+        approve(user);
+    }
+
+    const declineOnClick = (event) => {
+        event.preventDefault();
+        setAnchorEl(null);
+        decline(user);
+    }
 
     return (
         <>
@@ -23,9 +44,14 @@ const User = ({user}) => {
                             />
                         }
                         action={
+                            (!menu &&
                             <IconButton className="closebtn" onClick={handleClose}>
                                 <span>&times;</span>
-                            </IconButton>
+                            </IconButton> )||
+                            (menu &&
+                            <IconButton aria-label="settings">
+                                <MoreVertIcon onClick={handleMenu} />
+                            </IconButton>)
                         }
                         title={
                             <Typography sx={{"font-weight": "bold"}}>
@@ -33,6 +59,24 @@ const User = ({user}) => {
                             </Typography>
                         }
                     />
+                    <Menu
+                        id="menu-article"
+                        anchorEl={anchorEl}
+                        anchorOrigin={{
+                            vertical: 'top',
+                            horizontal: 'right',
+                        }}
+                        keepMounted
+                        transformOrigin={{
+                            vertical: 'top',
+                            horizontal: 'right',
+                        }}
+                        open={Boolean(anchorEl)}
+                        onClose={handleMenuClose}
+                    >
+                        <MenuItem onClick={approveOnClick}>Approve</MenuItem>
+                        <MenuItem onClick={declineOnClick}>Decline</MenuItem>
+                    </Menu>
                 </Card>
             </Link>
         </>
@@ -44,7 +88,11 @@ User.propTypes = {
         user_id: PropTypes.number.isRequired,
         name: PropTypes.string.isRequired,
         avatar: PropTypes.string.isRequired
-    })
+    }),
+    handleClose: PropTypes.func.isRequired,
+    menu: PropTypes.bool.isRequired,
+    approve: PropTypes.func,
+    decline: PropTypes.func,
 };
 
 export default User;

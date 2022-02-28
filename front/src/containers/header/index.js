@@ -1,17 +1,20 @@
-import React from "react";
+import React, {useContext} from "react";
 
 import './header.css';
-import {Link} from "react-router-dom";
+import authContext from "../../context/authContext";
+import ErrorBoundary from "../../components/ErrorBoundary";
+import Header from "../../components/header"
 
 
 export function HeaderContainer({setOpenModal, setAddArticle, setArticle}) {
+    const { user:{user_id} } = useContext(authContext);
 
     const handleClickOpen = () => {
         setOpenModal(true);
         setAddArticle(true);
         setArticle({
             text: "",
-            user_id: 1,
+            user_id,
             visibility: {
                 value: 1,
                 label: "All",
@@ -20,16 +23,8 @@ export function HeaderContainer({setOpenModal, setAddArticle, setArticle}) {
     };
 
     return (
-        <header>
-            <Link to={"/"}>
-                <button className={"left"}>Articles</button>
-            </Link>
-
-                <button onClick={handleClickOpen}>Add article</button>
-
-            <Link to={"/profile/1"}>
-                <button className={"right"}>Profile</button>
-            </Link>
-        </header>
+        <ErrorBoundary>
+            <Header handleClickOpen={handleClickOpen} user_id={user_id}/>
+        </ErrorBoundary>
     );
 }

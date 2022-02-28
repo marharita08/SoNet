@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useContext} from "react";
 
 import Article from "../../components/article";
 import {useParams} from "react-router-dom";
@@ -8,6 +8,7 @@ import {getArticle, getComments} from "../api/articlesCrud";
 import Comment from "../../components/comment";
 import ReactLoading from "react-loading";
 import {Collapse} from "@mui/material";
+import authContext from "../../context/authContext";
 
 
 export function ArticleContainer({setOpenModal, commentsExpanded, setCommentsExpanded, setArticle, setAddArticle}) {
@@ -16,6 +17,7 @@ export function ArticleContainer({setOpenModal, commentsExpanded, setCommentsExp
     const {isFetching:commentsFetching, data:commentsData } = useQuery('comments', () => getComments(id));
     const articles = articleData?.data;
     const comments = commentsData?.data;
+    const { user:{user_id} } = useContext(authContext);
 
     const handleExpandClick = () => {
         setCommentsExpanded(!commentsExpanded);
@@ -48,6 +50,7 @@ export function ArticleContainer({setOpenModal, commentsExpanded, setCommentsExp
                             handleEdit={handleEdit}
                             handleExpandClick={handleExpandClick}
                             handleLikeClick={handleLikeClick}
+                            isCurrentUser={article.user_id === user_id}
                         />
                     </ErrorBoundary>
                     <Collapse in={commentsExpanded} timeout="auto" unmountOnExit>
