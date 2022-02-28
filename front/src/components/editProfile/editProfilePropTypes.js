@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 
-export let ProfilePropTypes = {
+export let EditProfilePropTypes = {
     user: PropTypes.shape({
         user_id: PropTypes.number.isRequired,
         name: PropTypes.string.isRequired,
@@ -28,6 +28,23 @@ export let ProfilePropTypes = {
         }),
         avatar: PropTypes.string.isRequired
     }),
-    handleClick: PropTypes.func.isRequired,
-    isCurrentUser: PropTypes.bool.isRequired
+    universities: PropTypes.arrayOf(PropTypes.shape({
+        value: PropTypes.number.isRequired,
+        label: PropTypes.string.isRequired
+    })),
+    visibilities: PropTypes.arrayOf(PropTypes.shape({
+        value: PropTypes.number.isRequired,
+        label: PropTypes.string.isRequired
+    })),
+    onFormSubmit: PropTypes.func.isRequired,
+    isLoading: PropTypes.bool.isRequired,
+    image: PropTypes.object,
+    croppedImage: PropTypes.object,
+    deleteImage: PropTypes.func.isRequired,
+    cropImage: PropTypes.func.isRequired,
+    handleChange: PropTypes.func.isRequired,
+    setCropper: PropTypes.func.isRequired,
+    openModal: PropTypes.bool.isRequired,
+    handleClose: PropTypes.func.isRequired,
+    isFetching: PropTypes.bool.isRequired,
 }

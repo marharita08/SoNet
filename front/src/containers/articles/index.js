@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useContext} from "react";
 import { useQuery } from 'react-query';
 import {getArticles} from "../api/articlesCrud";
 
@@ -6,12 +6,14 @@ import Article from "../../components/article";
 import ErrorBoundary from "../../components/ErrorBoundary";
 import {Link} from "react-router-dom";
 import ReactLoading from "react-loading";
+import authContext from "../../context/authContext";
 
 
 
 export function ArticlesContainer({setOpenModal, commentsExpanded, setCommentsExpanded, setArticle, setAddArticle}) {
     const {isFetching, data } = useQuery('articles', () => getArticles());
     const articles = data?.data;
+    const { user:{user_id} } = useContext(authContext);
     setCommentsExpanded(false);
 
     const handleExpandClick = () => {
@@ -44,6 +46,7 @@ export function ArticlesContainer({setOpenModal, commentsExpanded, setCommentsEx
                             handleEdit={handleEdit}
                             handleExpandClick={handleExpandClick}
                             handleLikeClick={handleLikeClick}
+                            isCurrentUser={article.user_id === user_id}
                         />
                     </Link>
                 </ErrorBoundary>
