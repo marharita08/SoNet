@@ -11,6 +11,7 @@ import {ArticlesContainer} from './containers/articles';
 import {ArticleContainer} from './containers/article';
 import AddArticleContainer from './containers/addArticle';
 import {ProfileContainer} from './containers/profile';
+import {AuthContainer} from "./containers/auth";
 
 import './App.css';
 
@@ -57,6 +58,7 @@ function App() {
                      />}
               />
               <Route path="/profile/:id" element={<ProfileContainer/>} />
+              <Route path="/auth" element={<AuthContainer/>}/>
             </Routes>
           </BrowserRouter>
         </QueryClientProvider>
