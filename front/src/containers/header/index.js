@@ -1,30 +1,65 @@
 import React, {useContext} from "react";
+import {useMutation} from "react-query";
 
-import './header.css';
 import authContext from "../../context/authContext";
 import ErrorBoundary from "../../components/ErrorBoundary";
-import Header from "../../components/header"
+import Header from "../../components/header";
+import { apiLogout }  from '../../api/auth';
+import PropTypes from "prop-types";
+import './header.css';
 
+const HeaderContainer = ({
+    setArticleContext,
+    unsetAuthContext
+}) => {
+    const { authenticated, user,  refreshToken } = useContext(authContext);
 
-export function HeaderContainer({setOpenModal, setAddArticle, setArticle}) {
-    const { user:{user_id} } = useContext(authContext);
+    let handleClickOpen;
+    let logout;
 
-    const handleClickOpen = () => {
-        setOpenModal(true);
-        setAddArticle(true);
-        setArticle({
-            text: "",
-            user_id,
-            visibility: {
-                value: 1,
-                label: "All",
-            }
-        })
-    };
+    if (authenticated) {
+        handleClickOpen = () => {
+            setArticleContext({
+                openModal: true,
+                addArticle: true,
+                article: {
+                    text: "",
+                    user_id: user.user_id,
+                    visibility: {
+                        value: 1,
+                        label: "All",
+                    }
+                }
+            });
+        };
+
+        const { mutate } = useMutation(
+            apiLogout, {
+                onSuccess: () => {
+                    unsetAuthContext();
+                }
+            });
+
+        logout = () => {
+            mutate({refreshToken});
+        }
+    }
 
     return (
         <ErrorBoundary>
-            <Header handleClickOpen={handleClickOpen} user_id={user_id}/>
+            <Header
+                handleClickOpen={handleClickOpen}
+                user={user}
+                authenticated={authenticated}
+                logout={logout}
+            />
         </ErrorBoundary>
     );
 }
+
+HeaderContainer.propTypes = {
+    setArticleContext: PropTypes.func.isRequired,
+    unsetAuthContext: PropTypes.func.isRequired,
+}
+
+export default HeaderContainer;

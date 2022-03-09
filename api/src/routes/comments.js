@@ -1,24 +1,29 @@
 const router = require('express').Router();
 const db = require('../services/db');
 const asyncHandler = require('../middleware/asyncHandler');
+const storage = require('../db/comments/storage');
+const authMiddleware = require('../middleware/authMiddleware');
 
 router.get(
   '/',
+  authMiddleware,
   asyncHandler(async (req, res) => {
-    res.send(await db.select().from('comments').orderBy('comment_id'));
+    res.send(await storage.getAll());
   })
 );
 
 router.get(
   '/:id',
+  authMiddleware,
   asyncHandler(async (req, res) => {
     const id = parseInt(req.params.id, 10);
-    res.send(await db.select().from('comments').where('comment_id', id));
+    res.send(await storage.getById(id));
   })
 );
 
 router.post(
   '/',
+  authMiddleware,
   asyncHandler(async (req, res) => {
     const {
       article_id: articleID,
@@ -31,20 +36,18 @@ router.post(
     });
     let level;
     let path;
-    try {
-      level = await db('comments')
-        .select('level')
-        .where('comment_id', parentID);
-      level = parseInt(level[0].level, 10);
+    if (parentID !== undefined) {
+      const row = await storage.getLevelAndPath(parentID);
+      level = row[0].level;
+      level = parseInt(level, 10);
       level += 1;
-      path = await db('comments').select('path').where('comment_id', parentID);
-      path = path[0].path;
-    } catch (err) {
+      path = row[0].path;
+    } else {
       level = 1;
       path = '';
     }
     await db.transaction(async () => {
-      await db('comments').insert({
+      const id = await storage.create({
         article_id: articleID,
         user_id: userID,
         text,
@@ -52,51 +55,40 @@ router.post(
         level,
         commented_at: date,
       });
-      let id = await db.select(db.raw("currval('comments_comment_id_seq')"));
-      id = id[0].currval;
       if (path === '') {
-        path = id;
+        // eslint-disable-next-line prefer-destructuring
+        path = id[0];
       } else {
-        path = `${path}.${id}`;
+        path = `${path}.${id[0]}`;
       }
-      await db('comments')
-        .update({
-          path,
-        })
-        .where('comment_id', id);
+      await storage.update(id[0], {
+        path,
+      });
     });
-    res.send('Comment was added successfully.');
+    res.send({ message: 'Comment was added successfully.' });
   })
 );
 
 router.put(
   '/:id',
+  authMiddleware,
   asyncHandler(async (req, res) => {
     const { text } = req.body;
     const id = parseInt(req.params.id, 10);
-    await db('comments')
-      .update({
-        text,
-      })
-      .where('comment_id', id);
-    res.send('Comment was updated successfully.');
+    await storage.update(id, {
+      text,
+    });
+    res.send({ message: 'Comment was updated successfully.' });
   })
 );
 
 router.delete(
   '/:id',
+  authMiddleware,
   asyncHandler(async (req, res) => {
     const id = parseInt(req.params.id, 10);
-    await db('comments').delete().where('comment_id', id);
-    res.send('Comment was deleted successfully.');
-  })
-);
-
-router.get(
-  '/:id/likes',
-  asyncHandler(async (req, res) => {
-    const id = parseInt(req.params.id, 10);
-    res.send(await db.select().from('comment_likes').where('comment_id', id));
+    await storage.delete(id);
+    res.send({ message: 'Comment was deleted successfully.' });
   })
 );
 

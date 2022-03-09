@@ -1,17 +1,17 @@
 import React, {useContext} from "react";
-
-import Article from "../../components/article";
 import {useParams} from "react-router-dom";
-import ErrorBoundary from "../../components/ErrorBoundary";
-import {useQuery} from "react-query";
-import {getArticle, getComments} from "../api/articlesCrud";
-import Comment from "../../components/comment";
+import {useMutation, useQuery} from "react-query";
 import ReactLoading from "react-loading";
 import {Collapse} from "@mui/material";
+import PropTypes from 'prop-types';
+
+import ErrorBoundary from "../../components/ErrorBoundary";
+import Article from "../../components/article";
+import {deleteArticle, getArticle, getComments} from "../../api/articlesCrud";
+import Comment from "../../components/comment";
 import authContext from "../../context/authContext";
 
-
-export function ArticleContainer({setOpenModal, commentsExpanded, setCommentsExpanded, setArticle, setAddArticle}) {
+const ArticleContainer = ({commentsExpanded, setCommentsExpanded, setArticleContext}) => {
     let {id} = useParams();
     const {isFetching:articleFetching, data:articleData } = useQuery('article', () => getArticle(id));
     const {isFetching:commentsFetching, data:commentsData } = useQuery('comments', () => getComments(id));
@@ -28,11 +28,18 @@ export function ArticleContainer({setOpenModal, commentsExpanded, setCommentsExp
     };
 
     const handleEdit = (article) => {
-        setArticle(article);
-        setAddArticle(false);
-        setOpenModal(true);
+        setArticleContext({
+            openModal: true,
+            addArticle: false,
+            article
+        })
     }
 
+    const { mutate } = useMutation(deleteArticle);
+
+    const handleDelete = (article_id) => {
+        mutate(article_id);
+    }
 
     return (
         <div>
@@ -51,6 +58,7 @@ export function ArticleContainer({setOpenModal, commentsExpanded, setCommentsExp
                             handleExpandClick={handleExpandClick}
                             handleLikeClick={handleLikeClick}
                             isCurrentUser={article.user_id === user_id}
+                            handleDelete={handleDelete}
                         />
                     </ErrorBoundary>
                     <Collapse in={commentsExpanded} timeout="auto" unmountOnExit>
@@ -65,3 +73,11 @@ export function ArticleContainer({setOpenModal, commentsExpanded, setCommentsExp
         </div>
     );
 }
+
+ArticleContainer.propTypes = {
+    commentsExpanded: PropTypes.bool.isRequired,
+    setCommentsExpanded: PropTypes.func.isRequired,
+    setArticleContext: PropTypes.func.isRequired,
+}
+
+export default ArticleContainer;

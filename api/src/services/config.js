@@ -9,4 +9,5 @@ module.exports = {
   clientSecret: process.env.GOOGLE_API_CLIENT_SECRET,
   callbackURL: process.env.GOOGLE_CALLBACK_URL,
   appKey: process.env.APP_KEY,
+  salt: process.env.HASH_SALT,
 };

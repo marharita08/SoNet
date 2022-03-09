@@ -1,7 +1,7 @@
 const db = require('../../services/db');
 
 module.exports = {
-  create: async (user) => db('users').insert(user),
+  create: async (user) => db('users').returning('user_id').insert(user),
   getAll: async () => db.select().from('users').orderBy('user_id'),
   getById: async (id) =>
     db
@@ -10,7 +10,6 @@ module.exports = {
         'us.*',
         'un.name as university_label',
         'ev.visibility as ev_label',
-        'nv.visibility as nv_label',
         'pv.visibility as pv_label',
         'uv.visibility as uv_label'
       )
@@ -20,11 +19,6 @@ module.exports = {
         { ev: 'field_visibilities' },
         'email_visibility_id',
         'ev.visibility_id'
-      )
-      .join(
-        { nv: 'field_visibilities' },
-        'name_visibility_id',
-        'nv.visibility_id'
       )
       .join(
         { pv: 'field_visibilities' },
@@ -42,9 +36,7 @@ module.exports = {
         'un.university_id'
       )
       .where('u.user_id', id),
-  update: async (id, user) => db('users').update({ user }).where('user_id', id),
-  updateSettings: async (id, settings) =>
-    db('user_settings').update({ settings }).where('user_id', id),
+  update: async (id, user) => db('users').update(user).where('user_id', id),
   getAvatar: async (id) => db('users').select('avatar').where('user_id', id),
   delete: async (id) => db('users').delete().where('user_id', id),
   getFriends: async (id) =>
@@ -88,5 +80,4 @@ module.exports = {
       }),
   getByEmail: async (email) =>
     db('users').select().first().where('email', email),
-  createSession: async (session) => db('session').insert(session),
 };

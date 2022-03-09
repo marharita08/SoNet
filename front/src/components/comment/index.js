@@ -1,9 +1,10 @@
-import './comment.css';
 import {Link} from "react-router-dom";
 import moment from "moment";
-import env from "../../config/envConfig";
 import {Avatar, Button, Card, CardContent, CardHeader, Typography} from "@mui/material";
 import PropTypes from "prop-types";
+
+import env from "../../config/envConfig";
+import './comment.css';
 
 
 const Comment = ({comment}) => {

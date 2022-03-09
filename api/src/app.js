@@ -10,6 +10,7 @@ const commentsRoutes = require('./routes/comments');
 const universitiesRoutes = require('./routes/universities');
 const visibilitiesRoutes = require('./routes/visibilities');
 const authRoutes = require('./routes/auth');
+const friendsRoutes = require('./routes/friends');
 const logger = require('./middleware/logger');
 const errorHandler = require('./middleware/errorHandler');
 
@@ -30,6 +31,7 @@ app.use('/comments', commentsRoutes);
 app.use('/universities', universitiesRoutes);
 app.use('/visibilities', visibilitiesRoutes);
 app.use('/auth', authRoutes);
+app.use('/friends', friendsRoutes);
 
 app.use(errorHandler('logger'));
 

@@ -15,7 +15,7 @@ const errorHandler = (logTable) => async (err, req, res, next) => {
     message,
     stack,
   });
-  res.status(500).send("Something's going wrong!");
+  res.status(500).send({ message: 'Something went wrong!' });
   next();
 };
 

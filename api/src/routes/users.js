@@ -3,9 +3,13 @@ const fs = require('fs');
 const upload = require('../services/multerConfig');
 const asyncHandler = require('../middleware/asyncHandler');
 const storage = require('../db/users/storage');
+const settingsStorage = require('../db/settings/storage');
+const articleStorage = require('../db/articles/storage');
+const authMiddleware = require('../middleware/authMiddleware');
 
 router.get(
   '/',
+  authMiddleware,
   asyncHandler(async (req, res) => {
     res.send(await storage.getAll());
   })
@@ -13,6 +17,7 @@ router.get(
 
 router.get(
   '/:id',
+  authMiddleware,
   asyncHandler(async (req, res) => {
     const id = parseInt(req.params.id, 10);
     const dbResponse = await storage.getById(id);
@@ -50,6 +55,7 @@ router.get(
 
 router.post(
   '/',
+  authMiddleware,
   asyncHandler(async (req, res) => {
     const {
       name,
@@ -58,45 +64,50 @@ router.post(
       university_id: universityID,
       avatar,
     } = req.body;
-    await storage.create({
+    const id = await storage.create({
       name,
       email,
       phone,
       university_id: universityID,
       avatar,
     });
-    res.send('User was created successfully.');
+    await settingsStorage.create({ user_id: id[0] });
+    res.send({ message: 'Account was created successfully.' });
   })
 );
 
 router.put(
   '/:id',
+  authMiddleware,
   upload.single('file'),
   asyncHandler(async (req, res) => {
     const {
       name,
       email,
-      phone,
-      name_visibility: { value: nameVisibilityID },
       email_visibility: { value: emailVisibilityID },
       phone_visibility: { value: phoneVisibilityID },
       university_visibility: { value: universityVisibilityID },
     } = req.body;
     let {
       university: { value: universityID },
+      phone,
     } = req.body;
     const fileData = req.file;
     const id = parseInt(req.params.id, 10);
     if (universityID === undefined) {
       universityID = null;
     }
+    if (phone === '') {
+      phone = null;
+    }
     let path;
     if (fileData) {
       const oldFile = await storage.getAvatar(id);
+      const { avatar } = oldFile[0];
       const filePath = fileData.path;
       path = filePath.substr(filePath.indexOf('/'), filePath.length);
-      if (oldFile[0].avatar != null) {
-        fs.unlink(`public${oldFile[0].avatar}`, (err) => {
+      if (avatar != null) {
+        fs.unlink(`public${avatar}`, (err) => {
           if (err) {
             throw err;
           }
@@ -108,31 +119,32 @@ router.put(
       email,
       phone,
       university_id: universityID,
-      path,
+      avatar: path,
     };
     await storage.update(id, user);
     const settings = {
-      name_visibility_id: nameVisibilityID,
       email_visibility_id: emailVisibilityID,
       phone_visibility_id: phoneVisibilityID,
       university_visibility_id: universityVisibilityID,
     };
-    await storage.updateSettings(id, settings);
-    res.send('User was updated successfully.');
+    await settingsStorage.update(id, settings);
+    res.send({ message: 'Profile was updated successfully.' });
   })
 );
 
 router.delete(
   '/:id',
+  authMiddleware,
   asyncHandler(async (req, res) => {
     const id = parseInt(req.params.id, 10);
     await storage.delete(id);
-    res.send('User was deleted successfully.');
+    res.send({ message: 'Account was deleted successfully.' });
   })
 );
 
 router.get(
   '/:id/friends',
+  authMiddleware,
   asyncHandler(async (req, res) => {
     const id = parseInt(req.params.id, 10);
     res.send(await storage.getFriends(id));
@@ -141,6 +153,7 @@ router.get(
 
 router.get(
   '/:id/incoming-requests',
+  authMiddleware,
   asyncHandler(async (req, res) => {
     const id = parseInt(req.params.id, 10);
     res.send(await storage.getIncomingRequests(id));
@@ -149,9 +162,30 @@ router.get(
 
 router.get(
   '/:id/outgoing-requests',
+  authMiddleware,
   asyncHandler(async (req, res) => {
     const id = parseInt(req.params.id, 10);
     res.send(await storage.getOutgoingRequests(id));
+  })
+);
+
+router.get(
+  '/:id/news',
+  authMiddleware,
+  asyncHandler(async (req, res) => {
+    const id = parseInt(req.params.id, 10);
+    const dbResponse = await articleStorage.getNews(id);
+    const result = [];
+    Object.keys(dbResponse).forEach((dbResponseKey) => {
+      result.push({
+        ...dbResponse[dbResponseKey],
+        visibility: {
+          value: dbResponse[dbResponseKey].visibility_id,
+          label: dbResponse[dbResponseKey].visibility,
+        },
+      });
+    });
+    res.send(result);
   })
 );
 

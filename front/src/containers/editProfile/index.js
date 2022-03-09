@@ -1,11 +1,13 @@
 import React, {useState} from "react";
+import {useMutation, useQuery} from "react-query";
+import {serialize} from "object-to-formdata";
+
 import ErrorBoundary from "../../components/ErrorBoundary";
 import EditProfile from '../../components/editProfile';
-import {useMutation, useQuery} from "react-query";
-import {getUniversities} from "../api/universitiesCrud";
-import {getFieldVisibilities} from "../api/visibilitiesCrud";
-import {updateUser} from "../api/usersCrud";
-import {serialize} from "object-to-formdata";
+import {getUniversities} from "../../api/universitiesCrud";
+import {getFieldVisibilities} from "../../api/visibilitiesCrud";
+import {updateUser} from "../../api/usersCrud";
+import {EditProfileContainerPropTypes} from "./editProfileContainerPropTypes";
 
 const EditProfileContainer = ({openModal, setOpenModal, user}) => {
 
@@ -18,22 +20,18 @@ const EditProfileContainer = ({openModal, setOpenModal, user}) => {
     const [image, setImage] = useState();
     const [croppedImage, setCroppedImage] = useState();
     const [cropper, setCropper] = useState();
+    const [message, setMessage] = useState();
 
     const { mutate, isLoading } = useMutation(
         updateUser, {
-            onSuccess: data => {
-                console.log(data);
-                alert(data.data)
-            },
-            onError: () => {
-                alert("Updating was failed.");
+            onSettled: () => {
+                setOpenModal(false);
+                setMessage(undefined);
             }
         });
 
     const onFormSubmit = (data) => {
-        console.log(data);
         let formData=serialize(data);
-        formData.append('fileDestination', 'avatar');
         mutate(formData);
     }
 
@@ -47,8 +45,11 @@ const EditProfileContainer = ({openModal, setOpenModal, user}) => {
                 setImage(reader.result);
             }
             reader.readAsDataURL(file);
+            if (message) {
+                setMessage(undefined);
+            }
         } else {
-            console.error('Wrong file format or size!');
+            setMessage('Wrong file format or size!');
         }
     }
 
@@ -74,7 +75,8 @@ const EditProfileContainer = ({openModal, setOpenModal, user}) => {
     const handleClose = () => {
         setOpenModal(false);
         setCroppedImage(null);
-        setImage(null)
+        setImage(null);
+        setMessage(undefined);
     };
 
 
@@ -95,9 +97,12 @@ const EditProfileContainer = ({openModal, setOpenModal, user}) => {
                 openModal={openModal}
                 handleClose={handleClose}
                 isFetching={universitiesFetching||visibilitiesFetching}
+                message={message}
             />
         </ErrorBoundary>
     );
 }
+
+EditProfileContainer.propTypes = EditProfileContainerPropTypes;
 
 export default EditProfileContainer;

@@ -1,18 +1,22 @@
-import ErrorBoundary from "../../components/ErrorBoundary";
-import User from "../../components/user";
 import React from "react";
 import PropTypes from "prop-types";
 import ReactLoading from "react-loading";
 import {useQuery} from "react-query";
-import {getOutgoingRequests} from "../api/usersCrud";
 
-const OutgoingRequests = ({id}) => {
+import ErrorBoundary from "../../components/ErrorBoundary";
+import User from "../../components/user";
+import {getOutgoingRequests} from "../../api/usersCrud";
+
+const OutgoingRequests = ({id, deleteMutate}) => {
 
     const {isFetching: outgoingRequestsFetching, data: outgoingRequestsData} = useQuery('outgoing-requests', () => getOutgoingRequests(id));
     let outgoingRequests = outgoingRequestsData?.data;
 
-    const handleClose = (event) => {
-        event.preventDefault();
+    const handleClose = (user_id) => {
+        deleteMutate({
+            current_user_id: id,
+            user_id: user_id
+        });
     };
 
     return (
@@ -31,7 +35,8 @@ const OutgoingRequests = ({id}) => {
 }
 
 OutgoingRequests.propTypes = {
-   id: PropTypes.number.isRequired,
+    id: PropTypes.number.isRequired,
+    deleteMutate: PropTypes.func.isRequired
 };
 
 export default OutgoingRequests;

@@ -1,37 +1,16 @@
 const router = require('express').Router();
-const db = require('../services/db');
+const fs = require('fs');
 const upload = require('../services/multerConfig');
 const asyncHandler = require('../middleware/asyncHandler');
+const storage = require('../db/articles/storage');
+const commentStorage = require('../db/comments/storage');
+const authMiddleware = require('../middleware/authMiddleware');
 
 router.get(
   '/',
+  authMiddleware,
   asyncHandler(async (req, res) => {
-    const dbResponse = await db
-      .select(
-        'articles.*',
-        db.raw("to_char(created_at, 'DD.MM.YYYY HH24:MI:SS') as created_at"),
-        'users.name',
-        'users.avatar',
-        'v.visibility'
-      )
-      .countDistinct('article_likes.user_id', { as: 'likes' })
-      .countDistinct('comments.comment_id', { as: 'comments' })
-      .from('articles')
-      .join('users', 'articles.user_id', 'users.user_id')
-      .join(
-        { v: 'article_visibilities' },
-        'v.visibility_id',
-        'articles.visibility_id'
-      )
-      .leftJoin(
-        'article_likes',
-        'article_likes.article_id',
-        'articles.article_id'
-      )
-      .leftJoin('comments', 'comments.article_id', 'articles.article_id')
-      .groupBy('articles.article_id')
-      .groupBy('users.user_id')
-      .groupBy('v.visibility');
+    const dbResponse = await storage.getAll();
     const result = [];
     Object.keys(dbResponse).forEach((dbResponseKey) => {
       result.push({
@@ -48,35 +27,10 @@ router.get(
 
 router.get(
   '/:id',
+  authMiddleware,
   asyncHandler(async (req, res) => {
     const id = parseInt(req.params.id, 10);
-    const dbResponse = await db
-      .select(
-        'articles.*',
-        db.raw("to_char(created_at, 'DD.MM.YYYY HH24:MI:SS') as created_at"),
-        'users.name',
-        'users.avatar',
-        'v.visibility'
-      )
-      .countDistinct('article_likes.user_id', { as: 'likes' })
-      .countDistinct('comments.comment_id', { as: 'comments' })
-      .from('articles')
-      .join('users', 'articles.user_id', 'users.user_id')
-      .join(
-        { v: 'article_visibilities' },
-        'v.visibility_id',
-        'articles.visibility_id'
-      )
-      .leftJoin(
-        'article_likes',
-        'article_likes.article_id',
-        'articles.article_id'
-      )
-      .leftJoin('comments', 'comments.article_id', 'articles.article_id')
-      .groupBy('articles.article_id')
-      .groupBy('users.user_id')
-      .groupBy('v.visibility')
-      .where('articles.article_id', id);
+    const dbResponse = await storage.getById(id);
     const result = [
       {
         ...dbResponse[0],
@@ -92,6 +46,7 @@ router.get(
 
 router.post(
   '/',
+  authMiddleware,
   upload.single('file'),
   asyncHandler(async (req, res) => {
     const {
@@ -108,19 +63,20 @@ router.post(
       const filePath = fileData.path;
       path = filePath.substr(filePath.indexOf('/'), filePath.length);
     }
-    await db('articles').insert({
+    await storage.create({
       user_id: userID,
       text,
       visibility_id: visibilityID,
       created_at: date,
       image: path,
     });
-    res.send('Article was created successfully.');
+    res.send({ message: 'Article was created successfully.' });
   })
 );
 
 router.put(
   '/:id',
+  authMiddleware,
   upload.single('file'),
   asyncHandler(async (req, res) => {
     const {
@@ -131,59 +87,52 @@ router.put(
     const fileData = req.file;
     let path = null;
     if (fileData) {
+      const oldFile = await storage.getFile(id);
+      const { image } = oldFile[0];
       const filePath = fileData.path;
       path = filePath.substr(filePath.indexOf('/'), filePath.length);
+      if (image != null) {
+        fs.unlink(`public${image}`, (err) => {
+          if (err) {
+            throw err;
+          }
+        });
+      }
     }
-    await db('articles')
-      .update({
-        text,
-        visibility_id: visibilityID,
-        image: path,
-      })
-      .where('article_id', id);
-    res.send('Article was updated successfully.');
+    await storage.update(id, {
+      text,
+      visibility_id: visibilityID,
+      image: path,
+    });
+    res.send({ message: 'Article was updated successfully.' });
   })
 );
 
 router.delete(
   '/:id',
+  authMiddleware,
   asyncHandler(async (req, res) => {
     const id = parseInt(req.params.id, 10);
-    await db('articles').delete().where('article_id', id);
-    res.send('Article was deleted successfully.');
-  })
-);
-
-router.get(
-  '/:id/likes',
-  asyncHandler(async (req, res) => {
-    const id = parseInt(req.params.id, 10);
-    res.send(
-      await db.select().from('article_likes').where('article_id', '=', id)
-    );
+    const file = await storage.getFile(id);
+    const { image } = file[0];
+    if (image != null) {
+      fs.unlink(`public${image}`, (err) => {
+        if (err) {
+          throw err;
+        }
+      });
+    }
+    await storage.delete(id);
+    res.send({ message: 'Article was deleted successfully.' });
   })
 );
 
 router.get(
   '/:id/comments',
+  authMiddleware,
   asyncHandler(async (req, res) => {
     const id = parseInt(req.params.id, 10);
-    res.send(
-      await db
-        .select(
-          'ch.*',
-          'chu.name',
-          'chu.avatar',
-          'pu.name as to',
-          'p.user_id as p_user_id'
-        )
-        .from({ ch: 'comments' })
-        .leftOuterJoin({ p: 'comments' }, 'p.comment_id', 'ch.parent_id')
-        .leftOuterJoin({ pu: 'users' }, 'pu.user_id', 'p.user_id')
-        .join({ chu: 'users' }, 'chu.user_id', 'ch.user_id')
-        .where('ch.article_id', id)
-        .orderBy('ch.path')
-    );
+    res.send(await commentStorage.getByArticleId(id));
   })
 );
 

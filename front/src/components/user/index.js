@@ -1,12 +1,13 @@
-import './user.css';
 import {Link} from "react-router-dom";
 import PropTypes from "prop-types";
-import env from "../../config/envConfig";
 import {Avatar, Card, CardHeader, IconButton, Menu, MenuItem, Typography} from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import {useState} from "react";
 
-const User = ({user, handleClose, menu, approve, decline}) => {
+import env from "../../config/envConfig";
+import './user.css';
+
+const User = ({user, handleClose, menu, accept, decline}) => {
 
     const [anchorEl, setAnchorEl] = useState(null);
 
@@ -19,16 +20,16 @@ const User = ({user, handleClose, menu, approve, decline}) => {
         setAnchorEl(null);
     };
 
-    const approveOnClick = (event) => {
+    const acceptOnClick = (event) => {
         event.preventDefault();
         setAnchorEl(null);
-        approve(user);
+        accept(user.user_id);
     }
 
     const declineOnClick = (event) => {
         event.preventDefault();
         setAnchorEl(null);
-        decline(user);
+        decline(user.user_id);
     }
 
     return (
@@ -38,14 +39,19 @@ const User = ({user, handleClose, menu, approve, decline}) => {
                     <CardHeader
                         avatar={
                             <Avatar
-                                alt={user?.name}
                                 src={`${env.apiUrl}${user.avatar}`}
                                 sx={{ width: 50, height: 50 }}
                             />
                         }
                         action={
                             (!menu &&
-                            <IconButton className="closebtn" onClick={handleClose}>
+                            <IconButton
+                                className="closebtn"
+                                onClick={(event) => {
+                                    event.preventDefault();
+                                    handleClose(user.user_id);
+                                }}
+                            >
                                 <span>&times;</span>
                             </IconButton> )||
                             (menu &&
@@ -74,7 +80,7 @@ const User = ({user, handleClose, menu, approve, decline}) => {
                         open={Boolean(anchorEl)}
                         onClose={handleMenuClose}
                     >
-                        <MenuItem onClick={approveOnClick}>Approve</MenuItem>
+                        <MenuItem onClick={acceptOnClick}>Accept</MenuItem>
                         <MenuItem onClick={declineOnClick}>Decline</MenuItem>
                     </Menu>
                 </Card>
@@ -89,9 +95,9 @@ User.propTypes = {
         name: PropTypes.string.isRequired,
         avatar: PropTypes.string.isRequired
     }),
-    handleClose: PropTypes.func.isRequired,
+    handleClose: PropTypes.func,
     menu: PropTypes.bool.isRequired,
-    approve: PropTypes.func,
+    accept: PropTypes.func,
     decline: PropTypes.func,
 };
 

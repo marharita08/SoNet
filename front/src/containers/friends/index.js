@@ -1,18 +1,22 @@
-import ErrorBoundary from "../../components/ErrorBoundary";
-import User from "../../components/user";
 import React from "react";
-import PropTypes from "prop-types";
 import {useQuery} from "react-query";
-import {getFriends} from "../api/usersCrud";
 import ReactLoading from "react-loading";
 
-const Friends = ({id}) => {
+import ErrorBoundary from "../../components/ErrorBoundary";
+import User from "../../components/user";
+import {getFriends} from "../../api/usersCrud";
+import PropTypes from "prop-types";
+
+const Friends = ({id, deleteMutate}) => {
 
     const {isFetching: friendsFetching, data: friendsData} = useQuery('friends', () => getFriends(id));
     let friends = friendsData?.data;
 
-    const handleClose = (event) => {
-        event.preventDefault();
+    const handleClose = (user_id) => {
+        deleteMutate({
+            current_user_id: id,
+            user_id: user_id
+        });
     };
 
     return (
@@ -32,6 +36,7 @@ const Friends = ({id}) => {
 
 Friends.propTypes = {
     id: PropTypes.number.isRequired,
+    deleteMutate: PropTypes.func.isRequired,
 };
 
 export default Friends;

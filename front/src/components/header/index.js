@@ -1,29 +1,86 @@
-
-import React from "react";
+import React, {useState} from "react";
 import {Link} from "react-router-dom";
 import PropTypes from "prop-types";
+import {Avatar, Menu, MenuItem} from "@mui/material";
+import env from "../../config/envConfig";
 
-const Header = ({handleClickOpen, user_id}) => {
+const Header = ({handleClickOpen, user, authenticated, logout}) => {
+    const [anchorEl, setAnchorEl] = useState(null);
+
+    const handleMenu = (event) => {
+        event.preventDefault();
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleMenuClose = () => {
+        setAnchorEl(null);
+    };
+
     return (
         <>
             <header>
                 <Link to={"/"}>
-                    <button className={"left"}>Articles</button>
+                    <button className={"left"} onClick={'update'}>Home</button>
                 </Link>
-
-                <button onClick={handleClickOpen}>Add article</button>
-
-                <Link to={`/profile/${user_id}`}>
-                    <button className={"right"}>Profile</button>
-                </Link>
+                {
+                    authenticated &&
+                    <div>
+                        <button onClick={handleClickOpen}>Add article</button>
+                        <button
+                            className={"right"}
+                            onClick={handleMenu}
+                            style={{margin:0, border: "none", padding:'5px 10px'}}
+                        >
+                            <div className={'inline'}>
+                                <Avatar
+                                    src={`${env.apiUrl}${user.avatar}`}
+                                    sx={{ width: 40,
+                                        height: 40,
+                                        margin: '0 5px'
+                                    }}
+                                />
+                            </div>
+                            <div className={'inline margin username'}>
+                                {user.name}
+                            </div>
+                        </button>
+                        <Menu
+                            id="menu-article"
+                            anchorEl={anchorEl}
+                            anchorOrigin={{
+                                vertical: 'top',
+                                horizontal: 'right',
+                            }}
+                            keepMounted
+                            transformOrigin={{
+                                vertical: 'top',
+                                horizontal: 'right',
+                            }}
+                            open={Boolean(anchorEl)}
+                            onClose={handleMenuClose}
+                        >
+                            <Link to={`/profile/${user.user_id}`}
+                                  onClick={'update'}
+                                  style={{'text-decoration': 'none'}}
+                            >
+                                <MenuItem>Profile</MenuItem>
+                            </Link>
+                            <Link to={"/"} style={{'text-decoration': 'none'}}>
+                                <MenuItem onClick={logout}>Logout</MenuItem>
+                            </Link>
+                        </Menu>
+                    </div>
+                }
             </header>
         </>
     );
 }
 
 Header.propTypes = {
-    handleClickOpen: PropTypes.func.isRequired,
-    user_id: PropTypes.number
+    handleClickOpen: PropTypes.func,
+    user: PropTypes.object,
+    authenticated: PropTypes.bool.isRequired,
+    logout: PropTypes.func,
 }
 
 export default Header;

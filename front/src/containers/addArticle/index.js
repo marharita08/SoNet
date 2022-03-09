@@ -1,56 +1,48 @@
-import React, {useState} from "react";
-
-import AddArticle from '../../components/addArticle';
-import ErrorBoundary from "../../components/ErrorBoundary";
+import React, {useContext, useState} from "react";
 import {useMutation, useQuery} from "react-query";
-import {getArticleVisibilities} from "../api/visibilitiesCrud";
-import {insertArticle, updateArticle} from "../api/articlesCrud";
 import PropTypes from "prop-types";
 import {serialize} from "object-to-formdata";
 
-const AddArticleContainer = ({openModal, setOpenModal, article, addArticle}) => {
+import ErrorBoundary from "../../components/ErrorBoundary";
+import AddArticle from '../../components/addArticle';
+import {getArticleVisibilities} from "../../api/visibilitiesCrud";
+import {insertArticle, updateArticle} from "../../api/articlesCrud";
+import articleContext from "../../context/articleContext";
+
+const AddArticleContainer = ({setArticleContext}) => {
     const { data } = useQuery('visibilities', () => getArticleVisibilities());
+    const articleState = useContext(articleContext);
+    const {article, addArticle} = articleState;
     const visibilities = data?.data;
     const [image, setImage] = useState();
     const [croppedImage, setCroppedImage] = useState();
     const [cropper, setCropper] = useState();
+    const [message, setMessage] = useState();
 
-    const { mutate: updateMutate, isLoading: updateLoading } = useMutation(
-        updateArticle, {
-            onSuccess: data => {
-                console.log(data);
-                alert(data.data)
-            },
-            onError: () => {
-                alert("Updating was failed.");
-            }
-        });
+    const { mutate: updateMutate, isLoading: updateLoading } = useMutation(updateArticle);
 
-    const { mutate: insertMutate, isLoading: insertLoading } = useMutation(
-        insertArticle, {
-            onSuccess: data => {
-                console.log(data);
-                alert(data.data)
-            },
-            onError: () => {
-                alert("Adding was failed.");
-            }
-        });
+    const { mutate: insertMutate, isLoading: insertLoading } = useMutation(insertArticle);
 
     const onFormSubmit = (data) => {
-        let formData=serialize(data);
+        let formData = serialize(data);
         if (addArticle) {
             insertMutate(formData);
         } else {
             updateMutate(formData);
         }
-        setOpenModal(false);
+        setArticleContext({
+            openModal: false,
+        });
+        setMessage(undefined);
     }
 
     const handleClose = () => {
-        setOpenModal(false);
+        setArticleContext({
+            openModal: false,
+        });
         setCroppedImage(null);
-        setImage(null)
+        setImage(null);
+        setMessage(undefined);
     };
 
     const handleChange = e => {
@@ -63,8 +55,11 @@ const AddArticleContainer = ({openModal, setOpenModal, article, addArticle}) => 
                 setImage(reader.result);
             }
             reader.readAsDataURL(file);
+            if (message) {
+                setMessage(undefined);
+            }
         } else {
-            console.error('Wrong file format or size!');
+            setMessage('Wrong file format or size!');
         }
     }
 
@@ -82,7 +77,7 @@ const AddArticleContainer = ({openModal, setOpenModal, article, addArticle}) => 
     }
 
     const deleteImage = (setFieldValue) => {
-        article.image=null;
+        article.image = null;
         setImage(null);
         setCroppedImage(null);
         setFieldValue("file", undefined);
@@ -92,7 +87,6 @@ const AddArticleContainer = ({openModal, setOpenModal, article, addArticle}) => 
         <ErrorBoundary>
             <AddArticle
                 visibilities={visibilities}
-                openModal={openModal}
                 onFormSubmit={onFormSubmit}
                 handleClose={handleClose}
                 loading={updateLoading||insertLoading}
@@ -104,22 +98,14 @@ const AddArticleContainer = ({openModal, setOpenModal, article, addArticle}) => 
                 croppedImage={croppedImage}
                 cropImage={cropImage}
                 handleChange={handleChange}
+                message={message}
             />
         </ErrorBoundary>
     );
 }
 
 AddArticleContainer.propTypes = {
-    openModal: PropTypes.bool.isRequired,
-    setOpenModal: PropTypes.func.isRequired,
-    article: PropTypes.shape({
-        text: PropTypes.string.isRequired,
-        visibility: PropTypes.shape({
-            value: PropTypes.number.isRequired,
-            label: PropTypes.string.isRequired,
-        }),
-    }),
-    addArticle: PropTypes.bool.isRequired,
+    setArticleContext: PropTypes.func.isRequired,
 }
 
 export default AddArticleContainer;

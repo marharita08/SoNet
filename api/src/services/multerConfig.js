@@ -7,11 +7,7 @@ const storageConfig = multer.diskStorage({
   },
   filename: (req, file, cb) => {
     const ext = file.mimetype.split('/')[1];
-    if (req.method === 'PUT') {
-      cb(null, `${req.params.id}.${ext}`);
-    } else {
-      cb(null, `${req.body.article_id}.${ext}`);
-    }
+    cb(null, `${req.body.user_id}-${Date.now()}.${ext}`);
   },
 });
 

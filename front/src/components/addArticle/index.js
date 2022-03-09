@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import {Formik, Form, Field, ErrorMessage} from "formik";
 import {
     Button,
@@ -9,16 +8,17 @@ import {
     DialogTitle,
     IconButton,
 } from "@mui/material";
-
-import './addArticle.css';
 import * as Yup from "yup";
 import FormikAutocomplete from "../FormikAutocomplete";
 import Cropper from "react-cropper";
+
 import env from "../../config/envConfig";
+import {AddArticlePropTypes} from "./addArticlePropTypes";
+import './addArticle.css';
+import AlertContainer from "../../containers/alert";
 
 const AddArticle = ({
     visibilities,
-    openModal,
     article,
     addArticle,
     handleClose,
@@ -30,6 +30,7 @@ const AddArticle = ({
     cropImage,
     croppedImage,
     deleteImage,
+    message
 }) => {
 
     const schema = Yup.object().shape({
@@ -43,7 +44,7 @@ const AddArticle = ({
     return (
         <>
             <Dialog
-                open={openModal}
+                open={true}
                 onClose={handleClose}
                 fullWidth
                 maxWidth="sm"
@@ -62,6 +63,7 @@ const AddArticle = ({
                                 {addArticle && "Add article"}
                                 {!addArticle && "Edit article"}
                             </DialogTitle>
+                            <AlertContainer alertMessage={message} alertSeverity={'error'}/>
                             <DialogContent>
                                 <ErrorMessage name="text" render={msg => <div className="error">{msg}</div>}/>
                                 <label htmlFor="contained-button-file" className={"file margin"}>
@@ -153,23 +155,6 @@ const AddArticle = ({
     );
 }
 
-AddArticle.propTypes = {
-    visibilities: PropTypes.arrayOf(PropTypes.shape({
-        value: PropTypes.number.isRequired,
-        label: PropTypes.string.isRequired
-    })),
-    article: PropTypes.shape({
-        text: PropTypes.string.isRequired,
-        visibility: PropTypes.shape({
-            value: PropTypes.number.isRequired,
-            label: PropTypes.string.isRequired,
-        }),
-    }),
-    addArticle: PropTypes.bool.isRequired,
-    handleClose: PropTypes.func.isRequired,
-    onFormSubmit: PropTypes.func.isRequired,
-    openModal: PropTypes.bool.isRequired,
-    loading: PropTypes.bool.isRequired
-}
+AddArticle.propTypes = AddArticlePropTypes;
 
 export default AddArticle;

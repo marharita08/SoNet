@@ -1,29 +1,58 @@
 import React, {useContext, useState} from "react";
 import ReactLoading from 'react-loading';
+import {useParams} from "react-router-dom";
+import {useMutation, useQuery} from "react-query";
 
 import Profile from '../../components/profile';
 import ErrorBoundary from "../../components/ErrorBoundary";
 import EditProfileContainer from '../editProfile'
-import {useParams} from "react-router-dom";
-
-import { useQuery} from "react-query";
-import {getUser} from "../api/usersCrud";
-
+import {getUser} from "../../api/usersCrud";
 import OutgoingRequests from "../outgoingRequests";
 import authContext from "../../context/authContext";
 import Friends from "../friends";
 import IncomingRequests from "../incomingRequests";
+import {acceptRequest, declineRequest, deleteRequest, getStatus, insertRequest} from "../../api/friendsCrud";
 
-export function ProfileContainer() {
+const ProfileContainer = () => {
     let {id} = useParams();
     const [openModal, setOpenModal] = useState(false);
     const {user:currentUser} = useContext(authContext);
     const {isFetching: userFetching, data: userData} = useQuery('user', () => getUser(id));
+    const {data: statusData} = useQuery('status',
+            () => getStatus({'user_id': id, 'current_user_id': currentUser.user_id}));
 
+    const status = statusData?.data;
     let users = userData?.data;
+
 
     const handleClick = () => {
       setOpenModal(true);
+    }
+
+    const { mutate: addMutate, isLoading: addLoading } = useMutation(insertRequest);
+    const { mutate: acceptMutate, isLoading: acceptLoading } = useMutation(acceptRequest);
+    const { mutate: declineMutate } = useMutation(declineRequest);
+    const { mutate: deleteMutate, isLoading: deleteLoading } = useMutation(deleteRequest);
+
+    const addToFriends = () => {
+        addMutate({
+                from_user_id: currentUser.user_id,
+                to_user_id: id
+            });
+    }
+
+    const accept = () => {
+        acceptMutate({
+            to_user_id: currentUser.user_id,
+            from_user_id: id
+        });
+    }
+
+    const deleteFromFriends = () => {
+        deleteMutate({
+            current_user_id: currentUser.user_id,
+            user_id: id
+        });
     }
 
     return (
@@ -36,6 +65,14 @@ export function ProfileContainer() {
                             user={user}
                             handleClick={handleClick}
                             isCurrentUser={user.user_id === currentUser.user_id}
+                            addToFriends={addToFriends}
+                            accept={accept}
+                            deleteFromFriends={deleteFromFriends}
+                            isFriends={status === 'friends'}
+                            isNotFriends={status === 'not friends'}
+                            isIncomingRequest={status === 'incoming request'}
+                            isOutgoingRequest={status === 'outgoing request'}
+                            isLoading={acceptLoading||addLoading||deleteLoading}
                         />
                     </ErrorBoundary>
                     <EditProfileContainer
@@ -46,9 +83,9 @@ export function ProfileContainer() {
                     {
                         user.user_id === currentUser.user_id &&
                         <div>
-                            <Friends id={id}/>
-                            <IncomingRequests id={id}/>
-                            <OutgoingRequests id={id}/>
+                            <Friends id={id} deleteMutate={deleteMutate}/>
+                            <IncomingRequests id={id} acceptMutate={acceptMutate} declineMutate={declineMutate}/>
+                            <OutgoingRequests id={id} deleteMutate={deleteMutate}/>
                         </div>
                     }
                 </div>
@@ -56,3 +93,5 @@ export function ProfileContainer() {
         </>
     );
 }
+
+export default ProfileContainer;

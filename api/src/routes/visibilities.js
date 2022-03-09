@@ -1,28 +1,21 @@
 const router = require('express').Router();
-const db = require('../services/db');
 const asyncHandler = require('../middleware/asyncHandler');
+const storage = require('../db/visibilities/storage');
+const authMiddleware = require('../middleware/authMiddleware');
 
 router.get(
   '/field',
+  authMiddleware,
   asyncHandler(async (req, res) => {
-    res.send(
-      await db
-        .select('visibility_id as value', 'visibility as label')
-        .from('field_visibilities')
-        .orderBy('visibility_id')
-    );
+    res.send(await storage.getForFiled());
   })
 );
 
 router.get(
   '/article',
+  authMiddleware,
   asyncHandler(async (req, res) => {
-    res.send(
-      await db
-        .select('visibility_id as value', 'visibility as label')
-        .from('article_visibilities')
-        .orderBy('visibility_id')
-    );
+    res.send(await storage.getForArticle());
   })
 );
 

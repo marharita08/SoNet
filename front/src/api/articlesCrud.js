@@ -1,4 +1,4 @@
-import { apiClient } from '../../config/axios';
+import apiClient from '../config/axios';
 
 export const getArticles = async () => {
     return apiClient.get('/articles');
@@ -28,4 +28,8 @@ export const updateArticle = async (article) => {
             "File-Destination": "article",
         },
     });
+}
+
+export const deleteArticle = async (id) => {
+    return apiClient.delete(`/articles/${id}`);
 }

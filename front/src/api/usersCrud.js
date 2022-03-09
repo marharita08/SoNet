@@ -1,4 +1,4 @@
-import { apiClient } from '../../config/axios';
+import apiClient from '../config/axios';
 
 export const getUser = async (id) => {
     return apiClient.get(`/users/${id}`);
@@ -27,4 +27,8 @@ export const getIncomingRequests = async (id) => {
 
 export const getOutgoingRequests = async (id) => {
     return apiClient.get(`/users/${id}/outgoing-requests`);
+}
+
+export const getNews = async (id) => {
+    return apiClient.get(`/users/${id}/news`);
 }

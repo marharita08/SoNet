@@ -2,6 +2,7 @@ header {
     padding: 2px 5px;
     text-align: center;
     background-color: #001a4d;
+    height: 50px;
 }
 
 header button {
@@ -19,4 +20,10 @@ header button {
 }
 header button:hover {
     color: #00ffff;
+}
+
+.username {
+    text-transform: none;
+    letter-spacing: inherit;
+    font-size: 15px;
 }

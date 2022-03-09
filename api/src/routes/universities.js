@@ -1,16 +1,13 @@
 const router = require('express').Router();
-const db = require('../services/db');
 const asyncHandler = require('../middleware/asyncHandler');
+const storage = require('../db/universities/storage');
+const authMiddleware = require('../middleware/authMiddleware');
 
 router.get(
   '/',
+  authMiddleware,
   asyncHandler(async (req, res) => {
-    res.send(
-      await db
-        .select('university_id as value', 'name as label')
-        .from('universities')
-        .orderBy('name')
-    );
+    res.send(await storage.getAll());
   })
 );
 

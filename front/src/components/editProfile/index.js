@@ -2,12 +2,14 @@ import {Field, Form, Formik} from "formik";
 import {TextField} from "formik-mui";
 import FormikAutocomplete from "../FormikAutocomplete";
 import {Avatar, Button, CircularProgress, Dialog, DialogTitle, IconButton} from "@mui/material";
-import env from "../../config/envConfig";
 import Cropper from "react-cropper";
 import * as Yup from "yup";
-import {EditProfilePropTypes} from "./editProfilePropTypes";
 import ReactLoading from "react-loading";
 import React from "react";
+
+import env from "../../config/envConfig";
+import {EditProfilePropTypes} from "./editProfilePropTypes";
+import AlertContainer from "../../containers/alert";
 
 const EditProfile = (
     props
@@ -28,20 +30,17 @@ const EditProfile = (
         handleClose,
         user,
         isFetching,
+        message
     } = props;
 
         const schema = Yup.object().shape({
-        name: Yup.string().required("Name is required").max(255, "Mast be no more than 255 symbols"),
-        name_visibility: Yup.object().shape({
-            value: Yup.number(),
-            label: Yup.string(),
-        }).nullable(),
+        name: Yup.string().required("Name is required").max(255, "Must be no more than 255 symbols"),
         email: Yup.string().required("Email is required"),
         email_visibility: Yup.object().shape({
             value: Yup.number(),
             label: Yup.string(),
         }).nullable(),
-        phone: Yup.string().required("Phone number is required").matches(/^[+]380[\d]{9}$/, "Must match +380xxxxxxxxx"),
+        phone: Yup.string().matches(/^[+]380[\d]{9}$/, "Must match +380xxxxxxxxx").nullable(),
         phone_visibility: Yup.object().shape({
             value: Yup.number(),
             label: Yup.string(),
@@ -81,9 +80,9 @@ const EditProfile = (
                                 <span>&times;</span>
                             </IconButton>
                             <DialogTitle>Edit profile</DialogTitle>
+                            <AlertContainer alertMessage={message} alertSeverity={'error'}/>
                             <div className={"user_img"} >
                                 <Avatar
-                                    alt={user?.name}
                                     className={"big_margin"}
                                     src={croppedImage||`${env.apiUrl}${user?.avatar}`}
                                     sx={{ width: 100, height: 100 }}
@@ -141,13 +140,6 @@ const EditProfile = (
                                         name={"name"}
                                         label={"Name"}
                                         className={"inline fields_width fields_height"}
-                                    />
-                                    <Field
-                                        component={FormikAutocomplete}
-                                        name="name_visibility"
-                                        label={"Available to"}
-                                        options={visibilities}
-                                        className={"inline visibility fields_height"}
                                     />
                                 </div>
                                 <div className={"fields_margin"}>

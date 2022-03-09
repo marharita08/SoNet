@@ -1,26 +1,30 @@
-import ErrorBoundary from "../../components/ErrorBoundary";
-import User from "../../components/user";
 import React from "react";
-import PropTypes from "prop-types";
 import {useQuery} from "react-query";
-import {getIncomingRequests} from "../api/usersCrud";
+import PropTypes from "prop-types";
 import ReactLoading from "react-loading";
 
-const IncomingRequests = ({id}) => {
+import ErrorBoundary from "../../components/ErrorBoundary";
+import User from "../../components/user";
+import {getIncomingRequests} from "../../api/usersCrud";
 
-    const {isFetching: incomingRequestsFetching, data: incomingRequestsData} = useQuery('incoming-requests', () => getIncomingRequests(id));
+const IncomingRequests = ({id, acceptMutate, declineMutate}) => {
+
+    const {isFetching: incomingRequestsFetching, data: incomingRequestsData} =
+        useQuery('incoming-requests', () => getIncomingRequests(id));
     let incomingRequests = incomingRequestsData?.data;
 
-    const handleClose = (event) => {
-        event.preventDefault();
-    };
-
-    const decline = (user) => {
-
+    const decline = (user_id) => {
+        declineMutate({
+            to_user_id: id,
+            from_user_id: user_id
+        });
     }
 
-    const approve = (user) => {
-
+    const accept = (user_id) => {
+        acceptMutate({
+            to_user_id: id,
+            from_user_id: user_id
+        });
     }
 
     return (
@@ -30,7 +34,7 @@ const IncomingRequests = ({id}) => {
             <div>
                 {incomingRequests?.map((user)=>
                     <ErrorBoundary key={user.user_id}>
-                        <User user={user} handleClose={handleClose} menu={true} approve={approve} decline={decline}/>
+                        <User user={user} menu={true} accept={accept} decline={decline}/>
                     </ErrorBoundary>
                 )}
             </div>
@@ -40,6 +44,8 @@ const IncomingRequests = ({id}) => {
 
 IncomingRequests.propTypes = {
     id: PropTypes.number.isRequired,
+    acceptMutate: PropTypes.func.isRequired,
+    declineMutate: PropTypes.func.isRequired
 };
 
 export default IncomingRequests;

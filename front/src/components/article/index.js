@@ -1,8 +1,4 @@
 import PropTypes from 'prop-types';
-
-import './article.css';
-
-import env from "../../config/envConfig";
 import {
     Avatar,
     Card,
@@ -22,6 +18,9 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {Link} from "react-router-dom";
 import {useState} from "react";
 
+import env from "../../config/envConfig";
+import './article.css';
+
 const ExpandMore = styled((props) => {
     const { expand, ...other } = props;
     return <div {...other} />;
@@ -39,6 +38,7 @@ const Article = ({
     handleEdit,
     handleExpandClick,
     handleLikeClick,
+    handleDelete,
     isCurrentUser,
 }) => {
     const [anchorEl, setAnchorEl] = useState(null);
@@ -58,6 +58,13 @@ const Article = ({
         handleEdit(article);
     }
 
+    const deleteOnClick = (event) => {
+        event.preventDefault();
+        setAnchorEl(null);
+        handleDelete(article.article_id);
+    }
+
+
     return (
         <div className="article_outer">
             <div className="article_inner">
@@ -66,7 +73,6 @@ const Article = ({
                         <CardHeader
                             avatar={
                                 <Avatar
-                                    alt={article?.name}
                                     src={`${env.apiUrl}${article.avatar}`}
                                     sx={{ width: 60, height: 60 }}
                                 />
@@ -100,38 +106,41 @@ const Article = ({
                         open={Boolean(anchorEl)}
                         onClose={handleClose}
                     >
-                        <MenuItem onClick={editOnClick}>{`Edit`}</MenuItem>
+                        <MenuItem onClick={editOnClick}>Edit</MenuItem>
+                        <MenuItem onClick={deleteOnClick}>Delete</MenuItem>
                     </Menu>
-                    {
-                        article.image!==undefined && article.image &&
-                        <CardMedia
-                            component={"img"}
-                            image={`${env.apiUrl}${article.image}`}
-                        />
-                    }
-                    <CardContent>
-                        <Typography>
-                            {article.text}
-                        </Typography>
-                    </CardContent>
-                    <Divider/>
-                    <CardActions disableSpacing>
-                        <IconButton
-                            onClick={handleExpandClick}
-                            aria-expanded={commentsExpanded}
-                            aria-label="show more"
-                        >
-                            {article.comments}
-                            <CommentIcon/>
-                            <ExpandMore expand={commentsExpanded}>
-                                <ExpandMoreIcon />
-                            </ExpandMore>
-                        </IconButton>
-                        <IconButton aria-label="add to favorites" onClick={handleLikeClick}>
-                            <FavoriteIcon />
-                            {article.likes}
-                        </IconButton>
-                    </CardActions>
+                    <Link to={`/article/${article.article_id}`} style={{"text-decoration":"none"}}>
+                        {
+                            article.image!==undefined && article.image &&
+                            <CardMedia
+                                component={"img"}
+                                image={`${env.apiUrl}${article.image}`}
+                            />
+                        }
+                        <CardContent>
+                            <Typography>
+                                {article.text}
+                            </Typography>
+                        </CardContent>
+                        <Divider/>
+                        <CardActions disableSpacing>
+                            <IconButton
+                                onClick={handleExpandClick}
+                                aria-expanded={commentsExpanded}
+                                aria-label="show more"
+                            >
+                                {article.comments}
+                                <CommentIcon/>
+                                <ExpandMore expand={commentsExpanded}>
+                                    <ExpandMoreIcon />
+                                </ExpandMore>
+                            </IconButton>
+                            <IconButton aria-label="add to favorites" onClick={handleLikeClick}>
+                                <FavoriteIcon />
+                                {article.likes}
+                            </IconButton>
+                        </CardActions>
+                    </Link>
                 </Card>
             </div>
         </div>
@@ -151,6 +160,7 @@ Article.propTypes = {
     }),
     commentsExpanded: PropTypes.bool.isRequired,
     handleEdit: PropTypes.func.isRequired,
+    handleDelete: PropTypes.func.isRequired,
     handleExpandClick: PropTypes.func.isRequired,
     handleLikeClick: PropTypes.func.isRequired,
     isCurrentUser: PropTypes.bool.isRequired
