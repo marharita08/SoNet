@@ -29,7 +29,10 @@ const IncomingRequests = ({id, acceptMutate, declineMutate}) => {
 
     return (
         <>
-            <h2>Incoming Requests</h2>
+            {
+                (incomingRequestsFetching || incomingRequests.length !== 0) &&
+                <h2>Incoming Requests</h2>
+            }
             {incomingRequestsFetching && <ReactLoading type={'balls'} color='#001a4d'/>}
             <div>
                 {incomingRequests?.map((user)=>

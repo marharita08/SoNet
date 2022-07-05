@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 const config = require('./services/config');
 const usersRoutes = require('./routes/users');
 const articlesRoutes = require('./routes/articles');
-const articleLikesRoutes = require('./routes/likes');
+const likesRoutes = require('./routes/likes');
 const commentsRoutes = require('./routes/comments');
 const universitiesRoutes = require('./routes/universities');
 const visibilitiesRoutes = require('./routes/visibilities');
@@ -26,7 +26,7 @@ app.use(logger('logger'));
 
 app.use('/users', usersRoutes);
 app.use('/articles', articlesRoutes);
-app.use('/articleLikes', articleLikesRoutes);
+app.use('/likes', likesRoutes);
 app.use('/comments', commentsRoutes);
 app.use('/universities', universitiesRoutes);
 app.use('/visibilities', visibilitiesRoutes);

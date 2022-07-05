@@ -21,7 +21,10 @@ const Friends = ({id, deleteMutate}) => {
 
     return (
         <>
-            <h2>Friends</h2>
+            {
+                (friendsFetching || friends.length !== 0) &&
+                <h2 className={'inline'}>Friends</h2>
+            }
             {friendsFetching && <ReactLoading type={'balls'} color='#001a4d'/>}
             <div>
                 {friends?.map((user)=>

@@ -1,4 +1,4 @@
-import {Box, Collapse, IconButton} from "@mui/material";
+import {IconButton, Snackbar} from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
 import Alert from '@mui/material/Alert';
 import PropTypes from "prop-types";
@@ -6,11 +6,15 @@ import PropTypes from "prop-types";
 const AlertComponent = ({message, handleClose, severity}) => {
 
     return (
-        <Box sx={{ margin:"5px", padding:"5px"}}>
-            <Collapse in={message !== undefined && message !== 'undefined'}>
+        <Snackbar
+            open={message !== undefined && message !== 'undefined'}
+            autoHideDuration={7000}
+            anchorOrigin={{vertical: 'bottom', horizontal: 'right'}}
+            onClose={handleClose}
+        >
             <Alert
                 severity={severity}
-                variant="outlined"
+                variant="filled"
                 action={
                     handleClose &&
                     <IconButton
@@ -26,9 +30,7 @@ const AlertComponent = ({message, handleClose, severity}) => {
             >
                 {message}
             </Alert>
-            </Collapse>
-        </Box>
-
+        </Snackbar>
     )
 }
 

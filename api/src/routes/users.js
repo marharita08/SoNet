@@ -80,7 +80,7 @@ router.put(
   '/:id',
   authMiddleware,
   upload.single('file'),
-  asyncHandler(async (req, res) => {
+  asyncHandler(async (req, res, next) => {
     const {
       name,
       email,
@@ -109,7 +109,7 @@ router.put(
       if (avatar != null) {
         fs.unlink(`public${avatar}`, (err) => {
           if (err) {
-            throw err;
+            next(err);
           }
         });
       }
@@ -186,6 +186,14 @@ router.get(
       });
     });
     res.send(result);
+  })
+);
+
+router.get(
+  '/:id/search',
+  asyncHandler(async (req, res) => {
+    const id = parseInt(req.params.id, 10);
+    res.send(await storage.getAllForSearch(id));
   })
 );
 

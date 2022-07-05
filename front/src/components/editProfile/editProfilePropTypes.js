@@ -43,4 +43,5 @@ export let EditProfilePropTypes = {
     openModal: PropTypes.bool.isRequired,
     handleClose: PropTypes.func.isRequired,
     isFetching: PropTypes.bool.isRequired,
+    message: PropTypes.string
 }

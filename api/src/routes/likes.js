@@ -20,17 +20,17 @@ router.post(
       article_id: articleID,
       user_id: userID,
     });
-    res.send('Like was added successfully.');
+    res.send({ success: true });
   })
 );
 
 router.delete(
-  '/',
+  '/:article_id/:user_id',
   authMiddleware,
   asyncHandler(async (req, res) => {
-    const { article_id: articleID, user_id: userID } = req.body;
+    const { article_id: articleID, user_id: userID } = req.params;
     await storage.delete(articleID, userID);
-    res.send('Like was deleted successfully.');
+    res.send({ success: true });
   })
 );
 

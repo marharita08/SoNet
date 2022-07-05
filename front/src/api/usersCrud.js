@@ -32,3 +32,7 @@ export const getOutgoingRequests = async (id) => {
 export const getNews = async (id) => {
     return apiClient.get(`/users/${id}/news`);
 }
+
+export const getForSearch = async (id) => {
+    return apiClient.get(`/users/${id}/search`);
+}

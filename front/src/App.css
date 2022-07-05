@@ -60,3 +60,44 @@ a {
   cursor: pointer;
   transition: 0.3s;
 }
+
+.outer {
+  text-align: center;
+  width: 100%;
+  display: inline-block;
+  margin-top: 5px;
+}
+.inner {
+  display: inline-block;
+  text-align: left;
+  width: 40%;
+}
+
+.search:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+.facebook-login {
+  width: 200px;
+  background-color: #395697;
+  color: white;
+  height: 50px;
+  padding: 5px 20px;
+  border-color: #395697;
+}
+
+.facebook-login:hover {
+  background-color: #003366;
+  border-color: #003366;
+}
+.google-login {
+  width: 200px;
+  background-color: white;
+  color: black;
+  height: 50px;
+  padding: 5px 20px;
+  border-color: #E8E8E8;
+}
+.google-login:hover {
+  background-color: #F8F8F8;
+}

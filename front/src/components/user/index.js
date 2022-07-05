@@ -2,6 +2,8 @@ import {Link} from "react-router-dom";
 import PropTypes from "prop-types";
 import {Avatar, Card, CardHeader, IconButton, Menu, MenuItem, Typography} from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
+import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import {useState} from "react";
 
 import env from "../../config/envConfig";
@@ -34,7 +36,7 @@ const User = ({user, handleClose, menu, accept, decline}) => {
 
     return (
         <>
-            <Link to={"/profile/" + user.user_id} onClick={'update'}>
+            <Link to={`/profile/${user.user_id}`} onClick={'update'}>
                 <Card className={'inline margin width_100'}>
                     <CardHeader
                         avatar={
@@ -80,8 +82,18 @@ const User = ({user, handleClose, menu, accept, decline}) => {
                         open={Boolean(anchorEl)}
                         onClose={handleMenuClose}
                     >
-                        <MenuItem onClick={acceptOnClick}>Accept</MenuItem>
-                        <MenuItem onClick={declineOnClick}>Decline</MenuItem>
+                        <MenuItem onClick={acceptOnClick}>
+                            <PersonAddIcon/>
+                            <div className={"margin"}>
+                                Accept
+                            </div>
+                        </MenuItem>
+                        <MenuItem onClick={declineOnClick}>
+                            <PersonRemoveIcon/>
+                            <div className={"margin"}>
+                                Decline
+                            </div>
+                        </MenuItem>
                     </Menu>
                 </Card>
             </Link>

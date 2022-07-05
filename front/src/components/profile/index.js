@@ -1,6 +1,9 @@
 import { Formik, Form, Field} from 'formik';
 import {Avatar, Button, CircularProgress} from "@mui/material";
 import { TextField } from 'formik-mui';
+import EditIcon from '@mui/icons-material/Edit';
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 
 import {ProfilePropTypes} from "./profilePropTypes";
 import env from "../../config/envConfig";
@@ -23,7 +26,7 @@ const Profile = ({
 
     return (
         <>
-            <h1 className={"big_margin"}>My profile</h1>
+            <h1 className={"big_margin"}>Profile</h1>
             <Formik
                 initialValues={user}
                 onSubmit={null}
@@ -40,29 +43,35 @@ const Profile = ({
                                 disabled
                             />
                         </div>
-                        <div className={"fields_margin"}>
-                            <Field
-                                component={TextField}
-                                type={"email"}
-                                name={"email"}
-                                disabled
-                                label={"Email"}
-                                className={"inline fields_width fields_height"}
-                            />
-                            {
-                                isCurrentUser &&
+                        {
+                            (isCurrentUser || user.email_visibility.label === "All" ||
+                            isFriends && user.email_visibility.label === "Friends") &&
+                            <div className={"fields_margin"}>
                                 <Field
                                     component={TextField}
+                                    type={"email"}
+                                    name={"email"}
                                     disabled
-                                    name="email_visibility.label"
-                                    label="Available to"
-                                    className={"inline visibility fields_height"}
+                                    label={"Email"}
+                                    className={"inline fields_width fields_height"}
                                 />
-                            }
-                        </div>
-                        <div className={"fields_margin"}>
-                            {
-                                user.phone &&
+                                {
+                                    isCurrentUser &&
+                                    <Field
+                                        component={TextField}
+                                        disabled
+                                        name="email_visibility.label"
+                                        label="Available to"
+                                        className={"inline visibility fields_height"}
+                                    />
+                                }
+                            </div>
+                        }
+                        {
+                            user.phone &&
+                            (isCurrentUser || user.phone_visibility.label === "All" ||
+                             isFriends && user.phone_visibility.label === "Friends") &&
+                            <div className={"fields_margin"}>
                                 <div>
                                     <Field
                                         component={TextField}
@@ -82,11 +91,14 @@ const Profile = ({
                                         />
                                     }
                                 </div>
-                            }
-                        </div>
-                        <div className={"fields_margin"}>
-                            {
-                                user.university &&
+                            </div>
+                        }
+                        {
+                            user.university &&
+                            (isCurrentUser || user.university_visibility.label === "All" ||
+                             isFriends && user.university_visibility.label === "Friends") &&
+                            <div className={"fields_margin"}>
+
                                 <div>
                                     <Field
                                         component={TextField}
@@ -106,12 +118,16 @@ const Profile = ({
                                         />
                                     }
                                 </div>
-                            }
-                        </div>
+                            </div>
+                        }
                         {
                             isCurrentUser &&
                             <div align={"center"}>
-                                <Button variant={"contained"} onClick={handleClick}>
+                                <Button
+                                    variant={"contained"}
+                                    onClick={handleClick}
+                                    startIcon={<EditIcon fontSize={"small"}/>}
+                                >
                                     Edit
                                 </Button>
                             </div>
@@ -121,7 +137,7 @@ const Profile = ({
                         <Avatar
                             className={"big_margin"}
                             src={`${env.apiUrl}${user?.avatar}`}
-                            sx={{ width: 100, height: 100 }}
+                            sx={{ width: 110, height: 110 }}
                         />
                         {
                             !isCurrentUser &&
@@ -129,13 +145,13 @@ const Profile = ({
                                 {
                                     isNotFriends &&
                                     <Button
-                                        variant={"outlined"}
+                                        size={'small'}
                                         onClick={addToFriends}
                                         disabled={isLoading}
                                         startIcon={
                                             isLoading ? (
                                                 <CircularProgress color="inherit" size={25}/>
-                                            ) : null
+                                            ) : <PersonAddIcon/>
                                         }
                                     >
                                         Add to friends
@@ -144,13 +160,13 @@ const Profile = ({
                                 {
                                     isIncomingRequest &&
                                     <Button
-                                        variant={"outlined"}
+                                        size={'small'}
                                         onClick={accept}
                                         disabled={isLoading}
                                         startIcon={
                                             isLoading ? (
                                                 <CircularProgress color="inherit" size={25}/>
-                                            ) : null
+                                            ) : <PersonAddIcon/>
                                         }
                                     >
                                         Accept request
@@ -159,13 +175,13 @@ const Profile = ({
                                 {
                                     (isFriends || isOutgoingRequest) &&
                                     <Button
-                                        variant={"outlined"}
+                                        size={'small'}
                                         onClick={deleteFromFriends}
                                         disabled={isLoading}
                                         startIcon={
                                             isLoading ? (
                                                 <CircularProgress color="inherit" size={25}/>
-                                            ) : null
+                                            ) : <PersonRemoveIcon/>
                                         }
                                     >
                                         {isFriends && "Delete from friends"}

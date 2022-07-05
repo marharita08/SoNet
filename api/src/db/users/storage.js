@@ -80,4 +80,28 @@ module.exports = {
       }),
   getByEmail: async (email) =>
     db('users').select().first().where('email', email),
+  getByFbId: async (fbId) => db('users').select().first().where('fb_id', fbId),
+  getAllForSearch: async (id) =>
+    db
+      .select(
+        'u.user_id',
+        'u.name',
+        'u.email',
+        'u.avatar',
+        db.raw(
+          "case when s.status is null then 'not friends'" +
+            "when s.status = 'Accepted' then 'friends'" +
+            `when f.from_user_id=${id} and s.status != 'Accepted' then 'outgoing request'` +
+            `when f.to_user_id=${id} and s.status != 'Accepted' then 'incoming request' end as status`
+        )
+      )
+      .from({ u: 'users' })
+      .leftJoin({ f: 'friends' }, function () {
+        this.on(
+          db.raw('(u.user_id=f.from_user_id or u.user_id=f.to_user_id)')
+        ).andOn(db.raw(`(f.from_user_id=${id} or f.to_user_id=${id})`));
+      })
+      .leftJoin({ s: 'status' }, 's.status_id', 'f.status_id')
+      .where('u.user_id', '!=', id)
+      .orderBy('u.name'),
 };

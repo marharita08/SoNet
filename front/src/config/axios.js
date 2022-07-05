@@ -47,7 +47,6 @@ apiClient.interceptors.response.use(
         if (!originalConfig.url.includes("/auth") && err.response
             && err.response.status === 401 && !isRefreshing) {
             isRefreshing = true;
-            console.log(isRefreshing);
             const context = JSON.parse(window.localStorage.getItem('context'));
             apiClient.post("/auth/refresh", {
                 refreshToken: context.refreshToken,

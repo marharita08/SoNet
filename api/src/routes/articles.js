@@ -4,6 +4,7 @@ const upload = require('../services/multerConfig');
 const asyncHandler = require('../middleware/asyncHandler');
 const storage = require('../db/articles/storage');
 const commentStorage = require('../db/comments/storage');
+const likeStorage = require('../db/likes/storage');
 const authMiddleware = require('../middleware/authMiddleware');
 
 router.get(
@@ -21,25 +22,6 @@ router.get(
         },
       });
     });
-    res.send(result);
-  })
-);
-
-router.get(
-  '/:id',
-  authMiddleware,
-  asyncHandler(async (req, res) => {
-    const id = parseInt(req.params.id, 10);
-    const dbResponse = await storage.getById(id);
-    const result = [
-      {
-        ...dbResponse[0],
-        visibility: {
-          value: dbResponse[0].visibility_id,
-          label: dbResponse[0].visibility,
-        },
-      },
-    ];
     res.send(result);
   })
 );
@@ -78,7 +60,7 @@ router.put(
   '/:id',
   authMiddleware,
   upload.single('file'),
-  asyncHandler(async (req, res) => {
+  asyncHandler(async (req, res, next) => {
     const {
       text,
       visibility: { value: visibilityID },
@@ -94,7 +76,7 @@ router.put(
       if (image != null) {
         fs.unlink(`public${image}`, (err) => {
           if (err) {
-            throw err;
+            next(err);
           }
         });
       }
@@ -111,17 +93,19 @@ router.put(
 router.delete(
   '/:id',
   authMiddleware,
-  asyncHandler(async (req, res) => {
+  asyncHandler(async (req, res, next) => {
     const id = parseInt(req.params.id, 10);
     const file = await storage.getFile(id);
     const { image } = file[0];
     if (image != null) {
       fs.unlink(`public${image}`, (err) => {
         if (err) {
-          throw err;
+          next(err);
         }
       });
     }
+    await likeStorage.deleteByArticle(id);
+    await commentStorage.deleteByArticle(id);
     await storage.delete(id);
     res.send({ message: 'Article was deleted successfully.' });
   })
@@ -133,6 +117,35 @@ router.get(
   asyncHandler(async (req, res) => {
     const id = parseInt(req.params.id, 10);
     res.send(await commentStorage.getByArticleId(id));
+  })
+);
+
+router.get(
+  '/:id/likes',
+  authMiddleware,
+  asyncHandler(async (req, res) => {
+    const id = parseInt(req.params.id, 10);
+    res.send(await likeStorage.getByArticle(id));
+  })
+);
+
+router.get(
+  '/:id/:user_id',
+  authMiddleware,
+  asyncHandler(async (req, res) => {
+    const id = parseInt(req.params.id, 10);
+    const userId = parseInt(req.params.user_id, 10);
+    const dbResponse = await storage.getById(id, userId);
+    const result = [
+      {
+        ...dbResponse[0],
+        visibility: {
+          value: dbResponse[0].visibility_id,
+          label: dbResponse[0].visibility,
+        },
+      },
+    ];
+    res.send(result);
   })
 );
 

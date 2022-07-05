@@ -6,16 +6,17 @@ import Cropper from "react-cropper";
 import * as Yup from "yup";
 import ReactLoading from "react-loading";
 import React from "react";
+import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
+import ContentCutIcon from '@mui/icons-material/ContentCut';
+import DeleteIcon from '@mui/icons-material/Delete';
+import SaveIcon from '@mui/icons-material/Save';
+import CloseIcon from "@mui/icons-material/Close";
 
 import env from "../../config/envConfig";
 import {EditProfilePropTypes} from "./editProfilePropTypes";
 import AlertContainer from "../../containers/alert";
 
-const EditProfile = (
-    props
-) => {
-
-    const {
+const EditProfile = ({
         universities,
         visibilities,
         onFormSubmit,
@@ -30,9 +31,9 @@ const EditProfile = (
         handleClose,
         user,
         isFetching,
-        message
-    } = props;
-
+        message,
+        handleAlertClose,
+}) => {
         const schema = Yup.object().shape({
         name: Yup.string().required("Name is required").max(255, "Must be no more than 255 symbols"),
         email: Yup.string().required("Email is required"),
@@ -63,6 +64,7 @@ const EditProfile = (
                 fullWidth
                 maxWidth="sm"
             >
+                <AlertContainer alertMessage={message} alertSeverity={'error'} handleClose={handleAlertClose}/>
                 {
                     isFetching &&
                     <div align={"center"}>
@@ -77,19 +79,18 @@ const EditProfile = (
                     {({ setFieldValue, handleSubmit }) =>
                         <Form onSubmit={handleSubmit}>
                             <IconButton className="closebtn margin" onClick={handleClose}>
-                                <span>&times;</span>
+                                <CloseIcon/>
                             </IconButton>
                             <DialogTitle>Edit profile</DialogTitle>
-                            <AlertContainer alertMessage={message} alertSeverity={'error'}/>
                             <div className={"user_img"} >
                                 <Avatar
                                     className={"big_margin"}
                                     src={croppedImage||`${env.apiUrl}${user?.avatar}`}
-                                    sx={{ width: 100, height: 100 }}
+                                    sx={{ width: 110, height: 110 }}
                                 />
                                 <label htmlFor="contained-button-file" className={"file margin"}>
-                                    <Button variant="outlined" component="span">
-                                        Change avatar
+                                    <Button variant={"contained"} component="span">
+                                        <AddAPhotoIcon fontSize={"large"}/>
                                         <input hidden
                                                id="contained-button-file"
                                                type="file"
@@ -105,7 +106,7 @@ const EditProfile = (
                                         color={'success'}
                                         style={{display: "block", margin: 5}}
                                     >
-                                        Crop
+                                        <ContentCutIcon fontSize={"large"}/>
                                     </Button>
                                 }
                                 {(croppedImage||image) &&
@@ -115,7 +116,7 @@ const EditProfile = (
                                         color={'error'}
                                         style={{display: "block", margin: 5}}
                                     >
-                                        Delete image
+                                        <DeleteIcon fontSize={"large"}/>
                                     </Button>
                                 }
                             </div>
@@ -198,7 +199,7 @@ const EditProfile = (
                                         startIcon={
                                             isLoading ? (
                                                 <CircularProgress color="inherit" size={25} />
-                                            ) : null
+                                            ) : <SaveIcon/>
                                         }
                                     >
                                         Save
@@ -211,7 +212,6 @@ const EditProfile = (
             </Dialog>
         </>
     )
-
 }
 
 EditProfile.propTypes = EditProfilePropTypes;

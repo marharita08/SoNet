@@ -1,7 +1,9 @@
 const router = require('express').Router();
 const jwt = require('jsonwebtoken');
 const { v4: uuidv4 } = require('uuid');
-const { google } = require('googleapis');
+const passport = require('passport');
+const FacebookTokenStrategy = require('passport-facebook-token');
+const GoogleTokenStrategy = require('passport-google-token').Strategy;
 const asyncHandler = require('../middleware/asyncHandler');
 const storage = require('../db/users/storage');
 const sessionStorage = require('../db/sessions/storage');
@@ -10,64 +12,107 @@ const config = require('../services/config');
 const settingsStorage = require('../db/settings/storage');
 const passwordHasher = require('../services/passwordHasher');
 
-const { clientID, clientSecret, callbackURL } = config;
-
-const oAuth2Client = new google.auth.OAuth2(
-  clientID,
-  clientSecret,
-  callbackURL
-);
+const { facebookEnv, googleEnv } = config;
 
 const createAccessToken = (user) =>
   jwt.sign({ user_id: user.user_id, name: user.name }, appKey, {
     expiresIn: '30m',
   });
 
+const createTokens = async (user, res) => {
+  let accessToken;
+  let refreshToken;
+  if (user) {
+    accessToken = createAccessToken(user);
+    refreshToken = uuidv4();
+    await sessionStorage.create({
+      user_id: user.user_id,
+      token: refreshToken,
+    });
+  }
+
+  if (accessToken) {
+    return res.send({
+      user,
+      accessToken,
+      refreshToken,
+      success: true,
+    });
+  }
+  return res.sendStatus(401);
+};
+
+passport.use(
+  'facebookToken',
+  new FacebookTokenStrategy(
+    {
+      clientID: facebookEnv.clientID,
+      clientSecret: facebookEnv.clientSecret,
+    },
+    async (accessToken, refreshToken, profile, done) => {
+      const fbId = profile.id;
+      let user = await storage.getByFbId(fbId);
+      if (!user) {
+        const [{ value: email }] = profile.emails;
+        const name = profile.displayName;
+        user = {
+          name,
+          email,
+          fb_id: fbId,
+        };
+        const id = await storage.create(user);
+        await settingsStorage.create({ user_id: id[0] });
+        user = await storage.getByFbId(fbId);
+      }
+      return done(null, user);
+    }
+  )
+);
+
+passport.use(
+  'googleToken',
+  new GoogleTokenStrategy(
+    {
+      clientID: googleEnv.clientID,
+      clientSecret: googleEnv.clientSecret,
+    },
+    async (accessToken, refreshToken, profile, done) => {
+      const [{ value: email }] = profile.emails;
+      let user = await storage.getByEmail(email);
+      if (!user) {
+        const name = profile.displayName;
+        user = {
+          name,
+          email,
+        };
+        const id = await storage.create(user);
+        await settingsStorage.create({ user_id: id[0] });
+        user = await storage.getByEmail(email);
+      }
+      return done(null, user);
+    }
+  )
+);
+
+router.post(
+  '/facebook',
+  passport.authenticate('facebookToken', {
+    session: false,
+  }),
+  asyncHandler(async (req, res) => {
+    const { user } = req;
+    return createTokens(user, res);
+  })
+);
+
 router.post(
   '/google',
+  passport.authenticate('googleToken', {
+    session: false,
+  }),
   asyncHandler(async (req, res) => {
-    const { token } = req.body;
-    oAuth2Client.credentials = token;
-    const oauth2 = google.oauth2('v2');
-
-    const {
-      data: { email, name },
-    } = await oauth2.userinfo.v2.me.get({
-      auth: oAuth2Client,
-    });
-
-    let user = await storage.getByEmail(email);
-
-    if (!user) {
-      user = {
-        name,
-        email,
-      };
-      const id = await storage.create(user);
-      await settingsStorage.create({ user_id: id[0] });
-      user = await storage.getByEmail(email);
-    }
-
-    let accessToken;
-    let refreshToken;
-    if (user) {
-      accessToken = createAccessToken(user);
-      refreshToken = uuidv4();
-      await sessionStorage.create({
-        user_id: user.user_id,
-        token: refreshToken,
-      });
-    }
-
-    if (accessToken) {
-      return res.send({
-        user,
-        accessToken,
-        refreshToken,
-        success: true,
-      });
-    }
-    return res.sendStatus(401);
+    const { user } = req;
+    return createTokens(user, res);
   })
 );
 
@@ -94,26 +139,7 @@ router.post(
       return res.status(401).send({ message: 'Wrong password' });
     }
 
-    let accessToken;
-    let refreshToken;
-    if (user) {
-      accessToken = createAccessToken(user);
-      refreshToken = uuidv4();
-      await sessionStorage.create({
-        user_id: user.user_id,
-        token: refreshToken,
-      });
-    }
-
-    if (accessToken) {
-      return res.send({
-        user,
-        accessToken,
-        refreshToken,
-        success: true,
-      });
-    }
-    return res.sendStatus(401);
+    return createTokens(user, res);
   })
 );
 

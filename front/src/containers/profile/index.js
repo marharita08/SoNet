@@ -12,9 +12,11 @@ import authContext from "../../context/authContext";
 import Friends from "../friends";
 import IncomingRequests from "../incomingRequests";
 import {acceptRequest, declineRequest, deleteRequest, getStatus, insertRequest} from "../../api/friendsCrud";
+import SearchUsersContainer from "../searchUsers";
 
 const ProfileContainer = () => {
     let {id} = useParams();
+    id = parseInt(id, 10);
     const [openModal, setOpenModal] = useState(false);
     const {user:currentUser} = useContext(authContext);
     const {isFetching: userFetching, data: userData} = useQuery('user', () => getUser(id));
@@ -23,7 +25,6 @@ const ProfileContainer = () => {
 
     const status = statusData?.data;
     let users = userData?.data;
-
 
     const handleClick = () => {
       setOpenModal(true);
@@ -83,6 +84,13 @@ const ProfileContainer = () => {
                     {
                         user.user_id === currentUser.user_id &&
                         <div>
+                            <div className={'margin'}>
+                                <SearchUsersContainer
+                                    addMutate={addMutate}
+                                    acceptMutate={acceptMutate}
+                                    deleteMutate={deleteMutate}
+                                />
+                            </div>
                             <Friends id={id} deleteMutate={deleteMutate}/>
                             <IncomingRequests id={id} acceptMutate={acceptMutate} declineMutate={declineMutate}/>
                             <OutgoingRequests id={id} deleteMutate={deleteMutate}/>

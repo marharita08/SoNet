@@ -6,14 +6,3 @@
     display: inline-block;
     vertical-align: top;
 }
-
-.comment_outer {
-    text-align: center;
-    width: 100%;
-    display: inline-block;
-}
-.comment_inner {
-    display: inline-block;
-    text-align: left;
-    width: 40%;
-}

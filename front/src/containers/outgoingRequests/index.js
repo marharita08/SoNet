@@ -21,7 +21,10 @@ const OutgoingRequests = ({id, deleteMutate}) => {
 
     return (
         <>
-            <h2>Outgoing Requests</h2>
+            {
+                (outgoingRequestsFetching || outgoingRequests.length !== 0) &&
+                <h2>Outgoing Requests</h2>
+            }
             {outgoingRequestsFetching && <ReactLoading type={'balls'} color='#001a4d'/>}
             <div>
                 {outgoingRequests?.map((user)=>

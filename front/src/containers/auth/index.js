@@ -3,12 +3,25 @@ import {useMutation} from "react-query";
 import PropTypes from 'prop-types';
 
 import AuthComponent from "../../components/authComponent";
-import {googleAuth, auth} from "../../api/auth";
+import {googleAuth, facebookAuth, auth} from "../../api/auth";
 
 const AuthContainer = ({setAuthContext}) => {
 
     const { mutate: googleAuthMutate } = useMutation(
         googleAuth, {
+            onSuccess: data => {
+                const { data: {user, accessToken, refreshToken}} = data;
+                setAuthContext({
+                    authenticated: true,
+                    user,
+                    accessToken,
+                    refreshToken
+                })
+            }
+        });
+
+    const { mutate: facebookAuthMutate } = useMutation(
+        facebookAuth, {
             onSuccess: data => {
                 const { data: {user, accessToken, refreshToken}} = data;
                 setAuthContext({
@@ -34,8 +47,8 @@ const AuthContainer = ({setAuthContext}) => {
         });
 
     const onGoogleSuccess = (response) => {
-        const token = response.tokenObj;
-        let data = {'token': token};
+        const token = response.accessToken;
+        let data = {'access_token': token};
         googleAuthMutate(data);
     }
 
@@ -43,6 +56,12 @@ const AuthContainer = ({setAuthContext}) => {
         window.location.reload();
         window.localStorage.setItem('alertMessage', response.message);
         window.localStorage.setItem('alertSeverity', 'error');
+    }
+
+    const responseFacebook = (response) => {
+        const token = response.accessToken;
+        let data = {'access_token': token};
+        facebookAuthMutate(data);
     }
 
     const onFormSubmit = (data) => {
@@ -60,6 +79,7 @@ const AuthContainer = ({setAuthContext}) => {
             onGoogleFailure={onGoogleFailure}
             onFormSubmit={onFormSubmit}
             initialUser={initialUser}
+            responseFacebook={responseFacebook}
         />
     )
 }

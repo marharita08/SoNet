@@ -22,4 +22,5 @@ export let AddArticlePropTypes = {
     cropImage: PropTypes.func.isRequired,
     croppedImage: PropTypes.object,
     deleteImage: PropTypes.func.isRequired,
+    message: PropTypes.string,
 }

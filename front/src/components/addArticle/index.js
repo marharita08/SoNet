@@ -1,3 +1,4 @@
+import React from "react";
 import {Formik, Form, Field, ErrorMessage} from "formik";
 import {
     Button,
@@ -11,6 +12,11 @@ import {
 import * as Yup from "yup";
 import FormikAutocomplete from "../FormikAutocomplete";
 import Cropper from "react-cropper";
+import SaveIcon from '@mui/icons-material/Save';
+import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
+import CloseIcon from '@mui/icons-material/Close';
+import ContentCutIcon from "@mui/icons-material/ContentCut";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 import env from "../../config/envConfig";
 import {AddArticlePropTypes} from "./addArticlePropTypes";
@@ -57,19 +63,21 @@ const AddArticle = ({
                     {({setFieldValue, handleSubmit}) =>
                         <Form onSubmit={handleSubmit}>
                             <IconButton className="closebtn margin" onClick={handleClose}>
-                                <span>&times;</span>
+                                <CloseIcon/>
                             </IconButton>
                             <DialogTitle>
-                                {addArticle && "Add article"}
-                                {!addArticle && "Edit article"}
+                                {addArticle ? "Add article" : "Edit article"}
                             </DialogTitle>
                             <AlertContainer alertMessage={message} alertSeverity={'error'}/>
                             <DialogContent>
                                 <ErrorMessage name="text" render={msg => <div className="error">{msg}</div>}/>
                                 <label htmlFor="contained-button-file" className={"file margin"}>
-                                    <Button variant="outlined" component="span">
-                                        {(image||croppedImage||(article?.image!==undefined&&article?.image)) && "Change "}
-                                        {(!(image||croppedImage||(article?.image!==undefined&&article?.image))) && "Add "}
+                                    <Button
+                                        variant="outlined"
+                                        component="span"
+                                        startIcon={<AddAPhotoIcon/>}
+                                    >
+                                        {(image||croppedImage||(article?.image!==undefined&&article?.image)) ? "Change " : "Add "}
                                         image
                                         <input hidden
                                                id="contained-button-file"
@@ -80,35 +88,38 @@ const AddArticle = ({
                                     </Button>
                                 </label>
                                 {((image || (article?.image!==undefined&&article?.image)) && !croppedImage)&& (
-                                    <Cropper
-                                        src={image || `${env.apiUrl}${article?.image}`}
-                                        zoomable={false}
-                                        scalable={false}
-                                        onInitialized={instance => setCropper(instance)}
-                                        rotatable={false}
-                                        viewMode={1}
-                                        style={{width: '100%', margin: 5}}
-                                    />
+                                    <div>
+                                        <Cropper
+                                            src={image || `${env.apiUrl}${article?.image}`}
+                                            zoomable={false}
+                                            scalable={false}
+                                            onInitialized={instance => setCropper(instance)}
+                                            rotatable={false}
+                                            viewMode={1}
+                                            style={{width: '100%', margin: 5}}
+                                        />
+                                        <Button
+                                            variant={"outlined"}
+                                            onClick={() => cropImage(setFieldValue)}
+                                            color={'success'}
+                                            style={{ margin: 5}}
+                                            startIcon={<ContentCutIcon/>}
+                                        >
+                                            Crop image
+                                        </Button>
+                                    </div>
+
                                 )}
-                                {(image || (article?.image!==undefined&&article?.image)) &&
-                                    <Button
-                                        variant={"contained"}
-                                        onClick={() => cropImage(setFieldValue)}
-                                        color={'success'}
-                                        style={{display: "block", margin: 5}}
-                                    >
-                                        Crop
-                                    </Button>
-                                }
                                 {(croppedImage) &&
                                     <img src={croppedImage} width={'100%'}/>
                                 }
                                 {(croppedImage || image || (article?.image !== undefined && article?.image)) &&
                                     <Button
-                                        variant={"contained"}
+                                        variant={"outlined"}
                                         onClick={() => deleteImage(setFieldValue)}
                                         color={'error'}
-                                        style={{display: "block", margin: 5}}
+                                        style={{margin: 5}}
+                                        startIcon={<DeleteIcon/>}
                                     >
                                         Delete image
                                     </Button>
@@ -140,11 +151,10 @@ const AddArticle = ({
                                     startIcon={
                                         loading ? (
                                             <CircularProgress color="inherit" size={25}/>
-                                        ) : null
+                                        ) : <SaveIcon/>
                                     }
                                 >
-                                    {addArticle && "Add"}
-                                    {!addArticle && "Save"}
+                                    {addArticle ? "Add" : "Save"}
                                 </Button>
                             </DialogActions>
                         </Form>

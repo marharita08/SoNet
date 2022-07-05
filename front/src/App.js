@@ -8,7 +8,6 @@ import {QueryClient, QueryClientProvider} from "react-query";
 
 import HeaderContainer from './containers/header';
 import ArticlesContainer from './containers/articles';
-import ArticleContainer from './containers/article';
 import AddArticleContainer from './containers/addArticle';
 import ProfileContainer from './containers/profile';
 import AuthContainer from "./containers/auth";
@@ -16,6 +15,7 @@ import AlertContainer from "./containers/alert";
 import authContext from './context/authContext';
 import articleContext from "./context/articleContext";
 import './App.css';
+import ArticleOuterContainer from "./containers/articleOuter";
 
 const queryClient = new QueryClient();
 
@@ -23,7 +23,6 @@ function App() {
   const authenticationContext = JSON.parse(window.localStorage.getItem('context')) || useContext(authContext);
   const [articleModalContext, setArticleModalContext] = useState(useContext(articleContext));
   const {openModal} = articleModalContext;
-  const [commentsExpanded, setCommentsExpanded] = useState(false);
   const [alertMessage, setAlertMessage] = useState(window.localStorage.getItem('alertMessage'));
   const alertSeverity = window.localStorage.getItem('alertSeverity');
   const { authenticated } = authenticationContext;
@@ -69,10 +68,8 @@ function App() {
               <Routes>
                 <Route path="/" element={authenticated ? <Navigate to={'/articles'}/> : <Navigate to={'/auth'}/>}/>
                 <Route path="/article/:id"
-                       element={authenticated ? <ArticleContainer
+                       element={authenticated ? <ArticleOuterContainer
                            setArticleContext={setArticleContext}
-                           commentsExpanded={commentsExpanded}
-                           setCommentsExpanded={setCommentsExpanded}
                       /> : <Navigate to={'/auth'}/>}
                 />
                 <Route
@@ -89,8 +86,6 @@ function App() {
                 <Route path="/articles"
                        element={authenticated ? <ArticlesContainer
                            setArticleContext={setArticleContext}
-                           commentsExpanded={commentsExpanded}
-                           setCommentsExpanded={setCommentsExpanded}
                        /> : <Navigate to={'/auth'}/>}
                 />
               </Routes>

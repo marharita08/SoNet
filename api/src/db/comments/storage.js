@@ -8,7 +8,8 @@ module.exports = {
         'chu.name',
         'chu.avatar',
         'pu.name as to',
-        'p.user_id as p_user_id'
+        'p.user_id as p_user_id',
+        'p.text as parent_text'
       )
       .from({ ch: 'comments' })
       .leftOuterJoin({ p: 'comments' }, 'p.comment_id', 'ch.parent_id')
@@ -25,4 +26,6 @@ module.exports = {
   update: async (id, comment) =>
     db('comments').update(comment).where('comment_id', id),
   delete: async (id) => db('comments').delete().where('comment_id', id),
+  deleteByArticle: async (articleID) =>
+    db('comments').delete().where('article_id', articleID),
 };

@@ -1,20 +1,25 @@
+import React from 'react';
 import PropTypes from 'prop-types';
 import {
-    Avatar,
+    Avatar, AvatarGroup,
     Card,
     CardActions,
     CardContent,
     CardHeader, CardMedia, Divider,
     IconButton,
     Menu,
-    MenuItem,
+    MenuItem, Popover,
     styled,
     Typography
 } from "@mui/material";
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import FavoriteIcon from '@mui/icons-material/Favorite';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import CommentIcon from '@mui/icons-material/Comment';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import AddCommentIcon from '@mui/icons-material/AddComment';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 import {Link} from "react-router-dom";
 import {useState} from "react";
 
@@ -37,113 +42,179 @@ const Article = ({
     commentsExpanded,
     handleEdit,
     handleExpandClick,
-    handleLikeClick,
     handleDelete,
     isCurrentUser,
+    isLiked,
+    handleAddCommentClick,
+    handleLikeClick,
+    likes,
+    users
 }) => {
-    const [anchorEl, setAnchorEl] = useState(null);
+    const [menuAnchorEl, setMenuAnchorEl] = useState(null);
+    const [popoverAnchorEl, setPopoverAnchorEl] = React.useState(null);
+
+    const handlePopoverOpen = (event) => {
+        setPopoverAnchorEl(event.currentTarget);
+    };
+
+    const handlePopoverClose = () => {
+        setPopoverAnchorEl(null);
+    };
+
+    const open = Boolean(popoverAnchorEl);
+
 
     const handleMenu = (event) => {
         event.preventDefault();
-        setAnchorEl(event.currentTarget);
+        setMenuAnchorEl(event.currentTarget);
     };
 
     const handleClose = () => {
-        setAnchorEl(null);
+        setMenuAnchorEl(null);
     };
 
     const editOnClick = (event) => {
         event.preventDefault();
-        setAnchorEl(null);
+        setMenuAnchorEl(null);
         handleEdit(article);
     }
 
     const deleteOnClick = (event) => {
         event.preventDefault();
-        setAnchorEl(null);
+        setMenuAnchorEl(null);
         handleDelete(article.article_id);
     }
 
-
     return (
-        <div className="article_outer">
-            <div className="article_inner">
-                <Card sx={{ maxWidth: 1000 }}>
-                    <Link to={`/profile/${article.user_id}`} style={{"text-decoration":"none"}}>
-                        <CardHeader
-                            avatar={
-                                <Avatar
-                                    src={`${env.apiUrl}${article.avatar}`}
-                                    sx={{ width: 60, height: 60 }}
-                                />
-                            }
-                            action={
-                                isCurrentUser &&
-                                <IconButton aria-label="settings">
-                                    <MoreVertIcon onClick={handleMenu} />
-                                </IconButton>
-                            }
-                            title={
-                                <Typography sx={{"font-weight": "bold"}}>
-                                    {article.name}
-                                </Typography>
-                            }
-                            subheader={article.created_at}
+        <Card sx={{ maxWidth: 1000}}>
+            <CardHeader
+                avatar={
+                    <Link to={`/profile/${article.user_id}`} style={{textDecoration:"none"}}>
+                        <Avatar
+                            src={`${env.apiUrl}${article.avatar}`}
+                            sx={{ width: 60, height: 60 }}
                         />
                     </Link>
-                    <Menu
-                        id="menu-article"
-                        anchorEl={anchorEl}
-                        anchorOrigin={{
-                            vertical: 'top',
-                            horizontal: 'right',
-                        }}
-                        keepMounted
-                        transformOrigin={{
-                            vertical: 'top',
-                            horizontal: 'right',
-                        }}
-                        open={Boolean(anchorEl)}
-                        onClose={handleClose}
+                }
+                action={
+                    isCurrentUser &&
+                    <IconButton aria-label="settings">
+                        <MoreVertIcon onClick={handleMenu} />
+                    </IconButton>
+                }
+                title={
+                    <Typography sx={{"font-weight": "bold"}}>
+                        <Link to={`/profile/${article.user_id}`} style={{textDecoration:"none"}}>
+                            {article.name}
+                        </Link>
+                    </Typography>
+                }
+                subheader={article.created_at}
+            />
+            <Menu
+                id="menu-article"
+                anchorEl={menuAnchorEl}
+                anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'center',
+                }}
+                keepMounted
+                transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'center',
+                }}
+                open={Boolean(menuAnchorEl)}
+                onClose={handleClose}
+            >
+                <MenuItem onClick={editOnClick}>
+                    <EditIcon fontSize={"small"}/>
+                    <div className={"margin"}>
+                        Edit
+                    </div>
+                </MenuItem>
+                <MenuItem onClick={deleteOnClick}>
+                    <DeleteIcon fontSize={"small"}/>
+                    <div className={"margin"}>
+                        Delete
+                    </div>
+                </MenuItem>
+            </Menu>
+            <Link to={`/article/${article.article_id}`} style={{textDecoration:"none"}}>
+                {
+                    article.image!==undefined && article.image &&
+                    <CardMedia
+                        component={"img"}
+                        image={`${env.apiUrl}${article.image}`}
+                    />
+                }
+                <CardContent>
+                    <Typography>
+                        {article.text}
+                    </Typography>
+                </CardContent>
+                <Divider/>
+                <CardActions disableSpacing>
+                    <IconButton
+                        onClick={handleExpandClick}
+                        aria-expanded={commentsExpanded}
+                        aria-label="show more"
                     >
-                        <MenuItem onClick={editOnClick}>Edit</MenuItem>
-                        <MenuItem onClick={deleteOnClick}>Delete</MenuItem>
-                    </Menu>
-                    <Link to={`/article/${article.article_id}`} style={{"text-decoration":"none"}}>
+                        {article.comments}
+                        <CommentIcon/>
+                        <ExpandMore expand={commentsExpanded}>
+                            <ExpandMoreIcon />
+                        </ExpandMore>
+                    </IconButton>
+                    <IconButton onClick={handleAddCommentClick}>
+                        <AddCommentIcon/>
+                    </IconButton>
+                    <IconButton
+                        onClick={handleLikeClick}
+                        aria-owns={open ? 'mouse-over-popover' : undefined}
+                        aria-haspopup="true"
+                        onMouseEnter={handlePopoverOpen}
+                        onMouseLeave={handlePopoverClose}
+                    >
                         {
-                            article.image!==undefined && article.image &&
-                            <CardMedia
-                                component={"img"}
-                                image={`${env.apiUrl}${article.image}`}
-                            />
+                            isLiked ?
+                                <FavoriteIcon color={"error"}/> :
+                                <FavoriteBorderIcon/>
                         }
-                        <CardContent>
-                            <Typography>
-                                {article.text}
-                            </Typography>
-                        </CardContent>
-                        <Divider/>
-                        <CardActions disableSpacing>
-                            <IconButton
-                                onClick={handleExpandClick}
-                                aria-expanded={commentsExpanded}
-                                aria-label="show more"
-                            >
-                                {article.comments}
-                                <CommentIcon/>
-                                <ExpandMore expand={commentsExpanded}>
-                                    <ExpandMoreIcon />
-                                </ExpandMore>
-                            </IconButton>
-                            <IconButton aria-label="add to favorites" onClick={handleLikeClick}>
-                                <FavoriteIcon />
-                                {article.likes}
-                            </IconButton>
-                        </CardActions>
-                    </Link>
-                </Card>
-            </div>
-        </div>
+                        {likes}
+                    </IconButton>
+                    {
+                        users?.length !== 0 &&
+                        <Popover
+                            id="mouse-over-popover"
+                            sx={{
+                                pointerEvents: 'none',
+                            }}
+                            open={open}
+                            anchorEl={popoverAnchorEl}
+                            anchorOrigin={{
+                                vertical: 'bottom',
+                                horizontal: 'left',
+                            }}
+                            transformOrigin={{
+                                vertical: 'top',
+                                horizontal: 'left',
+                            }}
+                            onClose={handlePopoverClose}
+                            disableRestoreFocus
+                        >
+                            <AvatarGroup max={5} className={'margin'}>
+                                {users?.map((user) =>
+                                    <Avatar
+                                        src={`${env.apiUrl}${user.avatar}`}
+                                        sx={{width: 30, height: 30}}
+                                    />
+                                )}
+                            </AvatarGroup>
+                        </Popover>
+                    }
+                </CardActions>
+            </Link>
+        </Card>
     );
 }
 
@@ -163,7 +234,10 @@ Article.propTypes = {
     handleDelete: PropTypes.func.isRequired,
     handleExpandClick: PropTypes.func.isRequired,
     handleLikeClick: PropTypes.func.isRequired,
-    isCurrentUser: PropTypes.bool.isRequired
+    isCurrentUser: PropTypes.bool.isRequired,
+    isLiked: PropTypes.bool.isRequired,
+    likes: PropTypes.number.isRequired,
+    handleAddCommentClick: PropTypes.func.isRequired
 };
 
 export default Article;

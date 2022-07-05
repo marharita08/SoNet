@@ -30,22 +30,12 @@ router.post(
       user_id: userID,
       text,
       parent_id: parentID,
+      level,
     } = req.body;
+    let { path } = req.body;
     const date = new Date().toLocaleString('ua', {
       timeZone: 'Europe/Kiev',
     });
-    let level;
-    let path;
-    if (parentID !== undefined) {
-      const row = await storage.getLevelAndPath(parentID);
-      level = row[0].level;
-      level = parseInt(level, 10);
-      level += 1;
-      path = row[0].path;
-    } else {
-      level = 1;
-      path = '';
-    }
     await db.transaction(async () => {
       const id = await storage.create({
         article_id: articleID,

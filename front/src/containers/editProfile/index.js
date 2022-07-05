@@ -26,7 +26,6 @@ const EditProfileContainer = ({openModal, setOpenModal, user}) => {
         updateUser, {
             onSettled: () => {
                 setOpenModal(false);
-                setMessage(undefined);
             }
         });
 
@@ -45,9 +44,6 @@ const EditProfileContainer = ({openModal, setOpenModal, user}) => {
                 setImage(reader.result);
             }
             reader.readAsDataURL(file);
-            if (message) {
-                setMessage(undefined);
-            }
         } else {
             setMessage('Wrong file format or size!');
         }
@@ -76,9 +72,11 @@ const EditProfileContainer = ({openModal, setOpenModal, user}) => {
         setOpenModal(false);
         setCroppedImage(null);
         setImage(null);
-        setMessage(undefined);
     };
 
+    const handleAlertClose = () => {
+        setMessage(undefined);
+    }
 
     return(
         <ErrorBoundary>
@@ -98,6 +96,7 @@ const EditProfileContainer = ({openModal, setOpenModal, user}) => {
                 handleClose={handleClose}
                 isFetching={universitiesFetching||visibilitiesFetching}
                 message={message}
+                handleAlertClose={handleAlertClose}
             />
         </ErrorBoundary>
     );
