@@ -1,6 +1,7 @@
 const cors = require('cors');
 const express = require('express');
 const bodyParser = require('body-parser');
+const passport = require('passport');
 
 const config = require('./services/config');
 const usersRoutes = require('./routes/users');
@@ -18,11 +19,14 @@ const port = config.appPort;
 
 const app = express();
 
+require('./services/passportConfig')(passport);
+
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors());
 app.use(express.static(`public`));
 app.use(logger('logger'));
+app.use(passport.initialize());
 
 app.use('/users', usersRoutes);
 app.use('/articles', articlesRoutes);
