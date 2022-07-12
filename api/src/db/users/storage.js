@@ -3,7 +3,8 @@ const db = require('../../services/db');
 module.exports = {
   create: async (user) => db('users').returning('user_id').insert(user),
   getAll: async () => db.select().from('users').orderBy('user_id'),
-  getById: async (id) =>
+  getById: async (id) => db('users').select().where('user_id', id),
+  getProfileById: async (id) =>
     db
       .select(
         'u.*',

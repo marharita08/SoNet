@@ -3,6 +3,8 @@ const db = require('../services/db');
 const asyncHandler = require('../middleware/asyncHandler');
 const storage = require('../db/comments/storage');
 const authMiddleware = require('../middleware/authMiddleware');
+const aclMiddleware = require('../middleware/aclMiddleware');
+const NotFoundException = require('../errors/NotFoundException');
 
 router.get(
   '/',
@@ -15,9 +17,13 @@ router.get(
 router.get(
   '/:id',
   authMiddleware,
-  asyncHandler(async (req, res) => {
+  asyncHandler(async (req, res, next) => {
     const id = parseInt(req.params.id, 10);
-    res.send(await storage.getById(id));
+    const comment = await storage.getById(id);
+    if (comment[0]) {
+      return res.send(comment);
+    }
+    return next(new NotFoundException('Comment not found'));
   })
 );
 
@@ -62,6 +68,15 @@ router.post(
 router.put(
   '/:id',
   authMiddleware,
+  aclMiddleware([
+    {
+      resource: 'comment',
+      action: 'update',
+      possession: 'own',
+      getResource: (req) => storage.getById(req.params.id),
+      isOwn: (resource, userId) => resource.user_id === userId,
+    },
+  ]),
   asyncHandler(async (req, res) => {
     const { text } = req.body;
     const id = parseInt(req.params.id, 10);
@@ -75,6 +90,15 @@ router.put(
 router.delete(
   '/:id',
   authMiddleware,
+  aclMiddleware([
+    {
+      resource: 'comment',
+      action: 'delete',
+      possession: 'own',
+      getResource: (req) => storage.getById(req.params.id),
+      isOwn: (resource, userId) => resource.user_id === userId,
+    },
+  ]),
   asyncHandler(async (req, res) => {
     const id = parseInt(req.params.id, 10);
     await storage.delete(id);

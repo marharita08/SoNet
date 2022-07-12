@@ -8,11 +8,11 @@ module.exports = {
       .delete()
       .where('article_id', articleID)
       .andWhere('user_id', userID),
-  getByArticle: async (id) =>
+  getByArticleId: async (id) =>
     db('article_likes')
       .select('users.user_id', 'users.avatar')
       .join('users', 'users.user_id', 'article_likes.user_id')
       .where('article_id', id),
-  deleteByArticle: async (articleID) =>
+  deleteByArticleId: async (articleID) =>
     db('article_likes').delete().where('article_id', articleID),
 };

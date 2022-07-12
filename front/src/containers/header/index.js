@@ -12,7 +12,7 @@ const HeaderContainer = ({
     setArticleContext,
     unsetAuthContext
 }) => {
-    const { authenticated, user,  refreshToken } = useContext(authContext);
+    const { authenticated, user,  refreshToken, isAdmin } = useContext(authContext);
 
     let handleClickOpen;
     let logout;
@@ -52,6 +52,7 @@ const HeaderContainer = ({
                 user={user}
                 authenticated={authenticated}
                 logout={logout}
+                isAdmin={isAdmin}
             />
         </ErrorBoundary>
     );

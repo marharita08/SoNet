@@ -6,7 +6,7 @@ import {deleteComment} from "../../api/commentCrud";
 import PropTypes from "prop-types";
 
 const CommentContainer = ({comment, setComment, setAddComment, setCommentFieldExpanded}) => {
-    const { user:{user_id} } = useContext(authContext);
+    const { user:{user_id}, isAdmin} = useContext(authContext);
 
     const {mutate} = useMutation(deleteComment);
 
@@ -38,6 +38,7 @@ const CommentContainer = ({comment, setComment, setAddComment, setCommentFieldEx
         <Comment
             comment={comment}
             isCurrentUser={comment.user_id === user_id}
+            isAdmin={isAdmin}
             handleDelete={handleDelete}
             handleEdit={handleEdit}
             handleReply={handleReply}

@@ -2,6 +2,7 @@ const router = require('express').Router();
 const asyncHandler = require('../middleware/asyncHandler');
 const storage = require('../db/friends/storage');
 const authMiddleware = require('../middleware/authMiddleware');
+const NotFoundException = require('../errors/NotFoundException');
 
 router.get(
   '/status/:current_user_id/:user_id',
@@ -75,12 +76,11 @@ router.put(
 router.delete(
   '/:current_user_id/:user_id',
   authMiddleware,
-  asyncHandler(async (req, res) => {
+  asyncHandler(async (req, res, next) => {
     const { current_user_id: currentUserID, user_id: userID } = req.params;
     const row = await storage.get(userID, currentUserID);
     if (row[0] === undefined) {
-      res.status(404).send('Request for friendship not found');
-      return;
+      next(new NotFoundException('Request for friendship not found'));
     }
     const { status_id: statusID } = row[0];
     await storage.delete(userID, currentUserID);

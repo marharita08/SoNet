@@ -25,7 +25,7 @@ function App() {
   const {openModal} = articleModalContext;
   const [alertMessage, setAlertMessage] = useState(window.localStorage.getItem('alertMessage'));
   const alertSeverity = window.localStorage.getItem('alertSeverity');
-  const { authenticated } = authenticationContext;
+  const { authenticated, isAdmin } = authenticationContext;
 
   const handleClose = () => {
     window.localStorage.setItem('alertMessage', undefined)
@@ -86,7 +86,16 @@ function App() {
                 <Route path="/articles"
                        element={authenticated ? <ArticlesContainer
                            setArticleContext={setArticleContext}
+                           param='news'
                        /> : <Navigate to={'/auth'}/>}
+                />
+                <Route path="/all-articles"
+                       element={authenticated ?
+                           (isAdmin ? <ArticlesContainer
+                               setArticleContext={setArticleContext}
+                               param='all'
+                           /> : <Navigate to={'/articles'}/>)
+                           : <Navigate to={'/auth'}/>}
                 />
               </Routes>
             </BrowserRouter>

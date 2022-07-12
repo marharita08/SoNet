@@ -16,6 +16,7 @@ const Comment = ({
     comment,
     handleEdit,
     handleDelete,
+    isAdmin,
     isCurrentUser,
     handleReply
 }) => {
@@ -61,7 +62,7 @@ const Comment = ({
                                 <ReplyIcon onClick={handleReply}/>
                             </IconButton>
                             {
-                                isCurrentUser &&
+                                (isCurrentUser || isAdmin) &&
                                 <IconButton aria-label="settings">
                                     <MoreVertIcon onClick={handleMenu}/>
                                 </IconButton>

@@ -13,6 +13,7 @@ import './profile.css';
 const Profile = ({
     user,
     handleClick,
+    isAdmin,
     isCurrentUser,
     addToFriends,
     accept,
@@ -44,7 +45,7 @@ const Profile = ({
                             />
                         </div>
                         {
-                            (isCurrentUser || user.email_visibility.label === "All" ||
+                            (isAdmin || isCurrentUser || user.email_visibility.label === "All" ||
                             isFriends && user.email_visibility.label === "Friends") &&
                             <div className={"fields_margin"}>
                                 <Field
@@ -56,7 +57,7 @@ const Profile = ({
                                     className={"inline fields_width fields_height"}
                                 />
                                 {
-                                    isCurrentUser &&
+                                    (isAdmin || isCurrentUser) &&
                                     <Field
                                         component={TextField}
                                         disabled
@@ -69,7 +70,7 @@ const Profile = ({
                         }
                         {
                             user.phone &&
-                            (isCurrentUser || user.phone_visibility.label === "All" ||
+                            (isAdmin || isCurrentUser || user.phone_visibility.label === "All" ||
                              isFriends && user.phone_visibility.label === "Friends") &&
                             <div className={"fields_margin"}>
                                 <div>
@@ -81,7 +82,7 @@ const Profile = ({
                                         className={"inline fields_width fields_height"}
                                     />
                                     {
-                                        isCurrentUser &&
+                                        (isAdmin || isCurrentUser) &&
                                         <Field
                                             component={TextField}
                                             name="phone_visibility.label"
@@ -95,7 +96,7 @@ const Profile = ({
                         }
                         {
                             user.university &&
-                            (isCurrentUser || user.university_visibility.label === "All" ||
+                            (isAdmin || isCurrentUser || user.university_visibility.label === "All" ||
                              isFriends && user.university_visibility.label === "Friends") &&
                             <div className={"fields_margin"}>
 
@@ -108,7 +109,7 @@ const Profile = ({
                                         className={"inline fields_width fields_height"}
                                     />
                                     {
-                                        isCurrentUser &&
+                                        (isAdmin || isCurrentUser) &&
                                         <Field
                                             component={TextField}
                                             disabled
@@ -121,7 +122,7 @@ const Profile = ({
                             </div>
                         }
                         {
-                            isCurrentUser &&
+                            (isAdmin || isCurrentUser) &&
                             <div align={"center"}>
                                 <Button
                                     variant={"contained"}

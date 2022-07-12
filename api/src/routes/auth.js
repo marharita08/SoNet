@@ -9,13 +9,14 @@ const { appKey } = require('../services/config');
 const config = require('../services/config');
 const settingsStorage = require('../db/settings/storage');
 const passwordHasher = require('../services/passwordHasher');
+const UnauthorizedException = require('../errors/UnauthorizedException');
 
 const createAccessToken = (user) =>
   jwt.sign({ user_id: user.user_id, name: user.name }, appKey, {
     expiresIn: '30m',
   });
 
-const createTokens = async (user, res) => {
+const createTokens = async (user, res, next) => {
   let accessToken;
   let refreshToken;
   if (user) {
@@ -35,7 +36,7 @@ const createTokens = async (user, res) => {
       success: true,
     });
   }
-  return res.sendStatus(401);
+  return next(new UnauthorizedException());
 };
 
 router.post(
@@ -62,7 +63,7 @@ router.post(
 
 router.post(
   '/',
-  asyncHandler(async (req, res) => {
+  asyncHandler(async (req, res, next) => {
     let { password } = req.body;
     const { email } = req.body;
 
@@ -80,16 +81,15 @@ router.post(
       await settingsStorage.create({ user_id: id[0] });
       user = await storage.getByEmail(email);
     } else if (user.password !== password) {
-      return res.status(401).send({ message: 'Wrong password' });
+      return next(new UnauthorizedException('Wrong password'));
     }
-
-    return createTokens(user, res);
+    return createTokens(user, res, next);
   })
 );
 
 router.post(
   '/refresh',
-  asyncHandler(async (req, res) => {
+  asyncHandler(async (req, res, next) => {
     const session = await sessionStorage.getByToken(req.body.refreshToken);
     if (session) {
       const user = (await storage.getById(session.user_id))[0];
@@ -109,7 +109,7 @@ router.post(
         });
       }
     }
-    return res.sendStatus(401);
+    return next(new UnauthorizedException());
   })
 );
 

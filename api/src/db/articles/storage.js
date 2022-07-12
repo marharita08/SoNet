@@ -1,17 +1,27 @@
 const db = require('../../services/db');
 
 module.exports = {
-  getAll: async () =>
+  getAll: async () => db('articles').select().orderBy('article_id desc'),
+  getById: async (id) => db('articles').select().where('article_id', id),
+  create: async (article) =>
+    db('articles').returning('article_id').insert(article),
+  update: async (id, article) =>
+    db('articles').update(article).where('article_id', id),
+  delete: async (id) => db('articles').delete().where('article_id', id),
+  getAllNewsByUserId: async (userId) =>
     db
       .select(
-        db.raw('distinct article_id'),
-        'text',
+        db.raw('distinct articles.article_id'),
+        'articles.text',
         'image',
         db.raw("to_char(created_at, 'DD.MM.YYYY HH24:MI:SS') as created_at"),
-        'u.user_id',
+        'users.user_id',
         'users.name',
         'users.avatar',
-        'v.visibility'
+        'v.visibility',
+        db.raw(
+          'case when liked.article_id is null then false else true end as liked'
+        )
       )
       .countDistinct('article_likes.user_id', { as: 'likes' })
       .countDistinct('comments.comment_id', { as: 'comments' })
@@ -28,11 +38,18 @@ module.exports = {
         'articles.article_id'
       )
       .leftJoin('comments', 'comments.article_id', 'articles.article_id')
+      .leftJoin({ liked: 'article_likes' }, function () {
+        this.on('liked.article_id', 'articles.article_id').andOn(
+          'liked.user_id',
+          userId
+        );
+      })
       .groupBy('articles.article_id')
       .groupBy('users.user_id')
       .groupBy('v.visibility')
-      .orderBy('created_at', 'desc'),
-  getById: async (id, userId) =>
+      .groupBy('liked.article_id')
+      .orderBy('article_id', 'desc'),
+  getByIdAndUserId: async (id, userId) =>
     db
       .select(
         'articles.*',
@@ -70,11 +87,7 @@ module.exports = {
       .groupBy('v.visibility')
       .groupBy('liked.article_id')
       .where('articles.article_id', id),
-  create: async (article) => db('articles').insert(article),
-  update: async (id, article) =>
-    db('articles').update(article).where('article_id', id),
-  delete: async (id) => db('articles').delete().where('article_id', id),
-  getNews: async (id) =>
+  getNewsByUserId: async (userId) =>
     db
       .select(
         'main.*',
@@ -95,7 +108,6 @@ module.exports = {
               db.raw(
                 "to_char(created_at, 'DD.MM.YYYY HH24:MI:SS') as created_at"
               ),
-              'created_at as date_created_at',
               'u.name',
               'u.avatar',
               'v.visibility',
@@ -105,7 +117,9 @@ module.exports = {
               .join({ f: 'friends' }, function () {
                 this.on(
                   db.raw('(user_id=from_user_id or user_id=to_user_id)')
-                ).andOn(db.raw(`(from_user_id=${id} or to_user_id=${id})`));
+                ).andOn(
+                  db.raw(`(from_user_id=${userId} or to_user_id=${userId})`)
+                );
               })
               .join({ s: 'status' }, function () {
                 this.on('s.status_id', 'f.status_id').andOnVal(
@@ -120,7 +134,7 @@ module.exports = {
                 this.on('v.visibility_id', 'a.visibility_id');
               })
               .whereIn('v.visibility', ['All', 'Friends'])
-              .andWhere('u.user_id', '!=', id);
+              .andWhere('u.user_id', '!=', userId);
           })
           .union(function () {
             this.select(
@@ -131,7 +145,6 @@ module.exports = {
               db.raw(
                 "to_char(created_at, 'DD.MM.YYYY HH24:MI:SS') as created_at"
               ),
-              'created_at as date_created_at',
               'u.name',
               'u.avatar',
               'v.visibility',
@@ -139,7 +152,7 @@ module.exports = {
             )
               .from({ u: 'users' })
               .join({ a: 'articles' }, function () {
-                this.on('u.user_id', 'a.user_id').andOnVal('u.user_id', id);
+                this.on('u.user_id', 'a.user_id').andOnVal('u.user_id', userId);
               })
               .join(
                 { v: 'article_visibilities' },
@@ -153,13 +166,14 @@ module.exports = {
       .leftJoin({ liked: 'article_likes' }, function () {
         this.on('liked.article_id', 'main.article_id').andOn(
           'liked.user_id',
-          id
+          userId
         );
       })
       .groupByRaw(
         'main.article_id, main.text, main.image, main.user_id, main.created_at, main.name, main.avatar, ' +
-          'main.visibility, main.visibility_id, liked.article_id, date_created_at'
+          'main.visibility, main.visibility_id, liked.article_id'
       )
-      .orderBy('date_created_at', 'desc'),
-  getFile: async (id) => db('articles').select('image').where('article_id', id),
+      .orderBy('article_id', 'desc'),
+  getImageByArticleId: async (id) =>
+    db('articles').select('image').where('article_id', id),
 };

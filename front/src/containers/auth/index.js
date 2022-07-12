@@ -7,43 +7,30 @@ import {googleAuth, facebookAuth, auth} from "../../api/auth";
 
 const AuthContainer = ({setAuthContext}) => {
 
+    const setAuthContextFunc = data => {
+        const { data: {user, accessToken, refreshToken}} = data;
+        setAuthContext({
+            authenticated: true,
+            user,
+            isAdmin: user.role === 'admin',
+            accessToken,
+            refreshToken
+        })
+    }
+
     const { mutate: googleAuthMutate } = useMutation(
         googleAuth, {
-            onSuccess: data => {
-                const { data: {user, accessToken, refreshToken}} = data;
-                setAuthContext({
-                    authenticated: true,
-                    user,
-                    accessToken,
-                    refreshToken
-                })
-            }
+            onSuccess: setAuthContextFunc
         });
 
     const { mutate: facebookAuthMutate } = useMutation(
         facebookAuth, {
-            onSuccess: data => {
-                const { data: {user, accessToken, refreshToken}} = data;
-                setAuthContext({
-                    authenticated: true,
-                    user,
-                    accessToken,
-                    refreshToken
-                })
-            }
+            onSuccess: setAuthContextFunc
         });
 
     const { mutate: authMutate } = useMutation(
         auth, {
-            onSuccess: data => {
-                const { data: {user, accessToken, refreshToken}} = data;
-                setAuthContext({
-                    authenticated: true,
-                    user,
-                    accessToken,
-                    refreshToken
-                })
-            }
+            onSuccess: setAuthContextFunc
         });
 
     const onGoogleSuccess = (response) => {

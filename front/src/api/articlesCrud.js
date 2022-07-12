@@ -4,12 +4,8 @@ export const getArticles = async () => {
     return apiClient.get('/articles');
 }
 
-export const getArticle = async (id, user_id) => {
-    return apiClient.get(`/articles/${id}/${user_id}`);
-}
-
-export const getComments = async (id) => {
-    return apiClient.get(`/articles/${id}/comments`);
+export const getArticle = async (id) => {
+    return apiClient.get(`/articles/${id}`);
 }
 
 export const insertArticle = async (article) => {
@@ -34,6 +30,15 @@ export const deleteArticle = async (id) => {
     return apiClient.delete(`/articles/${id}`);
 }
 
+export const getComments = async (id) => {
+    return apiClient.get(`/articles/${id}/comments`);
+}
+
 export const getLikes = async (id) => {
     return apiClient.get(`/articles/${id}/likes`);
 }
+
+export const getArticleByIdAndUserId = async (id, user_id) => {
+    return apiClient.get(`/articles/${id}/${user_id}`);
+}
+

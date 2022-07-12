@@ -26,6 +26,7 @@ export let ProfilePropTypes = {
     }),
     handleClick: PropTypes.func.isRequired,
     isCurrentUser: PropTypes.bool.isRequired,
+    isAdmin: PropTypes.bool.isRequired,
     addToFriends: PropTypes.func.isRequired,
     accept: PropTypes.func.isRequired,
     deleteFromFriends: PropTypes.func.isRequired,

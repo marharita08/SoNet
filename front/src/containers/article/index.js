@@ -14,7 +14,7 @@ import {deleteLike, insertLike} from "../../api/likesCrud";
 
 const ArticleContainer = ({setArticleContext, article}) => {
     let id = article.article_id;
-    const { user:{user_id} } = useContext(authContext);
+    const { user:{user_id} , isAdmin } = useContext(authContext);
     const {isFetching:commentsFetching, data:commentsData } = useQuery(`comments ${id}`, () => getComments(id));
     const {data:usersData} = useQuery(`users ${id}`, () => getLikes(id));
     const comments = commentsData?.data;
@@ -96,6 +96,7 @@ const ArticleContainer = ({setArticleContext, article}) => {
                             handleEdit={handleEdit}
                             handleExpandClick={handleExpandClick}
                             isCurrentUser={article.user_id === user_id}
+                            isAdmin={isAdmin}
                             handleDelete={handleDelete}
                             handleAddCommentClick={handleAddCommentClick}
                             isLiked={isLiked}
@@ -140,6 +141,7 @@ ArticleContainer.propTypes = {
         created_at: PropTypes.string.isRequired,
         likes: PropTypes.number.isRequired,
         comments: PropTypes.number.isRequired,
+        liked: PropTypes.bool.isRequired,
     }),
 }
 

@@ -44,6 +44,7 @@ const Article = ({
     handleExpandClick,
     handleDelete,
     isCurrentUser,
+    isAdmin,
     isLiked,
     handleAddCommentClick,
     handleLikeClick,
@@ -97,7 +98,7 @@ const Article = ({
                     </Link>
                 }
                 action={
-                    isCurrentUser &&
+                    (isCurrentUser || isAdmin) &&
                     <IconButton aria-label="settings">
                         <MoreVertIcon onClick={handleMenu} />
                     </IconButton>
@@ -235,6 +236,7 @@ Article.propTypes = {
     handleExpandClick: PropTypes.func.isRequired,
     handleLikeClick: PropTypes.func.isRequired,
     isCurrentUser: PropTypes.bool.isRequired,
+    isAdmin: PropTypes.bool.isRequired,
     isLiked: PropTypes.bool.isRequired,
     likes: PropTypes.number.isRequired,
     handleAddCommentClick: PropTypes.func.isRequired

@@ -18,7 +18,7 @@ const ProfileContainer = () => {
     let {id} = useParams();
     id = parseInt(id, 10);
     const [openModal, setOpenModal] = useState(false);
-    const {user:currentUser} = useContext(authContext);
+    const {user:currentUser, isAdmin} = useContext(authContext);
     const {isFetching: userFetching, data: userData} = useQuery('user', () => getUser(id));
     const {data: statusData} = useQuery('status',
             () => getStatus({'user_id': id, 'current_user_id': currentUser.user_id}));
@@ -74,6 +74,7 @@ const ProfileContainer = () => {
                             isIncomingRequest={status === 'incoming request'}
                             isOutgoingRequest={status === 'outgoing request'}
                             isLoading={acceptLoading||addLoading||deleteLoading}
+                            isAdmin={isAdmin}
                         />
                     </ErrorBoundary>
                     <EditProfileContainer

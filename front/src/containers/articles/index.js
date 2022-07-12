@@ -6,12 +6,18 @@ import PropTypes from "prop-types";
 import Article from "../../containers/article";
 import ErrorBoundary from "../../components/ErrorBoundary";
 import authContext from "../../context/authContext";
-import {getNews} from "../../api/usersCrud";
+import {getAllNews, getNews} from "../../api/usersCrud";
 
 
-const ArticlesContainer = ({setArticleContext}) => {
+const ArticlesContainer = ({setArticleContext, param}) => {
     const { user:{user_id} } = useContext(authContext);
-    const {isFetching, data} = useQuery('articles', () => getNews(user_id));
+    let getFunc;
+    if (param === 'news') {
+        getFunc = getNews(user_id);
+    } else if (param === 'all') {
+        getFunc = getAllNews(user_id);
+    }
+    const {isFetching, data} = useQuery(`articles ${param}`, () => getFunc);
     const articles = data?.data;
 
     return (

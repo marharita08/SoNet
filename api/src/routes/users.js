@@ -6,6 +6,8 @@ const storage = require('../db/users/storage');
 const settingsStorage = require('../db/settings/storage');
 const articleStorage = require('../db/articles/storage');
 const authMiddleware = require('../middleware/authMiddleware');
+const aclMiddleware = require('../middleware/aclMiddleware');
+const NotFoundException = require('../errors/NotFoundException');
 
 router.get(
   '/',
@@ -18,38 +20,41 @@ router.get(
 router.get(
   '/:id',
   authMiddleware,
-  asyncHandler(async (req, res) => {
+  asyncHandler(async (req, res, next) => {
     const id = parseInt(req.params.id, 10);
-    const dbResponse = await storage.getById(id);
-    const result = [
-      {
-        ...dbResponse[0],
-        name_visibility: {
-          value: dbResponse[0].name_visibility_id,
-          label: dbResponse[0].nv_label,
+    const dbResponse = await storage.getProfileById(id);
+    if (dbResponse[0]) {
+      const result = [
+        {
+          ...dbResponse[0],
+          name_visibility: {
+            value: dbResponse[0].name_visibility_id,
+            label: dbResponse[0].nv_label,
+          },
+          email_visibility: {
+            value: dbResponse[0].email_visibility_id,
+            label: dbResponse[0].ev_label,
+          },
+          phone_visibility: {
+            value: dbResponse[0].phone_visibility_id,
+            label: dbResponse[0].pv_label,
+          },
+          university: {
+            value: dbResponse[0].university_id,
+            label: dbResponse[0].university_label,
+          },
+          university_visibility: {
+            value: dbResponse[0].university_visibility_id,
+            label: dbResponse[0].uv_label,
+          },
         },
-        email_visibility: {
-          value: dbResponse[0].email_visibility_id,
-          label: dbResponse[0].ev_label,
-        },
-        phone_visibility: {
-          value: dbResponse[0].phone_visibility_id,
-          label: dbResponse[0].pv_label,
-        },
-        university: {
-          value: dbResponse[0].university_id,
-          label: dbResponse[0].university_label,
-        },
-        university_visibility: {
-          value: dbResponse[0].university_visibility_id,
-          label: dbResponse[0].uv_label,
-        },
-      },
-    ];
-    if (result[0].university.value == null) {
-      result[0].university = null;
+      ];
+      if (result[0].university.value == null) {
+        result[0].university = null;
+      }
+      return res.send(result);
     }
-    res.send(result);
+    return next(new NotFoundException('User not found'));
   })
 );
 
@@ -70,6 +75,7 @@ router.post(
       phone,
       university_id: universityID,
       avatar,
+      role: 'user',
     });
     await settingsStorage.create({ user_id: id[0] });
     res.send({ message: 'Account was created successfully.' });
@@ -79,6 +85,15 @@ router.post(
 router.put(
   '/:id',
   authMiddleware,
+  aclMiddleware([
+    {
+      resource: 'user',
+      action: 'update',
+      possession: 'own',
+      getResource: (req) => storage.getById(req.params.id),
+      isOwn: (resource, userId) => resource.user_id === userId,
+    },
+  ]),
   upload.single('file'),
   asyncHandler(async (req, res, next) => {
     const {
@@ -135,6 +150,15 @@ router.put(
 router.delete(
   '/:id',
   authMiddleware,
+  aclMiddleware([
+    {
+      resource: 'user',
+      action: 'delete',
+      possession: 'own',
+      getResource: (req) => storage.getById(req.params.id),
+      isOwn: (resource, userId) => resource.user_id === userId,
+    },
+  ]),
   asyncHandler(async (req, res) => {
     const id = parseInt(req.params.id, 10);
     await storage.delete(id);
@@ -174,7 +198,27 @@ router.get(
   authMiddleware,
   asyncHandler(async (req, res) => {
     const id = parseInt(req.params.id, 10);
-    const dbResponse = await articleStorage.getNews(id);
+    const dbResponse = await articleStorage.getNewsByUserId(id);
+    const result = [];
+    Object.keys(dbResponse).forEach((dbResponseKey) => {
+      result.push({
+        ...dbResponse[dbResponseKey],
+        visibility: {
+          value: dbResponse[dbResponseKey].visibility_id,
+          label: dbResponse[dbResponseKey].visibility,
+        },
+      });
+    });
+    res.send(result);
+  })
+);
+
+router.get(
+  '/:id/all-news',
+  authMiddleware,
+  asyncHandler(async (req, res) => {
+    const id = parseInt(req.params.id, 10);
+    const dbResponse = await articleStorage.getAllNewsByUserId(id);
     const result = [];
     Object.keys(dbResponse).forEach((dbResponseKey) => {
       result.push({

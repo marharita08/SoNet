@@ -8,7 +8,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import NoteAddIcon from '@mui/icons-material/NoteAdd';
 import env from "../../config/envConfig";
 
-const Header = ({handleClickOpen, user, authenticated, logout}) => {
+const Header = ({handleClickOpen, user, authenticated, logout, isAdmin}) => {
     const [anchorEl, setAnchorEl] = useState(null);
 
     const handleMenu = (event) => {
@@ -36,6 +36,19 @@ const Header = ({handleClickOpen, user, authenticated, logout}) => {
                 {
                     authenticated &&
                     <div>
+                        {
+                            isAdmin &&
+                            <Link to={"/all-articles"}>
+                                <button onClick={'update'}>
+                                    <div className={"inline"}>
+                                        <HomeIcon fontSize={"small"}/>
+                                    </div>
+                                    <div className={"inline margin"}>
+                                        All articles
+                                    </div>
+                                </button>
+                            </Link>
+                        }
                         <button onClick={handleClickOpen}>
                             <div className={"inline"}>
                                 <NoteAddIcon fontSize={"small"}/>
