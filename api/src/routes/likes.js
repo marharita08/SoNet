@@ -2,6 +2,7 @@ const router = require('express').Router();
 const asyncHandler = require('../middleware/asyncHandler');
 const storage = require('../db/likes/storage');
 const authMiddleware = require('../middleware/authMiddleware');
+const validationMiddleware = require('../middleware/validationMiddleware');
 
 router.get(
   '/',
@@ -14,6 +15,10 @@ router.get(
 router.post(
   '/',
   authMiddleware,
+  validationMiddleware({
+    article_id: [{ name: 'required' }],
+    user_id: [{ name: 'required' }],
+  }),
   asyncHandler(async (req, res) => {
     const { article_id: articleID, user_id: userID } = req.body;
     await storage.create({

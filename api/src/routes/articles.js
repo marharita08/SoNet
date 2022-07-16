@@ -8,6 +8,7 @@ const likeStorage = require('../db/likes/storage');
 const authMiddleware = require('../middleware/authMiddleware');
 const aclMiddleware = require('../middleware/aclMiddleware');
 const NotFoundException = require('../errors/NotFoundException');
+const validationMiddleware = require('../middleware/validationMiddleware');
 
 router.get(
   '/',
@@ -34,6 +35,11 @@ router.post(
   '/',
   authMiddleware,
   upload.single('file'),
+  validationMiddleware({
+    user_id: [{ name: 'required' }],
+    text: [{ name: 'required' }],
+    visibility: [{ name: 'required' }],
+  }),
   asyncHandler(async (req, res) => {
     const {
       user_id: userID,
@@ -73,6 +79,10 @@ router.put(
     },
   ]),
   upload.single('file'),
+  validationMiddleware({
+    text: [{ name: 'required' }],
+    visibility: [{ name: 'required' }],
+  }),
   asyncHandler(async (req, res, next) => {
     const {
       text,

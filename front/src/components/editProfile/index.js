@@ -35,13 +35,14 @@ const EditProfile = ({
         handleAlertClose,
 }) => {
         const schema = Yup.object().shape({
-        name: Yup.string().required("Name is required").max(255, "Must be no more than 255 symbols"),
-        email: Yup.string().required("Email is required"),
+        name: Yup.string().required("Name is required").max(255, "Name should contain not more than 255 symbols"),
+        email: Yup.string().required("Email is required").max(255, "Name should contain not more than 255 symbols"),
         email_visibility: Yup.object().shape({
             value: Yup.number(),
             label: Yup.string(),
         }).nullable(),
-        phone: Yup.string().matches(/^[+]380[\d]{9}$/, "Must match +380xxxxxxxxx").nullable(),
+        password: Yup.string().min(8, "Password should contain at least 8 symbols").nullable(),
+        phone: Yup.string().matches(/^\+380\d{9}$/, "Phone should match +380xxxxxxxxx").nullable(),
         phone_visibility: Yup.object().shape({
             value: Yup.number(),
             label: Yup.string(),
@@ -148,7 +149,6 @@ const EditProfile = ({
                                         component={TextField}
                                         type={"email"}
                                         name={"email"}
-                                        disabled
                                         label={"Email"}
                                         className={"inline fields_width fields_height"}
                                     />
@@ -158,6 +158,15 @@ const EditProfile = ({
                                         label="Available to"
                                         options={visibilities}
                                         className={"inline visibility fields_height"}
+                                    />
+                                </div>
+                                <div className={"fields_margin"}>
+                                    <Field
+                                        component={TextField}
+                                        type={"password"}
+                                        name={"password"}
+                                        label={"Password"}
+                                        className={"inline fields_width fields_height"}
                                     />
                                 </div>
                                 <div className={"fields_margin"}>

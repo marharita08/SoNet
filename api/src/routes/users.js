@@ -8,6 +8,9 @@ const articleStorage = require('../db/articles/storage');
 const authMiddleware = require('../middleware/authMiddleware');
 const aclMiddleware = require('../middleware/aclMiddleware');
 const NotFoundException = require('../errors/NotFoundException');
+const validationMiddleware = require('../middleware/validationMiddleware');
+const passwordHasher = require('../services/passwordHasher');
+const config = require('../services/config');
 
 router.get(
   '/',
@@ -95,6 +98,53 @@ router.put(
     },
   ]),
   upload.single('file'),
+  validationMiddleware(
+    {
+      email: [
+        {
+          name: 'required',
+        },
+        {
+          name: 'email',
+        },
+        {
+          name: 'max',
+          value: 255,
+        },
+        {
+          name: 'unique',
+        },
+      ],
+      name: [
+        {
+          name: 'required',
+        },
+        {
+          name: 'max',
+          value: 255,
+        },
+      ],
+      phone: [
+        {
+          name: 'regexp',
+          value: /^\+380\d{9}$/,
+        },
+      ],
+      password: [{ name: 'min', value: 8 }],
+      email_visibility: [{ name: 'required' }],
+      phone_visibility: [{ name: 'required' }],
+      university_visibility: [{ name: 'required' }],
+    },
+    {
+      email: {
+        id: {
+          name: 'user_id',
+          value: (req) => req.params.id,
+        },
+        getResourceByField: (email) => storage.getByEmail(email),
+      },
+    }
+  ),
   asyncHandler(async (req, res, next) => {
     const {
       name,
@@ -102,26 +152,26 @@ router.put(
       email_visibility: { value: emailVisibilityID },
       phone_visibility: { value: phoneVisibilityID },
       university_visibility: { value: universityVisibilityID },
-    } = req.body;
-    let {
       university: { value: universityID },
-      phone,
     } = req.body;
+    let { phone, password } = req.body;
     const fileData = req.file;
     const id = parseInt(req.params.id, 10);
-    if (universityID === undefined) {
-      universityID = null;
-    }
     if (phone === '') {
       phone = null;
     }
+    if (password !== '' && password !== (await storage.getPassword(id))) {
+      password = passwordHasher(password, config.salt);
+    } else if (password === '') {
+      password = null;
+    }
     let path;
     if (fileData) {
-      const oldFile = await storage.getAvatar(id);
-      const { avatar } = oldFile[0];
+      const { avatar } = await storage.getAvatar(id);
       const filePath = fileData.path;
       path = filePath.substr(filePath.indexOf('/'), filePath.length);
-      if (avatar != null) {
+      const regexp = new RegExp(`${id}-\\d+.`);
+      if (avatar != null && regexp.test(avatar)) {
         fs.unlink(`public${avatar}`, (err) => {
           if (err) {
             next(err);
@@ -132,6 +182,7 @@ router.put(
     const user = {
       name,
       email,
+      password,
       phone,
       university_id: universityID,
       avatar: path,

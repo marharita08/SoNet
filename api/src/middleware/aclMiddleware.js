@@ -6,7 +6,7 @@ module.exports = (rule) => async (req, res, next) => {
   const rules = Array.isArray(rule) ? rule : [rule];
   let isAllow = false;
 
-  const user = (await userStorage.getById(req.auth.user_id))[0];
+  const user = await userStorage.getById(req.auth.user_id);
   if (user) {
     // eslint-disable-next-line no-restricted-syntax
     for await (const checkRule of rules) {
@@ -25,7 +25,7 @@ module.exports = (rule) => async (req, res, next) => {
           } else if (canUseAnyAction) {
             isAllow = true;
           } else {
-            const resource = (await checkRule.getResource(req))[0];
+            const resource = await checkRule.getResource(req);
             if (checkRule.isOwn(resource, user.user_id)) {
               isAllow = true;
             }

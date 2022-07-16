@@ -14,8 +14,8 @@ import env from "../../config/envConfig";
 const AuthComponent = ({onGoogleSuccess, onGoogleFailure, onFormSubmit, initialUser, responseFacebook}) => {
 
     const schema = Yup.object().shape({
-        email: Yup.string().required("Email is required"),
-        password: Yup.string().required("Password is required"),
+        email: Yup.string().required("Email is required").email("Email is invalid"),
+        password: Yup.string().required("Password is required").min(8, "Password should contain more than 8 symbols"),
     })
 
     return (

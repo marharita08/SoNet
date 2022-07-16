@@ -3,7 +3,7 @@ const db = require('../../services/db');
 module.exports = {
   create: async (user) => db('users').returning('user_id').insert(user),
   getAll: async () => db.select().from('users').orderBy('user_id'),
-  getById: async (id) => db('users').select().where('user_id', id),
+  getById: async (id) => db('users').select().first().where('user_id', id),
   getProfileById: async (id) =>
     db
       .select(
@@ -38,7 +38,10 @@ module.exports = {
       )
       .where('u.user_id', id),
   update: async (id, user) => db('users').update(user).where('user_id', id),
-  getAvatar: async (id) => db('users').select('avatar').where('user_id', id),
+  getAvatar: async (id) =>
+    db('users').select('avatar').first().where('user_id', id),
+  getPassword: async (id) =>
+    db('users').select('password').first().where('user_id', id),
   delete: async (id) => db('users').delete().where('user_id', id),
   getFriends: async (id) =>
     db

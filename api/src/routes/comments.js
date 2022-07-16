@@ -5,6 +5,7 @@ const storage = require('../db/comments/storage');
 const authMiddleware = require('../middleware/authMiddleware');
 const aclMiddleware = require('../middleware/aclMiddleware');
 const NotFoundException = require('../errors/NotFoundException');
+const validationMiddleware = require('../middleware/validationMiddleware');
 
 router.get(
   '/',
@@ -30,6 +31,28 @@ router.get(
 router.post(
   '/',
   authMiddleware,
+  validationMiddleware({
+    article_id: [
+      {
+        name: 'required',
+      },
+    ],
+    user_id: [
+      {
+        name: 'required',
+      },
+    ],
+    text: [
+      {
+        name: 'required',
+      },
+    ],
+    level: [
+      {
+        name: 'required',
+      },
+    ],
+  }),
   asyncHandler(async (req, res) => {
     const {
       article_id: articleID,
@@ -77,6 +100,13 @@ router.put(
       isOwn: (resource, userId) => resource.user_id === userId,
     },
   ]),
+  validationMiddleware({
+    text: [
+      {
+        name: 'required',
+      },
+    ],
+  }),
   asyncHandler(async (req, res) => {
     const { text } = req.body;
     const id = parseInt(req.params.id, 10);

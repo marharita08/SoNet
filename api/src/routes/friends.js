@@ -3,6 +3,7 @@ const asyncHandler = require('../middleware/asyncHandler');
 const storage = require('../db/friends/storage');
 const authMiddleware = require('../middleware/authMiddleware');
 const NotFoundException = require('../errors/NotFoundException');
+const validationMiddleware = require('../middleware/validationMiddleware');
 
 router.get(
   '/status/:current_user_id/:user_id',
@@ -30,6 +31,10 @@ router.get(
 router.post(
   '/',
   authMiddleware,
+  validationMiddleware({
+    from_user_id: [{ name: 'required' }],
+    to_user_id: [{ name: 'required' }],
+  }),
   asyncHandler(async (req, res) => {
     const { from_user_id: fromUserID, to_user_id: toUserID } = req.body;
     await storage.create({
@@ -44,6 +49,10 @@ router.post(
 router.put(
   '/accept',
   authMiddleware,
+  validationMiddleware({
+    from_user_id: [{ name: 'required' }],
+    to_user_id: [{ name: 'required' }],
+  }),
   asyncHandler(async (req, res) => {
     const { from_user_id: fromUserID, to_user_id: toUserID } = req.body;
     await storage.update(
@@ -60,6 +69,10 @@ router.put(
 router.put(
   '/decline',
   authMiddleware,
+  validationMiddleware({
+    from_user_id: [{ name: 'required' }],
+    to_user_id: [{ name: 'required' }],
+  }),
   asyncHandler(async (req, res) => {
     const { from_user_id: fromUserID, to_user_id: toUserID } = req.body;
     await storage.update(

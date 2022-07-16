@@ -19,12 +19,17 @@ module.exports = () => {
         const fbId = profile.id;
         let user = await storage.getByFbId(fbId);
         if (!user) {
-          const [{ value: email }] = profile.emails;
+          let [{ value: email }] = profile.emails;
+          const [{ value: avatar }] = profile.photos;
+          if (email === '') {
+            email = null;
+          }
           const name = profile.displayName;
           user = {
             name,
             email,
             fb_id: fbId,
+            avatar,
           };
           const id = await storage.create(user);
           await settingsStorage.create({ user_id: id[0] });
@@ -47,9 +52,12 @@ module.exports = () => {
         let user = await storage.getByEmail(email);
         if (!user) {
           const name = profile.displayName;
+          // eslint-disable-next-line no-underscore-dangle
+          const avatar = profile._json.picture;
           user = {
             name,
             email,
+            avatar,
           };
           const id = await storage.create(user);
           await settingsStorage.create({ user_id: id[0] });

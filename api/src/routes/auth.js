@@ -10,6 +10,7 @@ const config = require('../services/config');
 const settingsStorage = require('../db/settings/storage');
 const passwordHasher = require('../services/passwordHasher');
 const UnauthorizedException = require('../errors/UnauthorizedException');
+const validationMiddleware = require('../middleware/validationMiddleware');
 
 const createAccessToken = (user) =>
   jwt.sign({ user_id: user.user_id, name: user.name }, appKey, {
@@ -41,6 +42,13 @@ const createTokens = async (user, res, next) => {
 
 router.post(
   '/facebook',
+  validationMiddleware({
+    access_token: [
+      {
+        name: 'required',
+      },
+    ],
+  }),
   passport.authenticate('facebookToken', {
     session: false,
   }),
@@ -52,6 +60,13 @@ router.post(
 
 router.post(
   '/google',
+  validationMiddleware({
+    access_token: [
+      {
+        name: 'required',
+      },
+    ],
+  }),
   passport.authenticate('googleToken', {
     session: false,
   }),
@@ -63,6 +78,29 @@ router.post(
 
 router.post(
   '/',
+  validationMiddleware({
+    email: [
+      {
+        name: 'required',
+      },
+      {
+        name: 'email',
+      },
+      {
+        name: 'max',
+        value: 255,
+      },
+    ],
+    password: [
+      {
+        name: 'required',
+      },
+      {
+        name: 'min',
+        value: 8,
+      },
+    ],
+  }),
   asyncHandler(async (req, res, next) => {
     let { password } = req.body;
     const { email } = req.body;
@@ -89,10 +127,17 @@ router.post(
 
 router.post(
   '/refresh',
+  validationMiddleware({
+    refreshToken: [
+      {
+        name: 'required',
+      },
+    ],
+  }),
   asyncHandler(async (req, res, next) => {
     const session = await sessionStorage.getByToken(req.body.refreshToken);
     if (session) {
-      const user = (await storage.getById(session.user_id))[0];
+      const user = await storage.getById(session.user_id);
       const accessToken = createAccessToken(user);
       const refreshToken = uuidv4();
       await sessionStorage.deleteByToken(session.token);
@@ -115,6 +160,13 @@ router.post(
 
 router.post(
   '/logout',
+  validationMiddleware({
+    refreshToken: [
+      {
+        name: 'required',
+      },
+    ],
+  }),
   asyncHandler(async (req, res) => {
     await sessionStorage.deleteByToken(req.body.refreshToken);
     return res.send({ message: 'Logged out' });
