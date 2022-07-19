@@ -6,7 +6,6 @@ import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import {useState} from "react";
 
-import env from "../../config/envConfig";
 import './user.css';
 
 const User = ({user, handleClose, menu, accept, decline}) => {
@@ -41,7 +40,7 @@ const User = ({user, handleClose, menu, accept, decline}) => {
                     <CardHeader
                         avatar={
                             <Avatar
-                                src={`${env.apiUrl}${user.avatar}`}
+                                src={user.avatar}
                                 sx={{ width: 50, height: 50 }}
                             />
                         }

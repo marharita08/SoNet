@@ -8,7 +8,6 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-import env from "../../config/envConfig";
 import './comment.css';
 
 
@@ -51,7 +50,7 @@ const Comment = ({
                         <Link to={`/profile/${comment.user_id}`}>
                             <Avatar
                                 alt={comment.name}
-                                src={`${env.apiUrl}${comment.avatar}`}
+                                src={comment.avatar}
                                 sx={{width: 30, height: 30}}
                             />
                         </Link>

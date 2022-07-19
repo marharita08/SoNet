@@ -5,8 +5,6 @@ import {Formik, Form, Field} from "formik";
 import PropTypes from "prop-types";
 import SaveIcon from '@mui/icons-material/Save';
 
-import env from "../../config/envConfig";
-
 const AddComment = ({user, comment, onSubmit, loading, addComment, handleCancel}) => {
 
     const schema = Yup.object().shape({
@@ -26,7 +24,7 @@ const AddComment = ({user, comment, onSubmit, loading, addComment, handleCancel}
                         <div className={'inline'} style={{verticalAlign: 'top'}}>
                             <Link to={`/profile/${user.user_id}`}>
                                 <Avatar
-                                    src={`${env.apiUrl}${user.avatar}`}
+                                    src={user.avatar}
                                     sx={{width: 60, height: 60}}
                                     className={'margin'}
                                 />

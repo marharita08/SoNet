@@ -160,19 +160,22 @@ router.put(
     if (phone === '') {
       phone = null;
     }
-    if (password !== '' && password !== (await storage.getPassword(id))) {
+    const { password: oldHashedPassword } = await storage.getPassword(id);
+    if (password !== '' && password !== oldHashedPassword) {
       password = passwordHasher(password, config.salt);
     } else if (password === '') {
       password = null;
     }
-    let path;
+    let avatarUrl;
+    let avatarPath;
     if (fileData) {
-      const { avatar } = await storage.getAvatar(id);
-      const filePath = fileData.path;
-      path = filePath.substr(filePath.indexOf('/'), filePath.length);
-      const regexp = new RegExp(`${id}-\\d+.`);
-      if (avatar != null && regexp.test(avatar)) {
-        fs.unlink(`public${avatar}`, (err) => {
+      const { avatar_path: oldAvatarPath } = await storage.getAvatarPath(id);
+      avatarPath = fileData.path;
+      avatarUrl =
+        config.appUrl +
+        avatarPath.substr(avatarPath.indexOf('/'), avatarPath.length);
+      if (oldAvatarPath != null) {
+        fs.unlink(oldAvatarPath, (err) => {
           if (err) {
             next(err);
           }
@@ -185,7 +188,8 @@ router.put(
       password,
       phone,
       university_id: universityID,
-      avatar: path,
+      avatar: avatarUrl,
+      avatar_path: avatarPath,
     };
     await storage.update(id, user);
     const settings = {

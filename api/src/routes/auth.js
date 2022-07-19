@@ -114,6 +114,7 @@ router.post(
         name,
         email,
         password,
+        role: 'user',
       };
       const id = await storage.create(user);
       await settingsStorage.create({ user_id: id[0] });

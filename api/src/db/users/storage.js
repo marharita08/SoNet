@@ -38,8 +38,8 @@ module.exports = {
       )
       .where('u.user_id', id),
   update: async (id, user) => db('users').update(user).where('user_id', id),
-  getAvatar: async (id) =>
-    db('users').select('avatar').first().where('user_id', id),
+  getAvatarPath: async (id) =>
+    db('users').select('avatar_path').first().where('user_id', id),
   getPassword: async (id) =>
     db('users').select('password').first().where('user_id', id),
   delete: async (id) => db('users').delete().where('user_id', id),

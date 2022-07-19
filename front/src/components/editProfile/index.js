@@ -12,7 +12,6 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import SaveIcon from '@mui/icons-material/Save';
 import CloseIcon from "@mui/icons-material/Close";
 
-import env from "../../config/envConfig";
 import {EditProfilePropTypes} from "./editProfilePropTypes";
 import AlertContainer from "../../containers/alert";
 
@@ -86,7 +85,7 @@ const EditProfile = ({
                             <div className={"user_img"} >
                                 <Avatar
                                     className={"big_margin"}
-                                    src={croppedImage||`${env.apiUrl}${user?.avatar}`}
+                                    src={croppedImage||user?.avatar}
                                     sx={{ width: 110, height: 110 }}
                                 />
                                 <label htmlFor="contained-button-file" className={"file margin"}>

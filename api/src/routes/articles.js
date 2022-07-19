@@ -92,12 +92,11 @@ router.put(
     const fileData = req.file;
     let path = null;
     if (fileData) {
-      const oldFile = await storage.getImageByArticleId(id);
-      const { image } = oldFile[0];
+      const { image: oldFile } = await storage.getImageByArticleId(id);
       const filePath = fileData.path;
       path = filePath.substr(filePath.indexOf('/'), filePath.length);
-      if (image != null) {
-        fs.unlink(`public${image}`, (err) => {
+      if (oldFile != null) {
+        fs.unlink(`public${oldFile}`, (err) => {
           if (err) {
             next(err);
           }

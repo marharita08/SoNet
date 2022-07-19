@@ -92,7 +92,7 @@ const Article = ({
                 avatar={
                     <Link to={`/profile/${article.user_id}`} style={{textDecoration:"none"}}>
                         <Avatar
-                            src={`${env.apiUrl}${article.avatar}`}
+                            src={article.avatar}
                             sx={{ width: 60, height: 60 }}
                         />
                     </Link>
@@ -206,7 +206,7 @@ const Article = ({
                             <AvatarGroup max={5} className={'margin'}>
                                 {users?.map((user) =>
                                     <Avatar
-                                        src={`${env.apiUrl}${user.avatar}`}
+                                        src={user.avatar}
                                         sx={{width: 30, height: 30}}
                                     />
                                 )}

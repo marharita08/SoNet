@@ -6,7 +6,6 @@ import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 
 import {ProfilePropTypes} from "./profilePropTypes";
-import env from "../../config/envConfig";
 import 'cropperjs/dist/cropper.css';
 import './profile.css';
 
@@ -137,7 +136,7 @@ const Profile = ({
                     <div className={"user_img"} >
                         <Avatar
                             className={"big_margin"}
-                            src={`${env.apiUrl}${user?.avatar}`}
+                            src={user?.avatar}
                             sx={{ width: 110, height: 110 }}
                         />
                         {

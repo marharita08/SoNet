@@ -6,7 +6,6 @@ import HomeIcon from '@mui/icons-material/Home';
 import PersonIcon from '@mui/icons-material/Person';
 import LogoutIcon from '@mui/icons-material/Logout';
 import NoteAddIcon from '@mui/icons-material/NoteAdd';
-import env from "../../config/envConfig";
 
 const Header = ({handleClickOpen, user, authenticated, logout, isAdmin}) => {
     const [anchorEl, setAnchorEl] = useState(null);
@@ -64,7 +63,7 @@ const Header = ({handleClickOpen, user, authenticated, logout, isAdmin}) => {
                         >
                             <div className={'inline'}>
                                 <Avatar
-                                    src={`${env.apiUrl}${user.avatar}`}
+                                    src={user.avatar}
                                     sx={{ width: 40,
                                         height: 40,
                                         margin: '0 5px'

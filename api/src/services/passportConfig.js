@@ -30,6 +30,7 @@ module.exports = () => {
             email,
             fb_id: fbId,
             avatar,
+            role: 'user',
           };
           const id = await storage.create(user);
           await settingsStorage.create({ user_id: id[0] });
@@ -58,6 +59,7 @@ module.exports = () => {
             name,
             email,
             avatar,
+            role: 'user',
           };
           const id = await storage.create(user);
           await settingsStorage.create({ user_id: id[0] });

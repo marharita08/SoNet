@@ -175,5 +175,5 @@ module.exports = {
       )
       .orderBy('article_id', 'desc'),
   getImageByArticleId: async (id) =>
-    db('articles').select('image').where('article_id', id),
+    db('articles').select('image').first().where('article_id', id),
 };

@@ -1,5 +1,4 @@
 import React from "react";
-import env from "../../config/envConfig";
 import {Autocomplete, Avatar, Box, IconButton, TextField} from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
@@ -26,7 +25,7 @@ const SearchUsers = ({users, addToFriends, accept, deleteFromFriends}) => {
                             <Box component="li" className={'search'} sx={{width: 300, padding: '5px'}}>
                                 <div className={'inline'}>
                                     <Avatar
-                                        src={`${env.apiUrl}${option.avatar}`}
+                                        src={option.avatar}
                                         sx={{width: 30, height: 30}}
                                         className={'margin'}
                                     />
