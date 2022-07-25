@@ -2,7 +2,7 @@ import React, {useContext, useState} from "react";
 import {
   BrowserRouter,
   Routes,
-  Route, Navigate
+  Route
 } from "react-router-dom";
 import {QueryClient, QueryClientProvider} from "react-query";
 
@@ -16,6 +16,9 @@ import authContext from './context/authContext';
 import articleContext from "./context/articleContext";
 import './App.css';
 import ArticleOuterContainer from "./containers/articleOuter";
+import ProtectedRoute from "./components/ProtectedRoute";
+import GuestRoute from "./components/GuestRoute";
+import AdminRoute from "./components/AdminRoute";
 
 const queryClient = new QueryClient();
 
@@ -25,7 +28,7 @@ function App() {
   const [articleModalContext, setArticleModalContext] = useState(useContext(articleContext));
   const {openModal} = articleModalContext;
   const [alertMessage, setAlertMessage] = useState();
-  const { authenticated, isAdmin } = authenticationContext;
+  const { authenticated } = authenticationContext;
 
   const handleAlertClose = () => {
     setAlertMessage(undefined);
@@ -67,42 +70,50 @@ function App() {
                   handleClose={handleAlertClose}
               />
               <Routes>
-                <Route path="/" element={authenticated ? <Navigate to={'/articles'}/> : <Navigate to={'/auth'}/>}/>
-                <Route path="/article/:id"
-                       element={authenticated ? <ArticleOuterContainer
-                           setArticleContext={setArticleContext}
-                           handleError={handleError}
-                      /> : <Navigate to={'/auth'}/>}
-                />
-                <Route
-                    path="/profile/:id"
-                    element={authenticated ? <ProfileContainer
+                <Route element={<ProtectedRoute/>}>
+                  <Route path="/" element={
+                    <ArticlesContainer
+                      setArticleContext={setArticleContext}
+                      param='news'
+                      handleError={handleError}
+                    />
+                  }/>
+                  <Route path="/articles" element={
+                    <ArticlesContainer
+                        setArticleContext={setArticleContext}
+                        param='news'
                         handleError={handleError}
-                    /> : <Navigate to={'/auth'}/>}
-                />
-                <Route
-                    path="/auth"
-                    element={!authenticated ? <AuthContainer
-                        setAuthContext={setAuthContext}
+                    />
+                  }/>
+                  <Route path="/article/:id" element={
+                    <ArticleOuterContainer
+                        setArticleContext={setArticleContext}
                         handleError={handleError}
-                    /> : <Navigate to={'/articles'}/>}
-                />
-                <Route path="/articles"
-                       element={authenticated ? <ArticlesContainer
-                           setArticleContext={setArticleContext}
-                           param='news'
-                           handleError={handleError}
-                       /> : <Navigate to={'/auth'}/>}
-                />
-                <Route path="/all-articles"
-                       element={authenticated ?
-                           (isAdmin ? <ArticlesContainer
-                               setArticleContext={setArticleContext}
-                               param='all'
-                               handleError={handleError}
-                           /> : <Navigate to={'/articles'}/>)
-                           : <Navigate to={'/auth'}/>}
-                />
+                    />
+                  }/>
+                  <Route
+                      path="/profile/:id"
+                      element={<ProfileContainer handleError={handleError}/>}
+                  />
+                </Route>
+                <Route element={<GuestRoute/>}>
+                  <Route
+                      path="/auth"
+                      element={<AuthContainer
+                          setAuthContext={setAuthContext}
+                          handleError={handleError}
+                      />}
+                  />
+                </Route>
+                <Route element={<AdminRoute/>}>
+                  <Route path="/all-articles"
+                         element={<ArticlesContainer
+                                 setArticleContext={setArticleContext}
+                                 param='all'
+                                 handleError={handleError}
+                             />}
+                  />
+                </Route>
               </Routes>
             </BrowserRouter>
             </QueryClientProvider>
