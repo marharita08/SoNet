@@ -20,30 +20,32 @@ import ArticleOuterContainer from "./containers/articleOuter";
 const queryClient = new QueryClient();
 
 function App() {
-  const authenticationContext = JSON.parse(window.localStorage.getItem('context')) || useContext(authContext);
+  const [authenticationContext, setAuthenticationContext] =
+  useState(JSON.parse(window.localStorage.getItem('context')) || useContext(authContext));
   const [articleModalContext, setArticleModalContext] = useState(useContext(articleContext));
   const {openModal} = articleModalContext;
-  const [alertMessage, setAlertMessage] = useState(window.localStorage.getItem('alertMessage'));
-  const alertSeverity = window.localStorage.getItem('alertSeverity');
+  const [alertMessage, setAlertMessage] = useState();
   const { authenticated, isAdmin } = authenticationContext;
 
-  const handleClose = () => {
-    window.localStorage.setItem('alertMessage', undefined)
+  const handleAlertClose = () => {
     setAlertMessage(undefined);
   }
 
   const setAuthContext = (data) => {
     window.localStorage.setItem('context', JSON.stringify(data));
-    window.location.reload();
+    setAuthenticationContext(data);
   }
 
   const unsetAuthContext = () => {
     window.localStorage.removeItem('context');
+    setAuthenticationContext({ authenticated: false });
   }
 
   const setArticleContext = (data) => {
     setArticleModalContext(data);
   }
+
+  const handleError = (err) => setAlertMessage(err.response.data.message);
 
   return (
       <>
@@ -62,31 +64,34 @@ function App() {
               }
               <AlertContainer
                   alertMessage={alertMessage}
-                  handleClose={handleClose}
-                  alertSeverity={alertSeverity}
+                  handleClose={handleAlertClose}
               />
               <Routes>
                 <Route path="/" element={authenticated ? <Navigate to={'/articles'}/> : <Navigate to={'/auth'}/>}/>
                 <Route path="/article/:id"
                        element={authenticated ? <ArticleOuterContainer
                            setArticleContext={setArticleContext}
+                           handleError={handleError}
                       /> : <Navigate to={'/auth'}/>}
                 />
                 <Route
                     path="/profile/:id"
                     element={authenticated ? <ProfileContainer
+                        handleError={handleError}
                     /> : <Navigate to={'/auth'}/>}
                 />
                 <Route
                     path="/auth"
                     element={!authenticated ? <AuthContainer
                         setAuthContext={setAuthContext}
+                        handleError={handleError}
                     /> : <Navigate to={'/articles'}/>}
                 />
                 <Route path="/articles"
                        element={authenticated ? <ArticlesContainer
                            setArticleContext={setArticleContext}
                            param='news'
+                           handleError={handleError}
                        /> : <Navigate to={'/auth'}/>}
                 />
                 <Route path="/all-articles"
@@ -94,6 +99,7 @@ function App() {
                            (isAdmin ? <ArticlesContainer
                                setArticleContext={setArticleContext}
                                param='all'
+                               handleError={handleError}
                            /> : <Navigate to={'/articles'}/>)
                            : <Navigate to={'/auth'}/>}
                 />

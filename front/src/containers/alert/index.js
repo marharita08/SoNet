@@ -1,17 +1,16 @@
 import AlertComponent from "../../components/alert";
 import PropTypes from "prop-types";
 
-const AlertContainer = ({alertMessage, handleClose, alertSeverity}) => {
+const AlertContainer = ({alertMessage, handleClose}) => {
 
     return (
-        <AlertComponent message={alertMessage} handleClose={handleClose} severity={alertSeverity}/>
+        <AlertComponent message={alertMessage} handleClose={handleClose}/>
     )
 }
 
 AlertContainer.propTypes = {
-    message: PropTypes.string,
+    alertMessage: PropTypes.string,
     handleClose: PropTypes.func,
-    severity: PropTypes.string
 }
 
 export default AlertContainer;

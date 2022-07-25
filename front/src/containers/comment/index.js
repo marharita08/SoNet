@@ -5,10 +5,23 @@ import {useMutation} from "react-query";
 import {deleteComment} from "../../api/commentCrud";
 import PropTypes from "prop-types";
 
-const CommentContainer = ({comment, setComment, setAddComment, setCommentFieldExpanded}) => {
+const CommentContainer = ({
+    comment,
+    setComment,
+    setAddComment,
+    setCommentFieldExpanded,
+    deleteCommentFromArray,
+    handleError}) => {
+
     const { user:{user_id}, isAdmin} = useContext(authContext);
 
-    const {mutate} = useMutation(deleteComment);
+    const {mutate} = useMutation(deleteComment, {
+        onSuccess:(data) => {
+            const { data: {id}} = data;
+            deleteCommentFromArray(id);
+        },
+        onError: handleError
+    });
 
     const handleDelete = (id) => {
         mutate(id);
@@ -17,6 +30,7 @@ const CommentContainer = ({comment, setComment, setAddComment, setCommentFieldEx
     const handleEdit = () => {
         setComment(comment);
         setAddComment(false);
+        setCommentFieldExpanded(true);
     }
 
     const handleReply = () => {
@@ -57,7 +71,9 @@ CommentContainer.propTypes = {
     }),
     setComment: PropTypes.func.isRequired,
     setAddComment: PropTypes.func.isRequired,
-    setCommentFieldExpanded: PropTypes.func.isRequired
+    setCommentFieldExpanded: PropTypes.func.isRequired,
+    handleError: PropTypes.func.isRequired,
+    deleteCommentFromArray: PropTypes.func.isRequired
 }
 
 export default CommentContainer;

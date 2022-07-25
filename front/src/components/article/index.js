@@ -49,6 +49,7 @@ const Article = ({
     handleAddCommentClick,
     handleLikeClick,
     likes,
+    comments,
     users
 }) => {
     const [menuAnchorEl, setMenuAnchorEl] = useState(null);
@@ -61,9 +62,6 @@ const Article = ({
     const handlePopoverClose = () => {
         setPopoverAnchorEl(null);
     };
-
-    const open = Boolean(popoverAnchorEl);
-
 
     const handleMenu = (event) => {
         event.preventDefault();
@@ -160,7 +158,7 @@ const Article = ({
                         aria-expanded={commentsExpanded}
                         aria-label="show more"
                     >
-                        {article.comments}
+                        {comments}
                         <CommentIcon/>
                         <ExpandMore expand={commentsExpanded}>
                             <ExpandMoreIcon />
@@ -190,7 +188,7 @@ const Article = ({
                             sx={{
                                 pointerEvents: 'none',
                             }}
-                            open={open}
+                            open={Boolean(popoverAnchorEl)}
                             anchorEl={popoverAnchorEl}
                             anchorOrigin={{
                                 vertical: 'bottom',
@@ -239,6 +237,7 @@ Article.propTypes = {
     isAdmin: PropTypes.bool.isRequired,
     isLiked: PropTypes.bool.isRequired,
     likes: PropTypes.number.isRequired,
+    comments: PropTypes.number.isRequired,
     handleAddCommentClick: PropTypes.func.isRequired
 };
 

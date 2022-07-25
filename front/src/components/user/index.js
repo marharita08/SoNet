@@ -4,11 +4,12 @@ import {Avatar, Card, CardHeader, IconButton, Menu, MenuItem, Typography} from "
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
+import CloseIcon from '@mui/icons-material/Close';
 import {useState} from "react";
 
 import './user.css';
 
-const User = ({user, handleClose, menu, accept, decline}) => {
+const User = ({user, deleteRequest, menu, accept, decline}) => {
 
     const [anchorEl, setAnchorEl] = useState(null);
 
@@ -24,13 +25,18 @@ const User = ({user, handleClose, menu, accept, decline}) => {
     const acceptOnClick = (event) => {
         event.preventDefault();
         setAnchorEl(null);
-        accept(user.user_id);
+        accept(user.request_id);
     }
 
     const declineOnClick = (event) => {
         event.preventDefault();
         setAnchorEl(null);
-        decline(user.user_id);
+        decline(user.request_id);
+    }
+
+    const handleClose = (event) => {
+        event.preventDefault();
+        deleteRequest(user.request_id);
     }
 
     return (
@@ -46,18 +52,12 @@ const User = ({user, handleClose, menu, accept, decline}) => {
                         }
                         action={
                             (!menu &&
-                            <IconButton
-                                className="closebtn"
-                                onClick={(event) => {
-                                    event.preventDefault();
-                                    handleClose(user.user_id);
-                                }}
-                            >
-                                <span>&times;</span>
+                            <IconButton className="closebtn" onClick={handleClose}>
+                                <CloseIcon />
                             </IconButton> )||
                             (menu &&
-                            <IconButton aria-label="settings">
-                                <MoreVertIcon onClick={handleMenu} />
+                            <IconButton aria-label="settings" onClick={handleMenu}>
+                                <MoreVertIcon/>
                             </IconButton>)
                         }
                         title={
@@ -104,9 +104,9 @@ User.propTypes = {
     user: PropTypes.shape({
         user_id: PropTypes.number.isRequired,
         name: PropTypes.string.isRequired,
-        avatar: PropTypes.string.isRequired
+        avatar: PropTypes.string
     }),
-    handleClose: PropTypes.func,
+    deleteRequest: PropTypes.func,
     menu: PropTypes.bool.isRequired,
     accept: PropTypes.func,
     decline: PropTypes.func,

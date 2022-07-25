@@ -3,7 +3,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import Alert from '@mui/material/Alert';
 import PropTypes from "prop-types";
 
-const AlertComponent = ({message, handleClose, severity}) => {
+const AlertComponent = ({message, handleClose}) => {
 
     return (
         <Snackbar
@@ -13,7 +13,7 @@ const AlertComponent = ({message, handleClose, severity}) => {
             onClose={handleClose}
         >
             <Alert
-                severity={severity}
+                severity="error"
                 variant="filled"
                 action={
                     handleClose &&
@@ -36,8 +36,7 @@ const AlertComponent = ({message, handleClose, severity}) => {
 
 AlertComponent.propTypes = {
     message: PropTypes.string,
-    handleClose: PropTypes.func,
-    severity: PropTypes.string
+    handleClose: PropTypes.func
 }
 
 export default AlertComponent;

@@ -19,6 +19,11 @@ const Header = ({handleClickOpen, user, authenticated, logout, isAdmin}) => {
         setAnchorEl(null);
     };
 
+    const handleLogout = () => {
+        handleMenuClose();
+        logout();
+    }
+
     return (
         <>
             <header>
@@ -91,7 +96,7 @@ const Header = ({handleClickOpen, user, authenticated, logout, isAdmin}) => {
                         >
                             <Link to={`/profile/${user.user_id}`}
                                   onClick={'update'}
-                                  style={{'text-decoration': 'none'}}
+                                  style={{'textDecoration': 'none'}}
                             >
                                 <MenuItem>
                                     <PersonIcon/>
@@ -100,8 +105,8 @@ const Header = ({handleClickOpen, user, authenticated, logout, isAdmin}) => {
                                     </div>
                                 </MenuItem>
                             </Link>
-                            <Link to={"/"} style={{'text-decoration': 'none'}}>
-                                <MenuItem onClick={logout}>
+                            <Link to={"/"} style={{'textDecoration': 'none'}}>
+                                <MenuItem onClick={handleLogout}>
                                     <LogoutIcon/>
                                     <div className={"margin"}>
                                         Logout
@@ -121,6 +126,7 @@ Header.propTypes = {
     user: PropTypes.object,
     authenticated: PropTypes.bool.isRequired,
     logout: PropTypes.func,
+    isAdmin: PropTypes.bool,
 }
 
 export default Header;

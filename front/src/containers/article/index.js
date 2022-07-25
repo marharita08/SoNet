@@ -12,12 +12,15 @@ import CommentContainer from "../comment";
 import AddCommentContainer from "../addComment";
 import {deleteLike, insertLike} from "../../api/likesCrud";
 
-const ArticleContainer = ({setArticleContext, article}) => {
+const ArticleContainer = ({setArticleContext, article, handleError}) => {
     let id = article.article_id;
+
+    const [commentsArray, setCommentsArray] = useState();
+
     const { user:{user_id} , isAdmin } = useContext(authContext);
-    const {isFetching:commentsFetching, data:commentsData } = useQuery(`comments ${id}`, () => getComments(id));
+    const {isFetching:commentsFetching } = useQuery(`comments ${id}`,
+        () => getComments(id), { onSuccess: (data) => { setCommentsArray(data?.data) }});
     const {data:usersData} = useQuery(`users ${id}`, () => getLikes(id));
-    const comments = commentsData?.data;
     const users = usersData?.data;
 
     const initComment = {
@@ -33,10 +36,45 @@ const ArticleContainer = ({setArticleContext, article}) => {
     const [commentFieldExpanded, setCommentFieldExpanded] = useState(false);
     const [isLiked, setIsLiked] = useState(article.liked);
     const [likes, setLikes] = useState(parseInt(article.likes, 10));
-
+    const [commentsAmount, setCommentsAmount] = useState(parseInt(article.comments, 10));
 
     const { mutate: addLikeMutate } = useMutation(insertLike);
     const { mutate: deleteLikeMutate } = useMutation(deleteLike);
+
+    const addCommentToArray = (comment) => {
+        let newCommentsArray = [...commentsArray, comment];
+        newCommentsArray.sort((a, b) => {
+            const ap = a.path, bp = b.path;
+            if (ap < bp) {
+                return -1;
+            }
+            if (ap > bp) {
+                return 1;
+            }
+            return 0;
+        })
+        setCommentsArray(newCommentsArray);
+        setCommentsAmount(commentsAmount + 1);
+    }
+
+    const updateCommentInArray = (comment) => {
+        let newCommentsArray = [...commentsArray];
+        const index = newCommentsArray.findIndex((obj => obj.comment_id === comment.comment_id));
+        newCommentsArray[index].text = comment.text;
+        setCommentsArray(newCommentsArray);
+    }
+
+    const setCurrentInitComment = () => {
+        setCurrentComment(initComment);
+    }
+
+    const deleteCommentFromArray = (id) => {
+        let newCommentsArray = [...commentsArray];
+        const index = newCommentsArray.findIndex((obj => obj.comment_id === id));
+        newCommentsArray.splice(index, 1);
+        setCommentsArray(newCommentsArray);
+        setCommentsAmount(commentsAmount - 1);
+    }
 
     const handleLikeClick = (event) => {
         event.preventDefault();
@@ -49,7 +87,6 @@ const ArticleContainer = ({setArticleContext, article}) => {
         }
         setIsLiked(!isLiked);
     };
-
 
     const handleExpandClick = (event) => {
         event.preventDefault();
@@ -101,6 +138,7 @@ const ArticleContainer = ({setArticleContext, article}) => {
                             handleAddCommentClick={handleAddCommentClick}
                             isLiked={isLiked}
                             likes={likes}
+                            comments={commentsAmount}
                             handleLikeClick={handleLikeClick}
                             users={users}
                         />
@@ -110,16 +148,22 @@ const ArticleContainer = ({setArticleContext, article}) => {
                             comment={currentComment}
                             addComment={addComment}
                             handleCancel={handleCancel}
+                            addCommentToArray={addCommentToArray}
+                            updateCommentInArray={updateCommentInArray}
+                            setCurrentInitComment={setCurrentInitComment}
+                            handleError={handleError}
                         />
                     </Collapse>
                     <Collapse in={commentsExpanded} timeout="auto" unmountOnExit>
-                        {comments?.map((comment) =>
+                        {commentsArray?.map((comment) =>
                             <ErrorBoundary key={comment.path + comment.name}>
                                 <CommentContainer
                                     comment={comment}
                                     setComment={setCurrentComment}
                                     setAddComment={setAddComment}
                                     setCommentFieldExpanded={setCommentFieldExpanded}
+                                    deleteCommentFromArray={deleteCommentFromArray}
+                                    handleError={handleError}
                                 />
                             </ErrorBoundary>
                         )}
@@ -143,6 +187,7 @@ ArticleContainer.propTypes = {
         comments: PropTypes.number.isRequired,
         liked: PropTypes.bool.isRequired,
     }),
+    handleError: PropTypes.func.isRequired,
 }
 
 export default ArticleContainer;

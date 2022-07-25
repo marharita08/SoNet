@@ -64,7 +64,7 @@ const EditProfile = ({
                 fullWidth
                 maxWidth="sm"
             >
-                <AlertContainer alertMessage={message} alertSeverity={'error'} handleClose={handleAlertClose}/>
+                <AlertContainer alertMessage={message} handleClose={handleAlertClose}/>
                 {
                     isFetching &&
                     <div align={"center"}>

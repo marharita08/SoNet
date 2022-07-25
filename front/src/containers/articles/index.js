@@ -9,7 +9,7 @@ import authContext from "../../context/authContext";
 import {getAllNews, getNews} from "../../api/usersCrud";
 
 
-const ArticlesContainer = ({setArticleContext, param}) => {
+const ArticlesContainer = ({setArticleContext, param, handleError}) => {
     const { user:{user_id} } = useContext(authContext);
     let getFunc;
     if (param === 'news') {
@@ -32,6 +32,7 @@ const ArticlesContainer = ({setArticleContext, param}) => {
                     <Article
                         setArticleContext={setArticleContext}
                         article={article}
+                        handleError={handleError}
                     />
                 </ErrorBoundary>
             )}
@@ -41,6 +42,8 @@ const ArticlesContainer = ({setArticleContext, param}) => {
 
 ArticlesContainer.propTypes = {
     setArticleContext: PropTypes.func.isRequired,
+    param: PropTypes.string.isRequired,
+    handleError: PropTypes.func.isRequired,
 }
 
 export default ArticlesContainer;

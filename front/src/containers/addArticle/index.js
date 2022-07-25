@@ -8,6 +8,7 @@ import AddArticle from '../../components/addArticle';
 import {getArticleVisibilities} from "../../api/visibilitiesCrud";
 import {insertArticle, updateArticle} from "../../api/articlesCrud";
 import articleContext from "../../context/articleContext";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const AddArticleContainer = ({setArticleContext}) => {
     const { data } = useQuery('visibilities', () => getArticleVisibilities());
@@ -18,10 +19,27 @@ const AddArticleContainer = ({setArticleContext}) => {
     const [croppedImage, setCroppedImage] = useState();
     const [cropper, setCropper] = useState();
     const [message, setMessage] = useState();
+    const navigate = useNavigate();
+    const location = useLocation();
 
-    const { mutate: updateMutate, isLoading: updateLoading } = useMutation(updateArticle);
+    const options = {
+        onSuccess: () => {
+            setArticleContext({
+                openModal: false,
+            });
+            setMessage(undefined);
+            if (location.pathname === '/articles') {
+                navigate(0);
+            } else {
+                navigate('/articles');
+            }
+        },
+        onError: (err) => setMessage(err.response.data.message)
+    }
 
-    const { mutate: insertMutate, isLoading: insertLoading } = useMutation(insertArticle);
+    const { mutate: updateMutate, isLoading: updateLoading } = useMutation(updateArticle, options);
+
+    const { mutate: insertMutate, isLoading: insertLoading } = useMutation(insertArticle, options);
 
     const onFormSubmit = (data) => {
         let formData = serialize(data);
@@ -30,10 +48,6 @@ const AddArticleContainer = ({setArticleContext}) => {
         } else {
             updateMutate(formData);
         }
-        setArticleContext({
-            openModal: false,
-        });
-        setMessage(undefined);
     }
 
     const handleClose = () => {

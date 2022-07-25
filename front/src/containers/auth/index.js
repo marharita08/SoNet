@@ -5,33 +5,27 @@ import PropTypes from 'prop-types';
 import AuthComponent from "../../components/authComponent";
 import {googleAuth, facebookAuth, auth} from "../../api/auth";
 
-const AuthContainer = ({setAuthContext}) => {
+const AuthContainer = ({setAuthContext, handleError}) => {
 
-    const setAuthContextFunc = data => {
-        const { data: {user, accessToken, refreshToken}} = data;
-        setAuthContext({
-            authenticated: true,
-            user,
-            isAdmin: user.role === 'admin',
-            accessToken,
-            refreshToken
-        })
+    const options = {
+        onSuccess: (data) => {
+            const { data: {user, accessToken, refreshToken}} = data;
+            setAuthContext({
+                authenticated: true,
+                user,
+                isAdmin: user.role === 'admin',
+                accessToken,
+                refreshToken
+            })
+        },
+        onError: handleError
     }
 
-    const { mutate: googleAuthMutate } = useMutation(
-        googleAuth, {
-            onSuccess: setAuthContextFunc
-        });
+    const { mutate: googleAuthMutate } = useMutation(googleAuth, options);
 
-    const { mutate: facebookAuthMutate } = useMutation(
-        facebookAuth, {
-            onSuccess: setAuthContextFunc
-        });
+    const { mutate: facebookAuthMutate } = useMutation(facebookAuth, options);
 
-    const { mutate: authMutate } = useMutation(
-        auth, {
-            onSuccess: setAuthContextFunc
-        });
+    const { mutate: authMutate } = useMutation(auth, options);
 
     const onGoogleSuccess = (response) => {
         const token = response.accessToken;
@@ -40,9 +34,7 @@ const AuthContainer = ({setAuthContext}) => {
     }
 
     const onGoogleFailure = (response) => {
-        window.location.reload();
-        window.localStorage.setItem('alertMessage', response.message);
-        window.localStorage.setItem('alertSeverity', 'error');
+        setAlertMessage(response.message);
     }
 
     const responseFacebook = (response) => {
@@ -73,6 +65,7 @@ const AuthContainer = ({setAuthContext}) => {
 
 AuthContainer.propTypes = {
     setAuthContext: PropTypes.func.isRequired,
+    handleError: PropTypes.func.isRequired,
 }
 
 export default AuthContainer;

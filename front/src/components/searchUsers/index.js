@@ -4,6 +4,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import {Link} from "react-router-dom";
+import PropTypes from "prop-types";
 
 const SearchUsers = ({users, addToFriends, accept, deleteFromFriends}) => {
     return (
@@ -38,14 +39,14 @@ const SearchUsers = ({users, addToFriends, accept, deleteFromFriends}) => {
                         <div style={{alignContent: 'right'}} className={'inline'}>
                             <IconButton>
                                 {
-                                    (option.status === 'friends' || option.status === 'outgoing request') ?
+                                    (option.is_friends || option.is_outgoing_request) ?
                                     <PersonRemoveIcon
-                                        onClick={() => deleteFromFriends(option.user_id)}
+                                        onClick={() => deleteFromFriends(option.request_id)}
                                     /> :
                                     <PersonAddIcon
                                         onClick={() => {
-                                            option.status === 'not friends' ? addToFriends(option.user_id) :
-                                            accept(option.user_id)
+                                            option.is_not_friends ? addToFriends(option.user_id) :
+                                            accept(option.request_id)
                                         }}
                                     />
                                 }
@@ -68,6 +69,25 @@ const SearchUsers = ({users, addToFriends, accept, deleteFromFriends}) => {
             />
         </>
     );
+}
+
+SearchUsers.propTypes = {
+    addToFriends: PropTypes.func.isRequired,
+    accept: PropTypes.func.isRequired,
+    deleteFromFriends: PropTypes.func.isRequired,
+    users: PropTypes.arrayOf(
+        PropTypes.shape({
+            request_id: PropTypes.number,
+            user_id: PropTypes.number.isRequired,
+            name: PropTypes.string.isRequired,
+            email: PropTypes.string,
+            avatar: PropTypes.string,
+            is_not_friends: PropTypes.bool,
+            is_friends: PropTypes.bool,
+            is_incoming_request: PropTypes.bool,
+            is_outgoing_request: PropTypes.bool
+        })
+    ),
 }
 
 export default SearchUsers;

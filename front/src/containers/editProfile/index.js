@@ -9,7 +9,7 @@ import {getFieldVisibilities} from "../../api/visibilitiesCrud";
 import {updateUser} from "../../api/usersCrud";
 import {EditProfileContainerPropTypes} from "./editProfileContainerPropTypes";
 
-const EditProfileContainer = ({openModal, setOpenModal, user}) => {
+const EditProfileContainer = ({openModal, setOpenModal, user, setUser}) => {
 
     const {isFetching: universitiesFetching, data: universitiesData} = useQuery('universities', () => getUniversities());
     const {isFetching: visibilitiesFetching, data: visibilitiesData} = useQuery('visibilities', () => getFieldVisibilities());
@@ -24,9 +24,12 @@ const EditProfileContainer = ({openModal, setOpenModal, user}) => {
 
     const { mutate, isLoading } = useMutation(
         updateUser, {
-            onSettled: () => {
+            onSuccess: (data) => {
+                setUser(data.data);
+                console.log(user);
                 setOpenModal(false);
-            }
+            },
+            onError: (err) => setMessage(err.response.data.message)
         });
 
     const onFormSubmit = (data) => {

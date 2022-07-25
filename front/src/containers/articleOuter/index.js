@@ -10,7 +10,7 @@ import {getArticleByIdAndUserId} from "../../api/articlesCrud";
 import authContext from "../../context/authContext";
 
 
-const ArticleOuterContainer = ({setArticleContext}) => {
+const ArticleOuterContainer = ({setArticleContext, handleError}) => {
     let {id} = useParams();
     const { user:{user_id} } = useContext(authContext);
     const {isFetching:articleFetching, data:articleData } =
@@ -30,6 +30,7 @@ const ArticleOuterContainer = ({setArticleContext}) => {
                         <Article
                             setArticleContext={setArticleContext}
                             article={article}
+                            handleError={handleError}
                         />
                     </ErrorBoundary>
                 </div>
@@ -40,6 +41,7 @@ const ArticleOuterContainer = ({setArticleContext}) => {
 
 ArticleOuterContainer.propTypes = {
     setArticleContext: PropTypes.func.isRequired,
+    handleError: PropTypes.func.isRequired,
 }
 
 export default ArticleOuterContainer;

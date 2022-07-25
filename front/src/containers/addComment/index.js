@@ -5,12 +5,35 @@ import {useMutation} from "react-query";
 import {insertComment, updateComment} from "../../api/commentCrud";
 import PropTypes from "prop-types";
 
-const AddCommentContainer = ({comment, addComment, handleCancel}) => {
+const AddCommentContainer = ({
+    comment,
+    addComment,
+    handleCancel,
+    addCommentToArray,
+    updateCommentInArray,
+    handleError,
+    setCurrentInitComment}) => {
+
     const { user } = useContext(authContext);
 
-    const { mutate: insertMutate, isLoading: insertLoading } = useMutation(insertComment);
 
-    const {mutate: updateMutate, isLoading: updateLoading } = useMutation(updateComment);
+    const { mutate: insertMutate, isLoading: insertLoading } = useMutation(insertComment, {
+        onSuccess:(data) => {
+            const { data: {comment: addedComment}} = data;
+            addCommentToArray(addedComment);
+            setCurrentInitComment();
+        },
+        onError: handleError
+    });
+
+    const {mutate: updateMutate, isLoading: updateLoading } = useMutation(updateComment, {
+        onSuccess:(data) => {
+            const { data: {comment: updatedComment}} = data;
+            updateCommentInArray(updatedComment);
+            setCurrentInitComment();
+        },
+        onError: handleError
+    });
 
     const onSubmit = (data) => {
         if (addComment) {
@@ -41,7 +64,11 @@ AddCommentContainer.propTypes = {
         parent_id: PropTypes.number,
     }),
     addComment: PropTypes.bool.isRequired,
-    handleCancel: PropTypes.func.isRequired
+    handleCancel: PropTypes.func.isRequired,
+    addCommentToArray: PropTypes.func.isRequired,
+    updateCommentInArray: PropTypes.func.isRequired,
+    handleError: PropTypes.func.isRequired,
+    setCurrentInitComment: PropTypes.func.isRequired
 }
 
 export default AddCommentContainer;
