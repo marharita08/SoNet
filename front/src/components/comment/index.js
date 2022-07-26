@@ -96,7 +96,7 @@ const Comment = ({
                                     "color": "gray"
                                 }}
                             >
-                                {moment(comment.commented_at).utcOffset('-03.00').fromNow()}
+                                {moment(comment.commented_at).fromNow()}
                             </Typography>
                         }
                         sx={{"padding": "10px", "padding-bottom": "5px"}}

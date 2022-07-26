@@ -16,12 +16,14 @@ const ArticleContainer = ({setArticleContext, article, handleError}) => {
     let id = article.article_id;
 
     const [commentsArray, setCommentsArray] = useState();
+    const [likedUsers, setLikedUsers] = useState();
 
-    const { user:{user_id} , isAdmin } = useContext(authContext);
+    const { user:{user_id, avatar} , isAdmin } = useContext(authContext);
     const {isFetching:commentsFetching } = useQuery(`comments ${id}`,
         () => getComments(id), { onSuccess: (data) => { setCommentsArray(data?.data) }});
-    const {data:usersData} = useQuery(`users ${id}`, () => getLikes(id));
-    const users = usersData?.data;
+    useQuery(`users ${id}`, () => getLikes(id), {
+        onSuccess: (data) => setLikedUsers(data?.data)
+    });
 
     const initComment = {
         article_id: id,
@@ -38,8 +40,25 @@ const ArticleContainer = ({setArticleContext, article, handleError}) => {
     const [likes, setLikes] = useState(parseInt(article.likes, 10));
     const [commentsAmount, setCommentsAmount] = useState(parseInt(article.comments, 10));
 
-    const { mutate: addLikeMutate } = useMutation(insertLike);
-    const { mutate: deleteLikeMutate } = useMutation(deleteLike);
+    const { mutate: addLikeMutate } = useMutation(insertLike, {
+        onSuccess: () => {
+            setLikedUsers([...likedUsers, {user_id, avatar}]);
+            setLikes(likes + 1);
+            setIsLiked(true);
+        },
+        onError: handleError
+    });
+    const { mutate: deleteLikeMutate } = useMutation(deleteLike, {
+        onSuccess: () => {
+            let newLikedUsers = [...likedUsers];
+            const index = newLikedUsers.findIndex(((obj) => obj.user_id === user_id));
+            newLikedUsers.splice(index, 1);
+            setLikedUsers(newLikedUsers);
+            setLikes(likes - 1);
+            setIsLiked(false);
+        },
+        onError: handleError
+    });
 
     const addCommentToArray = (comment) => {
         let newCommentsArray = [...commentsArray, comment];
@@ -79,13 +98,10 @@ const ArticleContainer = ({setArticleContext, article, handleError}) => {
     const handleLikeClick = (event) => {
         event.preventDefault();
         if (!isLiked) {
-            setLikes(likes + 1);
             addLikeMutate({user_id, article_id: article.article_id});
         } else {
-            setLikes(likes - 1);
             deleteLikeMutate({user_id, article_id: article.article_id});
         }
-        setIsLiked(!isLiked);
     };
 
     const handleExpandClick = (event) => {
@@ -140,7 +156,7 @@ const ArticleContainer = ({setArticleContext, article, handleError}) => {
                             likes={likes}
                             comments={commentsAmount}
                             handleLikeClick={handleLikeClick}
-                            users={users}
+                            users={likedUsers}
                         />
                     </ErrorBoundary>
                     <Collapse in={commentFieldExpanded} timeout="auto" unmountOnExit>
