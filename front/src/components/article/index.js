@@ -81,7 +81,7 @@ const Article = ({
     const deleteOnClick = (event) => {
         event.preventDefault();
         setMenuAnchorEl(null);
-        handleDelete(article.article_id);
+        handleDelete();
     }
 
     return (
@@ -191,17 +191,17 @@ const Article = ({
                             open={Boolean(popoverAnchorEl)}
                             anchorEl={popoverAnchorEl}
                             anchorOrigin={{
-                                vertical: 'bottom',
-                                horizontal: 'left',
+                                vertical: 'top',
+                                horizontal: 'center',
                             }}
                             transformOrigin={{
-                                vertical: 'top',
-                                horizontal: 'left',
+                                vertical: 'bottom',
+                                horizontal: 'center',
                             }}
                             onClose={handlePopoverClose}
                             disableRestoreFocus
                         >
-                            <AvatarGroup max={5} className={'margin'}>
+                            <AvatarGroup max={4} className={'margin'}>
                                 {users?.map((user) =>
                                     <Avatar
                                         src={user.avatar}
@@ -222,11 +222,10 @@ Article.propTypes = {
         article_id: PropTypes.number.isRequired,
         user_id: PropTypes.number.isRequired,
         name: PropTypes.string.isRequired,
-        avatar: PropTypes.string.isRequired,
+        avatar: PropTypes.string,
         text: PropTypes.string.isRequired,
         created_at: PropTypes.string.isRequired,
-        likes: PropTypes.number.isRequired,
-        comments: PropTypes.number.isRequired,
+        image: PropTypes.string,
     }),
     commentsExpanded: PropTypes.bool.isRequired,
     handleEdit: PropTypes.func.isRequired,

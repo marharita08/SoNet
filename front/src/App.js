@@ -29,6 +29,7 @@ function App() {
   const {openModal} = articleModalContext;
   const [alertMessage, setAlertMessage] = useState();
   const { authenticated } = authenticationContext;
+  const [articles, setArticles] = useState();
 
   const handleAlertClose = () => {
     setAlertMessage(undefined);
@@ -63,6 +64,8 @@ function App() {
               { authenticated && openModal &&
                 <AddArticleContainer
                     setArticleContext={setArticleContext}
+                    articles={articles}
+                    setArticles={setArticles}
                 />
               }
               <AlertContainer
@@ -76,6 +79,8 @@ function App() {
                       setArticleContext={setArticleContext}
                       param='news'
                       handleError={handleError}
+                      articles={articles}
+                      setArticles={setArticles}
                     />
                   }/>
                   <Route path="/articles" element={
@@ -83,12 +88,16 @@ function App() {
                         setArticleContext={setArticleContext}
                         param='news'
                         handleError={handleError}
+                        articles={articles}
+                        setArticles={setArticles}
                     />
                   }/>
                   <Route path="/article/:id" element={
                     <ArticleOuterContainer
                         setArticleContext={setArticleContext}
                         handleError={handleError}
+                        articles={articles}
+                        setArticles={setArticles}
                     />
                   }/>
                   <Route
@@ -111,6 +120,8 @@ function App() {
                                  setArticleContext={setArticleContext}
                                  param='all'
                                  handleError={handleError}
+                                 articles={articles}
+                                 setArticles={setArticles}
                              />}
                   />
                 </Route>

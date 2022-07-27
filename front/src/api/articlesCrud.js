@@ -34,11 +34,23 @@ export const getComments = async (id) => {
     return apiClient.get(`/articles/${id}/comments`);
 }
 
+export const getCommentsAmount = async (id) => {
+    return apiClient.get(`/articles/${id}/comments-count`);
+}
+
 export const getLikes = async (id) => {
     return apiClient.get(`/articles/${id}/likes`);
 }
 
-export const getArticleByIdAndUserId = async (id, user_id) => {
-    return apiClient.get(`/articles/${id}/${user_id}`);
+export const getLikesAmount = async (id) => {
+    return apiClient.get(`/articles/${id}/likes-count`);
+}
+
+export const getNews = async () => {
+    return apiClient.get(`/articles/news`);
+}
+
+export const getAllNews = async () => {
+    return apiClient.get(`/articles/all-news`);
 }
 
