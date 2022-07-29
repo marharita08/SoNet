@@ -13,6 +13,15 @@ module.exports = {
       .select('users.user_id', 'users.avatar')
       .join('users', 'users.user_id', 'article_likes.user_id')
       .where('article_id', id),
-  deleteByArticleId: async (articleID) =>
-    db('article_likes').delete().where('article_id', articleID),
+  getByArticleIdAndUserId: async (articleId, userId) =>
+    db('article_likes')
+      .select()
+      .first()
+      .where('article_id', articleId)
+      .andWhere('user_id', userId),
+  getAmountByArticleId: async (id) =>
+    db('article_likes')
+      .countDistinct('user_id')
+      .first()
+      .where('article_id', id),
 };

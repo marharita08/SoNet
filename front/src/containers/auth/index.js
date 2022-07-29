@@ -21,11 +21,11 @@ const AuthContainer = ({setAuthContext, handleError}) => {
         onError: handleError
     }
 
-    const { mutate: googleAuthMutate } = useMutation(googleAuth, options);
+    const { mutate: googleAuthMutate, isLoading: googleLoading } = useMutation(googleAuth, options);
 
-    const { mutate: facebookAuthMutate } = useMutation(facebookAuth, options);
+    const { mutate: facebookAuthMutate, isLoading: facebookLoading } = useMutation(facebookAuth, options);
 
-    const { mutate: authMutate } = useMutation(auth, options);
+    const { mutate: authMutate, isLoading: authLoading } = useMutation(auth, options);
 
     const onGoogleSuccess = (response) => {
         const token = response.accessToken;
@@ -59,6 +59,9 @@ const AuthContainer = ({setAuthContext, handleError}) => {
             onFormSubmit={onFormSubmit}
             initialUser={initialUser}
             responseFacebook={responseFacebook}
+            authLoading={authLoading}
+            googleLoading={googleLoading}
+            facebookLoading={facebookLoading}
         />
     )
 }

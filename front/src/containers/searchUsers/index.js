@@ -45,7 +45,8 @@ SearchUsersContainer.propTypes = {
             is_outgoing_request: PropTypes.bool
         })
     ),
-    setUsersForSearch: PropTypes.func.isRequired
+    setUsersForSearch: PropTypes.func.isRequired,
+    isLoading: PropTypes.bool
 }
 
 export default SearchUsersContainer;

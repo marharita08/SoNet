@@ -37,13 +37,9 @@ const ProfileContainer = (handleError) => {
     const {isFetching: userFetching} = useQuery('user', () => getUser(id), {
         onSuccess: (data) => setUser(data.data)
     });
-    console.log(user);
-    useQuery('request',
-            () => getRequest({'user_id': id, 'current_user_id': currentUser.user_id},),
-        {
+    const {isFetching: requestFetching} = useQuery('request', () => getRequest(id), {
             onSuccess: (data) => setCurrentRequest(data?.data)
-        }
-    );
+    });
 
     const handleEdit = () => {
       setOpenModal(true);
@@ -171,7 +167,7 @@ const ProfileContainer = (handleError) => {
 
     return (
         <>
-            {userFetching  && <ReactLoading type={'balls'} color='#001a4d'/>}
+            {(userFetching || requestFetching) && <ReactLoading type={'balls'} color='#001a4d'/>}
 
                 <div key={user?.user_id}>
                     <ErrorBoundary>

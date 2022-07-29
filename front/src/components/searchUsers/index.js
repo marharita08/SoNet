@@ -39,6 +39,7 @@ const SearchUsers = ({users, addToFriends, accept, deleteFromFriends}) => {
                         <div style={{alignContent: 'right'}} className={'inline'}>
                             <IconButton>
                                 {
+
                                     (option.is_friends || option.is_outgoing_request) ?
                                     <PersonRemoveIcon
                                         onClick={() => deleteFromFriends(option.request_id)}

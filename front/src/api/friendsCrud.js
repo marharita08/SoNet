@@ -12,6 +12,6 @@ export const deleteRequest = async (id) => {
     return apiClient.delete(`/friends/${id}`);
 }
 
-export const getRequest = async (friends) => {
-    return apiClient.get(`/friends/${friends.current_user_id}/${friends.user_id}`);
+export const getRequest = async (user_id) => {
+    return apiClient.get(`/friends/request/${user_id}`);
 }

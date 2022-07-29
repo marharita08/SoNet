@@ -170,7 +170,7 @@ router.post(
   }),
   asyncHandler(async (req, res) => {
     await sessionStorage.deleteByToken(req.body.refreshToken);
-    return res.send({ message: 'Logged out' });
+    res.sendStatus(204);
   })
 );
 

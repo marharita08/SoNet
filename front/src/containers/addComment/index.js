@@ -12,7 +12,8 @@ const AddCommentContainer = ({
     addCommentToArray,
     updateCommentInArray,
     handleError,
-    setCurrentInitComment}) => {
+    setCurrentInitComment,
+    setCommentsExpanded}) => {
 
     const { user } = useContext(authContext);
 
@@ -22,6 +23,7 @@ const AddCommentContainer = ({
             const { data: {comment: addedComment}} = data;
             addCommentToArray(addedComment);
             setCurrentInitComment();
+            setCommentsExpanded(true);
         },
         onError: handleError
     });
@@ -31,6 +33,7 @@ const AddCommentContainer = ({
             const { data: {comment: updatedComment}} = data;
             updateCommentInArray(updatedComment);
             setCurrentInitComment();
+            setCommentsExpanded(true);
         },
         onError: handleError
     });
@@ -68,7 +71,8 @@ AddCommentContainer.propTypes = {
     addCommentToArray: PropTypes.func.isRequired,
     updateCommentInArray: PropTypes.func.isRequired,
     handleError: PropTypes.func.isRequired,
-    setCurrentInitComment: PropTypes.func.isRequired
+    setCurrentInitComment: PropTypes.func.isRequired,
+    setCommentsExpanded: PropTypes.func.isRequired
 }
 
 export default AddCommentContainer;

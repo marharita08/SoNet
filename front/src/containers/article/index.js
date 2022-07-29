@@ -111,9 +111,9 @@ const ArticleContainer = ({setArticleContext, article, handleError, articles, se
     const handleLikeClick = (event) => {
         event.preventDefault();
         if (!isLiked) {
-            addLikeMutate({user_id, article_id: article.article_id});
+            addLikeMutate({article_id: article.article_id});
         } else {
-            deleteLikeMutate({user_id, article_id: article.article_id});
+            deleteLikeMutate(article.article_id);
         }
     };
 
@@ -192,6 +192,7 @@ const ArticleContainer = ({setArticleContext, article, handleError, articles, se
                             updateCommentInArray={updateCommentInArray}
                             setCurrentInitComment={setCurrentInitComment}
                             handleError={handleError}
+                            setCommentsExpanded={setCommentsExpanded}
                         />
                     </Collapse>
                     <Collapse in={commentsExpanded} timeout="auto" unmountOnExit>

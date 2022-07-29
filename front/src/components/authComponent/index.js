@@ -4,14 +4,23 @@ import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props
 import {Formik, Form, Field} from "formik";
 import * as Yup from "yup";
 import {TextField} from "formik-mui";
-import {Button, Card, CardHeader} from "@mui/material";
+import {Button, Card, CardHeader, CircularProgress} from "@mui/material";
 import PropTypes from "prop-types";
 import FacebookIcon from '@mui/icons-material/Facebook';
 import GoogleIcon from '@mui/icons-material/Google';
+import LoginIcon from '@mui/icons-material/Login';
 
 import env from "../../config/envConfig";
 
-const AuthComponent = ({onGoogleSuccess, onGoogleFailure, onFormSubmit, initialUser, responseFacebook}) => {
+const AuthComponent = ({
+    onGoogleSuccess,
+    onGoogleFailure,
+    onFormSubmit,
+    initialUser,
+    responseFacebook,
+    googleLoading,
+    facebookLoading,
+    authLoading }) => {
 
     const schema = Yup.object().shape({
         email: Yup.string().required("Email is required").email("Email is invalid"),
@@ -52,6 +61,11 @@ const AuthComponent = ({onGoogleSuccess, onGoogleFailure, onFormSubmit, initialU
                                 variant="contained"
                                 type="submit"
                                 className={'margin'}
+                                startIcon={
+                                    authLoading ? (
+                                        <CircularProgress color="inherit" size={25}/>
+                                    ) : <LoginIcon/>
+                                }
                             >
                                 Log in
                             </Button>
@@ -67,7 +81,11 @@ const AuthComponent = ({onGoogleSuccess, onGoogleFailure, onFormSubmit, initialU
                     render={renderProps => (
                         <button onClick={renderProps.onClick} className={"google-login margin"}>
                             <div className={"inline"}>
-                                <GoogleIcon fontSize={"small"}/>
+                                {
+                                    googleLoading ?
+                                        <CircularProgress color="inherit" size={25}/> :
+                                        <GoogleIcon fontSize={"small"}/>
+                                }
                             </div>
                             <div className={"inline margin"}>
                                 Login with Google
@@ -84,7 +102,11 @@ const AuthComponent = ({onGoogleSuccess, onGoogleFailure, onFormSubmit, initialU
                     render={renderProps => (
                         <button onClick={renderProps.onClick} className={"facebook-login margin"}>
                             <div className={"inline"}>
-                                <FacebookIcon fontSize={"small"}/>
+                                {
+                                    facebookLoading ?
+                                        <CircularProgress color="inherit" size={25}/> :
+                                        <FacebookIcon fontSize={"small"}/>
+                                }
                             </div>
                             <div className={"inline margin"}>
                                 Login with Facebook
@@ -106,7 +128,10 @@ AuthComponent.propTypes = {
     initialUser: PropTypes.shape({
         email: PropTypes.string.isRequired,
         password: PropTypes.string.isRequired,
-    })
+    }),
+    googleLoading: PropTypes.bool,
+    facebookLoading: PropTypes.bool,
+    authLoading: PropTypes.bool
 }
 
 export default AuthComponent;

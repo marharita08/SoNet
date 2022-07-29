@@ -65,8 +65,9 @@ router.post(
     const date = new Date().toLocaleString('ua', {
       timeZone: 'Europe/Kiev',
     });
+    let id;
     await db.transaction(async () => {
-      const id = await storage.create({
+      id = await storage.create({
         article_id: articleID,
         user_id: userID,
         text,
@@ -84,7 +85,7 @@ router.post(
         path,
       });
     });
-    res.send({ message: 'Comment was added successfully.' });
+    res.send({ comment: await storage.getFullDataById(id[0]) });
   })
 );
 
@@ -113,7 +114,7 @@ router.put(
     await storage.update(id, {
       text,
     });
-    res.send({ message: 'Comment was updated successfully.' });
+    res.send({ comment: { comment_id: id, text } });
   })
 );
 
@@ -132,7 +133,7 @@ router.delete(
   asyncHandler(async (req, res) => {
     const id = parseInt(req.params.id, 10);
     await storage.delete(id);
-    res.send({ message: 'Comment was deleted successfully.' });
+    res.sendStatus(204);
   })
 );
 

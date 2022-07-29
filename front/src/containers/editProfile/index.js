@@ -26,7 +26,6 @@ const EditProfileContainer = ({openModal, setOpenModal, user, setUser}) => {
         updateUser, {
             onSuccess: (data) => {
                 setUser(data.data);
-                console.log(user);
                 setOpenModal(false);
             },
             onError: (err) => setMessage(err.response.data.message)

@@ -16,15 +16,14 @@ const CommentContainer = ({
     const { user:{user_id}, isAdmin} = useContext(authContext);
 
     const {mutate} = useMutation(deleteComment, {
-        onSuccess:(data) => {
-            const { data: {id}} = data;
-            deleteCommentFromArray(id);
+        onSuccess:() => {
+            deleteCommentFromArray(comment.comment_id);
         },
         onError: handleError
     });
 
-    const handleDelete = (id) => {
-        mutate(id);
+    const handleDelete = () => {
+        mutate(comment.comment_id);
     }
 
     const handleEdit = () => {
