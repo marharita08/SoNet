@@ -6,16 +6,17 @@ import PropTypes from 'prop-types';
 
 import ErrorBoundary from "../../components/ErrorBoundary";
 import Article from "../../containers/article";
-import {getArticleByIdAndUserId} from "../../api/articlesCrud";
+import {getArticle} from "../../api/articlesCrud";
 import authContext from "../../context/authContext";
 
 
-const ArticleOuterContainer = ({setArticleContext}) => {
+const ArticleOuterContainer = ({setArticleContext, handleError, articles, setArticles}) => {
     let {id} = useParams();
     const { user:{user_id} } = useContext(authContext);
-    const {isFetching:articleFetching, data:articleData } =
-        useQuery(`article ${id}-${user_id}`, () => getArticleByIdAndUserId(id, user_id));
-    const articles = articleData?.data;
+    const {isFetching:articleFetching} =
+        useQuery(`article ${id}-${user_id}`, () => getArticle(id), {
+            onSuccess: (data) => setArticles(data?.data)
+        });
 
     return (
         <div>
@@ -30,6 +31,9 @@ const ArticleOuterContainer = ({setArticleContext}) => {
                         <Article
                             setArticleContext={setArticleContext}
                             article={article}
+                            handleError={handleError}
+                            articles={articles}
+                            setArticles={setArticles}
                         />
                     </ErrorBoundary>
                 </div>
@@ -40,6 +44,19 @@ const ArticleOuterContainer = ({setArticleContext}) => {
 
 ArticleOuterContainer.propTypes = {
     setArticleContext: PropTypes.func.isRequired,
+    handleError: PropTypes.func.isRequired,
+    articles: PropTypes.arrayOf(
+        PropTypes.shape({
+            article_id: PropTypes.number.isRequired,
+            user_id: PropTypes.number.isRequired,
+            name: PropTypes.string.isRequired,
+            avatar: PropTypes.string,
+            text: PropTypes.string.isRequired,
+            created_at: PropTypes.string.isRequired,
+            image: PropTypes.string,
+        })
+    ),
+    setArticles: PropTypes.func.isRequired,
 }
 
 export default ArticleOuterContainer;

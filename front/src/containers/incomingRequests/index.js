@@ -7,25 +7,12 @@ import ErrorBoundary from "../../components/ErrorBoundary";
 import User from "../../components/user";
 import {getIncomingRequests} from "../../api/usersCrud";
 
-const IncomingRequests = ({id, acceptMutate, declineMutate}) => {
+const IncomingRequests = ({id, accept, decline, incomingRequests, setIncomingRequests}) => {
 
-    const {isFetching: incomingRequestsFetching, data: incomingRequestsData} =
-        useQuery('incoming-requests', () => getIncomingRequests(id));
-    let incomingRequests = incomingRequestsData?.data;
-
-    const decline = (user_id) => {
-        declineMutate({
-            to_user_id: id,
-            from_user_id: user_id
+    const {isFetching: incomingRequestsFetching} =
+        useQuery('incoming-requests', () => getIncomingRequests(id), {
+            onSuccess: (data) => setIncomingRequests(data?.data)
         });
-    }
-
-    const accept = (user_id) => {
-        acceptMutate({
-            to_user_id: id,
-            from_user_id: user_id
-        });
-    }
 
     return (
         <>
@@ -47,8 +34,17 @@ const IncomingRequests = ({id, acceptMutate, declineMutate}) => {
 
 IncomingRequests.propTypes = {
     id: PropTypes.number.isRequired,
-    acceptMutate: PropTypes.func.isRequired,
-    declineMutate: PropTypes.func.isRequired
+    accept: PropTypes.func.isRequired,
+    decline: PropTypes.func.isRequired,
+    incomingRequests: PropTypes.arrayOf(
+        PropTypes.shape({
+            request_id: PropTypes.number.isRequired,
+            user_id: PropTypes.number.isRequired,
+            name: PropTypes.string.isRequired,
+            avatar: PropTypes.string,
+        })
+    ),
+    setIncomingRequests: PropTypes.func.isRequired,
 };
 
 export default IncomingRequests;

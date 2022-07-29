@@ -23,23 +23,8 @@ apiClient.interceptors.request.use(
 
 let isRefreshing = false;
 
-const showSuccessAlert = (message) => {
-    window.location.reload();
-    window.localStorage.setItem('alertMessage', message);
-    window.localStorage.setItem('alertSeverity', 'success');
-}
-
-const showErrorAlert = (message) => {
-    window.location.reload();
-    window.localStorage.setItem('alertMessage', message || 'Something went wrong');
-    window.localStorage.setItem('alertSeverity', 'error');
-}
-
 apiClient.interceptors.response.use(
     (res) => {
-        if (res.data.message) {
-            showSuccessAlert(res.data.message);
-        }
         return res;
     },
      (err) => {
@@ -58,12 +43,8 @@ apiClient.interceptors.response.use(
                 isRefreshing = false;
                 if (originalConfig.method !== 'get') {
                     apiClient.request(originalConfig).then(response => {
-                        if (response.data.message) {
-                            showSuccessAlert(response.data.message);
-                        }
                         return response;
                     }).catch(error => {
-                        showErrorAlert(error.response.data.message);
                         return Promise.reject(error);
                     });
                 } else {
@@ -71,15 +52,10 @@ apiClient.interceptors.response.use(
                 }
             }).catch((_err) => {
                 isRefreshing = false;
-                showErrorAlert(_err.response.data.message);
                 return Promise.reject(_err);
             });
-        } else if (err.response && err.response.status !== 401) {
-            showErrorAlert(err.response.data.message);
-        } else if (originalConfig.url.includes("/auth") && err.response && err.response.status === 401) {
-            showErrorAlert(err.response.data.message || 'Auth was failed');
         }
-         return Promise.reject(err);
+        return Promise.reject(err);
     }
 );
 

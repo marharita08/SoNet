@@ -12,30 +12,45 @@ router.get(
   })
 );
 
+router.get(
+  '/:article_id/is-liked',
+  authMiddleware,
+  asyncHandler(async (req, res) => {
+    const { user_id: userId } = req.auth;
+    const { article_id: articleId } = req.params;
+    const row = await storage.getByArticleIdAndUserId(articleId, userId);
+    if (row) {
+      return res.send(true);
+    }
+    return res.send(false);
+  })
+);
+
 router.post(
   '/',
   authMiddleware,
   validationMiddleware({
     article_id: [{ name: 'required' }],
-    user_id: [{ name: 'required' }],
   }),
   asyncHandler(async (req, res) => {
-    const { article_id: articleID, user_id: userID } = req.body;
+    const { article_id: articleID } = req.body;
+    const { user_id: userID } = req.auth;
     await storage.create({
       article_id: articleID,
       user_id: userID,
     });
-    res.send({ success: true });
+    res.sendStatus(204);
   })
 );
 
 router.delete(
-  '/:article_id/:user_id',
+  '/article/:article_id',
   authMiddleware,
   asyncHandler(async (req, res) => {
-    const { article_id: articleID, user_id: userID } = req.params;
+    const { article_id: articleID } = req.params;
+    const { user_id: userID } = req.auth;
     await storage.delete(articleID, userID);
-    res.send({ success: true });
+    res.sendStatus(204);
   })
 );
 

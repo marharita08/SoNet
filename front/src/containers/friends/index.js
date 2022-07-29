@@ -7,17 +7,11 @@ import User from "../../components/user";
 import {getFriends} from "../../api/usersCrud";
 import PropTypes from "prop-types";
 
-const Friends = ({id, deleteMutate}) => {
+const Friends = ({id, deleteRequest, friends, setFriends}) => {
 
-    const {isFetching: friendsFetching, data: friendsData} = useQuery('friends', () => getFriends(id));
-    let friends = friendsData?.data;
-
-    const handleClose = (user_id) => {
-        deleteMutate({
-            current_user_id: id,
-            user_id: user_id
-        });
-    };
+    const {isFetching: friendsFetching} = useQuery('friends', () => getFriends(id), {
+        onSuccess: (data) => setFriends(data?.data)
+    });
 
     return (
         <>
@@ -29,7 +23,7 @@ const Friends = ({id, deleteMutate}) => {
             <div>
                 {friends?.map((user)=>
                     <ErrorBoundary key={user.user_id}>
-                        <User user={user} handleClose={handleClose} menu={false}/>
+                        <User user={user} deleteRequest={deleteRequest} menu={false}/>
                     </ErrorBoundary>
                 )}
             </div>
@@ -39,7 +33,16 @@ const Friends = ({id, deleteMutate}) => {
 
 Friends.propTypes = {
     id: PropTypes.number.isRequired,
-    deleteMutate: PropTypes.func.isRequired,
+    deleteRequest: PropTypes.func.isRequired,
+    friends: PropTypes.arrayOf(
+        PropTypes.shape({
+            request_id: PropTypes.number.isRequired,
+            user_id: PropTypes.number.isRequired,
+            name: PropTypes.string.isRequired,
+            avatar: PropTypes.string,
+        })
+    ),
+    setFriends: PropTypes.func.isRequired,
 };
 
 export default Friends;

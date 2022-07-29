@@ -17,10 +17,7 @@ export default class ErrorBoundary extends React.Component {
 
     render() {
         if (this.state.hasError) {
-            return <AlertContainer
-                alertMessage='Something went wrong'
-                alertSeverity={'error'}
-            />;
+            return <AlertContainer alertMessage='Something went wrong'/>;
         }
 
         return this.props.children;

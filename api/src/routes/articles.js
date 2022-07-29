@@ -5,10 +5,57 @@ const asyncHandler = require('../middleware/asyncHandler');
 const storage = require('../db/articles/storage');
 const commentStorage = require('../db/comments/storage');
 const likeStorage = require('../db/likes/storage');
+const userStorage = require('../db/users/storage');
 const authMiddleware = require('../middleware/authMiddleware');
 const aclMiddleware = require('../middleware/aclMiddleware');
 const NotFoundException = require('../errors/NotFoundException');
+const ForbiddenException = require('../errors/ForbiddenException');
 const validationMiddleware = require('../middleware/validationMiddleware');
+const articleStorage = require('../db/articles/storage');
+
+router.get(
+  '/all-news',
+  authMiddleware,
+  asyncHandler(async (req, res, next) => {
+    const id = parseInt(req.auth.user_id, 10);
+    const user = await userStorage.getById(id);
+    if (user.role !== 'admin') {
+      return next(new ForbiddenException());
+    }
+    const dbResponse = await storage.getAllNews();
+    const result = [];
+    Object.keys(dbResponse).forEach((dbResponseKey) => {
+      result.push({
+        ...dbResponse[dbResponseKey],
+        visibility: {
+          value: dbResponse[dbResponseKey].visibility_id,
+          label: dbResponse[dbResponseKey].visibility,
+        },
+      });
+    });
+    return res.send(result);
+  })
+);
+
+router.get(
+  '/news',
+  authMiddleware,
+  asyncHandler(async (req, res) => {
+    const id = parseInt(req.auth.user_id, 10);
+    const dbResponse = await articleStorage.getNewsByUserId(id);
+    const result = [];
+    Object.keys(dbResponse).forEach((dbResponseKey) => {
+      result.push({
+        ...dbResponse[dbResponseKey],
+        visibility: {
+          value: dbResponse[dbResponseKey].visibility_id,
+          label: dbResponse[dbResponseKey].visibility,
+        },
+      });
+    });
+    res.send(result);
+  })
+);
 
 router.get(
   '/',
@@ -23,9 +70,25 @@ router.get(
   authMiddleware,
   asyncHandler(async (req, res, next) => {
     const id = parseInt(req.params.id, 10);
-    const article = await storage.getById(id);
-    if (article) {
-      return res.send(article);
+    const userId = parseInt(req.auth.user_id, 10);
+    const user = await userStorage.getById(userId);
+    let dbResponse;
+    if (user.role === 'admin') {
+      dbResponse = await storage.getWholeArticleById(id);
+    } else {
+      dbResponse = await storage.getByIdAndUserId(id, userId);
+    }
+    if (dbResponse) {
+      const result = [
+        {
+          ...dbResponse,
+          visibility: {
+            value: dbResponse.visibility_id,
+            label: dbResponse.visibility,
+          },
+        },
+      ];
+      return res.send(result);
     }
     return next(new NotFoundException('Article not found'));
   })
@@ -55,14 +118,22 @@ router.post(
       const filePath = fileData.path;
       path = filePath.substr(filePath.indexOf('/'), filePath.length);
     }
-    await storage.create({
+    const id = await storage.create({
       user_id: userID,
       text,
       visibility_id: visibilityID,
       created_at: date,
       image: path,
     });
-    res.send({ message: 'Article was created successfully.' });
+    const dbResponse = await storage.getWholeArticleById(id[0]);
+    const result = {
+      ...dbResponse,
+      visibility: {
+        value: dbResponse.visibility_id,
+        label: dbResponse.visibility,
+      },
+    };
+    res.send(result);
   })
 );
 
@@ -108,7 +179,15 @@ router.put(
       visibility_id: visibilityID,
       image: path,
     });
-    res.send({ message: 'Article was updated successfully.' });
+    const dbResponse = await storage.getWholeArticleById(id);
+    const result = {
+      ...dbResponse,
+      visibility: {
+        value: dbResponse.visibility_id,
+        label: dbResponse.visibility,
+      },
+    };
+    res.send(result);
   })
 );
 
@@ -126,19 +205,16 @@ router.delete(
   ]),
   asyncHandler(async (req, res, next) => {
     const id = parseInt(req.params.id, 10);
-    const file = await storage.getImageByArticleId(id);
-    const { image } = file[0];
-    if (image != null) {
+    const { image } = await storage.getImageByArticleId(id);
+    if (image) {
       fs.unlink(`public${image}`, (err) => {
         if (err) {
           next(err);
         }
       });
     }
-    await likeStorage.deleteByArticleId(id);
-    await commentStorage.deleteByArticleId(id);
     await storage.delete(id);
-    res.send({ message: 'Article was deleted successfully.' });
+    res.sendStatus(204);
   })
 );
 
@@ -152,6 +228,15 @@ router.get(
 );
 
 router.get(
+  '/:id/comments-count',
+  authMiddleware,
+  asyncHandler(async (req, res) => {
+    const id = parseInt(req.params.id, 10);
+    res.send(await commentStorage.getAmountByArticleId(id));
+  })
+);
+
+router.get(
   '/:id/likes',
   authMiddleware,
   asyncHandler(async (req, res) => {
@@ -161,25 +246,11 @@ router.get(
 );
 
 router.get(
-  '/:id/:user_id',
+  '/:id/likes-count',
   authMiddleware,
-  asyncHandler(async (req, res, next) => {
+  asyncHandler(async (req, res) => {
     const id = parseInt(req.params.id, 10);
-    const userId = parseInt(req.params.user_id, 10);
-    const dbResponse = await storage.getByIdAndUserId(id, userId);
-    if (dbResponse[0]) {
-      const result = [
-        {
-          ...dbResponse[0],
-          visibility: {
-            value: dbResponse[0].visibility_id,
-            label: dbResponse[0].visibility,
-          },
-        },
-      ];
-      return res.send(result);
-    }
-    return next(new NotFoundException('Article not found'));
+    res.send(await likeStorage.getAmountByArticleId(id));
   })
 );
 

@@ -45,7 +45,7 @@ module.exports = {
   delete: async (id) => db('users').delete().where('user_id', id),
   getFriends: async (id) =>
     db
-      .select('user_id', 'name', 'avatar')
+      .select('request_id', 'user_id', 'name', 'avatar')
       .from('users')
       .join({ f: 'friends' }, function () {
         this.on(db.raw('(user_id=from_user_id or user_id=to_user_id)')).andOn(
@@ -58,7 +58,7 @@ module.exports = {
       .where('user_id', '!=', id),
   getIncomingRequests: async (id) =>
     db
-      .select('user_id', 'name', 'avatar')
+      .select('request_id', 'user_id', 'name', 'avatar')
       .from('users')
       .join({ f: 'friends' }, function () {
         this.on('user_id', 'from_user_id').andOnVal('to_user_id', id);
@@ -71,7 +71,7 @@ module.exports = {
       }),
   getOutgoingRequests: async (id) =>
     db
-      .select('user_id', 'name', 'avatar')
+      .select('request_id', 'user_id', 'name', 'avatar')
       .from('users')
       .join({ f: 'friends' }, function () {
         this.on('user_id', 'to_user_id').andOnVal('from_user_id', id);
@@ -92,11 +92,12 @@ module.exports = {
         'u.name',
         'u.email',
         'u.avatar',
+        'f.request_id',
         db.raw(
-          "case when s.status is null then 'not friends'" +
-            "when s.status = 'Accepted' then 'friends'" +
-            `when f.from_user_id=${id} and s.status != 'Accepted' then 'outgoing request'` +
-            `when f.to_user_id=${id} and s.status != 'Accepted' then 'incoming request' end as status`
+          'case when s.status is null then true else false end as is_not_friends, ' +
+            "case when s.status = 'Accepted' then true else false end is_friends, " +
+            `case when f.from_user_id=${id} and s.status != 'Accepted' then true else false end as is_outgoing_request, ` +
+            `case when f.to_user_id=${id} and s.status != 'Accepted' then true else false end as is_incoming_request`
         )
       )
       .from({ u: 'users' })

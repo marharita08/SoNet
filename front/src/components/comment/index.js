@@ -39,7 +39,7 @@ const Comment = ({
     const deleteOnClick = (event) => {
         event.preventDefault();
         setAnchorEl(null);
-        handleDelete(comment.comment_id);
+        handleDelete();
     }
 
     return (

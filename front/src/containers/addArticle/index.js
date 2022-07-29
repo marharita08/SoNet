@@ -8,8 +8,9 @@ import AddArticle from '../../components/addArticle';
 import {getArticleVisibilities} from "../../api/visibilitiesCrud";
 import {insertArticle, updateArticle} from "../../api/articlesCrud";
 import articleContext from "../../context/articleContext";
+import { useNavigate, useLocation } from "react-router-dom";
 
-const AddArticleContainer = ({setArticleContext}) => {
+const AddArticleContainer = ({setArticleContext, articles, setArticles}) => {
     const { data } = useQuery('visibilities', () => getArticleVisibilities());
     const articleState = useContext(articleContext);
     const {article, addArticle} = articleState;
@@ -18,10 +19,50 @@ const AddArticleContainer = ({setArticleContext}) => {
     const [croppedImage, setCroppedImage] = useState();
     const [cropper, setCropper] = useState();
     const [message, setMessage] = useState();
+    const navigate = useNavigate();
+    const location = useLocation();
 
-    const { mutate: updateMutate, isLoading: updateLoading } = useMutation(updateArticle);
+    const { mutate: updateMutate, isLoading: updateLoading } = useMutation(updateArticle, {
+        onSuccess: (data) => {
+            setArticleContext({
+                openModal: false,
+            });
+            setMessage(undefined);
+            const updatedArticle = data?.data;
+            const newArticles = [...articles];
+            const index = newArticles.findIndex((obj => obj.article_id === updatedArticle.article_id));
+            newArticles[index] = updatedArticle;
+            setArticles(newArticles);
+        },
+        onError: (err) => setMessage(err.response.data.message)
+    });
 
-    const { mutate: insertMutate, isLoading: insertLoading } = useMutation(insertArticle);
+    const { mutate: insertMutate, isLoading: insertLoading } = useMutation(insertArticle, {
+        onSuccess: (data) => {
+            setArticleContext({
+                openModal: false,
+            });
+            setMessage(undefined);
+            const newArticle = data?.data;
+            if (location.pathname === '/articles') {
+                let newArticles = [...articles, newArticle];
+                newArticles.sort((a, b) => {
+                    const aid = a.article_id, bid = b.article_id;
+                    if (aid > bid) {
+                        return -1;
+                    }
+                    if (aid < bid) {
+                        return 1;
+                    }
+                    return 0;
+                });
+                setArticles(newArticles);
+            } else {
+                navigate('/articles');
+            }
+        },
+        onError: (err) => setMessage(err.response.data.message)
+    });
 
     const onFormSubmit = (data) => {
         let formData = serialize(data);
@@ -30,10 +71,6 @@ const AddArticleContainer = ({setArticleContext}) => {
         } else {
             updateMutate(formData);
         }
-        setArticleContext({
-            openModal: false,
-        });
-        setMessage(undefined);
     }
 
     const handleClose = () => {
@@ -106,6 +143,18 @@ const AddArticleContainer = ({setArticleContext}) => {
 
 AddArticleContainer.propTypes = {
     setArticleContext: PropTypes.func.isRequired,
+    articles: PropTypes.arrayOf(
+        PropTypes.shape({
+            article_id: PropTypes.number.isRequired,
+            user_id: PropTypes.number.isRequired,
+            name: PropTypes.string.isRequired,
+            avatar: PropTypes.string,
+            text: PropTypes.string.isRequired,
+            created_at: PropTypes.string.isRequired,
+            image: PropTypes.string,
+        })
+    ),
+    setArticles: PropTypes.func.isRequired,
 }
 
 export default AddArticleContainer;

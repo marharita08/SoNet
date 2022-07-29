@@ -68,7 +68,7 @@ const AddArticle = ({
                             <DialogTitle>
                                 {addArticle ? "Add article" : "Edit article"}
                             </DialogTitle>
-                            <AlertContainer alertMessage={message} alertSeverity={'error'}/>
+                            <AlertContainer alertMessage={message}/>
                             <DialogContent>
                                 <ErrorMessage name="text" render={msg => <div className="error">{msg}</div>}/>
                                 <label htmlFor="contained-button-file" className={"file margin"}>

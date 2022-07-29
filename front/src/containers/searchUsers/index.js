@@ -2,44 +2,51 @@ import SearchUsers from "../../components/searchUsers";
 import {useQuery} from "react-query";
 import {getForSearch} from "../../api/usersCrud";
 import React, {useContext} from "react";
+import PropTypes from "prop-types";
 import authContext from "../../context/authContext";
 
-const SearchUsersContainer = ({addMutate, acceptMutate, deleteMutate}) => {
+const SearchUsersContainer = ({addToFriends, accept, deleteFromFriends, usersForSearch, setUsersForSearch}) => {
 
     const {user:{user_id}} = useContext(authContext);
 
-    const {data} = useQuery('users', () => getForSearch(user_id));
-    const users = data?.data;
+    useQuery('users', () => getForSearch(user_id), {
+        onSuccess: (data) => setUsersForSearch(data?.data)
+    });
 
-    const addToFriends = (id) => {
-        addMutate({
-            from_user_id: user_id,
-            to_user_id: id
-        });
-    }
 
-    const accept = (id) => {
-        acceptMutate({
-            to_user_id: user_id,
-            from_user_id: id
-        });
-    }
-
-    const deleteFromFriends = (id) => {
-        deleteMutate({
-            current_user_id: user_id,
-            user_id: id
-        });
+    const handleAddToFriends = (id) => {
+        addToFriends(user_id, id);
     }
 
     return (
         <SearchUsers
-            users={users}
+            users={usersForSearch}
             accept={accept}
-            addToFriends={addToFriends}
+            addToFriends={handleAddToFriends}
             deleteFromFriends={deleteFromFriends}
         />
     );
+}
+
+SearchUsersContainer.propTypes = {
+    addToFriends: PropTypes.func.isRequired,
+    accept: PropTypes.func.isRequired,
+    deleteFromFriends: PropTypes.func.isRequired,
+    usersForSearch: PropTypes.arrayOf(
+        PropTypes.shape({
+            request_id: PropTypes.number,
+            user_id: PropTypes.number.isRequired,
+            name: PropTypes.string.isRequired,
+            email: PropTypes.string,
+            avatar: PropTypes.string,
+            is_not_friends: PropTypes.bool,
+            is_friends: PropTypes.bool,
+            is_incoming_request: PropTypes.bool,
+            is_outgoing_request: PropTypes.bool
+        })
+    ),
+    setUsersForSearch: PropTypes.func.isRequired,
+    isLoading: PropTypes.bool
 }
 
 export default SearchUsersContainer;

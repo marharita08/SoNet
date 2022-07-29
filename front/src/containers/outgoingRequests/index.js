@@ -7,17 +7,12 @@ import ErrorBoundary from "../../components/ErrorBoundary";
 import User from "../../components/user";
 import {getOutgoingRequests} from "../../api/usersCrud";
 
-const OutgoingRequests = ({id, deleteMutate}) => {
+const OutgoingRequests = ({id, deleteRequest, outgoingRequests, setOutgoingRequests}) => {
 
-    const {isFetching: outgoingRequestsFetching, data: outgoingRequestsData} = useQuery('outgoing-requests', () => getOutgoingRequests(id));
-    let outgoingRequests = outgoingRequestsData?.data;
-
-    const handleClose = (user_id) => {
-        deleteMutate({
-            current_user_id: id,
-            user_id: user_id
+    const { isFetching: outgoingRequestsFetching } =
+        useQuery('outgoing-requests', () => getOutgoingRequests(id), {
+            onSuccess: (data) => setOutgoingRequests(data?.data)
         });
-    };
 
     return (
         <>
@@ -29,7 +24,7 @@ const OutgoingRequests = ({id, deleteMutate}) => {
             <div>
                 {outgoingRequests?.map((user)=>
                     <ErrorBoundary key={user.user_id}>
-                        <User user={user} handleClose={handleClose} menu={false}/>
+                        <User user={user} deleteRequest={deleteRequest} menu={false}/>
                     </ErrorBoundary>
                 )}
             </div>
@@ -39,7 +34,16 @@ const OutgoingRequests = ({id, deleteMutate}) => {
 
 OutgoingRequests.propTypes = {
     id: PropTypes.number.isRequired,
-    deleteMutate: PropTypes.func.isRequired
+    deleteRequest: PropTypes.func.isRequired,
+    outgoingRequests: PropTypes.arrayOf(
+        PropTypes.shape({
+            request_id: PropTypes.number.isRequired,
+            user_id: PropTypes.number.isRequired,
+            name: PropTypes.string.isRequired,
+            avatar: PropTypes.string,
+        })
+    ),
+    setOutgoingRequests: PropTypes.func.isRequired,
 };
 
 export default OutgoingRequests;

@@ -11,23 +11,20 @@ import './profile.css';
 
 const Profile = ({
     user,
-    handleClick,
+    handleEdit,
     isAdmin,
     isCurrentUser,
-    addToFriends,
-    accept,
-    deleteFromFriends,
-    isFriends,
-    isOutgoingRequest,
-    isIncomingRequest,
-    isNotFriends,
-    isLoading
-}) => {
+    handleAddToFriends,
+    handleAccept,
+    handleDeleteFromFriends,
+    currentRequest,
+    isLoading }) => {
 
     return (
         <>
             <h1 className={"big_margin"}>Profile</h1>
             <Formik
+                enableReinitialize={true}
                 initialValues={user}
                 onSubmit={null}
             >
@@ -44,8 +41,8 @@ const Profile = ({
                             />
                         </div>
                         {
-                            (isAdmin || isCurrentUser || user.email_visibility.label === "All" ||
-                            isFriends && user.email_visibility.label === "Friends") &&
+                            (isAdmin || isCurrentUser || user?.email_visibility.label === "All" ||
+                                currentRequest?.is_friends && user?.email_visibility.label === "Friends") &&
                             <div className={"fields_margin"}>
                                 <Field
                                     component={TextField}
@@ -68,9 +65,9 @@ const Profile = ({
                             </div>
                         }
                         {
-                            user.phone &&
-                            (isAdmin || isCurrentUser || user.phone_visibility.label === "All" ||
-                             isFriends && user.phone_visibility.label === "Friends") &&
+                            user?.phone &&
+                            (isAdmin || isCurrentUser || user?.phone_visibility.label === "All" ||
+                                currentRequest?.is_friends && user?.phone_visibility.label === "Friends") &&
                             <div className={"fields_margin"}>
                                 <div>
                                     <Field
@@ -94,9 +91,9 @@ const Profile = ({
                             </div>
                         }
                         {
-                            user.university &&
-                            (isAdmin || isCurrentUser || user.university_visibility.label === "All" ||
-                             isFriends && user.university_visibility.label === "Friends") &&
+                            user?.university &&
+                            (isAdmin || isCurrentUser || user?.university_visibility.label === "All" ||
+                                currentRequest?.is_friends && user?.university_visibility.label === "Friends") &&
                             <div className={"fields_margin"}>
 
                                 <div>
@@ -125,7 +122,7 @@ const Profile = ({
                             <div align={"center"}>
                                 <Button
                                     variant={"contained"}
-                                    onClick={handleClick}
+                                    onClick={handleEdit}
                                     startIcon={<EditIcon fontSize={"small"}/>}
                                 >
                                     Edit
@@ -143,10 +140,10 @@ const Profile = ({
                             !isCurrentUser &&
                             <div>
                                 {
-                                    isNotFriends &&
+                                    currentRequest?.is_not_friends &&
                                     <Button
                                         size={'small'}
-                                        onClick={addToFriends}
+                                        onClick={handleAddToFriends}
                                         disabled={isLoading}
                                         startIcon={
                                             isLoading ? (
@@ -158,10 +155,10 @@ const Profile = ({
                                     </Button>
                                 }
                                 {
-                                    isIncomingRequest &&
+                                    currentRequest?.is_incoming_request &&
                                     <Button
                                         size={'small'}
-                                        onClick={accept}
+                                        onClick={handleAccept}
                                         disabled={isLoading}
                                         startIcon={
                                             isLoading ? (
@@ -173,10 +170,10 @@ const Profile = ({
                                     </Button>
                                 }
                                 {
-                                    (isFriends || isOutgoingRequest) &&
+                                    (currentRequest?.is_friends || currentRequest?.is_outgoing_request) &&
                                     <Button
                                         size={'small'}
-                                        onClick={deleteFromFriends}
+                                        onClick={handleDeleteFromFriends}
                                         disabled={isLoading}
                                         startIcon={
                                             isLoading ? (
@@ -184,8 +181,8 @@ const Profile = ({
                                             ) : <PersonRemoveIcon/>
                                         }
                                     >
-                                        {isFriends && "Delete from friends"}
-                                        {isOutgoingRequest && "Delete request"}
+                                        {currentRequest?.is_friends && "Delete from friends"}
+                                        {currentRequest?.is_outgoing_request && "Delete request"}
                                     </Button>
                                 }
                             </div>
