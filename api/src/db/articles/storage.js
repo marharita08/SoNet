@@ -70,11 +70,10 @@ module.exports = {
         'articles.visibility_id'
       )
       .leftJoin({ f: 'friends' }, function () {
-        this.on(
-          db.raw(
-            '(articles.user_id=from_user_id or articles.user_id=to_user_id)'
-          )
-        ).andOn(db.raw(`(from_user_id=${userId} or to_user_id=${userId})`));
+        this.on('u.user_id', 'from_user_id')
+          .andOn('to_user_id', userId)
+          .orOn('u.user_id', 'to_user_id')
+          .andOn('from_user_id', userId);
       })
       .leftJoin({ s: 'status' }, function () {
         this.on('s.status_id', 'f.status_id').andOnVal('s.status', 'Accepted');
@@ -82,58 +81,54 @@ module.exports = {
       .where('articles.article_id', id)
       .andWhere(function () {
         this.where('articles.user_id', userId)
+          .orWhere('v.visibility', 'All')
           .orWhere(function () {
             this.where('v.visibility', 'Friends').andWhere(
               's.status_id',
               'is not',
               null
             );
-          })
-          .orWhere('v.visibility', 'All');
+          });
       }),
   getNewsByUserId: async (userId, page, limit) =>
     db
       .select('main.*')
       .from({
         main: db
-          .union(function () {
-            this.select(
-              'a.article_id',
-              'a.text',
-              'image',
-              'u.user_id',
-              db.raw(
-                "to_char(created_at, 'DD.MM.YYYY HH24:MI:SS') as created_at"
-              ),
-              'u.name',
-              'u.avatar',
-              'v.visibility',
-              'v.visibility_id'
-            )
-              .from({ u: 'users' })
-              .join({ f: 'friends' }, function () {
-                this.on(
-                  db.raw('(user_id=from_user_id or user_id=to_user_id)')
-                ).andOn(
-                  db.raw(`(from_user_id=${userId} or to_user_id=${userId})`)
-                );
-              })
-              .join({ s: 'status' }, function () {
-                this.on('s.status_id', 'f.status_id').andOnVal(
-                  's.status',
-                  'Accepted'
-                );
-              })
-              .join({ a: 'articles' }, function () {
-                this.on('u.user_id', 'a.user_id');
-              })
-              .join({ v: 'article_visibilities' }, function () {
-                this.on('v.visibility_id', 'a.visibility_id');
-              })
-              .whereIn('v.visibility', ['All', 'Friends'])
-              .andWhere('u.user_id', '!=', userId);
+          .select(
+            'a.article_id',
+            'a.text',
+            'image',
+            'u.user_id',
+            db.raw(
+              "to_char(created_at, 'DD.MM.YYYY HH24:MI:SS') as created_at"
+            ),
+            'u.name',
+            'u.avatar',
+            'v.visibility',
+            'v.visibility_id'
+          )
+          .from({ a: 'articles' })
+          .join({ u: 'users' }, 'u.user_id', 'a.user_id')
+          .join({ f: 'friends' }, function () {
+            this.on('u.user_id', 'from_user_id')
+              .andOn('to_user_id', userId)
+              .orOn('u.user_id', 'to_user_id')
+              .andOn('from_user_id', userId);
           })
-          .union(function () {
+          .join({ s: 'status' }, function () {
+            this.on('s.status_id', 'f.status_id').andOnVal(
+              's.status',
+              'Accepted'
+            );
+          })
+          .join({ v: 'article_visibilities' }, function () {
+            this.on('v.visibility_id', 'a.visibility_id').andOnIn(
+              'v.visibility',
+              ['All', 'Friends']
+            );
+          })
+          .unionAll(function () {
             this.select(
               'a.article_id',
               'a.text',
@@ -147,8 +142,8 @@ module.exports = {
               'v.visibility',
               'v.visibility_id'
             )
-              .from({ u: 'users' })
-              .join({ a: 'articles' }, function () {
+              .from({ a: 'articles' })
+              .join({ u: 'users' }, function () {
                 this.on('u.user_id', 'a.user_id').andOnVal('u.user_id', userId);
               })
               .join(
@@ -170,32 +165,27 @@ module.exports = {
       .first()
       .from({
         main: db
-          .union(function () {
-            this.select('a.article_id')
-              .from({ u: 'users' })
-              .join({ f: 'friends' }, function () {
-                this.on(
-                  db.raw('(user_id=from_user_id or user_id=to_user_id)')
-                ).andOn(
-                  db.raw(`(from_user_id=${userId} or to_user_id=${userId})`)
-                );
-              })
-              .join({ s: 'status' }, function () {
-                this.on('s.status_id', 'f.status_id').andOnVal(
-                  's.status',
-                  'Accepted'
-                );
-              })
-              .join({ a: 'articles' }, function () {
-                this.on('u.user_id', 'a.user_id');
-              })
-              .join({ v: 'article_visibilities' }, function () {
-                this.on('v.visibility_id', 'a.visibility_id');
-              })
-              .whereIn('v.visibility', ['All', 'Friends'])
-              .andWhere('u.user_id', '!=', userId);
+          .select('a.article_id')
+          .from({ a: 'articles' })
+          .join({ f: 'friends' }, function () {
+            this.on('a.user_id', 'from_user_id')
+              .andOn('to_user_id', userId)
+              .orOn('a.user_id', 'to_user_id')
+              .andOn('from_user_id', userId);
           })
-          .union(function () {
+          .join({ s: 'status' }, function () {
+            this.on('s.status_id', 'f.status_id').andOnVal(
+              's.status',
+              'Accepted'
+            );
+          })
+          .join({ v: 'article_visibilities' }, function () {
+            this.on('v.visibility_id', 'a.visibility_id').andOnIn(
+              'v.visibility',
+              ['All', 'Friends']
+            );
+          })
+          .unionAll(function () {
             this.select('article_id').from('articles').where('user_id', userId);
           }),
       }),

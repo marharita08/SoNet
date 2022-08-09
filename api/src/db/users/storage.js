@@ -48,14 +48,14 @@ module.exports = {
       .select('request_id', 'user_id', 'name', 'avatar')
       .from('users')
       .join({ f: 'friends' }, function () {
-        this.on(db.raw('(user_id=from_user_id or user_id=to_user_id)')).andOn(
-          db.raw(`(from_user_id=${id} or to_user_id=${id})`)
-        );
+        this.on('u.user_id', 'from_user_id')
+          .andOn('to_user_id', id)
+          .orOn('u.user_id', 'to_user_id')
+          .andOn('from_user_id', id);
       })
       .join({ s: 'status' }, function () {
         this.on('s.status_id', 'f.status_id').andOnVal('s.status', 'Accepted');
-      })
-      .where('user_id', '!=', id),
+      }),
   getIncomingRequests: async (id) =>
     db
       .select('request_id', 'user_id', 'name', 'avatar')
@@ -102,9 +102,10 @@ module.exports = {
       )
       .from({ u: 'users' })
       .leftJoin({ f: 'friends' }, function () {
-        this.on(
-          db.raw('(u.user_id=f.from_user_id or u.user_id=f.to_user_id)')
-        ).andOn(db.raw(`(f.from_user_id=${id} or f.to_user_id=${id})`));
+        this.on('u.user_id', 'from_user_id')
+          .andOn('to_user_id', id)
+          .orOn('u.user_id', 'to_user_id')
+          .andOn('from_user_id', id);
       })
       .leftJoin({ s: 'status' }, 's.status_id', 'f.status_id')
       .where('u.user_id', '!=', id)
