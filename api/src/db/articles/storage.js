@@ -30,7 +30,7 @@ module.exports = {
         'articles.visibility_id'
       )
       .where('article_id', id),
-  getAllNews: async () =>
+  getAllNews: async (page, limit) =>
     db
       .select(
         db.raw('articles.article_id'),
@@ -49,7 +49,9 @@ module.exports = {
         'v.visibility_id',
         'articles.visibility_id'
       )
-      .orderBy('article_id', 'desc'),
+      .orderBy('article_id', 'desc')
+      .limit(limit)
+      .offset(page * limit - limit),
   getByIdAndUserId: async (id, userId) =>
     db
       .select(
@@ -89,14 +91,14 @@ module.exports = {
           })
           .orWhere('v.visibility', 'All');
       }),
-  getNewsByUserId: async (userId) =>
+  getNewsByUserId: async (userId, page, limit) =>
     db
       .select('main.*')
       .from({
         main: db
           .union(function () {
             this.select(
-              db.raw('distinct a.article_id'),
+              'a.article_id',
               'a.text',
               'image',
               'u.user_id',
@@ -133,7 +135,7 @@ module.exports = {
           })
           .union(function () {
             this.select(
-              db.raw('distinct a.article_id'),
+              'a.article_id',
               'a.text',
               'image',
               'u.user_id',
@@ -156,7 +158,45 @@ module.exports = {
               );
           }),
       })
-      .orderBy('article_id', 'desc'),
+      .orderBy('article_id', 'desc')
+      .limit(limit)
+      .offset(page * limit - limit),
   getImageByArticleId: async (id) =>
     db('articles').select('image').first().where('article_id', id),
+  getCountOfAllNews: async () => db('articles').count('article_id').first(),
+  getCountOfNewsByUserId: async (userId) =>
+    db
+      .count('article_id')
+      .first()
+      .from({
+        main: db
+          .union(function () {
+            this.select('a.article_id')
+              .from({ u: 'users' })
+              .join({ f: 'friends' }, function () {
+                this.on(
+                  db.raw('(user_id=from_user_id or user_id=to_user_id)')
+                ).andOn(
+                  db.raw(`(from_user_id=${userId} or to_user_id=${userId})`)
+                );
+              })
+              .join({ s: 'status' }, function () {
+                this.on('s.status_id', 'f.status_id').andOnVal(
+                  's.status',
+                  'Accepted'
+                );
+              })
+              .join({ a: 'articles' }, function () {
+                this.on('u.user_id', 'a.user_id');
+              })
+              .join({ v: 'article_visibilities' }, function () {
+                this.on('v.visibility_id', 'a.visibility_id');
+              })
+              .whereIn('v.visibility', ['All', 'Friends'])
+              .andWhere('u.user_id', '!=', userId);
+          })
+          .union(function () {
+            this.select('article_id').from('articles').where('user_id', userId);
+          }),
+      }),
 };

@@ -6,35 +6,44 @@ import PropTypes from "prop-types";
 import Article from "../../containers/article";
 import ErrorBoundary from "../../components/ErrorBoundary";
 import authContext from "../../context/authContext";
-import {getAllNews, getNews} from "../../api/articlesCrud";
+import {getAllNews, getNews, getCountOfNews, getCountOfAllNews} from "../../api/articlesCrud";
 import LoadMoreBtn from "../../components/loadMoreBtn/loadMoreBtn";
 
 
 const ArticlesContainer = ({setArticleContext, param, handleError, articles, setArticles}) => {
     const { user:{user_id} } = useContext(authContext);
-    const [limit, setLimit] = useState(10);
+    const [page, setPage] = useState(1);
+    const [amount, setAmount] = useState();
+    const limit = 10;
     let getFunc;
+    let getCountFunc;
     if (param === 'news') {
-        getFunc = getNews();
+        getFunc = getNews(page, limit);
+        getCountFunc = getCountOfNews();
     } else if (param === 'all') {
-        getFunc = getAllNews();
+        getFunc = getAllNews(page, limit);
+        getCountFunc = getCountOfAllNews();
     }
-    const {isFetching} = useQuery(`articles ${param} ${user_id}`, () => getFunc, {
-        onSuccess: (data) => setArticles(data?.data)
+    const {isFetching: articlesFetching, isLoading} = useQuery(`articles ${param} ${user_id} ${page}`, () => getFunc, {
+        onSuccess: (data) => setArticles([...articles, ...data?.data])
+    });
+
+    const {isFetching: countFetching} = useQuery(`articles amount ${param} ${user_id}`, () => getCountFunc, {
+        onSuccess: (data) => setAmount(data?.data.count)
     });
 
     const handleLoadMore = () => {
-        setLimit(limit + 10);
+        setPage(page + 1);
     }
 
     return (
         <div>
-            {isFetching &&
+            {articlesFetching &&
                 <div align={"center"}>
                     <ReactLoading type={'balls'} color='#001a4d'/>
                 </div>
             }
-            {articles?.slice(0, limit).map((article) =>
+            {articles?.map((article) =>
                 <ErrorBoundary key={article.article_id}>
                     <Article
                         setArticleContext={setArticleContext}
@@ -46,8 +55,12 @@ const ArticlesContainer = ({setArticleContext, param, handleError, articles, set
                 </ErrorBoundary>
             )}
             {
-                articles?.length > limit &&
-                <LoadMoreBtn handleLoadMore={handleLoadMore}/>
+                countFetching ?
+                    <div align={"center"}>
+                        <ReactLoading type={'balls'} color='#001a4d'/>
+                    </div>:
+                    (amount > articles.length &&
+                <LoadMoreBtn handleLoadMore={handleLoadMore} loading={isLoading}/>)
             }
         </div>
     );

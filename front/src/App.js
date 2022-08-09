@@ -29,7 +29,7 @@ function App() {
   const {openModal} = articleModalContext;
   const [alertMessage, setAlertMessage] = useState();
   const { authenticated } = authenticationContext;
-  const [articles, setArticles] = useState();
+  const [articles, setArticles] = useState([]);
 
   const handleAlertClose = () => {
     setAlertMessage(undefined);

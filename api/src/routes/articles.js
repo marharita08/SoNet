@@ -22,7 +22,9 @@ router.get(
     if (user.role !== 'admin') {
       return next(new ForbiddenException());
     }
-    const dbResponse = await storage.getAllNews();
+    const page = parseInt(req.query.page, 10);
+    const limit = parseInt(req.query.limit, 10);
+    const dbResponse = await storage.getAllNews(page, limit);
     const result = [];
     Object.keys(dbResponse).forEach((dbResponseKey) => {
       result.push({
@@ -38,11 +40,26 @@ router.get(
 );
 
 router.get(
+  '/all-news/amount',
+  authMiddleware,
+  asyncHandler(async (req, res, next) => {
+    const id = parseInt(req.auth.user_id, 10);
+    const user = await userStorage.getById(id);
+    if (user.role !== 'admin') {
+      return next(new ForbiddenException());
+    }
+    return res.send(await storage.getCountOfAllNews());
+  })
+);
+
+router.get(
   '/news',
   authMiddleware,
   asyncHandler(async (req, res) => {
     const id = parseInt(req.auth.user_id, 10);
-    const dbResponse = await articleStorage.getNewsByUserId(id);
+    const page = parseInt(req.query.page, 10);
+    const limit = parseInt(req.query.limit, 10);
+    const dbResponse = await articleStorage.getNewsByUserId(id, page, limit);
     const result = [];
     Object.keys(dbResponse).forEach((dbResponseKey) => {
       result.push({
@@ -54,6 +71,15 @@ router.get(
       });
     });
     res.send(result);
+  })
+);
+
+router.get(
+  '/news/amount',
+  authMiddleware,
+  asyncHandler(async (req, res) => {
+    const id = parseInt(req.auth.user_id, 10);
+    return res.send(await storage.getCountOfNewsByUserId(id));
   })
 );
 

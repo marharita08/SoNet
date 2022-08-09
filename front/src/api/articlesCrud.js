@@ -46,11 +46,19 @@ export const getLikesAmount = async (id) => {
     return apiClient.get(`/articles/${id}/likes-count`);
 }
 
-export const getNews = async () => {
-    return apiClient.get(`/articles/news`);
+export const getNews = async (page, limit) => {
+    return apiClient.get(`/articles/news?page=${page}&limit=${limit}`);
 }
 
-export const getAllNews = async () => {
-    return apiClient.get(`/articles/all-news`);
+export const getAllNews = async (page, limit) => {
+    return apiClient.get(`/articles/all-news?page=${page}&limit=${limit}`);
+}
+
+export const getCountOfNews = async () => {
+    return apiClient.get(`/articles/news/amount`);
+}
+
+export const getCountOfAllNews = async () => {
+    return apiClient.get(`/articles/all-news/amount`);
 }
 
