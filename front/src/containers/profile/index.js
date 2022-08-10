@@ -1,5 +1,4 @@
 import React, {useContext, useState} from "react";
-import ReactLoading from 'react-loading';
 import {useParams} from "react-router-dom";
 import {useMutation, useQuery} from "react-query";
 import PropTypes from "prop-types";
@@ -14,6 +13,7 @@ import Friends from "../friends";
 import IncomingRequests from "../incomingRequests";
 import {updateRequest, deleteRequest, getRequest, insertRequest} from "../../api/friendsCrud";
 import SearchUsersContainer from "../searchUsers";
+import Loading from "../../components/loading";
 
 const ProfileContainer = (handleError) => {
     let {id} = useParams();
@@ -167,33 +167,33 @@ const ProfileContainer = (handleError) => {
 
     return (
         <>
-            {(userFetching || requestFetching) && <ReactLoading type={'balls'} color='#001a4d'/>}
-
-                <div key={user?.user_id}>
-                    <ErrorBoundary>
-                        <Profile
-                            user={user}
-                            handleEdit={handleEdit}
-                            isCurrentUser={user?.user_id === currentUser.user_id}
-                            handleAddToFriends={handleAddToFriends}
-                            handleAccept={handleAccept}
-                            handleDeleteFromFriends={handleDeleteFromFriends}
-                            currentRequest={currentRequest}
-                            isLoading={acceptLoading||addLoading||deleteLoading}
-                            isAdmin={isAdmin}
-                        />
-                    </ErrorBoundary>
-                    <EditProfileContainer
-                        openModal={openModal}
-                        setOpenModal={setOpenModal}
+            <Loading isLoading={userFetching} align={'left'}/>
+            <div key={user?.user_id}>
+                <ErrorBoundary>
+                    <Profile
                         user={user}
-                        setUser={setUser}
+                        handleEdit={handleEdit}
+                        isCurrentUser={user?.user_id === currentUser.user_id}
+                        handleAddToFriends={handleAddToFriends}
+                        handleAccept={handleAccept}
+                        handleDeleteFromFriends={handleDeleteFromFriends}
+                        currentRequest={currentRequest}
+                        isLoading={acceptLoading||addLoading||deleteLoading}
+                        isAdmin={isAdmin}
+                        requestFetching={requestFetching}
                     />
-                    {
-                        user?.user_id === currentUser.user_id &&
-                        <div>
-                            <div className={'margin'}>
-                                <ErrorBoundary>
+                </ErrorBoundary>
+                <EditProfileContainer
+                    openModal={openModal}
+                    setOpenModal={setOpenModal}
+                    user={user}
+                    setUser={setUser}
+                />
+                {
+                    user?.user_id === currentUser.user_id &&
+                    <div>
+                        <div className={'margin'}>
+                            <ErrorBoundary>
                                 <SearchUsersContainer
                                     accept={accept}
                                     addToFriends={addToFriends}
@@ -201,17 +201,17 @@ const ProfileContainer = (handleError) => {
                                     usersForSearch={usersForSearch}
                                     setUsersForSearch={setUsersForSearch}
                                 />
-                                </ErrorBoundary>
-                            </div>
-                            <ErrorBoundary>
+                            </ErrorBoundary>
+                        </div>
+                        <ErrorBoundary>
                             <Friends
                                 id={id}
                                 deleteRequest={deleteFromFriends}
                                 friends={friends}
                                 setFriends={setFriends}
                             />
-                            </ErrorBoundary>
-                            <ErrorBoundary>
+                        </ErrorBoundary>
+                        <ErrorBoundary>
                             <IncomingRequests
                                 id={id}
                                 accept={accept}
@@ -219,19 +219,18 @@ const ProfileContainer = (handleError) => {
                                 incomingRequests={incomingRequests}
                                 setIncomingRequests={setIncomingRequests}
                             />
-                            </ErrorBoundary>
-                            <ErrorBoundary>
+                        </ErrorBoundary>
+                        <ErrorBoundary>
                             <OutgoingRequests
                                 id={id}
                                 deleteRequest={deleteFromFriends}
                                 outgoingRequests={outgoingRequests}
                                 setOutgoingRequests={setOutgoingRequests}
                             />
-                            </ErrorBoundary>
-                        </div>
-                    }
-                </div>
-
+                        </ErrorBoundary>
+                    </div>
+                }
+            </div>
         </>
     );
 }

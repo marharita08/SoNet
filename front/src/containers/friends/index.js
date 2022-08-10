@@ -1,11 +1,11 @@
 import React from "react";
 import {useQuery} from "react-query";
-import ReactLoading from "react-loading";
 
 import ErrorBoundary from "../../components/ErrorBoundary";
 import User from "../../components/user";
 import {getFriends} from "../../api/usersCrud";
 import PropTypes from "prop-types";
+import Loading from "../../components/loading";
 
 const Friends = ({id, deleteRequest, friends, setFriends}) => {
 
@@ -13,13 +13,15 @@ const Friends = ({id, deleteRequest, friends, setFriends}) => {
         onSuccess: (data) => setFriends(data?.data)
     });
 
+    console.log(friends);
+
     return (
         <>
             {
-                (friendsFetching || friends.length !== 0) &&
+                (friendsFetching || friends?.length !== 0) &&
                 <h2 className={'inline'}>Friends</h2>
             }
-            {friendsFetching && <ReactLoading type={'balls'} color='#001a4d'/>}
+            <Loading isLoading={friendsFetching} align={'left'}/>
             <div>
                 {friends?.map((user)=>
                     <ErrorBoundary key={user.user_id}>
@@ -46,5 +48,3 @@ Friends.propTypes = {
 };
 
 export default Friends;
-
-

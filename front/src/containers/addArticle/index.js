@@ -11,7 +11,7 @@ import articleContext from "../../context/articleContext";
 import { useNavigate, useLocation } from "react-router-dom";
 
 const AddArticleContainer = ({setArticleContext, articles, setArticles}) => {
-    const { data } = useQuery('visibilities', () => getArticleVisibilities());
+    const { data, isFetching: visibilitiesFetching } = useQuery('visibilities', () => getArticleVisibilities());
     const articleState = useContext(articleContext);
     const {article, addArticle} = articleState;
     const visibilities = data?.data;
@@ -136,6 +136,7 @@ const AddArticleContainer = ({setArticleContext, articles, setArticles}) => {
                 cropImage={cropImage}
                 handleChange={handleChange}
                 message={message}
+                visibilitiesFetching={visibilitiesFetching}
             />
         </ErrorBoundary>
     );

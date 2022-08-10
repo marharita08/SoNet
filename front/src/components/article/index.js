@@ -5,7 +5,7 @@ import {
     Card,
     CardActions,
     CardContent,
-    CardHeader, CardMedia, Divider,
+    CardHeader, CardMedia, CircularProgress, Divider,
     IconButton,
     Menu,
     MenuItem, Popover,
@@ -50,8 +50,9 @@ const Article = ({
     handleLikeClick,
     likes,
     comments,
-    users
-}) => {
+    users,
+    likesFetching,
+    commentsFetching}) => {
     const [menuAnchorEl, setMenuAnchorEl] = useState(null);
     const [popoverAnchorEl, setPopoverAnchorEl] = React.useState(null);
 
@@ -153,34 +154,40 @@ const Article = ({
                 </CardContent>
                 <Divider/>
                 <CardActions disableSpacing>
-                    <IconButton
-                        onClick={handleExpandClick}
-                        aria-expanded={commentsExpanded}
-                        aria-label="show more"
-                    >
-                        {comments}
-                        <CommentIcon/>
-                        <ExpandMore expand={commentsExpanded}>
-                            <ExpandMoreIcon />
-                        </ExpandMore>
-                    </IconButton>
+                    {
+                        commentsFetching ?
+                            <CircularProgress color="inherit" size={25}/> :
+                            <IconButton
+                                onClick={handleExpandClick}
+                                aria-expanded={commentsExpanded}
+                                aria-label="show more"
+                            >
+                                {comments}
+                                <CommentIcon/>
+                                <ExpandMore expand={commentsExpanded}>
+                                    <ExpandMoreIcon/>
+                                </ExpandMore>
+                            </IconButton>
+                    }
                     <IconButton onClick={handleAddCommentClick}>
                         <AddCommentIcon/>
                     </IconButton>
-                    <IconButton
-                        onClick={handleLikeClick}
-                        aria-owns={open ? 'mouse-over-popover' : undefined}
-                        aria-haspopup="true"
-                        onMouseEnter={handlePopoverOpen}
-                        onMouseLeave={handlePopoverClose}
-                    >
-                        {
-                            isLiked ?
-                                <FavoriteIcon color={"error"}/> :
-                                <FavoriteBorderIcon/>
-                        }
-                        {likes}
-                    </IconButton>
+                    {
+                        likesFetching ? <CircularProgress color="inherit" size={25}/> :
+                            <IconButton
+                                onClick={handleLikeClick}
+                                aria-owns={open ? 'mouse-over-popover' : undefined}
+                                aria-haspopup="true"
+                                onMouseEnter={handlePopoverOpen}
+                                onMouseLeave={handlePopoverClose}
+                            >
+                                {isLiked ?
+                                    <FavoriteIcon color={"error"}/> :
+                                    <FavoriteBorderIcon/>
+                                }
+                                {likes}
+                            </IconButton>
+                    }
                     {
                         users?.length !== 0 &&
                         <Popover
@@ -237,7 +244,15 @@ Article.propTypes = {
     isLiked: PropTypes.bool.isRequired,
     likes: PropTypes.number.isRequired,
     comments: PropTypes.number.isRequired,
-    handleAddCommentClick: PropTypes.func.isRequired
+    handleAddCommentClick: PropTypes.func.isRequired,
+    users: PropTypes.arrayOf(
+        PropTypes.shape({
+            user_id: PropTypes.number.isRequired,
+            avatar: PropTypes.string
+        })
+    ),
+    likesFetching: PropTypes.bool,
+    commentsFetching: PropTypes.bool
 };
 
 export default Article;

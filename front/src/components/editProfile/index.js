@@ -4,7 +4,6 @@ import FormikAutocomplete from "../FormikAutocomplete";
 import {Avatar, Button, CircularProgress, Dialog, DialogTitle, IconButton} from "@mui/material";
 import Cropper from "react-cropper";
 import * as Yup from "yup";
-import ReactLoading from "react-loading";
 import React from "react";
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 import ContentCutIcon from '@mui/icons-material/ContentCut';
@@ -14,6 +13,7 @@ import CloseIcon from "@mui/icons-material/Close";
 
 import {EditProfilePropTypes} from "./editProfilePropTypes";
 import AlertContainer from "../../containers/alert";
+import Loading from "../../components/loading";
 
 const EditProfile = ({
         universities,
@@ -31,8 +31,8 @@ const EditProfile = ({
         user,
         isFetching,
         message,
-        handleAlertClose,
-}) => {
+        handleAlertClose}) => {
+
         const schema = Yup.object().shape({
         name: Yup.string().required("Name is required").max(255, "Name should contain not more than 255 symbols"),
         email: Yup.string().required("Email is required").max(255, "Name should contain not more than 255 symbols"),
@@ -65,12 +65,7 @@ const EditProfile = ({
                 maxWidth="sm"
             >
                 <AlertContainer alertMessage={message} handleClose={handleAlertClose}/>
-                {
-                    isFetching &&
-                    <div align={"center"}>
-                        <ReactLoading type={'balls'} color='#001a4d'/>
-                    </div>
-                }
+                <Loading isLoading={isFetching}/>
                 <Formik
                     initialValues={user}
                     onSubmit={onFormSubmit}

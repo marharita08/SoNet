@@ -4,7 +4,7 @@ export let EditProfilePropTypes = {
     user: PropTypes.shape({
         user_id: PropTypes.number.isRequired,
         name: PropTypes.string.isRequired,
-        email: PropTypes.string.isRequired,
+        email: PropTypes.string,
         email_visibility: PropTypes.shape({
             value: PropTypes.number.isRequired,
             label: PropTypes.string.isRequired
@@ -22,7 +22,7 @@ export let EditProfilePropTypes = {
             value: PropTypes.number.isRequired,
             label: PropTypes.string.isRequired
         }),
-        avatar: PropTypes.string.isRequired
+        avatar: PropTypes.string
     }),
     universities: PropTypes.arrayOf(PropTypes.shape({
         value: PropTypes.number.isRequired,
@@ -33,7 +33,7 @@ export let EditProfilePropTypes = {
         label: PropTypes.string.isRequired
     })),
     onFormSubmit: PropTypes.func.isRequired,
-    isLoading: PropTypes.bool.isRequired,
+    isLoading: PropTypes.bool,
     image: PropTypes.object,
     croppedImage: PropTypes.object,
     deleteImage: PropTypes.func.isRequired,
@@ -42,6 +42,7 @@ export let EditProfilePropTypes = {
     setCropper: PropTypes.func.isRequired,
     openModal: PropTypes.bool.isRequired,
     handleClose: PropTypes.func.isRequired,
-    isFetching: PropTypes.bool.isRequired,
-    message: PropTypes.string
+    isFetching: PropTypes.bool,
+    message: PropTypes.string,
+    handleAlertClose: PropTypes.func
 }

@@ -46,7 +46,7 @@ module.exports = {
   getFriends: async (id) =>
     db
       .select('request_id', 'user_id', 'name', 'avatar')
-      .from('users')
+      .from({ u: 'users' })
       .join({ f: 'friends' }, function () {
         this.on('u.user_id', 'from_user_id')
           .andOn('to_user_id', id)

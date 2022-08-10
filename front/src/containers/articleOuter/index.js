@@ -1,13 +1,13 @@
 import React , {useContext} from "react";
 import {useParams} from "react-router-dom";
 import {useQuery} from "react-query";
-import ReactLoading from "react-loading";
 import PropTypes from 'prop-types';
 
 import ErrorBoundary from "../../components/ErrorBoundary";
 import Article from "../../containers/article";
 import {getArticle} from "../../api/articlesCrud";
 import authContext from "../../context/authContext";
+import Loading from "../../components/loading";
 
 
 const ArticleOuterContainer = ({setArticleContext, handleError, articles, setArticles}) => {
@@ -20,11 +20,7 @@ const ArticleOuterContainer = ({setArticleContext, handleError, articles, setArt
 
     return (
         <div>
-            {(articleFetching) &&
-                <div align={"center"}>
-                    <ReactLoading type={'balls'} color='#001a4d'/>
-                </div>
-            }
+            <Loading isLoading={articleFetching}/>
             {articles?.map((article) =>
                 <div>
                     <ErrorBoundary>

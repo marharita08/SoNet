@@ -36,8 +36,8 @@ const AddArticle = ({
     cropImage,
     croppedImage,
     deleteImage,
-    message
-}) => {
+    message,
+    visibilitiesFetching }) => {
 
     const schema = Yup.object().shape({
         text: Yup.string().required("Text is required"),
@@ -128,13 +128,15 @@ const AddArticle = ({
                                 <div align={"center"}>
                                     <div className={"available"}>
                                         <div className={"margin"} align={"left"}>
-                                            <Field
-                                                component={FormikAutocomplete}
-                                                name="visibility"
-                                                label={"Available to"}
-                                                options={visibilities}
-                                                className={"visibility"}
-                                            />
+                                            {visibilitiesFetching ? <CircularProgress color="inherit" size={25}/> :
+                                                <Field
+                                                    component={FormikAutocomplete}
+                                                    name="visibility"
+                                                    label={"Available to"}
+                                                    options={visibilities}
+                                                    className={"visibility"}
+                                                />
+                                            }
                                         </div>
                                     </div>
                                 </div>

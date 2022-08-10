@@ -1,11 +1,11 @@
 import React from "react";
 import {useQuery} from "react-query";
 import PropTypes from "prop-types";
-import ReactLoading from "react-loading";
 
 import ErrorBoundary from "../../components/ErrorBoundary";
 import User from "../../components/user";
 import {getIncomingRequests} from "../../api/usersCrud";
+import Loading from "../../components/loading";
 
 const IncomingRequests = ({id, accept, decline, incomingRequests, setIncomingRequests}) => {
 
@@ -17,10 +17,10 @@ const IncomingRequests = ({id, accept, decline, incomingRequests, setIncomingReq
     return (
         <>
             {
-                (incomingRequestsFetching || incomingRequests.length !== 0) &&
+                (incomingRequestsFetching || incomingRequests?.length !== 0) &&
                 <h2>Incoming Requests</h2>
             }
-            {incomingRequestsFetching && <ReactLoading type={'balls'} color='#001a4d'/>}
+            <Loading isLoading={incomingRequestsFetching} align={'left'}/>
             <div>
                 {incomingRequests?.map((user)=>
                     <ErrorBoundary key={user.user_id}>
@@ -48,5 +48,3 @@ IncomingRequests.propTypes = {
 };
 
 export default IncomingRequests;
-
-

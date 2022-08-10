@@ -15,7 +15,7 @@ export let AddArticlePropTypes = {
     addArticle: PropTypes.bool.isRequired,
     handleClose: PropTypes.func.isRequired,
     onFormSubmit: PropTypes.func.isRequired,
-    loading: PropTypes.bool.isRequired,
+    loading: PropTypes.bool,
     handleChange: PropTypes.func.isRequired,
     image: PropTypes.object,
     setCropper: PropTypes.func.isRequired,
@@ -23,4 +23,5 @@ export let AddArticlePropTypes = {
     croppedImage: PropTypes.object,
     deleteImage: PropTypes.func.isRequired,
     message: PropTypes.string,
+    visibilitiesFetching: PropTypes.bool
 }

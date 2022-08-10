@@ -151,7 +151,7 @@ Comment.propTypes = {
     }),
     handleEdit: PropTypes.func.isRequired,
     handleDelete: PropTypes.func.isRequired,
-    isCurrentUser: PropTypes.bool.isRequired,
+    isCurrentUser: PropTypes.bool,
     handleReply: PropTypes.func.isRequired
 }
 

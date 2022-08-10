@@ -1,6 +1,5 @@
 import React, {useContext, useState} from "react";
 import { useQuery} from "react-query";
-import ReactLoading from "react-loading";
 import PropTypes from "prop-types";
 
 import Article from "../../containers/article";
@@ -8,6 +7,7 @@ import ErrorBoundary from "../../components/ErrorBoundary";
 import authContext from "../../context/authContext";
 import {getAllNews, getNews, getCountOfNews, getCountOfAllNews} from "../../api/articlesCrud";
 import LoadMoreBtn from "../../components/loadMoreBtn/loadMoreBtn";
+import Loading from "../../components/loading";
 
 
 const ArticlesContainer = ({setArticleContext, param, handleError, articles, setArticles}) => {
@@ -38,11 +38,7 @@ const ArticlesContainer = ({setArticleContext, param, handleError, articles, set
 
     return (
         <div>
-            {articlesFetching &&
-                <div align={"center"}>
-                    <ReactLoading type={'balls'} color='#001a4d'/>
-                </div>
-            }
+            <Loading isLoading={articlesFetching}/>
             {articles?.map((article) =>
                 <ErrorBoundary key={article.article_id}>
                     <Article
@@ -54,13 +50,10 @@ const ArticlesContainer = ({setArticleContext, param, handleError, articles, set
                     />
                 </ErrorBoundary>
             )}
+            <Loading isLoading={countFetching}/>
             {
-                countFetching ?
-                    <div align={"center"}>
-                        <ReactLoading type={'balls'} color='#001a4d'/>
-                    </div>:
-                    (amount > articles.length &&
-                <LoadMoreBtn handleLoadMore={handleLoadMore} loading={isLoading}/>)
+                amount > articles.length &&
+                <LoadMoreBtn handleLoadMore={handleLoadMore} loading={isLoading}/>
             }
         </div>
     );

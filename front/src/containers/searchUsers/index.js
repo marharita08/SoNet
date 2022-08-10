@@ -9,7 +9,7 @@ const SearchUsersContainer = ({addToFriends, accept, deleteFromFriends, usersFor
 
     const {user:{user_id}} = useContext(authContext);
 
-    useQuery('users', () => getForSearch(user_id), {
+    const {isFetching} = useQuery('users', () => getForSearch(user_id), {
         onSuccess: (data) => setUsersForSearch(data?.data)
     });
 
@@ -24,6 +24,7 @@ const SearchUsersContainer = ({addToFriends, accept, deleteFromFriends, usersFor
             accept={accept}
             addToFriends={handleAddToFriends}
             deleteFromFriends={deleteFromFriends}
+            isFetching={isFetching}
         />
     );
 }

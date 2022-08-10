@@ -1,12 +1,12 @@
 import React from "react";
-import {Autocomplete, Avatar, Box, IconButton, TextField} from "@mui/material";
+import {Autocomplete, Avatar, Box, CircularProgress, IconButton, TextField} from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import {Link} from "react-router-dom";
 import PropTypes from "prop-types";
 
-const SearchUsers = ({users, addToFriends, accept, deleteFromFriends}) => {
+const SearchUsers = ({users, addToFriends, accept, deleteFromFriends, isFetching}) => {
     return (
         <>
             <Autocomplete
@@ -57,10 +57,12 @@ const SearchUsers = ({users, addToFriends, accept, deleteFromFriends}) => {
                 )}
                 renderInput={props =>
                     <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
-                        <SearchIcon sx={{ color: 'action.active' }} />
+                        {
+                            isFetching ? <CircularProgress color="inherit" size={25}/>:
+                            <SearchIcon sx={{color: 'action.active'}}/>
+                        }
                         <TextField
                             {...props}
-
                             variant="standard"
                             label={'Search'}
                         />
@@ -89,6 +91,7 @@ SearchUsers.propTypes = {
             is_outgoing_request: PropTypes.bool
         })
     ),
+    isFetching: PropTypes.bool
 }
 
 export default SearchUsers;

@@ -18,7 +18,12 @@ const LoadMoreBtn = ({handleLoadMore, loading}) => {
 }
 
 LoadMoreBtn.propTypes = {
-    handleLoadMore: PropTypes.func.isRequired
+    handleLoadMore: PropTypes.func.isRequired,
+    loading: PropTypes.bool
+}
+
+LoadMoreBtn.defaultProps = {
+    loading: false
 }
 
 export default LoadMoreBtn;

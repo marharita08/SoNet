@@ -18,7 +18,8 @@ const Profile = ({
     handleAccept,
     handleDeleteFromFriends,
     currentRequest,
-    isLoading }) => {
+    isLoading,
+    requestFetching}) => {
 
     return (
         <>
@@ -138,6 +139,7 @@ const Profile = ({
                         />
                         {
                             !isCurrentUser &&
+                            (requestFetching ? <CircularProgress color="inherit" size={25}/> :
                             <div>
                                 {
                                     currentRequest?.is_not_friends &&
@@ -185,7 +187,7 @@ const Profile = ({
                                         {currentRequest?.is_outgoing_request && "Delete request"}
                                     </Button>
                                 }
-                            </div>
+                            </div>)
                         }
                     </div>
                 </Form>
@@ -195,5 +197,12 @@ const Profile = ({
 }
 
 Profile.propTypes = ProfilePropTypes;
+
+Profile.defaultProps = {
+    isCurrentUser: false,
+    isAdmin: false,
+    isLoading: false,
+    requestFetching: false,
+}
 
 export default Profile;

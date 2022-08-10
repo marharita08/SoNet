@@ -1,6 +1,5 @@
 import React, {useContext, useState} from "react";
 import {useMutation, useQuery} from "react-query";
-import ReactLoading from "react-loading";
 import {Collapse} from "@mui/material";
 import PropTypes from 'prop-types';
 
@@ -159,11 +158,6 @@ const ArticleContainer = ({setArticleContext, article, handleError, articles, se
 
     return (
         <div>
-            {(commentsFetching || likesFetching || isLikedFetching || commentsAmountFetching || likesAmountFetching) &&
-                <div align={"center"}>
-                    <ReactLoading type={'balls'} color='#001a4d'/>
-                </div>
-            }
             <div className="outer">
                 <div className="inner">
                     <ErrorBoundary>
@@ -181,6 +175,8 @@ const ArticleContainer = ({setArticleContext, article, handleError, articles, se
                             comments={commentsAmount}
                             handleLikeClick={handleLikeClick}
                             users={likedUsers}
+                            likesFetching={likesFetching||likesAmountFetching||isLikedFetching}
+                            commentsFetching={commentsFetching || commentsAmountFetching}
                         />
                     </ErrorBoundary>
                     <Collapse in={commentFieldExpanded} timeout="auto" unmountOnExit>

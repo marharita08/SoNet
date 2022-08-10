@@ -4,7 +4,7 @@ export let ProfilePropTypes = {
     user: PropTypes.shape({
         user_id: PropTypes.number.isRequired,
         name: PropTypes.string.isRequired,
-        email: PropTypes.string.isRequired,
+        email: PropTypes.string,
         email_visibility: PropTypes.shape({
             value: PropTypes.number.isRequired,
             label: PropTypes.string.isRequired
@@ -22,11 +22,11 @@ export let ProfilePropTypes = {
             value: PropTypes.number.isRequired,
             label: PropTypes.string.isRequired
         }),
-        avatar: PropTypes.string.isRequired
+        avatar: PropTypes.string
     }),
     handleEdit: PropTypes.func.isRequired,
-    isCurrentUser: PropTypes.bool.isRequired,
-    isAdmin: PropTypes.bool.isRequired,
+    isCurrentUser: PropTypes.bool,
+    isAdmin: PropTypes.bool,
     handleAddToFriends: PropTypes.func.isRequired,
     handleAccept: PropTypes.func.isRequired,
     handleDeleteFromFriends: PropTypes.func.isRequired,
@@ -40,5 +40,6 @@ export let ProfilePropTypes = {
         is_incoming_request: PropTypes.bool,
         is_outgoing_request: PropTypes.bool
     }),
-    isLoading: PropTypes.bool.isRequired,
+    isLoading: PropTypes.bool,
+    requestFetching: PropTypes.bool,
 }
