@@ -140,17 +140,11 @@ router.post(
     if (session) {
       const user = await storage.getById(session.user_id);
       const accessToken = createAccessToken(user);
-      const refreshToken = uuidv4();
-      await sessionStorage.deleteByToken(session.token);
-      await sessionStorage.create({
-        user_id: session.user_id,
-        token: refreshToken,
-      });
 
       if (accessToken) {
         return res.send({
           accessToken,
-          refreshToken,
+          refreshToken: session.refresh_token,
           success: true,
         });
       }
