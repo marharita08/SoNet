@@ -1,18 +1,38 @@
 # Social Network
 
-This project is prototype of social network. It was developed as part of courses MindKDevCamp. It was developed using:
-- Express.js for back-end;
-- React.js for front-end;
-- PostgreSQL as DBMS.
+This repository contains the code for a prototype of a social network web application. The backend of the application is built using the Express.js framework, while the frontend is built using React. The database used is PostgreSQL. Both the backend and the database are deployed in Docker containers.
+
+## Features
+The application provides the following features:
+  - User authentication and registration (including Google and Facebook authentication)
+  - Posting, liking, and commenting on posts
+  - Adding other users as friends
+  - Searching for users in the system
+  - Customizing own profile
+
 
 ## Prerequisites
-Project is written using Node.js v14.18.1, PostgreSQL 13, Docker 20.10.12.
-It requires Node.js, PostgreSQL and Docker to be installed.
+This project requires to be installed:
+  - Node.js
+  - Docker(including docker-compose)
+
+## Technologies Used
+
+ - JavaScript
+ - Express.js
+ - React.js
+ - PostgreSQL
+ - Docker
 
 ## Installation
 
-Load code from this repository.
-Add to folder **`front`** file **`.env`** with values for keys placed below.
+Clone this repository: `git clone https://github.com/marharita08/Social-Network-MindKDevCamp`.
+
+To install the required libraries, simply execute the following files:
+  - `install api.cmd`
+  - `install front.cmd`
+
+Before running the application, you need to add a `.env` file to the `front` folder with the following properties:
 
 | Key                              | Value                                                |    
 |----------------------------------|------------------------------------------------------|
@@ -20,7 +40,7 @@ Add to folder **`front`** file **`.env`** with values for keys placed below.
 | REACT_APP_GOOGLE_API_CLIENT_ID   | Google client ID, required for login with Google     |
 | REACT_APP_FACEBOOK_API_CLIENT_ID | Facebook client ID, required for login with Facebook |                                                                                                               |
 
-Add to folder **`api`** file **`.env`** with values for keys placed below.
+You also need to add a `.env` file to the `api` folder with the following properties:
 
 | Key                        | Value                                                    |    
 |----------------------------|----------------------------------------------------------|
@@ -39,6 +59,14 @@ Add to folder **`api`** file **`.env`** with values for keys placed below.
 | FACEBOOK_API_CLIENT_SECRET | Facebook client secret, required for login with Facebook |
 | HASH_SALT                  | Salt for password hashing                                |
 
-Run **`install api.cmd`** and **`install front.cmd`**.
-## How to run?
-Run **`run api.cmd`** and **`run front.cmd`**.
+## Running the Application
+
+To start the backend, execute the `run api.cmd` file.
+
+To start the frontend, execute the `run front.cmd` file.
+
+## Database Setup
+
+To create the necessary tables in the database, run backend and open the Adminer tool in your browser using the following URL: `appurl:adminerport` (e.g., `localhost:8080`). 
+Then, connect to the database using the credentials specified in the .env file. 
+Once connected, load and execute the `init.sql` file.
