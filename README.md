@@ -10,12 +10,6 @@ The application provides the following features:
   - Searching for users in the system
   - Customizing own profile
 
-
-## Prerequisites
-This project requires to be installed:
-  - Node.js
-  - Docker(including docker-compose)
-
 ## Technologies Used
 
  - JavaScript
@@ -23,6 +17,11 @@ This project requires to be installed:
  - React.js
  - PostgreSQL
  - Docker
+
+## Prerequisites
+Before running the application, make sure you have the following installed:
+- Node.js
+- Docker(including docker-compose)
 
 ## Installation
 
