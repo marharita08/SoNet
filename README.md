@@ -2,6 +2,10 @@
 
 This repository contains the code for a prototype of a social network web application. The backend of the application is built using the Express.js framework, while the frontend is built using React. The database used is PostgreSQL. Both the backend and the database are deployed in Docker containers.
 
+## Reasons for Development
+
+This project was developed as part of the "MinK Dev Camp" course.
+
 ## Features
 The application provides the following features:
   - User authentication and registration (including Google and Facebook authentication)
@@ -27,9 +31,9 @@ Before running the application, make sure you have the following installed:
 
 Clone this repository: `git clone https://github.com/marharita08/Social-Network-MindKDevCamp`.
 
-To install the required libraries, simply execute the following files:
-  - `install api.cmd`
-  - `install front.cmd`
+To install the required libraries, simply execute the following files depending on your OS:
+  - `install_api.cmd` or `install_api.sh`
+  - `install_front.cmd` or `install_front.sh`
 
 Before running the application, you need to add a `.env` file to the `front` folder with the following properties:
 
@@ -60,12 +64,13 @@ You also need to add a `.env` file to the `api` folder with the following proper
 
 ## Running the Application
 
-To start the backend, execute the `run api.cmd` file.
+To start the backend, execute the `run_api.cmd` or `run_api.sh`.
 
-To start the frontend, execute the `run front.cmd` file.
-
-## Database Setup
-
-To create the necessary tables in the database, run backend and open the Adminer tool in your browser using the following URL: `appurl:adminerport` (e.g., `localhost:8080`). 
-Then, connect to the database using the credentials specified in the .env file. 
+To create the necessary tables in the database open the Adminer tool in your browser using the following URL: `appurl:adminerport` (e.g., `localhost:8080`).
+Then, connect to the database using the credentials specified in the .env file.
 Once connected, load and execute the `init.sql` file.
+
+To start the frontend, execute the `run_front.cmd` or `run_front.sh`.
+
+Open `localhost:3000` in your browser.
+
