@@ -77,12 +77,20 @@ a {
   background-color: rgba(0, 0, 0, 0.04);
 }
 
-.facebook-login {
+.login-btns {
   width: 220px;
-  background-color: #395697;
-  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px;
   height: 50px;
   padding: 5px 20px;
+  cursor: pointer;
+}
+
+.facebook-login {
+  background-color: #395697;
+  color: white;
   border-color: #395697;
 }
 
@@ -91,13 +99,32 @@ a {
   border-color: #003366;
 }
 .google-login {
-  width: 220px;
   background-color: white;
   color: black;
-  height: 50px;
-  padding: 5px 20px;
   border-color: #E8E8E8;
 }
 .google-login:hover {
-  background-color: #F8F8F8;
+  background-color: #f2f2f2;
+}
+
+.auth-card {
+  width: 95%;
+}
+
+.auth-field {
+  margin: 10px;
+  width: 90%;
+}
+
+.icon {
+  margin-right: 5px;
+}
+
+@media screen and (min-width: 480px) {
+  .auth-card {
+    width: 480px;
+  }
+  .auth-field {
+    width: 300px;
+  }
 }

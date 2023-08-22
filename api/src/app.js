@@ -15,7 +15,8 @@ const friendsRoutes = require('./routes/friends');
 const logger = require('./middleware/logger');
 const errorHandler = require('./middleware/errorHandler');
 
-const port = config.appPort;
+const hostPort = config.appHostPort;
+const containerPort = config.appContainerPort;
 
 const app = express();
 
@@ -39,6 +40,6 @@ app.use('/friends', friendsRoutes);
 
 app.use(errorHandler('logger'));
 
-app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`);
+app.listen(containerPort, () => {
+  console.log(`Example app listening at http://localhost:${hostPort}`);
 });

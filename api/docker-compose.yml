@@ -14,13 +14,13 @@ services:
       - ./tmp/db_data:/var/lib/postgresql/data
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
-      - ${DB_PORT}:5432
+      - ${DB_HOST_PORT}:${DB_CONTAINER_PORT}
   adminer:
     image: adminer
     container_name: db_adminer
     restart: always
     ports:
-      - ${ADMINER_PORT}:8080
+      - ${ADMINER_HOST_PORT}:${ADMINER_CONTAINER_PORT}
     depends_on:
       - db
   api:
@@ -30,7 +30,7 @@ services:
     volumes:
       - .:/api/
     ports:
-      - ${APP_PORT}:3001
+      - ${APP_HOST_PORT}:${APP_CONTAINER_PORT}
     depends_on:
       - db
     command: "npm run start:dev"
