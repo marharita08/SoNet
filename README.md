@@ -66,11 +66,10 @@ You also need to add a `.env` file to the `api` folder with the following proper
 
 To start the backend, execute the `run_api.cmd` or `run_api.sh`.
 
-To create the necessary tables in the database open the Adminer tool in your browser using the following URL: `appurl:adminerport` (e.g., `localhost:8080`).
-Then, connect to the database using the credentials specified in the .env file.
-Once connected, load and execute the `init.sql` file.
-
 To start the frontend, execute the `run_front.cmd` or `run_front.sh`.
 
 Open `localhost:3000` in your browser.
+
+To manage the database you can use the Adminer tool in your browser using the following URL: `appurl:adminerport` (e.g., `localhost:8080`).
+Then, connect to the database using the credentials specified in the .env file.
 
