@@ -1,14 +1,15 @@
 import React from "react";
-import { GoogleLogin } from 'react-google-login';
+import {GoogleLogin} from 'react-google-login';
 import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
 import {Formik, Form, Field} from "formik";
 import * as Yup from "yup";
-import {TextField} from "formik-mui";
 import {Button, Card, CardHeader, CircularProgress} from "@mui/material";
 import PropTypes from "prop-types";
 import FacebookIcon from '@mui/icons-material/Facebook';
 import GoogleIcon from '@mui/icons-material/Google';
 import LoginIcon from '@mui/icons-material/Login';
+import AuthTextField from "./AuthTextField";
+import LoginWithButton from "./LoginWithButton";
 
 import env from "../../config/envConfig";
 
@@ -29,11 +30,9 @@ const AuthComponent = ({
 
     return (
         <div align={"center"} className={'margin'}>
-            <Card sx={{width: '500px'}}>
-                <CardHeader
-                    title={'Login'}
-                />
-                <div>
+            <Card className={'auth-card'}>
+                <CardHeader title={'Login/Sign Up'}/>
+                <div className={'margin'}>
                     <Formik
                         onSubmit={onFormSubmit}
                         validationSchema={schema}
@@ -41,26 +40,20 @@ const AuthComponent = ({
                     >
                         <Form>
                             <Field
-                                component={TextField}
+                                component={AuthTextField}
                                 type={"email"}
                                 name={"email"}
                                 label={"Email"}
-                                sx={{margin:'5px'}}
                             />
-                            <br/>
                             <Field
-                                component={TextField}
+                                component={AuthTextField}
                                 type={"password"}
                                 name={"password"}
                                 label={"Password"}
-                                className={'margin'}
-                                sx={{margin:'5px'}}
                             />
-                            <br/>
                             <Button
                                 variant="contained"
                                 type="submit"
-                                className={'margin'}
                                 startIcon={
                                     authLoading ? (
                                         <CircularProgress color="inherit" size={25}/>
@@ -79,39 +72,29 @@ const AuthComponent = ({
                     onFailure={onGoogleFailure}
                     accessType="offline"
                     render={renderProps => (
-                        <button onClick={renderProps.onClick} className={"google-login margin"}>
-                            <div className={"inline"}>
-                                {
-                                    googleLoading ?
-                                        <CircularProgress color="inherit" size={25}/> :
-                                        <GoogleIcon fontSize={"small"}/>
-                                }
-                            </div>
-                            <div className={"inline margin"}>
-                                Login with Google
-                            </div>
-                        </button>
+                        <LoginWithButton
+                            onclick={renderProps.onClick}
+                            text={"Login with Google"}
+                            icon={ googleLoading ?
+                                <CircularProgress color="inherit" size={25}/> :
+                                <GoogleIcon fontSize={"small"}/> }
+                            className={"google-login"}
+                        />
                     )}
                 />
-                <br/>
                 <FacebookLogin
                     appId={env.facebook.clientId}
                     scope="public_profile"
                     callback={responseFacebook}
                     icon="fa-facebook"
                     render={renderProps => (
-                        <button onClick={renderProps.onClick} className={"facebook-login margin"}>
-                            <div className={"inline"}>
-                                {
-                                    facebookLoading ?
-                                        <CircularProgress color="inherit" size={25}/> :
-                                        <FacebookIcon fontSize={"small"}/>
-                                }
-                            </div>
-                            <div className={"inline margin"}>
-                                Login with Facebook
-                            </div>
-                        </button>
+                        <LoginWithButton
+                            onclick={renderProps.onClick}
+                            text={"Login with Facebook"}
+                            icon={ facebookLoading ?
+                                <CircularProgress color="inherit" size={25}/> :
+                                <FacebookIcon fontSize={"small"}/> }
+                            className={"facebook-login"} />
                     )}
                 />
                 <br/>
