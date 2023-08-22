@@ -1,11 +1,13 @@
 module.exports = {
-  appPort: process.env.APP_PORT,
+  appHostPort: process.env.APP_HOST_PORT,
+  appContainerPort: process.env.APP_CONTAINER_PORT,
   appUrl: process.env.APP_URL,
   dbHost: process.env.DB_HOST,
   dbUser: process.env.DB_USER,
   dbPassword: process.env.DB_PASSWORD,
   dbDatabase: process.env.DB_DATABASE,
-  dbPort: process.env.DB_PORT,
+  dbHostPort: process.env.DB_HOST_PORT,
+  dbContainerPort: process.env.DB_CONTAINER_PORT,
   googleEnv: {
     clientID: process.env.GOOGLE_API_CLIENT_ID,
     clientSecret: process.env.GOOGLE_API_CLIENT_SECRET,

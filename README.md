@@ -47,15 +47,18 @@ You also need to add a `.env` file to the `api` folder with the following proper
 
 | Key                        | Value                                                    |    
 |----------------------------|----------------------------------------------------------|
-| APP_PORT                   | API port                                                 |
+| APP_HOST_PORT              | API port on the host system                              |
+| APP_CONTAINER_PORT         | API port in the docker container                         |
 | APP_URL                    | API url                                                  |
 | APP_KEY                    | App key, random string                                   | 
 | DB_HOST                    | Database host                                            |
 | DB_USER                    | Name of database user                                    |
 | DB_PASSWORD                | Database password                                        |
 | DB_DATABASE                | Database name                                            |
-| DB_PORT                    | Database port                                            |
-| ADMINER_PORT               | Adminer port                                             |  
+| DB_HOST_PORT               | Database port on the host system                         |
+| DB_CONTAINER_PORT          | Database port in the docker container                    |
+| ADMINER_HOST_PORT          | Adminer port on the host system                          | 
+| ADMINER_CONTAINER_PORT     | Adminer port in the docker container                     |
 | GOOGLE_API_CLIENT_ID       | Google client ID, required for login with Google         |
 | GOOGLE_API_CLIENT_SECRET   | Google client secret, required for login with Google     |
 | FACEBOOK_API_CLIENT_ID     | Facebook client ID, required for login with Facebook     |
