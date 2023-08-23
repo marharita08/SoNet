@@ -13,8 +13,6 @@ const Friends = ({id, deleteRequest, friends, setFriends}) => {
         onSuccess: (data) => setFriends(data?.data)
     });
 
-    console.log(friends);
-
     return (
         <>
             {

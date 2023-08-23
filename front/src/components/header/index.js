@@ -6,6 +6,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import PersonIcon from '@mui/icons-material/Person';
 import LogoutIcon from '@mui/icons-material/Logout';
 import NoteAddIcon from '@mui/icons-material/NoteAdd';
+import DescriptionIcon from '@mui/icons-material/Description';
 
 const Header = ({handleClickOpen, user, authenticated, logout, isAdmin}) => {
     const [anchorEl, setAnchorEl] = useState(null);
@@ -27,46 +28,43 @@ const Header = ({handleClickOpen, user, authenticated, logout, isAdmin}) => {
     return (
         <>
             <header>
-                <Link to={"/"}>
-                    <button className={"left"} onClick={'update'}>
-                        <div className={"inline"}>
-                            <HomeIcon fontSize={"small"}/>
-                        </div>
-                        <div className={"inline margin"}>
-                            Home
-                        </div>
-                    </button>
-                </Link>
+                <div className={"header-logo"}>
+                    <Link to={"/"}>
+                        <img src={'/logo.png'} alt={"Social Network"} className={"logo"} onClick={'update'}/>
+                        <img src={'/minilogo.png'} alt={"Social Network"} className={"minilogo"} onClick={'update'}/>
+                    </Link>
+                </div>
+                <div className={"header-btns"}>
+                    <Link to={"/"}>
+                        <button onClick={'update'} className={"home-btn"}>
+                            <div><HomeIcon fontSize={"small"}/></div>
+                            <div className={"btn-text"}>Home</div>
+                        </button>
+                    </Link>
+                    {
+                        authenticated && isAdmin &&
+                        <Link to={"/all-articles"}>
+                            <button onClick={'update'}>
+                                <div><DescriptionIcon fontSize={"small"}/></div>
+                                <div className={"btn-text"}>All articles</div>
+                            </button>
+                        </Link>
+                    }
+                    {
+                        authenticated &&
+                        <button onClick={handleClickOpen}>
+                            <div><NoteAddIcon fontSize={"small"}/></div>
+                            <div className={"btn-text"}>Add article</div>
+                        </button>
+                    }
+                </div>
                 {
                     authenticated &&
-                    <div>
-                        {
-                            isAdmin &&
-                            <Link to={"/all-articles"}>
-                                <button onClick={'update'}>
-                                    <div className={"inline"}>
-                                        <HomeIcon fontSize={"small"}/>
-                                    </div>
-                                    <div className={"inline margin"}>
-                                        All articles
-                                    </div>
-                                </button>
-                            </Link>
-                        }
-                        <button onClick={handleClickOpen}>
-                            <div className={"inline"}>
-                                <NoteAddIcon fontSize={"small"}/>
-                            </div>
-                            <div className={"inline margin"}>
-                                Add article
-                            </div>
-                        </button>
+                    <div className={"curr-user"}>
                         <button
-                            className={"right"}
                             onClick={handleMenu}
-                            style={{margin:0, border: "none", padding:'5px 10px'}}
                         >
-                            <div className={'inline'}>
+                            <span className={"inline"}>
                                 <Avatar
                                     src={user.avatar}
                                     sx={{ width: 40,
@@ -74,10 +72,8 @@ const Header = ({handleClickOpen, user, authenticated, logout, isAdmin}) => {
                                         margin: '0 5px'
                                     }}
                                 />
-                            </div>
-                            <div className={'inline margin username'}>
-                                {user.name}
-                            </div>
+                            </span>
+                            <span className={'username'}>{user.name}</span>
                         </button>
                         <Menu
                             id="menu-article"

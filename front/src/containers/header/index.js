@@ -6,7 +6,7 @@ import ErrorBoundary from "../../components/ErrorBoundary";
 import Header from "../../components/header";
 import { apiLogout }  from '../../api/auth';
 import PropTypes from "prop-types";
-import './header.css';
+import '../../components/header/header.css';
 
 const HeaderContainer = ({
     setArticleContext,
