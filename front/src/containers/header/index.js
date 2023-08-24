@@ -33,14 +33,10 @@ const HeaderContainer = ({
             });
         };
 
-        const { mutate } = useMutation(
-            apiLogout, {
-                onSuccess: () => {
-                    unsetAuthContext();
-                }
-            });
+        const { mutate } = useMutation(apiLogout);
 
         logout = () => {
+            unsetAuthContext();
             mutate({refreshToken});
         }
     }

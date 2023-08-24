@@ -82,7 +82,7 @@ a {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 10px;
+  margin: 10px auto;
   height: 50px;
   padding: 5px 20px;
   cursor: pointer;
@@ -109,10 +109,12 @@ a {
 
 .auth-card {
   width: 95%;
+  text-align: center;
+  margin: 10px auto;
 }
 
 .auth-field {
-  margin: 10px;
+  margin: 10px auto;
   width: 90%;
 }
 
@@ -120,11 +122,16 @@ a {
   margin-right: 5px;
 }
 
-@media screen and (min-width: 480px) {
+.menu-item {
+  display: flex;
+  align-items: flex-end;
+}
+
+@media screen and (min-width: 600px) {
   .auth-card {
-    width: 480px;
+    width: 500px;
   }
   .auth-field {
-    width: 300px;
+    width: 320px;
   }
 }

@@ -32,15 +32,13 @@ header button:hover {
 
 .logo {
     height: 50px;
-    display: none;
 }
-.minilogo {
-    height: 50px;
-    display: inline-block;
-}
+
 .header-logo {
     place-self: self-start;
     align-self: center;
+    width: 45px;
+    overflow: hidden;
 }
 .curr-user {
     place-self: self-end;
@@ -72,11 +70,8 @@ header button:hover {
     .username {
         display: contents;
     }
-    .logo {
-        display: inline-block;
-    }
-    .minilogo {
-        display: none;
+    .header-logo {
+        width: auto;
     }
 }
 @media screen and (min-width: 350px) {

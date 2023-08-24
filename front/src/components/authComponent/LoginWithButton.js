@@ -1,9 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const LoginWithButton = ({icon, text, onclick, className}) => {
+const LoginWithButton = ({icon, text, onClick, className}) => {
     return (
-        <button onClick={onclick} className={`login-btns ${className}`}>
+        <button onClick={onClick} className={`login-btns ${className}`}>
             <span className={"icon"}>{icon}</span>
             <span>{text}</span>
         </button>
@@ -13,7 +13,7 @@ const LoginWithButton = ({icon, text, onclick, className}) => {
 LoginWithButton.propTypes = {
     icon: PropTypes.node.isRequired,
     text: PropTypes.string.isRequired,
-    onclick: PropTypes.func.isRequired,
+    onClick: PropTypes.func.isRequired,
     className: PropTypes.string
 }
 

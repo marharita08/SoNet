@@ -1,12 +1,15 @@
 import React, {useState} from "react";
 import {Link} from "react-router-dom";
 import PropTypes from "prop-types";
-import {Avatar, Menu, MenuItem} from "@mui/material";
+import {Avatar} from "@mui/material";
 import HomeIcon from '@mui/icons-material/Home';
 import PersonIcon from '@mui/icons-material/Person';
 import LogoutIcon from '@mui/icons-material/Logout';
 import NoteAddIcon from '@mui/icons-material/NoteAdd';
 import DescriptionIcon from '@mui/icons-material/Description';
+import HeaderButton from "./HeaderButton";
+import HeaderMenuItemBody from "../menu/HeaderMenuItemBody";
+import SNMenu from "../menu/SNMenu";
 
 const Header = ({handleClickOpen, user, authenticated, logout, isAdmin}) => {
     const [anchorEl, setAnchorEl] = useState(null);
@@ -25,45 +28,46 @@ const Header = ({handleClickOpen, user, authenticated, logout, isAdmin}) => {
         logout();
     }
 
+    const menuItems = [
+        {
+            body: <HeaderMenuItemBody text={"Profile"} to={`/profile/${user?.user_id}`} icon={<PersonIcon/>}/>,
+            onClick: handleMenuClose
+        },
+        {
+            body: <HeaderMenuItemBody text={"Logout"} to={"/"} icon={<LogoutIcon/>}/>,
+            onClick: handleLogout
+        }
+    ]
+
     return (
         <>
             <header>
                 <div className={"header-logo"}>
                     <Link to={"/"}>
                         <img src={'/logo.png'} alt={"Social Network"} className={"logo"} onClick={'update'}/>
-                        <img src={'/minilogo.png'} alt={"Social Network"} className={"minilogo"} onClick={'update'}/>
                     </Link>
-                </div>
-                <div className={"header-btns"}>
-                    <Link to={"/"}>
-                        <button onClick={'update'} className={"home-btn"}>
-                            <div><HomeIcon fontSize={"small"}/></div>
-                            <div className={"btn-text"}>Home</div>
-                        </button>
-                    </Link>
-                    {
-                        authenticated && isAdmin &&
-                        <Link to={"/all-articles"}>
-                            <button onClick={'update'}>
-                                <div><DescriptionIcon fontSize={"small"}/></div>
-                                <div className={"btn-text"}>All articles</div>
-                            </button>
-                        </Link>
-                    }
-                    {
-                        authenticated &&
-                        <button onClick={handleClickOpen}>
-                            <div><NoteAddIcon fontSize={"small"}/></div>
-                            <div className={"btn-text"}>Add article</div>
-                        </button>
-                    }
                 </div>
                 {
                     authenticated &&
+                    <div className={"header-btns"}>
+                        <Link to={"/"}>
+                            <HeaderButton text={"Home"} icon={<HomeIcon fontSize={"small"}/>} className={"home-btn"}/>
+                        </Link>
+                        {
+                            isAdmin &&
+                            <Link to={"/all-articles"}>
+                                <HeaderButton text={"All articles"} icon={<DescriptionIcon fontSize={"small"}/>}/>
+                            </Link>
+                        }
+                        <HeaderButton text={"Add article"}
+                                      icon={<NoteAddIcon fontSize={"small"}/>}
+                                      onClick={handleClickOpen}/>
+                    </div>
+                }
+                {
+                    authenticated &&
                     <div className={"curr-user"}>
-                        <button
-                            onClick={handleMenu}
-                        >
+                        <button onClick={handleMenu}>
                             <span className={"inline"}>
                                 <Avatar
                                     src={user.avatar}
@@ -75,41 +79,7 @@ const Header = ({handleClickOpen, user, authenticated, logout, isAdmin}) => {
                             </span>
                             <span className={'username'}>{user.name}</span>
                         </button>
-                        <Menu
-                            id="menu-article"
-                            anchorEl={anchorEl}
-                            anchorOrigin={{
-                                vertical: 'top',
-                                horizontal: 'right',
-                            }}
-                            keepMounted
-                            transformOrigin={{
-                                vertical: 'top',
-                                horizontal: 'right',
-                            }}
-                            open={Boolean(anchorEl)}
-                            onClose={handleMenuClose}
-                        >
-                            <Link to={`/profile/${user.user_id}`}
-                                  onClick={'update'}
-                                  style={{'textDecoration': 'none'}}
-                            >
-                                <MenuItem>
-                                    <PersonIcon/>
-                                    <div className={"margin"}>
-                                        Profile
-                                    </div>
-                                </MenuItem>
-                            </Link>
-                            <Link to={"/"} style={{'textDecoration': 'none'}}>
-                                <MenuItem onClick={handleLogout}>
-                                    <LogoutIcon/>
-                                    <div className={"margin"}>
-                                        Logout
-                                    </div>
-                                </MenuItem>
-                            </Link>
-                        </Menu>
+                        <SNMenu menuItems={menuItems} anchorEl={anchorEl} onClose={handleMenuClose}/>
                     </div>
                 }
             </header>
