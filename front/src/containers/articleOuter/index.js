@@ -19,22 +19,20 @@ const ArticleOuterContainer = ({setArticleContext, handleError, articles, setArt
         });
 
     return (
-        <div>
+        <>
             <Loading isLoading={articleFetching}/>
             {articles?.map((article) =>
-                <div>
-                    <ErrorBoundary>
-                        <Article
-                            setArticleContext={setArticleContext}
-                            article={article}
-                            handleError={handleError}
-                            articles={articles}
-                            setArticles={setArticles}
-                        />
-                    </ErrorBoundary>
-                </div>
+                <ErrorBoundary key={article.article_id}>
+                    <Article
+                        setArticleContext={setArticleContext}
+                        article={article}
+                        handleError={handleError}
+                        articles={articles}
+                        setArticles={setArticles}
+                    />
+                </ErrorBoundary>
             )}
-        </div>
+        </>
     );
 }
 

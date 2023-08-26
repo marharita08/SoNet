@@ -1,9 +1,11 @@
 import React from "react";
-import {Avatar, Button, Card, CircularProgress, Link} from "@mui/material";
+import {Avatar, Button, CircularProgress} from "@mui/material";
 import * as Yup from "yup";
 import {Formik, Form, Field} from "formik";
 import PropTypes from "prop-types";
 import SaveIcon from '@mui/icons-material/Save';
+import SNTextarea from "../fields/SNTextarea";
+import './addComent.css';
 
 const AddComment = ({user, comment, onSubmit, loading, addComment, handleCancel}) => {
 
@@ -12,48 +14,46 @@ const AddComment = ({user, comment, onSubmit, loading, addComment, handleCancel}
     });
 
     return (
-        <Card sx={{ maxWidth: 1000 }}>
-            <Formik
-                enableReinitialize
-                initialValues={comment}
-                onSubmit={onSubmit}
-                validationSchema={schema}
-            >
-                {({handleSubmit}) =>
-                    <Form onSubmit={handleSubmit}>
-                        <div className={'inline'} style={{verticalAlign: 'top'}}>
-                            <Link to={`/profile/${user.user_id}`}>
-                                <Avatar
-                                    src={user.avatar}
-                                    sx={{width: 60, height: 60}}
-                                    className={'margin'}
-                                />
-                            </Link>
-                        </div>
-                        <div className={'inline'}>
-                            {
-                                comment.to &&
-                                <div className={'margin'}>
-                                    Reply to: {comment.to}
-                                    <div style={{fontStyle: "italic"}}>
-                                        {comment.parent_text}
-                                    </div>
+        <Formik
+            enableReinitialize
+            initialValues={comment}
+            onSubmit={onSubmit}
+            validationSchema={schema}
+        >
+            {({handleSubmit}) =>
+                <Form onSubmit={handleSubmit}>
+                    <div className={'avatar-container'} >
+                        <Avatar
+                            src={user.avatar}
+                            className={'margin avatar'}
+                        />
+                    </div>
+                    <div className={'inline comment-field-container'}>
+                        {
+                            comment.to &&
+                            <div className={'margin'}>
+                                Reply to: {comment.to}
+                                <div className={"reply-to-text"}>
+                                    {comment.parent_text}
                                 </div>
-                            }
+                            </div>
+                        }
+                        <div className={"margin"}>
                             <Field
-                                as={"textarea"}
+                                label={"Comment"}
+                                type={"text"}
                                 name={"text"}
-                                style={{width: '450px', maxWidth: '450px'}}
-                                className={'margin'}
-                                placeholder={'Comment'}
+                                component = {SNTextarea}
                             />
-                            <br/>
-                            {
-                                (!addComment || comment.level !== 1) &&
+                        </div>
+                        {
+                            (!addComment || comment.level !== 1) &&
+                            <div className={"inline margin"}>
                                 <Button variant={'outlined'} onClick={handleCancel}>Cancel</Button>
-                            }
+                            </div>
+                        }
+                        <div className={"inline margin"}>
                             <Button
-                                sx={{margin: "5px"}}
                                 type={"submit"}
                                 variant="contained"
                                 disabled={loading}
@@ -66,10 +66,10 @@ const AddComment = ({user, comment, onSubmit, loading, addComment, handleCancel}
                                 {addComment ? 'Add' : 'Save'}
                             </Button>
                         </div>
-                    </Form>
-                }
-            </Formik>
-        </Card>
+                    </div>
+                </Form>
+            }
+        </Formik>
     )
 }
 

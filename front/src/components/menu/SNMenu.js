@@ -2,10 +2,10 @@ import React from "react";
 import {MenuItem, Menu} from "@mui/material";
 import PropTypes from "prop-types";
 
-const SNMenu = ({menuItems, anchorEl, onClose}) => {
+const SNMenu = ({id, menuItems, anchorEl, onClose}) => {
     return (
         <Menu
-            id="menu-article"
+            id={id}
             anchorEl={anchorEl}
             anchorOrigin={{
                 vertical: 'top',
@@ -29,6 +29,7 @@ const SNMenu = ({menuItems, anchorEl, onClose}) => {
 }
 
 SNMenu.propTypes = {
+    id: PropTypes.string,
     menuItems: PropTypes.arrayOf(
         PropTypes.shape({
             body: PropTypes.node.isRequired,

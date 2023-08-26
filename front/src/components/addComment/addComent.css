@@ -1,0 +1,14 @@
+.avatar {
+    width: 60px;
+    height: 60px;
+}
+.avatar-container {
+    display: inline-block;
+    vertical-align: top;
+}
+.comment-field-container {
+    width: calc(100% - 70px - 10px);
+}
+.reply-to-text {
+    font-style: italic;
+}

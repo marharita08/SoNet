@@ -79,7 +79,7 @@ const Header = ({handleClickOpen, user, authenticated, logout, isAdmin}) => {
                             </span>
                             <span className={'username'}>{user.name}</span>
                         </button>
-                        <SNMenu menuItems={menuItems} anchorEl={anchorEl} onClose={handleMenuClose}/>
+                        <SNMenu id={"menu-header"} menuItems={menuItems} anchorEl={anchorEl} onClose={handleMenuClose}/>
                     </div>
                 }
             </header>
