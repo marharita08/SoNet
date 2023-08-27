@@ -1,5 +1,5 @@
 import React from "react";
-import {Avatar, Button, CircularProgress} from "@mui/material";
+import {Avatar, Button, CircularProgress, Divider} from "@mui/material";
 import * as Yup from "yup";
 import {Formik, Form, Field} from "formik";
 import PropTypes from "prop-types";
@@ -14,62 +14,66 @@ const AddComment = ({user, comment, onSubmit, loading, addComment, handleCancel}
     });
 
     return (
-        <Formik
-            enableReinitialize
-            initialValues={comment}
-            onSubmit={onSubmit}
-            validationSchema={schema}
-        >
-            {({handleSubmit}) =>
-                <Form onSubmit={handleSubmit}>
-                    <div className={'avatar-container'} >
-                        <Avatar
-                            src={user.avatar}
-                            className={'margin avatar'}
-                        />
-                    </div>
-                    <div className={'inline comment-field-container'}>
-                        {
-                            comment.to &&
-                            <div className={'margin'}>
-                                Reply to: {comment.to}
-                                <div className={"reply-to-text"}>
-                                    {comment.parent_text}
-                                </div>
-                            </div>
-                        }
-                        <div className={"margin"}>
-                            <Field
-                                label={"Comment"}
-                                type={"text"}
-                                name={"text"}
-                                component = {SNTextarea}
+        <>
+            <Divider/>
+            <Formik
+                enableReinitialize
+                initialValues={comment}
+                onSubmit={onSubmit}
+                validationSchema={schema}
+            >
+                {({handleSubmit}) =>
+                    <Form onSubmit={handleSubmit}>
+                        <div className={'avatar-container'} >
+                            <Avatar
+                                src={user.avatar}
+                                style={{width: '60px', height: '60px'}}
+                                className={'margin'}
                             />
                         </div>
-                        {
-                            (!addComment || comment.level !== 1) &&
-                            <div className={"inline margin"}>
-                                <Button variant={'outlined'} onClick={handleCancel}>Cancel</Button>
+                        <div className={'inline comment-field-container'}>
+                            {
+                                comment.to &&
+                                <div className={'margin'}>
+                                    Reply to: {comment.to}
+                                    <div className={"reply-to-text"}>
+                                        {comment.parent_text}
+                                    </div>
+                                </div>
+                            }
+                            <div className={"margin"}>
+                                <Field
+                                    label={"Comment"}
+                                    type={"text"}
+                                    name={"text"}
+                                    component = {SNTextarea}
+                                />
                             </div>
-                        }
-                        <div className={"inline margin"}>
-                            <Button
-                                type={"submit"}
-                                variant="contained"
-                                disabled={loading}
-                                startIcon={
-                                    loading ? (
-                                        <CircularProgress color="inherit" size={25}/>
-                                    ) : <SaveIcon/>
-                                }
-                            >
-                                {addComment ? 'Add' : 'Save'}
-                            </Button>
+                            {
+                                (!addComment || comment.level !== 1) &&
+                                <div className={"inline margin"}>
+                                    <Button variant={'outlined'} onClick={handleCancel}>Cancel</Button>
+                                </div>
+                            }
+                            <div className={"inline margin"}>
+                                <Button
+                                    type={"submit"}
+                                    variant="contained"
+                                    disabled={loading}
+                                    startIcon={
+                                        loading ? (
+                                            <CircularProgress color="inherit" size={25}/>
+                                        ) : <SaveIcon/>
+                                    }
+                                >
+                                    {addComment ? 'Add' : 'Save'}
+                                </Button>
+                            </div>
                         </div>
-                    </div>
-                </Form>
-            }
-        </Formik>
+                    </Form>
+                }
+            </Formik>
+        </>
     )
 }
 

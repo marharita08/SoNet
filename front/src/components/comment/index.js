@@ -1,13 +1,12 @@
 import {Link} from "react-router-dom";
 import React, {useState} from "react";
 import moment from "moment";
-import {Avatar, CardContent, CardHeader, IconButton, Typography} from "@mui/material";
+import {Avatar, CardContent, CardHeader, Divider, IconButton, Typography} from "@mui/material";
 import PropTypes from "prop-types";
 import ReplyIcon from '@mui/icons-material/Reply';
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-
 import './comment.css';
 import SNMenu from "../menu/SNMenu";
 import MenuItemBody from "../menu/MenuItemBody";
@@ -56,65 +55,64 @@ const Comment = ({
     ]
 
     return (
-        <div style={{paddingLeft: (comment.level - 1) * 30}}>
-            <CardHeader
-                avatar={
-                    <Link to={`/profile/${comment.user_id}`}>
-                        <Avatar
-                            alt={comment.name}
-                            src={comment.avatar}
-                            sx={{width: 30, height: 30}}
-                        />
-                    </Link>
-                }
-                action={
-                    <div>
-                        <IconButton>
-                            <ReplyIcon onClick={handleReply}/>
-                        </IconButton>
-                        {
-                            (isCurrentUser || isAdmin) &&
-                            <IconButton aria-label="settings">
-                                <MoreVertIcon onClick={handleMenu}/>
+        <>
+            <Divider/>
+            <div style={{paddingLeft: (comment.level - 1) * 30}}>
+                <CardHeader
+                    avatar={
+                        <Link to={`/profile/${comment.user_id}`}>
+                            <Avatar
+                                alt={comment.name}
+                                src={comment.avatar}
+                            />
+                        </Link>
+                    }
+                    action={
+                        <div>
+                            <IconButton>
+                                <ReplyIcon onClick={handleReply}/>
                             </IconButton>
-                        }
-                    </div>
-                }
-                title={
-                    <div>
-                        <div className="name inline">
-                            <Link to={`/profile/${comment.user_id}`} style={{textDecoration: "none"}}>
-                                {comment.name}
-                            </Link>
+                            {
+                                (isCurrentUser || isAdmin) &&
+                                <IconButton aria-label="settings">
+                                    <MoreVertIcon onClick={handleMenu}/>
+                                </IconButton>
+                            }
                         </div>
-                        {
-                            comment.level !== 1 &&
-                            <div className={"inline"} style={{marginLeft: "5px"}}>
-                                to:
-                                <Link
-                                    to={`/profile/${comment.p_user_id}`}
-                                    style={{marginLeft: "5px"}}
-                                >
-                                    {comment.to}
+                    }
+                    title={
+                        <div>
+                            <span className="name">
+                                <Link to={`/profile/${comment.user_id}`}>
+                                    {comment.name}
                                 </Link>
-                            </div>
-                        }
-                    </div>
-                }
-                subheader={
-                    <Typography sx={{fontSize: "10px", color: "gray"}}>
+                            </span>
+                            {
+                                comment.level !== 1 &&
+                                <span className={"margin_left"}>
+                                    to:
+                                    <Link to={`/profile/${comment.p_user_id}`} className={"margin_left"}>
+                                        {comment.to}
+                                    </Link>
+                                </span>
+                            }
+                        </div>
+                    }
+                    subheader={
+                        <Typography style={{fontSize: '12px', color: 'gray'}}>
                             {moment(comment.commented_at).fromNow()}
+                        </Typography>
+                    }
+                    style={{padding: "10px", paddingBottom: '5px'}}
+                />
+                <SNMenu id={"menu-comment"} menuItems={menuItems} anchorEl={anchorEl} onClose={handleClose}/>
+                <CardContent style={{padding: "10px", paddingTop: '5px'}}>
+                    <Typography variant="body2">
+                        {comment.text}
                     </Typography>
-                }
-                sx={{padding: "10px", paddingBottom: "5px"}}
-            />
-            <SNMenu id={"menu-comment"} menuItems={menuItems} anchorEl={anchorEl} onClose={handleClose}/>
-            <CardContent sx={{padding: "10px", paddingTop: "5px"}}>
-                <Typography variant="body2">
-                    {comment.text}
-                </Typography>
-            </CardContent>
-        </div>
+                </CardContent>
+            </div>
+        </>
     );
 }
 

@@ -34,7 +34,9 @@ const ArticlesContainer = ({setArticleContext, param, handleError, articles, set
     });
 
     const {isFetching: countFetching} = useQuery(`articles amount ${param} ${user_id}`, () => getCountFunc, {
-        onSuccess: (data) => setAmount(data?.data.count)
+        onSuccess: (data) => setAmount(data?.data.count),
+        refetchInterval: false,
+        refetchOnWindowFocus: false
     });
 
     const handleLoadMore = () => {

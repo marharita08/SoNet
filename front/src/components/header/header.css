@@ -61,6 +61,11 @@ header button:hover {
 .home-btn {
     display: none;
 }
+
+.header-avatar {
+    margin: 0 5px;
+}
+
 @media screen and (min-width: 992px) {
     .btn-text {
         display: contents;

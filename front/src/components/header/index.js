@@ -40,50 +40,45 @@ const Header = ({handleClickOpen, user, authenticated, logout, isAdmin}) => {
     ]
 
     return (
-        <>
-            <header>
-                <div className={"header-logo"}>
+        <header>
+            <div className={"header-logo"}>
+                <Link to={"/"}>
+                    <img src={'/logo.png'} alt={"Social Network"} className={"logo"} onClick={'update'}/>
+                </Link>
+            </div>
+            {
+                authenticated &&
+                <div className={"header-btns"}>
                     <Link to={"/"}>
-                        <img src={'/logo.png'} alt={"Social Network"} className={"logo"} onClick={'update'}/>
+                        <HeaderButton text={"Home"} icon={<HomeIcon fontSize={"small"}/>} className={"home-btn"}/>
                     </Link>
-                </div>
-                {
-                    authenticated &&
-                    <div className={"header-btns"}>
-                        <Link to={"/"}>
-                            <HeaderButton text={"Home"} icon={<HomeIcon fontSize={"small"}/>} className={"home-btn"}/>
+                    {
+                        isAdmin &&
+                        <Link to={"/all-articles"}>
+                            <HeaderButton text={"All articles"} icon={<DescriptionIcon fontSize={"small"}/>}/>
                         </Link>
-                        {
-                            isAdmin &&
-                            <Link to={"/all-articles"}>
-                                <HeaderButton text={"All articles"} icon={<DescriptionIcon fontSize={"small"}/>}/>
-                            </Link>
-                        }
-                        <HeaderButton text={"Add article"}
-                                      icon={<NoteAddIcon fontSize={"small"}/>}
-                                      onClick={handleClickOpen}/>
-                    </div>
-                }
-                {
-                    authenticated &&
-                    <div className={"curr-user"}>
-                        <button onClick={handleMenu}>
-                            <span className={"inline"}>
-                                <Avatar
-                                    src={user.avatar}
-                                    sx={{ width: 40,
-                                        height: 40,
-                                        margin: '0 5px'
-                                    }}
-                                />
-                            </span>
-                            <span className={'username'}>{user.name}</span>
-                        </button>
-                        <SNMenu id={"menu-header"} menuItems={menuItems} anchorEl={anchorEl} onClose={handleMenuClose}/>
-                    </div>
-                }
-            </header>
-        </>
+                    }
+                    <HeaderButton text={"Add article"}
+                                  icon={<NoteAddIcon fontSize={"small"}/>}
+                                  onClick={handleClickOpen}/>
+                </div>
+            }
+            {
+                authenticated &&
+                <div className={"curr-user"}>
+                    <button onClick={handleMenu}>
+                        <span className={"inline"}>
+                            <Avatar
+                                src={user.avatar}
+                                className={"header-avatar"}
+                            />
+                        </span>
+                        <span className={'username'}>{user.name}</span>
+                    </button>
+                    <SNMenu id={"menu-header"} menuItems={menuItems} anchorEl={anchorEl} onClose={handleMenuClose}/>
+                </div>
+            }
+        </header>
     );
 }
 

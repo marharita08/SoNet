@@ -15,7 +15,9 @@ const ArticleOuterContainer = ({setArticleContext, handleError, articles, setArt
     const { user:{user_id} } = useContext(authContext);
     const {isFetching:articleFetching} =
         useQuery(`article ${id}-${user_id}`, () => getArticle(id), {
-            onSuccess: (data) => setArticles(data?.data)
+            onSuccess: (data) => setArticles(data?.data),
+            refetchInterval: false,
+            refetchOnWindowFocus: false
         });
 
     return (

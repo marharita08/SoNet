@@ -25,19 +25,30 @@ const ArticleContainer = ({setArticleContext, article, handleError, articles, se
 
     const { user:{user_id, avatar} , isAdmin } = useContext(authContext);
     const {isFetching:commentsFetching } = useQuery(`comments ${id}`,
-        () => getComments(id), { onSuccess: (data) => setCommentsArray(data?.data)
+        () => getComments(id), {
+        onSuccess: (data) => setCommentsArray(data?.data),
+            refetchInterval: false,
+            refetchOnWindowFocus: false
     });
     const {isFetching:likesFetching } = useQuery(`users ${id}`, () => getLikes(id), {
-        onSuccess: (data) => setLikedUsers(data?.data)
+        onSuccess: (data) => setLikedUsers(data?.data),
+        refetchInterval: false,
+        refetchOnWindowFocus: false
     });
     const {isFetching:isLikedFetching } = useQuery(`is liked ${id}-${user_id}`, () => getIsLiked(id), {
-        onSuccess: (data) => setIsLiked(data?.data)
+        onSuccess: (data) => setIsLiked(data?.data),
+        refetchInterval: false,
+        refetchOnWindowFocus: false
     });
     const {isFetching:commentsAmountFetching } = useQuery(`comments amount ${id}`, () => getCommentsAmount(id), {
-        onSuccess: (data) => setCommentsAmount(parseInt(data?.data.count, 10))
+        onSuccess: (data) => setCommentsAmount(parseInt(data?.data.count, 10)),
+        refetchInterval: false,
+        refetchOnWindowFocus: false
     });
     const {isFetching:likesAmountFetching } = useQuery(`likes amount ${id}`, () => getLikesAmount(id), {
-        onSuccess: (data) => setLikes(parseInt(data?.data.count, 10))
+        onSuccess: (data) => setLikes(parseInt(data?.data.count, 10)),
+        refetchInterval: false,
+        refetchOnWindowFocus: false
     })
 
     const initComment = {

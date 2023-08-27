@@ -1,12 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-    Avatar, AvatarGroup,
+    Avatar,
     CardActions,
     CardContent,
     CardHeader, CardMedia, CircularProgress, Divider,
     IconButton,
-    Popover,
     styled,
     Typography
 } from "@mui/material";
@@ -25,6 +24,7 @@ import env from "../../config/envConfig";
 import './article.css';
 import MenuItemBody from "../menu/MenuItemBody";
 import SNMenu from "../menu/SNMenu";
+import AvatarPopover from "./AvatarPopover";
 
 const ExpandMore = styled((props) => {
     const { expand, ...other } = props;
@@ -100,10 +100,10 @@ const Article = ({
         <>
             <CardHeader
                 avatar={
-                    <Link to={`/profile/${article.user_id}`} style={{textDecoration:"none"}}>
+                    <Link to={`/profile/${article.user_id}`}>
                         <Avatar
                             src={article.avatar}
-                            sx={{ width: 60, height: 60 }}
+                            style={{width: '60px', height: '60px'}}
                         />
                     </Link>
                 }
@@ -114,8 +114,8 @@ const Article = ({
                     </IconButton>
                 }
                 title={
-                    <Typography sx={{"font-weight": "bold"}}>
-                        <Link to={`/profile/${article.user_id}`} style={{textDecoration:"none"}}>
+                    <Typography style={{fontWeight: 'bold'}}>
+                        <Link to={`/profile/${article.user_id}`}>
                             {article.name}
                         </Link>
                     </Typography>
@@ -123,7 +123,7 @@ const Article = ({
                 subheader={article.created_at}
             />
             <SNMenu id={"menu-article"} menuItems={menuItems} anchorEl={menuAnchorEl} onClose={handleClose}/>
-            <Link to={`/article/${article.article_id}`} style={{textDecoration:"none"}}>
+            <Link to={`/article/${article.article_id}`}>
                 {
                     article.image!==undefined && article.image &&
                     <CardMedia
@@ -174,34 +174,7 @@ const Article = ({
                     }
                     {
                         users?.length !== 0 &&
-                        <Popover
-                            id="mouse-over-popover"
-                            sx={{
-                                pointerEvents: 'none',
-                            }}
-                            open={Boolean(popoverAnchorEl)}
-                            anchorEl={popoverAnchorEl}
-                            anchorOrigin={{
-                                vertical: 'top',
-                                horizontal: 'center',
-                            }}
-                            transformOrigin={{
-                                vertical: 'bottom',
-                                horizontal: 'center',
-                            }}
-                            onClose={handlePopoverClose}
-                            disableRestoreFocus
-                        >
-                            <AvatarGroup max={4} className={'margin'}>
-                                {users?.map((user) =>
-                                    <Avatar
-                                        key={user.user_id}
-                                        src={user.avatar}
-                                        sx={{width: 30, height: 30}}
-                                    />
-                                )}
-                            </AvatarGroup>
-                        </Popover>
+                        <AvatarPopover anchorEl={popoverAnchorEl} onClose={handlePopoverClose} users={users}/>
                     }
                 </CardActions>
             </Link>
