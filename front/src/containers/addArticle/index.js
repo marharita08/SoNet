@@ -11,7 +11,11 @@ import articleContext from "../../context/articleContext";
 import { useNavigate, useLocation } from "react-router-dom";
 
 const AddArticleContainer = ({setArticleContext, articles, setArticles}) => {
-    const { data, isFetching: visibilitiesFetching } = useQuery('visibilities', () => getArticleVisibilities());
+    const { data, isFetching: visibilitiesFetching } = useQuery('visibilities',
+        () => getArticleVisibilities(), {
+            refetchInterval: false,
+            refetchOnWindowFocus: false
+        });
     const articleState = useContext(articleContext);
     const {article, addArticle} = articleState;
     const visibilities = data?.data;

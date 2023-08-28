@@ -20,14 +20,6 @@ a {
   text-decoration: none;
 }
 
-.left {
-  float: left;
-}
-
-.right {
-  float: right;
-}
-
 .closebtn {
   margin-left: 15px;
   color: black;
@@ -39,18 +31,6 @@ a {
   transition: 0.3s;
 }
 
-.outer {
-  text-align: center;
-  width: 100%;
-  display: inline-block;
-  margin-top: 5px;
-}
-.inner {
-  display: inline-block;
-  text-align: left;
-  width: 40%;
-}
-
 .article-card {
   margin: 10px auto 0 auto;
   width: 100%
@@ -58,47 +38,6 @@ a {
 
 .search:hover {
   background-color: rgba(0, 0, 0, 0.04);
-}
-
-.login-btns {
-  width: 220px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 10px auto;
-  height: 50px;
-  padding: 5px 20px;
-  cursor: pointer;
-}
-
-.facebook-login {
-  background-color: #395697;
-  color: white;
-  border-color: #395697;
-}
-
-.facebook-login:hover {
-  background-color: #003366;
-  border-color: #003366;
-}
-.google-login {
-  background-color: white;
-  color: black;
-  border-color: #E8E8E8;
-}
-.google-login:hover {
-  background-color: #f2f2f2;
-}
-
-.auth-card {
-  width: 95%;
-  text-align: center;
-  margin: 10px auto;
-}
-
-.auth-field {
-  margin: 10px auto;
-  width: 90%;
 }
 
 .icon {
@@ -110,12 +49,17 @@ a {
   align-items: flex-end;
 }
 
+.heading {
+  text-align: center;
+}
+
+.btn-text {
+  display: none;
+}
+
 @media screen and (min-width: 600px) {
-  .auth-card {
-    width: 500px;
-  }
-  .auth-field {
-    width: 320px;
+  .btn-text {
+    display: contents;
   }
   .article-card {
     width: 500px;

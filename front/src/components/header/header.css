@@ -55,7 +55,7 @@ header button:hover {
     padding: 5px 10px;
 }
 
-.btn-text {
+.header-btn-text {
     display: none;
 }
 .home-btn {
@@ -67,7 +67,7 @@ header button:hover {
 }
 
 @media screen and (min-width: 992px) {
-    .btn-text {
+    .header-btn-text {
         display: contents;
     }
 }

@@ -5,7 +5,7 @@ const HeaderButton = ({icon, text, className, onClick}) => {
     return (
         <button className={className} onClick={onClick}>
             <div>{icon}</div>
-            <div className={"btn-text"}>{text}</div>
+            <div className={"header-btn-text"}>{text}</div>
         </button>
     )
 }
