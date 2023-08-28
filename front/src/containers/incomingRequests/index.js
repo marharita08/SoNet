@@ -11,24 +11,24 @@ const IncomingRequests = ({id, accept, decline, incomingRequests, setIncomingReq
 
     const {isFetching: incomingRequestsFetching} =
         useQuery('incoming-requests', () => getIncomingRequests(id), {
-            onSuccess: (data) => setIncomingRequests(data?.data)
+            onSuccess: (data) => setIncomingRequests(data?.data),
+            refetchInterval: false,
+            refetchOnWindowFocus: false
         });
 
     return (
-        <>
+        <div className={"margin"}>
             {
                 (incomingRequestsFetching || incomingRequests?.length !== 0) &&
                 <h2>Incoming Requests</h2>
             }
             <Loading isLoading={incomingRequestsFetching} align={'left'}/>
-            <div>
-                {incomingRequests?.map((user)=>
-                    <ErrorBoundary key={user.user_id}>
-                        <User user={user} menu={true} accept={accept} decline={decline}/>
-                    </ErrorBoundary>
-                )}
-            </div>
-        </>
+            {incomingRequests?.map((user) =>
+                <ErrorBoundary key={user.user_id}>
+                    <User user={user} menu={true} accept={accept} decline={decline}/>
+                </ErrorBoundary>
+            )}
+        </div>
     );
 }
 

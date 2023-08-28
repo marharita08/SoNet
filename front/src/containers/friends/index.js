@@ -10,24 +10,24 @@ import Loading from "../../components/loading";
 const Friends = ({id, deleteRequest, friends, setFriends}) => {
 
     const {isFetching: friendsFetching} = useQuery('friends', () => getFriends(id), {
-        onSuccess: (data) => setFriends(data?.data)
+        onSuccess: (data) => setFriends(data?.data),
+        refetchInterval: false,
+        refetchOnWindowFocus: false
     });
 
     return (
-        <>
+        <div className={"margin"}>
             {
                 (friendsFetching || friends?.length !== 0) &&
                 <h2 className={'inline'}>Friends</h2>
             }
             <Loading isLoading={friendsFetching} align={'left'}/>
-            <div>
-                {friends?.map((user)=>
-                    <ErrorBoundary key={user.user_id}>
-                        <User user={user} deleteRequest={deleteRequest} menu={false}/>
-                    </ErrorBoundary>
-                )}
-            </div>
-        </>
+            {friends?.map((user) =>
+                <ErrorBoundary key={user.user_id}>
+                    <User user={user} deleteRequest={deleteRequest} menu={false}/>
+                </ErrorBoundary>
+            )}
+        </div>
     );
 }
 

@@ -11,24 +11,24 @@ const OutgoingRequests = ({id, deleteRequest, outgoingRequests, setOutgoingReque
 
     const { isFetching: outgoingRequestsFetching } =
         useQuery('outgoing-requests', () => getOutgoingRequests(id), {
-            onSuccess: (data) => setOutgoingRequests(data?.data)
+            onSuccess: (data) => setOutgoingRequests(data?.data),
+            refetchInterval: false,
+            refetchOnWindowFocus: false
         });
 
     return (
-        <>
+        <div className={"margin"}>
             {
                 (outgoingRequestsFetching || outgoingRequests?.length !== 0) &&
                 <h2>Outgoing Requests</h2>
             }
             <Loading isLoading={outgoingRequestsFetching} align={'left'}/>
-            <div>
-                {outgoingRequests?.map((user)=>
-                    <ErrorBoundary key={user.user_id}>
-                        <User user={user} deleteRequest={deleteRequest} menu={false}/>
-                    </ErrorBoundary>
-                )}
-            </div>
-        </>
+            {outgoingRequests?.map((user) =>
+                <ErrorBoundary key={user.user_id}>
+                    <User user={user} deleteRequest={deleteRequest} menu={false}/>
+                </ErrorBoundary>
+            )}
+        </div>
     );
 }
 

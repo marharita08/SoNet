@@ -10,9 +10,10 @@ const SearchUsersContainer = ({addToFriends, accept, deleteFromFriends, usersFor
     const {user:{user_id}} = useContext(authContext);
 
     const {isFetching} = useQuery('users', () => getForSearch(user_id), {
-        onSuccess: (data) => setUsersForSearch(data?.data)
+        onSuccess: (data) => setUsersForSearch(data?.data),
+        refetchInterval: false,
+        refetchOnWindowFocus: false
     });
-
 
     const handleAddToFriends = (id) => {
         addToFriends(user_id, id);

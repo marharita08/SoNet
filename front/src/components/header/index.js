@@ -43,7 +43,7 @@ const Header = ({handleClickOpen, user, authenticated, logout, isAdmin}) => {
         <header>
             <div className={"header-logo"}>
                 <Link to={"/"}>
-                    <img src={'/logo.png'} alt={"Social Network"} className={"logo"} onClick={'update'}/>
+                    <img src={'/logo.png'} alt={"Social Network"} className={"logo"}/>
                 </Link>
             </div>
             {

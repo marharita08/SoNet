@@ -30,14 +30,73 @@ const Profile = ({
                 onSubmit={null}
             >
                 <Form>
-                    <div className={"inline big_margin"}>
+                    <div className={"user_img"} >
+                        <Avatar
+                            className={"big_margin"}
+                            src={user?.avatar}
+                            sx={{ width: 110, height: 110 }}
+                        />
+                        {
+                            !isCurrentUser &&
+                            (requestFetching ? <CircularProgress color="inherit" size={25}/> :
+                                <div>
+                                    {
+                                        currentRequest?.is_not_friends &&
+                                        <Button
+                                            size={'small'}
+                                            onClick={handleAddToFriends}
+                                            disabled={isLoading}
+                                            startIcon={
+                                                isLoading ? (
+                                                    <CircularProgress color="inherit" size={25}/>
+                                                ) : <PersonAddIcon/>
+                                            }
+                                        >
+                                            Add to friends
+                                        </Button>
+                                    }
+                                    {
+                                        currentRequest?.is_incoming_request &&
+                                        <Button
+                                            size={'small'}
+                                            onClick={handleAccept}
+                                            disabled={isLoading}
+                                            startIcon={
+                                                isLoading ? (
+                                                    <CircularProgress color="inherit" size={25}/>
+                                                ) : <PersonAddIcon/>
+                                            }
+                                        >
+                                            Accept request
+                                        </Button>
+                                    }
+                                    {
+                                        (currentRequest?.is_friends || currentRequest?.is_outgoing_request) &&
+                                        <Button
+                                            size={'small'}
+                                            onClick={handleDeleteFromFriends}
+                                            disabled={isLoading}
+                                            startIcon={
+                                                isLoading ? (
+                                                    <CircularProgress color="inherit" size={25}/>
+                                                ) : <PersonRemoveIcon/>
+                                            }
+                                        >
+                                            {currentRequest?.is_friends && "Delete from friends"}
+                                            {currentRequest?.is_outgoing_request && "Delete request"}
+                                        </Button>
+                                    }
+                                </div>)
+                        }
+                    </div>
+                    <div className={"fields_container"}>
                         <div className={"fields_margin"}>
                             <Field
                                 component={TextField}
                                 type={"text"}
                                 name={"name"}
                                 label={"Name"}
-                                className={"inline fields_width fields_height"}
+                                className={"fields_width"}
                                 disabled
                             />
                         </div>
@@ -51,7 +110,7 @@ const Profile = ({
                                     name={"email"}
                                     disabled
                                     label={"Email"}
-                                    className={"inline fields_width fields_height"}
+                                    className={"fields_width"}
                                 />
                                 {
                                     (isAdmin || isCurrentUser) &&
@@ -60,7 +119,7 @@ const Profile = ({
                                         disabled
                                         name="email_visibility.label"
                                         label="Available to"
-                                        className={"inline visibility fields_height"}
+                                        className={"visibility"}
                                     />
                                 }
                             </div>
@@ -70,13 +129,13 @@ const Profile = ({
                             (isAdmin || isCurrentUser || user?.phone_visibility.label === "All" ||
                                 currentRequest?.is_friends && user?.phone_visibility.label === "Friends") &&
                             <div className={"fields_margin"}>
-                                <div>
+
                                     <Field
                                         component={TextField}
                                         name={"phone"}
                                         label={"Phone"}
                                         disabled
-                                        className={"inline fields_width fields_height"}
+                                        className={"fields_width"}
                                     />
                                     {
                                         (isAdmin || isCurrentUser) &&
@@ -85,10 +144,10 @@ const Profile = ({
                                             name="phone_visibility.label"
                                             label={"Available to"}
                                             disabled
-                                            className={"inline visibility fields_height"}
+                                            className={"visibility"}
                                         />
                                     }
-                                </div>
+
                             </div>
                         }
                         {
@@ -97,13 +156,12 @@ const Profile = ({
                                 currentRequest?.is_friends && user?.university_visibility.label === "Friends") &&
                             <div className={"fields_margin"}>
 
-                                <div>
                                     <Field
                                         component={TextField}
                                         disabled
                                         name="university.label"
                                         label="University"
-                                        className={"inline fields_width fields_height"}
+                                        className={"fields_width"}
                                     />
                                     {
                                         (isAdmin || isCurrentUser) &&
@@ -112,10 +170,9 @@ const Profile = ({
                                             disabled
                                             name="university_visibility.label"
                                             label="Available to"
-                                            className={"inline visibility fields_height"}
+                                            className={"visibility"}
                                         />
                                     }
-                                </div>
                             </div>
                         }
                         {
@@ -129,65 +186,6 @@ const Profile = ({
                                     Edit
                                 </Button>
                             </div>
-                        }
-                    </div>
-                    <div className={"user_img"} >
-                        <Avatar
-                            className={"big_margin"}
-                            src={user?.avatar}
-                            sx={{ width: 110, height: 110 }}
-                        />
-                        {
-                            !isCurrentUser &&
-                            (requestFetching ? <CircularProgress color="inherit" size={25}/> :
-                            <div>
-                                {
-                                    currentRequest?.is_not_friends &&
-                                    <Button
-                                        size={'small'}
-                                        onClick={handleAddToFriends}
-                                        disabled={isLoading}
-                                        startIcon={
-                                            isLoading ? (
-                                                <CircularProgress color="inherit" size={25}/>
-                                            ) : <PersonAddIcon/>
-                                        }
-                                    >
-                                        Add to friends
-                                    </Button>
-                                }
-                                {
-                                    currentRequest?.is_incoming_request &&
-                                    <Button
-                                        size={'small'}
-                                        onClick={handleAccept}
-                                        disabled={isLoading}
-                                        startIcon={
-                                            isLoading ? (
-                                                <CircularProgress color="inherit" size={25}/>
-                                            ) : <PersonAddIcon/>
-                                        }
-                                    >
-                                        Accept request
-                                    </Button>
-                                }
-                                {
-                                    (currentRequest?.is_friends || currentRequest?.is_outgoing_request) &&
-                                    <Button
-                                        size={'small'}
-                                        onClick={handleDeleteFromFriends}
-                                        disabled={isLoading}
-                                        startIcon={
-                                            isLoading ? (
-                                                <CircularProgress color="inherit" size={25}/>
-                                            ) : <PersonRemoveIcon/>
-                                        }
-                                    >
-                                        {currentRequest?.is_friends && "Delete from friends"}
-                                        {currentRequest?.is_outgoing_request && "Delete request"}
-                                    </Button>
-                                }
-                            </div>)
                         }
                     </div>
                 </Form>

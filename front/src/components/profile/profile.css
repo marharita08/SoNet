@@ -1,5 +1,5 @@
 .fields_width {
-    width: 250px;
+    width: 62%;
 }
 
 .fields_height {
@@ -15,7 +15,13 @@
 }
 
 .visibility {
-    width: 150px;
+    width: 33%;
+}
+
+.fields_container {
+    width: 100%;
+    margin: 0;
+    display: inline-block;
 }
 
 .user_img {
@@ -28,6 +34,12 @@
 }
 
 .fields_margin {
-    margin: 10px;
-    margin-bottom: 30px;
+    margin: 10px 10px 30px 10px;
+}
+
+@media screen and (min-width: 600px) {
+    .fields_container {
+        width: 550px;
+        margin: 20px;
+    }
 }
