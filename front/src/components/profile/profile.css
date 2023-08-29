@@ -1,10 +1,7 @@
 .fields_width {
-    width: 62%;
+    width: 60%;
 }
 
-.fields_height {
-    height: 56px;
-}
 
 .save {
     display: block;
@@ -15,7 +12,7 @@
 }
 
 .visibility {
-    width: 33%;
+    width: 30%;
 }
 
 .fields_container {

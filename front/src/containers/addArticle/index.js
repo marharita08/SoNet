@@ -130,7 +130,7 @@ const AddArticleContainer = ({setArticleContext, articles, setArticles}) => {
                 visibilities={visibilities}
                 onFormSubmit={onFormSubmit}
                 handleClose={handleClose}
-                loading={updateLoading||insertLoading}
+                isLoading={updateLoading||insertLoading}
                 article={article}
                 addArticle={addArticle}
                 image={image}

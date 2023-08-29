@@ -6,7 +6,7 @@ import Article from "../../containers/article";
 import ErrorBoundary from "../../components/ErrorBoundary";
 import authContext from "../../context/authContext";
 import {getAllNews, getNews, getCountOfNews, getCountOfAllNews} from "../../api/articlesCrud";
-import LoadMoreBtn from "../../components/loadMoreBtn/loadMoreBtn";
+import LoadMoreBtn from "../../components/buttons/LoadMoreBtn";
 import Loading from "../../components/loading";
 
 

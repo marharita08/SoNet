@@ -13,16 +13,16 @@ import * as Yup from "yup";
 import FormikAutocomplete from "../FormikAutocomplete";
 import Cropper from "react-cropper";
 import SaveIcon from '@mui/icons-material/Save';
-import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 import CloseIcon from '@mui/icons-material/Close';
-import ContentCutIcon from "@mui/icons-material/ContentCut";
-import DeleteIcon from "@mui/icons-material/Delete";
 
 import env from "../../config/envConfig";
 import {AddArticlePropTypes} from "./addArticlePropTypes";
 import './addArticle.css';
 import AlertContainer from "../../containers/alert";
 import SNTextarea from "../fields/SNTextarea";
+import CropImageBtn from "../buttons/CropImageBtn";
+import DeleteImageBtn from "../buttons/DeleteImageBtn";
+import AddImageBtn from "../buttons/AddImageBtn";
 
 const AddArticle = ({
     visibilities,
@@ -30,7 +30,7 @@ const AddArticle = ({
     addArticle,
     handleClose,
     onFormSubmit,
-    loading,
+    isLoading,
     handleChange,
     image,
     setCropper,
@@ -70,69 +70,34 @@ const AddArticle = ({
                         </DialogTitle>
                         <AlertContainer alertMessage={message}/>
                         <DialogContent>
-                            {((image || (article?.image!==undefined&&article?.image)) && !croppedImage)&& (
-                                <>
-                                    <div className={"margin"}>
-                                        <Cropper
-                                            src={image || `${env.apiUrl}${article?.image}`}
-                                            zoomable={false}
-                                            scalable={false}
-                                            onInitialized={instance => setCropper(instance)}
-                                            rotatable={false}
-                                            viewMode={1}
-                                            className={"fullWidth"}
-                                        />
-                                    </div>
-                                    <span className={"margin"}>
-                                        <Button
-                                            variant={"outlined"}
-                                            onClick={() => cropImage(setFieldValue)}
-                                            color={'success'}
-                                            startIcon={<ContentCutIcon/>}
-                                        >
-                                            <span className={"btn-text"}>Crop image</span>
-                                        </Button>
-                                    </span>
-                                </>
+                            {((image || (article?.image !== undefined && article?.image)) && !croppedImage) && (
+                                <div className={"margin"}>
+                                    <Cropper
+                                        src={image || `${env.apiUrl}${article?.image}`}
+                                        zoomable={false}
+                                        scalable={false}
+                                        onInitialized={instance => setCropper(instance)}
+                                        rotatable={false}
+                                        viewMode={1}
+                                        className={"full-width"}
+                                    />
+                                </div>
                             )}
                             {(croppedImage) &&
                                 <div className={"margin"}>
-                                    <img src={croppedImage} alt={"image"} className={"fullWidth"}/>
+                                    <img src={croppedImage} alt={"image"} className={"full-width"}/>
                                 </div>
                             }
-                            <span className={"margin"}>
-                                <label htmlFor="contained-button-file" className={"file"}>
-                                    <Button
-                                        variant="outlined"
-                                        component="span"
-                                        startIcon={<AddAPhotoIcon/>}
-                                    >
-                                        <span className={"btn-text"}>
-                                            {(image || croppedImage || (article?.image !== undefined && article?.image)) ?
-                                                "Change " : "Add "}
-                                            image
-                                        </span>
-                                        <input hidden
-                                               id="contained-button-file"
-                                               type="file"
-                                               name="avatar"
-                                               onChange={handleChange}
-                                        />
-                                    </Button>
-                                </label>
-                            </span>
-                            {(croppedImage || image || (article?.image !== undefined && article?.image)) &&
-                                <span className={"margin"}>
-                                    <Button
-                                        variant={"outlined"}
-                                        onClick={() => deleteImage(setFieldValue)}
-                                        color={'error'}
-                                        startIcon={<DeleteIcon/>}
-                                    >
-                                        <span className={"btn-text"}>Delete image</span>
-                                    </Button>
-                                </span>
-                            }
+                            <DialogActions style={{justifyContent: "center"}}>
+                                <AddImageBtn
+                                    onChange={handleChange}
+                                    isImage={(image || croppedImage || (article?.image !== undefined && article?.image))}
+                                />
+                                {((image || (article?.image !== undefined && article?.image)) && !croppedImage) &&
+                                    <CropImageBtn onClick={() => cropImage(setFieldValue)} />}
+                                {(croppedImage || image || (article?.image !== undefined && article?.image)) &&
+                                    <DeleteImageBtn onClick={() => deleteImage(setFieldValue)} />}
+                            </DialogActions>
                             <div className={"fields-margin"}>
                                 <Field label={"Article text"} name={"text"} type={"text"} component={SNTextarea} />
                             </div>
@@ -147,20 +112,16 @@ const AddArticle = ({
                                 }
                             </div>
                         </DialogContent>
-                        <DialogActions>
-                            <div className={"margin"}>
-                                <Button variant="outlined" onClick={handleClose}>Cancel</Button>
-                            </div>
-                            <div className={"margin"}>
-                                <Button
-                                    type={"submit"}
-                                    variant="contained"
-                                    disabled={loading}
-                                    startIcon={loading ? <CircularProgress color="inherit" size={25}/> : <SaveIcon/>}
-                                >
-                                    {addArticle ? "Add" : "Save"}
-                                </Button>
-                            </div>
+                        <DialogActions style={{justifyContent: "center"}}>
+                            <Button variant="outlined" onClick={handleClose}>Cancel</Button>
+                            <Button
+                                type={"submit"}
+                                variant="contained"
+                                disabled={isLoading}
+                                startIcon={isLoading ? <CircularProgress color="inherit" size={25}/> : <SaveIcon/>}
+                            >
+                                {addArticle ? "Add" : "Save"}
+                            </Button>
                         </DialogActions>
                     </Form>
                 }

@@ -86,7 +86,8 @@ const Profile = ({
                                             {currentRequest?.is_outgoing_request && "Delete request"}
                                         </Button>
                                     }
-                                </div>)
+                                </div>
+                            )
                         }
                     </div>
                     <div className={"fields_container"}>

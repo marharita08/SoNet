@@ -6,11 +6,12 @@ import React from "react";
 const LoadMoreBtn = ({handleLoadMore, loading}) => {
     return (
         <div align={'center'} className={'margin'}>
-            <Button onClick={handleLoadMore}
-                    startIcon={loading ? (
-                        <CircularProgress color="inherit" size={25}/>
-                    ) :<ExpandMoreIcon/>}
-                    variant={"outlined"}>
+            <Button
+                onClick={handleLoadMore}
+                startIcon={loading ? <CircularProgress color="inherit" size={25}/> : <ExpandMoreIcon/>}
+                variant={"outlined"}
+                disabled={loading}
+            >
                 Load more
             </Button>
         </div>
