@@ -1,14 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-    Avatar, AvatarGroup,
-    Card,
+    Avatar,
     CardActions,
     CardContent,
     CardHeader, CardMedia, CircularProgress, Divider,
     IconButton,
-    Menu,
-    MenuItem, Popover,
     styled,
     Typography
 } from "@mui/material";
@@ -25,6 +22,9 @@ import {useState} from "react";
 
 import env from "../../config/envConfig";
 import './article.css';
+import MenuItemBody from "../menu/MenuItemBody";
+import SNMenu from "../menu/SNMenu";
+import AvatarPopover from "./AvatarPopover";
 
 const ExpandMore = styled((props) => {
     const { expand, ...other } = props;
@@ -85,14 +85,25 @@ const Article = ({
         handleDelete();
     }
 
+    const menuItems = [
+        {
+            body: <MenuItemBody text={"Edit"} icon={<EditIcon/>}/>,
+            onClick: editOnClick
+        },
+        {
+            body: <MenuItemBody text={"Delete"} icon={<DeleteIcon/>}/>,
+            onClick: deleteOnClick
+        }
+    ]
+
     return (
-        <Card sx={{ maxWidth: 1000}}>
+        <>
             <CardHeader
                 avatar={
-                    <Link to={`/profile/${article.user_id}`} style={{textDecoration:"none"}}>
+                    <Link to={`/profile/${article.user_id}`}>
                         <Avatar
                             src={article.avatar}
-                            sx={{ width: 60, height: 60 }}
+                            style={{width: '60px', height: '60px'}}
                         />
                     </Link>
                 }
@@ -103,43 +114,16 @@ const Article = ({
                     </IconButton>
                 }
                 title={
-                    <Typography sx={{"font-weight": "bold"}}>
-                        <Link to={`/profile/${article.user_id}`} style={{textDecoration:"none"}}>
+                    <Typography style={{fontWeight: 'bold'}}>
+                        <Link to={`/profile/${article.user_id}`}>
                             {article.name}
                         </Link>
                     </Typography>
                 }
                 subheader={article.created_at}
             />
-            <Menu
-                id="menu-article"
-                anchorEl={menuAnchorEl}
-                anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'center',
-                }}
-                keepMounted
-                transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'center',
-                }}
-                open={Boolean(menuAnchorEl)}
-                onClose={handleClose}
-            >
-                <MenuItem onClick={editOnClick}>
-                    <EditIcon fontSize={"small"}/>
-                    <div className={"margin"}>
-                        Edit
-                    </div>
-                </MenuItem>
-                <MenuItem onClick={deleteOnClick}>
-                    <DeleteIcon fontSize={"small"}/>
-                    <div className={"margin"}>
-                        Delete
-                    </div>
-                </MenuItem>
-            </Menu>
-            <Link to={`/article/${article.article_id}`} style={{textDecoration:"none"}}>
+            <SNMenu id={"menu-article"} menuItems={menuItems} anchorEl={menuAnchorEl} onClose={handleClose}/>
+            <Link to={`/article/${article.article_id}`}>
                 {
                     article.image!==undefined && article.image &&
                     <CardMedia
@@ -190,37 +174,11 @@ const Article = ({
                     }
                     {
                         users?.length !== 0 &&
-                        <Popover
-                            id="mouse-over-popover"
-                            sx={{
-                                pointerEvents: 'none',
-                            }}
-                            open={Boolean(popoverAnchorEl)}
-                            anchorEl={popoverAnchorEl}
-                            anchorOrigin={{
-                                vertical: 'top',
-                                horizontal: 'center',
-                            }}
-                            transformOrigin={{
-                                vertical: 'bottom',
-                                horizontal: 'center',
-                            }}
-                            onClose={handlePopoverClose}
-                            disableRestoreFocus
-                        >
-                            <AvatarGroup max={4} className={'margin'}>
-                                {users?.map((user) =>
-                                    <Avatar
-                                        src={user.avatar}
-                                        sx={{width: 30, height: 30}}
-                                    />
-                                )}
-                            </AvatarGroup>
-                        </Popover>
+                        <AvatarPopover anchorEl={popoverAnchorEl} onClose={handlePopoverClose} users={users}/>
                     }
                 </CardActions>
             </Link>
-        </Card>
+        </>
     );
 }
 
@@ -241,9 +199,9 @@ Article.propTypes = {
     handleLikeClick: PropTypes.func.isRequired,
     isCurrentUser: PropTypes.bool.isRequired,
     isAdmin: PropTypes.bool.isRequired,
-    isLiked: PropTypes.bool.isRequired,
-    likes: PropTypes.number.isRequired,
-    comments: PropTypes.number.isRequired,
+    isLiked: PropTypes.bool,
+    likes: PropTypes.number,
+    comments: PropTypes.number,
     handleAddCommentClick: PropTypes.func.isRequired,
     users: PropTypes.arrayOf(
         PropTypes.shape({

@@ -2,7 +2,11 @@
     width: 70%;
 }
 
-.inline_top{
+.inline_top {
     display: inline-block;
     vertical-align: top;
+}
+
+.margin_left {
+    margin-left: 5px;
 }

@@ -1,19 +1,28 @@
 import {Field, Form, Formik} from "formik";
 import {TextField} from "formik-mui";
 import FormikAutocomplete from "../FormikAutocomplete";
-import {Avatar, Button, CircularProgress, Dialog, DialogTitle, IconButton} from "@mui/material";
+import {
+    Avatar,
+    Button,
+    CircularProgress,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    IconButton
+} from "@mui/material";
 import Cropper from "react-cropper";
 import * as Yup from "yup";
 import React from "react";
-import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
-import ContentCutIcon from '@mui/icons-material/ContentCut';
-import DeleteIcon from '@mui/icons-material/Delete';
 import SaveIcon from '@mui/icons-material/Save';
 import CloseIcon from "@mui/icons-material/Close";
-
 import {EditProfilePropTypes} from "./editProfilePropTypes";
 import AlertContainer from "../../containers/alert";
 import Loading from "../../components/loading";
+import CropImageBtn from "../buttons/CropImageBtn";
+import AddImageBtn from "../buttons/AddImageBtn";
+import DeleteImageBtn from "../buttons/DeleteImageBtn";
+import './editProfile.css';
 
 const EditProfile = ({
         universities,
@@ -57,163 +66,149 @@ const EditProfile = ({
     })
 
     return (
-        <>
-            <Dialog
-                open={openModal}
-                onClose={handleClose}
-                fullWidth
-                maxWidth="sm"
+        <Dialog
+            open={openModal}
+            onClose={handleClose}
+            fullWidth
+            maxWidth="sm"
+        >
+            <Formik
+                initialValues={user}
+                onSubmit={onFormSubmit}
+                validationSchema={schema}
             >
-                <AlertContainer alertMessage={message} handleClose={handleAlertClose}/>
-                <Loading isLoading={isFetching}/>
-                <Formik
-                    initialValues={user}
-                    onSubmit={onFormSubmit}
-                    validationSchema={schema}
-                >
-                    {({ setFieldValue, handleSubmit }) =>
-                        <Form onSubmit={handleSubmit}>
-                            <IconButton className="closebtn margin" onClick={handleClose}>
-                                <CloseIcon/>
-                            </IconButton>
-                            <DialogTitle>Edit profile</DialogTitle>
-                            <div className={"user_img"} >
-                                <Avatar
-                                    className={"big_margin"}
-                                    src={croppedImage||user?.avatar}
-                                    sx={{ width: 110, height: 110 }}
+                {({ setFieldValue, handleSubmit }) =>
+                    <Form onSubmit={handleSubmit}>
+                        <IconButton className="closebtn margin" onClick={handleClose}>
+                            <CloseIcon/>
+                        </IconButton>
+                        <DialogTitle className={"heading"}>Edit profile</DialogTitle>
+                        <AlertContainer alertMessage={message} handleClose={handleAlertClose}/>
+                        <DialogContent>
+                        <Loading isLoading={isFetching}/>
+                        <Avatar
+                            className={"edit-profile-avatar"}
+                            src={croppedImage||user?.avatar}
+                            sx={{ width: 110, height: 110 }}
+                        />
+                        {image && (
+                            <div className={"margin"}>
+                                <Cropper
+                                    src={image}
+                                    zoomable={false}
+                                    scalable={false}
+                                    onInitialized={instance => setCropper(instance)}
+                                    rotatable={false}
+                                    viewMode={1}
+                                    className={"full-width"}
                                 />
-                                <label htmlFor="contained-button-file" className={"file margin"}>
-                                    <Button variant={"contained"} component="span">
-                                        <AddAPhotoIcon fontSize={"large"}/>
-                                        <input hidden
-                                               id="contained-button-file"
-                                               type="file"
-                                               name="avatar"
-                                               onChange={handleChange}
-                                        />
-                                    </Button>
-                                </label>
-                                {image &&
-                                    <Button
-                                        variant={"contained"}
-                                        onClick={ () => cropImage(setFieldValue) }
-                                        color={'success'}
-                                        style={{display: "block", margin: 5}}
-                                    >
-                                        <ContentCutIcon fontSize={"large"}/>
-                                    </Button>
-                                }
-                                {(croppedImage||image) &&
-                                    <Button
-                                        variant={"contained"}
-                                        onClick={() => deleteImage(setFieldValue)}
-                                        color={'error'}
-                                        style={{display: "block", margin: 5}}
-                                    >
-                                        <DeleteIcon fontSize={"large"}/>
-                                    </Button>
-                                }
                             </div>
-                            <div className={"inline"}>
-                                {image && (
-                                    <Cropper
-                                        src={image}
-                                        zoomable={false}
-                                        scalable={false}
-                                        onInitialized={instance => setCropper(instance)}
-                                        rotatable={false}
-                                        viewMode={1}
-                                        style={{ height: 400, width: 400, margin: 5 }}
-                                    />
-                                )}
-                            </div>
-                            <div className={"inline big_margin"}>
-                                <div className={"fields_margin"}>
+                        )}
+                        <DialogActions style={{justifyContent: "center"}}>
+                            <AddImageBtn onChange={handleChange} isImage={croppedImage||user?.avatar}/>
+                            {image && <CropImageBtn onClick={() => cropImage(setFieldValue)} />}
+                            {(croppedImage || image) && <DeleteImageBtn onClick={() => deleteImage(setFieldValue)}/>}
+                        </DialogActions>
+                        <div className={"edit-profile-fields-container"}>
+                            <div>
+                                <div className={"edit-profile-field"}>
                                     <Field
                                         component={TextField}
                                         type={"text"}
                                         name={"name"}
                                         label={"Name"}
-                                        className={"inline fields_width fields_height"}
+                                        fullWidth
                                     />
                                 </div>
-                                <div className={"fields_margin"}>
+                                <div className={"edit-profile-visibility"}></div>
+                            </div>
+                            <div>
+                                <div className={"edit-profile-field"}>
                                     <Field
                                         component={TextField}
                                         type={"email"}
                                         name={"email"}
                                         label={"Email"}
-                                        className={"inline fields_width fields_height"}
+                                        fullWidth
                                     />
+                                </div>
+                                <div className={"edit-profile-visibility"}>
                                     <Field
                                         component={FormikAutocomplete}
                                         name="email_visibility"
                                         label="Available to"
                                         options={visibilities}
-                                        className={"inline visibility fields_height"}
+
                                     />
                                 </div>
-                                <div className={"fields_margin"}>
+                            </div>
+                            <div>
+                                <div className={"edit-profile-field"}>
                                     <Field
                                         component={TextField}
                                         type={"password"}
                                         name={"password"}
                                         label={"Password"}
-                                        className={"inline fields_width fields_height"}
+                                        fullWidth
                                     />
                                 </div>
-                                <div className={"fields_margin"}>
+                                <div className={"edit-profile-visibility"}></div>
+                            </div>
+                            <div>
+                                <div className={"edit-profile-field"}>
                                     <Field
                                         component={TextField}
                                         name={"phone"}
                                         label={"Phone"}
-                                        className={"inline fields_width fields_height"}
+                                        fullWidth
                                     />
+                                </div>
+                                <div className={"edit-profile-visibility"}>
                                     <Field
                                         component={FormikAutocomplete}
                                         name="phone_visibility"
                                         label={"Available to"}
                                         options={visibilities}
-                                        className={"inline visibility fields_height"}
                                     />
                                 </div>
-                                <div className={"fields_margin"}>
+                            </div>
+                            <div>
+                                <div className={"edit-profile-field"}>
                                     <Field
                                         component={FormikAutocomplete}
                                         name="university"
                                         label="University"
                                         options={universities}
-                                        className={"inline fields_width fields_height"}
                                     />
+                                </div>
+                                <div className={"edit-profile-visibility"}>
                                     <Field
                                         component={FormikAutocomplete}
                                         name="university_visibility"
                                         label="Available to"
                                         options={visibilities}
-                                        className={"inline visibility fields_height"}
                                     />
                                 </div>
-                                <div align={"center"}>
-                                    <Button
-                                        variant="contained"
-                                        type="submit"
-                                        disabled={isLoading}
-                                        startIcon={
-                                            isLoading ? (
-                                                <CircularProgress color="inherit" size={25} />
-                                            ) : <SaveIcon/>
-                                        }
-                                    >
-                                        Save
-                                    </Button>
-                                </div>
                             </div>
-                        </Form>
-                    }
-                </Formik>
-            </Dialog>
-        </>
+                        </div>
+                        </DialogContent>
+                        <DialogActions style={{justifyContent: "center"}}>
+                            <Button variant="outlined" onClick={handleClose}>Cancel</Button>
+                            <Button
+                                variant="contained"
+                                type="submit"
+                                disabled={isLoading}
+                                startIcon={
+                                    isLoading ? <CircularProgress color="inherit" size={25} /> : <SaveIcon/>
+                                }
+                            >
+                                Save
+                            </Button>
+                        </DialogActions>
+                    </Form>
+                }
+            </Formik>
+        </Dialog>
     )
 }
 

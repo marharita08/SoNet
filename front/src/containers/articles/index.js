@@ -1,4 +1,4 @@
-import React, {useContext, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import { useQuery} from "react-query";
 import PropTypes from "prop-types";
 
@@ -6,7 +6,7 @@ import Article from "../../containers/article";
 import ErrorBoundary from "../../components/ErrorBoundary";
 import authContext from "../../context/authContext";
 import {getAllNews, getNews, getCountOfNews, getCountOfAllNews} from "../../api/articlesCrud";
-import LoadMoreBtn from "../../components/loadMoreBtn/loadMoreBtn";
+import LoadMoreBtn from "../../components/buttons/LoadMoreBtn";
 import Loading from "../../components/loading";
 
 
@@ -24,12 +24,19 @@ const ArticlesContainer = ({setArticleContext, param, handleError, articles, set
         getFunc = getAllNews(page, limit);
         getCountFunc = getCountOfAllNews();
     }
+    useEffect(() => {
+        setArticles([]);
+    },[param])
     const {isFetching: articlesFetching, isLoading} = useQuery(`articles ${param} ${user_id} ${page}`, () => getFunc, {
-        onSuccess: (data) => setArticles([...articles, ...data?.data])
+        onSuccess: (data) => setArticles([...articles, ...data?.data]),
+        refetchInterval: false,
+        refetchOnWindowFocus: false
     });
 
     const {isFetching: countFetching} = useQuery(`articles amount ${param} ${user_id}`, () => getCountFunc, {
-        onSuccess: (data) => setAmount(data?.data.count)
+        onSuccess: (data) => setAmount(data?.data.count),
+        refetchInterval: false,
+        refetchOnWindowFocus: false
     });
 
     const handleLoadMore = () => {

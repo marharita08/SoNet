@@ -15,26 +15,26 @@ const ArticleOuterContainer = ({setArticleContext, handleError, articles, setArt
     const { user:{user_id} } = useContext(authContext);
     const {isFetching:articleFetching} =
         useQuery(`article ${id}-${user_id}`, () => getArticle(id), {
-            onSuccess: (data) => setArticles(data?.data)
+            onSuccess: (data) => setArticles(data?.data),
+            refetchInterval: false,
+            refetchOnWindowFocus: false
         });
 
     return (
-        <div>
+        <>
             <Loading isLoading={articleFetching}/>
             {articles?.map((article) =>
-                <div>
-                    <ErrorBoundary>
-                        <Article
-                            setArticleContext={setArticleContext}
-                            article={article}
-                            handleError={handleError}
-                            articles={articles}
-                            setArticles={setArticles}
-                        />
-                    </ErrorBoundary>
-                </div>
+                <ErrorBoundary key={article.article_id}>
+                    <Article
+                        setArticleContext={setArticleContext}
+                        article={article}
+                        handleError={handleError}
+                        articles={articles}
+                        setArticles={setArticles}
+                    />
+                </ErrorBoundary>
             )}
-        </div>
+        </>
     );
 }
 

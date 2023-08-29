@@ -11,8 +11,16 @@ import {EditProfileContainerPropTypes} from "./editProfileContainerPropTypes";
 
 const EditProfileContainer = ({openModal, setOpenModal, user, setUser}) => {
 
-    const {isFetching: universitiesFetching, data: universitiesData} = useQuery('universities', () => getUniversities());
-    const {isFetching: visibilitiesFetching, data: visibilitiesData} = useQuery('visibilities', () => getFieldVisibilities());
+    const {isFetching: universitiesFetching, data: universitiesData} =
+        useQuery('universities', () => getUniversities(), {
+            refetchInterval: false,
+            refetchOnWindowFocus: false
+        });
+    const {isFetching: visibilitiesFetching, data: visibilitiesData} =
+        useQuery('visibilities', () => getFieldVisibilities(), {
+            refetchInterval: false,
+            refetchOnWindowFocus: false
+        });
 
     let universities = universitiesData?.data;
     let visibilities = visibilitiesData?.data;

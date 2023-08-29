@@ -1,6 +1,6 @@
 import React, {useContext, useState} from "react";
 import {useMutation, useQuery} from "react-query";
-import {Collapse} from "@mui/material";
+import {Collapse, Card} from "@mui/material";
 import PropTypes from 'prop-types';
 
 import ErrorBoundary from "../../components/ErrorBoundary";
@@ -25,19 +25,30 @@ const ArticleContainer = ({setArticleContext, article, handleError, articles, se
 
     const { user:{user_id, avatar} , isAdmin } = useContext(authContext);
     const {isFetching:commentsFetching } = useQuery(`comments ${id}`,
-        () => getComments(id), { onSuccess: (data) => setCommentsArray(data?.data)
+        () => getComments(id), {
+        onSuccess: (data) => setCommentsArray(data?.data),
+            refetchInterval: false,
+            refetchOnWindowFocus: false
     });
     const {isFetching:likesFetching } = useQuery(`users ${id}`, () => getLikes(id), {
-        onSuccess: (data) => setLikedUsers(data?.data)
+        onSuccess: (data) => setLikedUsers(data?.data),
+        refetchInterval: false,
+        refetchOnWindowFocus: false
     });
     const {isFetching:isLikedFetching } = useQuery(`is liked ${id}-${user_id}`, () => getIsLiked(id), {
-        onSuccess: (data) => setIsLiked(data?.data)
+        onSuccess: (data) => setIsLiked(data?.data),
+        refetchInterval: false,
+        refetchOnWindowFocus: false
     });
     const {isFetching:commentsAmountFetching } = useQuery(`comments amount ${id}`, () => getCommentsAmount(id), {
-        onSuccess: (data) => setCommentsAmount(parseInt(data?.data.count, 10))
+        onSuccess: (data) => setCommentsAmount(parseInt(data?.data.count, 10)),
+        refetchInterval: false,
+        refetchOnWindowFocus: false
     });
     const {isFetching:likesAmountFetching } = useQuery(`likes amount ${id}`, () => getLikesAmount(id), {
-        onSuccess: (data) => setLikes(parseInt(data?.data.count, 10))
+        onSuccess: (data) => setLikes(parseInt(data?.data.count, 10)),
+        refetchInterval: false,
+        refetchOnWindowFocus: false
     })
 
     const initComment = {
@@ -157,57 +168,53 @@ const ArticleContainer = ({setArticleContext, article, handleError, articles, se
     }
 
     return (
-        <div>
-            <div className="outer">
-                <div className="inner">
-                    <ErrorBoundary>
-                        <Article
-                            article={article}
-                            commentsExpanded={commentsExpanded}
-                            handleEdit={handleEdit}
-                            handleExpandClick={handleExpandClick}
-                            isCurrentUser={article.user_id === user_id}
-                            isAdmin={isAdmin}
-                            handleDelete={handleDelete}
-                            handleAddCommentClick={handleAddCommentClick}
-                            isLiked={isLiked}
-                            likes={likes}
-                            comments={commentsAmount}
-                            handleLikeClick={handleLikeClick}
-                            users={likedUsers}
-                            likesFetching={likesFetching||likesAmountFetching||isLikedFetching}
-                            commentsFetching={commentsFetching || commentsAmountFetching}
-                        />
-                    </ErrorBoundary>
-                    <Collapse in={commentFieldExpanded} timeout="auto" unmountOnExit>
-                        <AddCommentContainer
-                            comment={currentComment}
-                            addComment={addComment}
-                            handleCancel={handleCancel}
-                            addCommentToArray={addCommentToArray}
-                            updateCommentInArray={updateCommentInArray}
-                            setCurrentInitComment={setCurrentInitComment}
-                            handleError={handleError}
-                            setCommentsExpanded={setCommentsExpanded}
-                        />
-                    </Collapse>
-                    <Collapse in={commentsExpanded} timeout="auto" unmountOnExit>
-                        {commentsArray?.map((comment) =>
-                            <ErrorBoundary key={comment.path + comment.name}>
-                                <CommentContainer
-                                    comment={comment}
-                                    setComment={setCurrentComment}
-                                    setAddComment={setAddComment}
-                                    setCommentFieldExpanded={setCommentFieldExpanded}
-                                    deleteCommentFromArray={deleteCommentFromArray}
-                                    handleError={handleError}
-                                />
-                            </ErrorBoundary>
-                        )}
-                    </Collapse>
-                </div>
-            </div>
-        </div>
+        <Card className={"article-card"}>
+            <ErrorBoundary>
+                <Article
+                    article={article}
+                    commentsExpanded={commentsExpanded}
+                    handleEdit={handleEdit}
+                    handleExpandClick={handleExpandClick}
+                    isCurrentUser={article.user_id === user_id}
+                    isAdmin={isAdmin}
+                    handleDelete={handleDelete}
+                    handleAddCommentClick={handleAddCommentClick}
+                    isLiked={isLiked}
+                    likes={likes}
+                    comments={commentsAmount}
+                    handleLikeClick={handleLikeClick}
+                    users={likedUsers}
+                    likesFetching={likesFetching||likesAmountFetching||isLikedFetching}
+                    commentsFetching={commentsFetching || commentsAmountFetching}
+                />
+            </ErrorBoundary>
+            <Collapse in={commentFieldExpanded} timeout="auto" unmountOnExit>
+                <AddCommentContainer
+                    comment={currentComment}
+                    addComment={addComment}
+                    handleCancel={handleCancel}
+                    addCommentToArray={addCommentToArray}
+                    updateCommentInArray={updateCommentInArray}
+                    setCurrentInitComment={setCurrentInitComment}
+                    handleError={handleError}
+                    setCommentsExpanded={setCommentsExpanded}
+                />
+            </Collapse>
+            <Collapse in={commentsExpanded} timeout="auto" unmountOnExit>
+                {commentsArray?.map((comment) =>
+                        <ErrorBoundary key={comment.comment_id}>
+                            <CommentContainer
+                                comment={comment}
+                                setComment={setCurrentComment}
+                                setAddComment={setAddComment}
+                                setCommentFieldExpanded={setCommentFieldExpanded}
+                                deleteCommentFromArray={deleteCommentFromArray}
+                                handleError={handleError}
+                            />
+                        </ErrorBoundary>
+                )}
+            </Collapse>
+        </Card>
     );
 }
 

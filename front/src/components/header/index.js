@@ -1,11 +1,15 @@
 import React, {useState} from "react";
 import {Link} from "react-router-dom";
 import PropTypes from "prop-types";
-import {Avatar, Menu, MenuItem} from "@mui/material";
+import {Avatar} from "@mui/material";
 import HomeIcon from '@mui/icons-material/Home';
 import PersonIcon from '@mui/icons-material/Person';
 import LogoutIcon from '@mui/icons-material/Logout';
 import NoteAddIcon from '@mui/icons-material/NoteAdd';
+import DescriptionIcon from '@mui/icons-material/Description';
+import HeaderButton from "./HeaderButton";
+import HeaderMenuItemBody from "../menu/HeaderMenuItemBody";
+import SNMenu from "../menu/SNMenu";
 
 const Header = ({handleClickOpen, user, authenticated, logout, isAdmin}) => {
     const [anchorEl, setAnchorEl] = useState(null);
@@ -24,100 +28,57 @@ const Header = ({handleClickOpen, user, authenticated, logout, isAdmin}) => {
         logout();
     }
 
+    const menuItems = [
+        {
+            body: <HeaderMenuItemBody text={"Profile"} to={`/profile/${user?.user_id}`} icon={<PersonIcon/>}/>,
+            onClick: handleMenuClose
+        },
+        {
+            body: <HeaderMenuItemBody text={"Logout"} to={"/"} icon={<LogoutIcon/>}/>,
+            onClick: handleLogout
+        }
+    ]
+
     return (
-        <>
-            <header>
+        <header>
+            <div className={"header-logo"}>
                 <Link to={"/"}>
-                    <button className={"left"} onClick={'update'}>
-                        <div className={"inline"}>
-                            <HomeIcon fontSize={"small"}/>
-                        </div>
-                        <div className={"inline margin"}>
-                            Home
-                        </div>
-                    </button>
+                    <img src={'/logo.png'} alt={"Social Network"} className={"logo"}/>
                 </Link>
-                {
-                    authenticated &&
-                    <div>
-                        {
-                            isAdmin &&
-                            <Link to={"/all-articles"}>
-                                <button onClick={'update'}>
-                                    <div className={"inline"}>
-                                        <HomeIcon fontSize={"small"}/>
-                                    </div>
-                                    <div className={"inline margin"}>
-                                        All articles
-                                    </div>
-                                </button>
-                            </Link>
-                        }
-                        <button onClick={handleClickOpen}>
-                            <div className={"inline"}>
-                                <NoteAddIcon fontSize={"small"}/>
-                            </div>
-                            <div className={"inline margin"}>
-                                Add article
-                            </div>
-                        </button>
-                        <button
-                            className={"right"}
-                            onClick={handleMenu}
-                            style={{margin:0, border: "none", padding:'5px 10px'}}
-                        >
-                            <div className={'inline'}>
-                                <Avatar
-                                    src={user.avatar}
-                                    sx={{ width: 40,
-                                        height: 40,
-                                        margin: '0 5px'
-                                    }}
-                                />
-                            </div>
-                            <div className={'inline margin username'}>
-                                {user.name}
-                            </div>
-                        </button>
-                        <Menu
-                            id="menu-article"
-                            anchorEl={anchorEl}
-                            anchorOrigin={{
-                                vertical: 'top',
-                                horizontal: 'right',
-                            }}
-                            keepMounted
-                            transformOrigin={{
-                                vertical: 'top',
-                                horizontal: 'right',
-                            }}
-                            open={Boolean(anchorEl)}
-                            onClose={handleMenuClose}
-                        >
-                            <Link to={`/profile/${user.user_id}`}
-                                  onClick={'update'}
-                                  style={{'textDecoration': 'none'}}
-                            >
-                                <MenuItem>
-                                    <PersonIcon/>
-                                    <div className={"margin"}>
-                                        Profile
-                                    </div>
-                                </MenuItem>
-                            </Link>
-                            <Link to={"/"} style={{'textDecoration': 'none'}}>
-                                <MenuItem onClick={handleLogout}>
-                                    <LogoutIcon/>
-                                    <div className={"margin"}>
-                                        Logout
-                                    </div>
-                                </MenuItem>
-                            </Link>
-                        </Menu>
-                    </div>
-                }
-            </header>
-        </>
+            </div>
+            {
+                authenticated &&
+                <div className={"header-btns"}>
+                    <Link to={"/"}>
+                        <HeaderButton text={"Home"} icon={<HomeIcon fontSize={"small"}/>} className={"home-btn"}/>
+                    </Link>
+                    {
+                        isAdmin &&
+                        <Link to={"/all-articles"}>
+                            <HeaderButton text={"All articles"} icon={<DescriptionIcon fontSize={"small"}/>}/>
+                        </Link>
+                    }
+                    <HeaderButton text={"Add article"}
+                                  icon={<NoteAddIcon fontSize={"small"}/>}
+                                  onClick={handleClickOpen}/>
+                </div>
+            }
+            {
+                authenticated &&
+                <div className={"curr-user"}>
+                    <button onClick={handleMenu}>
+                        <span className={"inline"}>
+                            <Avatar
+                                src={user.avatar}
+                                className={"header-avatar"}
+                            />
+                        </span>
+                        <span className={'username'}>{user.name}</span>
+                    </button>
+                    <SNMenu id={"menu-header"} menuItems={menuItems} anchorEl={anchorEl} onClose={handleMenuClose}/>
+                </div>
+            }
+        </header>
     );
 }
 

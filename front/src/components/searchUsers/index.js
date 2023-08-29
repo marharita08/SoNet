@@ -5,61 +5,55 @@ import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import {Link} from "react-router-dom";
 import PropTypes from "prop-types";
+import './search.css';
 
 const SearchUsers = ({users, addToFriends, accept, deleteFromFriends, isFetching}) => {
     return (
         <>
             <Autocomplete
-                sx={{ width: 400 }}
+                className={"search-width margin"}
                 options={users}
                 freeSolo
                 getOptionLabel={(option) => `${option.name} ${option.email}`}
                 groupBy={(option) => option.name[0].toUpperCase()}
                 renderOption={(props, option) => (
-                    <div key={option.user_id}>
+                    <div key={option.user_id} >
                         <Link
                             to={`/profile/${option.user_id}`}
-                            onClick={'update'}
-                            style={{textDecoration: 'none'}}
-                            className={'inline'}
+                            className={'search-item inline'}
                         >
-                            <Box component="li" className={'search'} sx={{width: 300, padding: '5px'}}>
-                                <div className={'inline'}>
+                            <Box component="li"  >
+                                <span className={"inline"}>
                                     <Avatar
                                         src={option.avatar}
                                         sx={{width: 30, height: 30}}
                                         className={'margin'}
                                     />
-                                </div>
-                                <div className={'inline'}>
+                                </span>
+                                <span className={"inline"}>
                                     {option.name}
-                                </div>
+                                </span>
                             </Box>
                         </Link>
-                        <div style={{alignContent: 'right'}} className={'inline'}>
-                            <IconButton>
-                                {
-
-                                    (option.is_friends || option.is_outgoing_request) ?
-                                    <PersonRemoveIcon
-                                        onClick={() => deleteFromFriends(option.request_id)}
-                                    /> :
+                        <IconButton>
+                            {
+                                (option.is_friends || option.is_outgoing_request) ?
+                                    <PersonRemoveIcon onClick={() => deleteFromFriends(option.request_id)}/> :
                                     <PersonAddIcon
                                         onClick={() => {
                                             option.is_not_friends ? addToFriends(option.user_id) :
                                             accept(option.request_id)
                                         }}
                                     />
-                                }
-                            </IconButton>
-                        </div>
+                            }
+                        </IconButton>
                     </div>
                 )}
                 renderInput={props =>
-                    <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
+                    <Box className={"search-field"}>
                         {
                             isFetching ? <CircularProgress color="inherit" size={25}/>:
-                            <SearchIcon sx={{color: 'action.active'}}/>
+                                <SearchIcon sx={{color: 'action.active'}}/>
                         }
                         <TextField
                             {...props}
@@ -67,7 +61,6 @@ const SearchUsers = ({users, addToFriends, accept, deleteFromFriends, isFetching
                             label={'Search'}
                         />
                     </Box>
-
                 }
             />
         </>

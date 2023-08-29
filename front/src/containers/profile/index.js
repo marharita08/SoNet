@@ -16,8 +16,8 @@ import SearchUsersContainer from "../searchUsers";
 import Loading from "../../components/loading";
 
 const ProfileContainer = (handleError) => {
-    let {id} = useParams();
-    id = parseInt(id, 10);
+    const {id: idStr} = useParams();
+    const id = parseInt(idStr, 10);
     const {user:currentUser, isAdmin} = useContext(authContext);
     const status = {
         underConsideration: 1,
@@ -34,11 +34,15 @@ const ProfileContainer = (handleError) => {
     const [user, setUser] = useState();
 
 
-    const {isFetching: userFetching} = useQuery('user', () => getUser(id), {
-        onSuccess: (data) => setUser(data.data)
+    const {isFetching: userFetching} = useQuery(`user ${id}`, () => getUser(id), {
+        onSuccess: (data) => setUser(data.data),
+        refetchInterval: false,
+        refetchOnWindowFocus: false
     });
-    const {isFetching: requestFetching} = useQuery('request', () => getRequest(id), {
-            onSuccess: (data) => setCurrentRequest(data?.data)
+    const {isFetching: requestFetching} = useQuery(`request ${id}`, () => getRequest(id), {
+        onSuccess: (data) => setCurrentRequest(data?.data),
+        refetchInterval: false,
+        refetchOnWindowFocus: false
     });
 
     const handleEdit = () => {
@@ -168,7 +172,7 @@ const ProfileContainer = (handleError) => {
     return (
         <>
             <Loading isLoading={userFetching} align={'left'}/>
-            <div key={user?.user_id}>
+            <div key={id}>
                 <ErrorBoundary>
                     <Profile
                         user={user}
@@ -191,18 +195,16 @@ const ProfileContainer = (handleError) => {
                 />
                 {
                     user?.user_id === currentUser.user_id &&
-                    <div>
-                        <div className={'margin'}>
-                            <ErrorBoundary>
-                                <SearchUsersContainer
-                                    accept={accept}
-                                    addToFriends={addToFriends}
-                                    deleteFromFriends={deleteFromFriends}
-                                    usersForSearch={usersForSearch}
-                                    setUsersForSearch={setUsersForSearch}
-                                />
-                            </ErrorBoundary>
-                        </div>
+                    <>
+                        <ErrorBoundary>
+                            <SearchUsersContainer
+                                accept={accept}
+                                addToFriends={addToFriends}
+                                deleteFromFriends={deleteFromFriends}
+                                usersForSearch={usersForSearch}
+                                setUsersForSearch={setUsersForSearch}
+                            />
+                        </ErrorBoundary>
                         <ErrorBoundary>
                             <Friends
                                 id={id}
@@ -228,7 +230,7 @@ const ProfileContainer = (handleError) => {
                                 setOutgoingRequests={setOutgoingRequests}
                             />
                         </ErrorBoundary>
-                    </div>
+                    </>
                 }
             </div>
         </>

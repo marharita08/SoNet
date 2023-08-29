@@ -2,22 +2,6 @@ body {
   background-color: #f2f2f2;
 }
 
-.body_button {
-  padding: 5px 10px;
-  color: #001a4d;
-  border-width: thin;
-  border-color: #001a4d;
-  border-style: solid;
-  border-radius: 10px;
-  margin: 5px;
-  font-size: 14px;
-  background-color: white;
-}
-
-.body_button:hover {
-  background-color: #f2f2f2;
-}
-
 .inline {
   display: inline-block;
   vertical-align: middle;
@@ -31,23 +15,9 @@ body {
   margin: 20px;
 }
 
-input, select, textarea {
-  border-radius: 7px;
-  border-width: thin;
-  padding: 3px;
-  border-color: #001a4d;
-}
-
 a {
   color: black;
-}
-
-.left {
-  float: left;
-}
-
-.right {
-  float: right;
+  text-decoration: none;
 }
 
 .closebtn {
@@ -61,70 +31,34 @@ a {
   transition: 0.3s;
 }
 
-.outer {
-  text-align: center;
-  width: 100%;
-  display: inline-block;
-  margin-top: 5px;
-}
-.inner {
-  display: inline-block;
-  text-align: left;
-  width: 40%;
+.article-card {
+  margin: 10px auto 0 auto;
+  width: 100%
 }
 
-.search:hover {
-  background-color: rgba(0, 0, 0, 0.04);
-}
-
-.login-btns {
-  width: 220px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 10px;
-  height: 50px;
-  padding: 5px 20px;
-  cursor: pointer;
-}
-
-.facebook-login {
-  background-color: #395697;
-  color: white;
-  border-color: #395697;
-}
-
-.facebook-login:hover {
-  background-color: #003366;
-  border-color: #003366;
-}
-.google-login {
-  background-color: white;
-  color: black;
-  border-color: #E8E8E8;
-}
-.google-login:hover {
-  background-color: #f2f2f2;
-}
-
-.auth-card {
-  width: 95%;
-}
-
-.auth-field {
-  margin: 10px;
-  width: 90%;
-}
 
 .icon {
   margin-right: 5px;
 }
 
-@media screen and (min-width: 480px) {
-  .auth-card {
-    width: 480px;
+.menu-item {
+  display: flex;
+  align-items: flex-end;
+}
+
+.heading {
+  text-align: center;
+}
+
+.btn-text {
+  display: none;
+}
+
+@media screen and (min-width: 600px) {
+  .btn-text {
+    display: contents;
   }
-  .auth-field {
-    width: 300px;
+  .article-card {
+    width: 500px;
   }
 }

@@ -1,15 +1,17 @@
-textarea {
-    min-width: 100%;
-    max-width: 100%;
-    min-height: 100px;
-    font-family: "Roboto","Helvetica","Arial",sans-serif;
-}
 
 .available {
     width: 90%;
 }
 
-.error {
-    color: red;
-    margin: 5px;
+.fields-margin {
+    margin: 10px 5px;
+}
+
+.full-width {
+    width: 100%;
+}
+
+.add-article-buttons-container {
+    display: flex;
+    justify-content: center;
 }

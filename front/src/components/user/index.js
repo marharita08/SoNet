@@ -1,6 +1,6 @@
 import {Link} from "react-router-dom";
 import PropTypes from "prop-types";
-import {Avatar, Card, CardHeader, IconButton, Menu, MenuItem, Typography} from "@mui/material";
+import {Avatar, Card, CardHeader, IconButton, Typography} from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
@@ -8,6 +8,8 @@ import CloseIcon from '@mui/icons-material/Close';
 import {useState} from "react";
 
 import './user.css';
+import MenuItemBody from "../menu/MenuItemBody";
+import SNMenu from "../menu/SNMenu";
 
 const User = ({user, deleteRequest, menu, accept, decline}) => {
 
@@ -18,7 +20,8 @@ const User = ({user, deleteRequest, menu, accept, decline}) => {
         setAnchorEl(event.currentTarget);
     };
 
-    const handleMenuClose = () => {
+    const handleMenuClose = (event) => {
+        event.preventDefault();
         setAnchorEl(null);
     };
 
@@ -39,10 +42,21 @@ const User = ({user, deleteRequest, menu, accept, decline}) => {
         deleteRequest(user.request_id);
     }
 
+    const menuItems = [
+        {
+            body: <MenuItemBody text={"Accept"} icon={<PersonAddIcon/>}/>,
+            onClick: acceptOnClick
+        },
+        {
+            body: <MenuItemBody text={"Decline"} icon={<PersonRemoveIcon/>}/>,
+            onClick: declineOnClick
+        }
+    ]
+
     return (
         <>
-            <Link to={`/profile/${user.user_id}`} onClick={'update'}>
-                <Card className={'inline margin width_100'}>
+            <Link to={`/profile/${user.user_id}`}>
+                <Card className={'inline margin user-card'}>
                     <CardHeader
                         avatar={
                             <Avatar
@@ -51,49 +65,21 @@ const User = ({user, deleteRequest, menu, accept, decline}) => {
                             />
                         }
                         action={
-                            (!menu &&
-                            <IconButton className="closebtn" onClick={handleClose}>
-                                <CloseIcon />
-                            </IconButton> )||
-                            (menu &&
+                            menu ?
                             <IconButton aria-label="settings" onClick={handleMenu}>
                                 <MoreVertIcon/>
-                            </IconButton>)
+                            </IconButton>:
+                            <IconButton className="closebtn" onClick={handleClose}>
+                                <CloseIcon />
+                            </IconButton>
                         }
                         title={
-                            <Typography sx={{"font-weight": "bold"}}>
+                            <Typography sx={{fontWeight: "bold"}}>
                                 {user.name}
                             </Typography>
                         }
                     />
-                    <Menu
-                        id="menu-article"
-                        anchorEl={anchorEl}
-                        anchorOrigin={{
-                            vertical: 'top',
-                            horizontal: 'right',
-                        }}
-                        keepMounted
-                        transformOrigin={{
-                            vertical: 'top',
-                            horizontal: 'right',
-                        }}
-                        open={Boolean(anchorEl)}
-                        onClose={handleMenuClose}
-                    >
-                        <MenuItem onClick={acceptOnClick}>
-                            <PersonAddIcon/>
-                            <div className={"margin"}>
-                                Accept
-                            </div>
-                        </MenuItem>
-                        <MenuItem onClick={declineOnClick}>
-                            <PersonRemoveIcon/>
-                            <div className={"margin"}>
-                                Decline
-                            </div>
-                        </MenuItem>
-                    </Menu>
+                    <SNMenu menuItems={menuItems} id={"request-menu"} anchorEl={anchorEl} onClose={handleMenuClose}/>
                 </Card>
             </Link>
         </>

@@ -1,11 +1,9 @@
-.background {
-    background-color: white;
+.user-card {
+    width: 100%
 }
 
-.padding {
-    padding: 5px;
-}
-
-.width_100 {
-    width: 20%;
+@media screen and (min-width: 600px) {
+    .user-card {
+        width: 350px;
+    }
 }
