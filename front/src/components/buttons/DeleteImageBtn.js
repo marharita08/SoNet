@@ -2,8 +2,11 @@ import React from "react";
 import {Button} from "@mui/material";
 import PropTypes from "prop-types";
 import DeleteIcon from "@mui/icons-material/Delete";
+import {useStyles} from "./imageButtonsStyle";
 
 const DeleteImageBtn = ({onClick}) => {
+    const classes = useStyles();
+
     return (
         <span>
             <Button
@@ -11,8 +14,9 @@ const DeleteImageBtn = ({onClick}) => {
                 onClick={onClick}
                 color={'error'}
                 startIcon={<DeleteIcon/>}
+                className={classes.button}
             >
-                <span className={"btn-text"}>Delete image</span>
+                <span className={classes.buttonText}>Delete image</span>
             </Button>
         </span>
     )

@@ -2,8 +2,11 @@ import React from "react";
 import {Button} from "@mui/material";
 import PropTypes from "prop-types";
 import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
+import {useStyles} from "./imageButtonsStyle";
 
 const AddImageBtn = ({onChange, isImage}) => {
+    const classes = useStyles();
+
     return (
         <span>
             <label htmlFor="contained-button-file" >
@@ -11,8 +14,9 @@ const AddImageBtn = ({onChange, isImage}) => {
                     variant="outlined"
                     component="span"
                     startIcon={<AddAPhotoIcon/>}
+                    className={classes.button}
                 >
-                    <span className={"btn-text"}>
+                    <span className={classes.buttonText}>
                         {isImage ? "Change " : "Add "} image
                     </span>
                     <input

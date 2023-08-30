@@ -2,8 +2,11 @@ import React from "react";
 import ContentCutIcon from "@mui/icons-material/ContentCut";
 import {Button} from "@mui/material";
 import PropTypes from "prop-types";
+import {useStyles} from "./imageButtonsStyle";
 
 const CropImageBtn = ({onClick}) => {
+    const classes = useStyles();
+
     return (
         <span>
             <Button
@@ -11,8 +14,9 @@ const CropImageBtn = ({onClick}) => {
                 onClick={onClick}
                 color={'success'}
                 startIcon={<ContentCutIcon/>}
+                className={classes.button}
             >
-                <span className={"btn-text"}>Crop image</span>
+                <span className={classes.buttonText}>Crop image</span>
             </Button>
         </span>
     )
