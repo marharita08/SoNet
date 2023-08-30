@@ -2,16 +2,15 @@ import React, {useContext, useState} from "react";
 import {useMutation, useQuery} from "react-query";
 import PropTypes from "prop-types";
 import {serialize} from "object-to-formdata";
-
 import ErrorBoundary from "../../components/ErrorBoundary";
-import AddArticle from '../../components/addArticle';
+import AddArticle from "../../components/addArticle";
 import {getArticleVisibilities} from "../../api/visibilitiesCrud";
 import {insertArticle, updateArticle} from "../../api/articlesCrud";
 import articleContext from "../../context/articleContext";
-import { useNavigate, useLocation } from "react-router-dom";
+import {useNavigate, useLocation} from "react-router-dom";
 
 const AddArticleContainer = ({setArticleContext, articles, setArticles}) => {
-    const { data, isFetching: visibilitiesFetching } = useQuery('visibilities',
+    const {data, isFetching: visibilitiesFetching} = useQuery("visibilities",
         () => getArticleVisibilities(), {
             refetchInterval: false,
             refetchOnWindowFocus: false
@@ -26,7 +25,7 @@ const AddArticleContainer = ({setArticleContext, articles, setArticles}) => {
     const navigate = useNavigate();
     const location = useLocation();
 
-    const { mutate: updateMutate, isLoading: updateLoading } = useMutation(updateArticle, {
+    const {mutate: updateMutate, isLoading: updateLoading} = useMutation(updateArticle, {
         onSuccess: (data) => {
             setArticleContext({
                 openModal: false,
@@ -41,14 +40,14 @@ const AddArticleContainer = ({setArticleContext, articles, setArticles}) => {
         onError: (err) => setMessage(err.response.data.message)
     });
 
-    const { mutate: insertMutate, isLoading: insertLoading } = useMutation(insertArticle, {
+    const {mutate: insertMutate, isLoading: insertLoading} = useMutation(insertArticle, {
         onSuccess: (data) => {
             setArticleContext({
                 openModal: false,
             });
             setMessage(undefined);
             const newArticle = data?.data;
-            if (location.pathname === '/articles') {
+            if (location.pathname === "/articles") {
                 let newArticles = [...articles, newArticle];
                 newArticles.sort((a, b) => {
                     const aid = a.article_id, bid = b.article_id;
@@ -62,7 +61,7 @@ const AddArticleContainer = ({setArticleContext, articles, setArticles}) => {
                 });
                 setArticles(newArticles);
             } else {
-                navigate('/articles');
+                navigate("/articles");
             }
         },
         onError: (err) => setMessage(err.response.data.message)
@@ -75,7 +74,7 @@ const AddArticleContainer = ({setArticleContext, articles, setArticles}) => {
         } else {
             updateMutate(formData);
         }
-    }
+    };
 
     const handleClose = () => {
         setArticleContext({
@@ -90,22 +89,22 @@ const AddArticleContainer = ({setArticleContext, articles, setArticles}) => {
         e.preventDefault();
         const file = e.target.files[0];
 
-        if (file.type.match('image.*') && file.size < 10000000) {
+        if (file.type.match("image.*") && file.size < 10000000) {
             const reader = new FileReader();
             reader.onload = () => {
                 setImage(reader.result);
-            }
+            };
             reader.readAsDataURL(file);
             if (message) {
                 setMessage(undefined);
             }
         } else {
-            setMessage('Wrong file format or size!');
+            setMessage("Wrong file format or size!");
         }
-    }
+    };
 
     const cropImage = (setFieldValue) => {
-        if (typeof cropper !== 'undefined') {
+        if (typeof cropper !== "undefined") {
             var img = cropper.getCroppedCanvas().toDataURL();
             setCroppedImage(img);
             setImage(null);
@@ -113,16 +112,16 @@ const AddArticleContainer = ({setArticleContext, articles, setArticles}) => {
                 .then(res => res.blob())
                 .then(blob => {
                     setFieldValue("file", blob);
-                })
+                });
         }
-    }
+    };
 
     const deleteImage = (setFieldValue) => {
         article.image = null;
         setImage(null);
         setCroppedImage(null);
         setFieldValue("file", undefined);
-    }
+    };
 
     return (
         <ErrorBoundary>
@@ -130,7 +129,7 @@ const AddArticleContainer = ({setArticleContext, articles, setArticles}) => {
                 visibilities={visibilities}
                 onFormSubmit={onFormSubmit}
                 handleClose={handleClose}
-                isLoading={updateLoading||insertLoading}
+                isLoading={updateLoading || insertLoading}
                 article={article}
                 addArticle={addArticle}
                 image={image}
@@ -144,7 +143,7 @@ const AddArticleContainer = ({setArticleContext, articles, setArticles}) => {
             />
         </ErrorBoundary>
     );
-}
+};
 
 AddArticleContainer.propTypes = {
     setArticleContext: PropTypes.func.isRequired,
@@ -160,6 +159,6 @@ AddArticleContainer.propTypes = {
         })
     ),
     setArticles: PropTypes.func.isRequired,
-}
+};
 
 export default AddArticleContainer;

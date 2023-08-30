@@ -10,22 +10,22 @@ const AvatarPopover = ({anchorEl, onClose, users}) => {
         <Popover
             id="mouse-over-popover"
             sx={{
-                pointerEvents: 'none',
+                pointerEvents: "none",
             }}
             open={Boolean(anchorEl)}
             anchorEl={anchorEl}
             anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'center',
+                vertical: "top",
+                horizontal: "center",
             }}
             transformOrigin={{
-                vertical: 'bottom',
-                horizontal: 'center',
+                vertical: "bottom",
+                horizontal: "center",
             }}
             onClose={onClose}
             disableRestoreFocus
         >
-            <AvatarGroup max={4} className={'margin'}>
+            <AvatarGroup max={4} className={"margin"}>
                 {users?.map((user) =>
                     <Avatar
                         key={user.user_id}
@@ -35,8 +35,8 @@ const AvatarPopover = ({anchorEl, onClose, users}) => {
                 )}
             </AvatarGroup>
         </Popover>
-    )
-}
+    );
+};
 
 AvatarPopover.propTypes = {
     anchorEl: PropTypes.object,
@@ -47,6 +47,6 @@ AvatarPopover.propTypes = {
             avatar: PropTypes.string
         })
     )
-}
+};
 
 export default AvatarPopover;

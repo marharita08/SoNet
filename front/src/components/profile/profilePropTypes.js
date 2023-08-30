@@ -42,4 +42,4 @@ export let ProfilePropTypes = {
     }),
     isLoading: PropTypes.bool,
     requestFetching: PropTypes.bool,
-}
+};

@@ -1,8 +1,7 @@
 import React, {useContext, useState} from "react";
 import {useMutation, useQuery} from "react-query";
 import {Collapse, Card} from "@mui/material";
-import PropTypes from 'prop-types';
-
+import PropTypes from "prop-types";
 import ErrorBoundary from "../../components/ErrorBoundary";
 import Article from "../../components/article";
 import {deleteArticle, getComments, getLikes, getCommentsAmount, getLikesAmount} from "../../api/articlesCrud";
@@ -10,7 +9,7 @@ import authContext from "../../context/authContext";
 import CommentContainer from "../comment";
 import AddCommentContainer from "../addComment";
 import {deleteLike, getIsLiked, insertLike} from "../../api/likesCrud";
-import { useNavigate, useLocation } from "react-router-dom";
+import {useNavigate, useLocation} from "react-router-dom";
 
 const ArticleContainer = ({setArticleContext, article, handleError, articles, setArticles}) => {
     let id = article.article_id;
@@ -23,47 +22,47 @@ const ArticleContainer = ({setArticleContext, article, handleError, articles, se
     const navigate = useNavigate();
     const location = useLocation();
 
-    const { user:{user_id, avatar} , isAdmin } = useContext(authContext);
-    const {isFetching:commentsFetching } = useQuery(`comments ${id}`,
+    const {user: {user_id, avatar}, isAdmin} = useContext(authContext);
+    const {isFetching: commentsFetching} = useQuery(`comments ${id}`,
         () => getComments(id), {
-        onSuccess: (data) => setCommentsArray(data?.data),
+            onSuccess: (data) => setCommentsArray(data?.data),
             refetchInterval: false,
             refetchOnWindowFocus: false
-    });
-    const {isFetching:likesFetching } = useQuery(`users ${id}`, () => getLikes(id), {
+        });
+    const {isFetching: likesFetching} = useQuery(`users ${id}`, () => getLikes(id), {
         onSuccess: (data) => setLikedUsers(data?.data),
         refetchInterval: false,
         refetchOnWindowFocus: false
     });
-    const {isFetching:isLikedFetching } = useQuery(`is liked ${id}-${user_id}`, () => getIsLiked(id), {
+    const {isFetching: isLikedFetching} = useQuery(`is liked ${id}-${user_id}`, () => getIsLiked(id), {
         onSuccess: (data) => setIsLiked(data?.data),
         refetchInterval: false,
         refetchOnWindowFocus: false
     });
-    const {isFetching:commentsAmountFetching } = useQuery(`comments amount ${id}`, () => getCommentsAmount(id), {
+    const {isFetching: commentsAmountFetching} = useQuery(`comments amount ${id}`, () => getCommentsAmount(id), {
         onSuccess: (data) => setCommentsAmount(parseInt(data?.data.count, 10)),
         refetchInterval: false,
         refetchOnWindowFocus: false
     });
-    const {isFetching:likesAmountFetching } = useQuery(`likes amount ${id}`, () => getLikesAmount(id), {
+    const {isFetching: likesAmountFetching} = useQuery(`likes amount ${id}`, () => getLikesAmount(id), {
         onSuccess: (data) => setLikes(parseInt(data?.data.count, 10)),
         refetchInterval: false,
         refetchOnWindowFocus: false
-    })
+    });
 
     const initComment = {
         article_id: id,
         user_id,
-        text: '',
+        text: "",
         level: 1,
-        path: ''
-    }
+        path: ""
+    };
     const [currentComment, setCurrentComment] = useState(initComment);
     const [addComment, setAddComment] = useState(true);
     const [commentsExpanded, setCommentsExpanded] = useState(false);
     const [commentFieldExpanded, setCommentFieldExpanded] = useState(false);
 
-    const { mutate: addLikeMutate } = useMutation(insertLike, {
+    const {mutate: addLikeMutate} = useMutation(insertLike, {
         onSuccess: () => {
             setLikedUsers([...likedUsers, {user_id, avatar}]);
             setLikes(likes + 1);
@@ -71,7 +70,7 @@ const ArticleContainer = ({setArticleContext, article, handleError, articles, se
         },
         onError: handleError
     });
-    const { mutate: deleteLikeMutate } = useMutation(deleteLike, {
+    const {mutate: deleteLikeMutate} = useMutation(deleteLike, {
         onSuccess: () => {
             let newLikedUsers = [...likedUsers];
             const index = newLikedUsers.findIndex(((obj) => obj.user_id === user_id));
@@ -94,21 +93,21 @@ const ArticleContainer = ({setArticleContext, article, handleError, articles, se
                 return 1;
             }
             return 0;
-        })
+        });
         setCommentsArray(newCommentsArray);
         setCommentsAmount(commentsAmount + 1);
-    }
+    };
 
     const updateCommentInArray = (comment) => {
         let newCommentsArray = [...commentsArray];
         const index = newCommentsArray.findIndex((obj => obj.comment_id === comment.comment_id));
         newCommentsArray[index].text = comment.text;
         setCommentsArray(newCommentsArray);
-    }
+    };
 
     const setCurrentInitComment = () => {
         setCurrentComment(initComment);
-    }
+    };
 
     const deleteCommentFromArray = (id) => {
         let newCommentsArray = [...commentsArray];
@@ -116,7 +115,7 @@ const ArticleContainer = ({setArticleContext, article, handleError, articles, se
         newCommentsArray.splice(index, 1);
         setCommentsArray(newCommentsArray);
         setCommentsAmount(commentsAmount - 1);
-    }
+    };
 
     const handleLikeClick = (event) => {
         event.preventDefault();
@@ -135,37 +134,37 @@ const ArticleContainer = ({setArticleContext, article, handleError, articles, se
     const handleAddCommentClick = (event) => {
         event.preventDefault();
         setCommentFieldExpanded(!commentFieldExpanded);
-    }
+    };
 
     const handleEdit = (article) => {
         setArticleContext({
             openModal: true,
             addArticle: false,
             article
-        })
-    }
+        });
+    };
 
-    const { mutate } = useMutation(deleteArticle, {
+    const {mutate} = useMutation(deleteArticle, {
         onSuccess: () => {
-            if (location.pathname === '/articles') {
+            if (location.pathname === "/articles") {
                 const newArticles = [...articles];
                 const index = newArticles.findIndex((obj => obj.article_id === id));
                 newArticles.splice(index, 1);
                 setArticles(newArticles);
             } else {
-                navigate('/articles');
+                navigate("/articles");
             }
         }
     });
 
     const handleDelete = () => {
         mutate(id);
-    }
+    };
 
     const handleCancel = () => {
         setCurrentComment(initComment);
         setAddComment(true);
-    }
+    };
 
     return (
         <Card className={"article-card"}>
@@ -184,7 +183,7 @@ const ArticleContainer = ({setArticleContext, article, handleError, articles, se
                     comments={commentsAmount}
                     handleLikeClick={handleLikeClick}
                     users={likedUsers}
-                    likesFetching={likesFetching||likesAmountFetching||isLikedFetching}
+                    likesFetching={likesFetching || likesAmountFetching || isLikedFetching}
                     commentsFetching={commentsFetching || commentsAmountFetching}
                 />
             </ErrorBoundary>
@@ -202,21 +201,21 @@ const ArticleContainer = ({setArticleContext, article, handleError, articles, se
             </Collapse>
             <Collapse in={commentsExpanded} timeout="auto" unmountOnExit>
                 {commentsArray?.map((comment) =>
-                        <ErrorBoundary key={comment.comment_id}>
-                            <CommentContainer
-                                comment={comment}
-                                setComment={setCurrentComment}
-                                setAddComment={setAddComment}
-                                setCommentFieldExpanded={setCommentFieldExpanded}
-                                deleteCommentFromArray={deleteCommentFromArray}
-                                handleError={handleError}
-                            />
-                        </ErrorBoundary>
+                    <ErrorBoundary key={comment.comment_id}>
+                        <CommentContainer
+                            comment={comment}
+                            setComment={setCurrentComment}
+                            setAddComment={setAddComment}
+                            setCommentFieldExpanded={setCommentFieldExpanded}
+                            deleteCommentFromArray={deleteCommentFromArray}
+                            handleError={handleError}
+                        />
+                    </ErrorBoundary>
                 )}
             </Collapse>
         </Card>
     );
-}
+};
 
 ArticleContainer.propTypes = {
     setArticleContext: PropTypes.func.isRequired,
@@ -242,6 +241,6 @@ ArticleContainer.propTypes = {
         })
     ),
     setArticles: PropTypes.func.isRequired,
-}
+};
 
 export default ArticleContainer;

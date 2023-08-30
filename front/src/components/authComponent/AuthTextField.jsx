@@ -1,10 +1,10 @@
 import React from "react";
 import {TextField} from "formik-mui";
 
-const AuthTextField = ({ ...props }) => {
+const AuthTextField = ({...props}) => {
     return (
-        <div className={'auth-field'}>
-            <TextField {...props} fullWidth />
+        <div className={"auth-field"}>
+            <TextField {...props} fullWidth/>
         </div>
     );
 };

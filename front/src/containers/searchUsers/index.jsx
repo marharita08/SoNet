@@ -7,9 +7,9 @@ import authContext from "../../context/authContext";
 
 const SearchUsersContainer = ({addToFriends, accept, deleteFromFriends, usersForSearch, setUsersForSearch}) => {
 
-    const {user:{user_id}} = useContext(authContext);
+    const {user: {user_id}} = useContext(authContext);
 
-    const {isFetching} = useQuery('users', () => getForSearch(user_id), {
+    const {isFetching} = useQuery("users", () => getForSearch(user_id), {
         onSuccess: (data) => setUsersForSearch(data?.data),
         refetchInterval: false,
         refetchOnWindowFocus: false
@@ -17,7 +17,7 @@ const SearchUsersContainer = ({addToFriends, accept, deleteFromFriends, usersFor
 
     const handleAddToFriends = (id) => {
         addToFriends(user_id, id);
-    }
+    };
 
     return (
         <SearchUsers
@@ -28,7 +28,7 @@ const SearchUsersContainer = ({addToFriends, accept, deleteFromFriends, usersFor
             isFetching={isFetching}
         />
     );
-}
+};
 
 SearchUsersContainer.propTypes = {
     addToFriends: PropTypes.func.isRequired,
@@ -49,6 +49,6 @@ SearchUsersContainer.propTypes = {
     ),
     setUsersForSearch: PropTypes.func.isRequired,
     isLoading: PropTypes.bool
-}
+};
 
 export default SearchUsersContainer;

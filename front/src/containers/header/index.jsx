@@ -1,18 +1,17 @@
 import React, {useContext} from "react";
 import {useMutation} from "react-query";
-
 import authContext from "../../context/authContext";
 import ErrorBoundary from "../../components/ErrorBoundary";
 import Header from "../../components/header";
-import { apiLogout }  from '../../api/auth';
+import {apiLogout} from "../../api/auth";
 import PropTypes from "prop-types";
-import '../../components/header/header.css';
+import "../../components/header/header.css";
 
 const HeaderContainer = ({
     setArticleContext,
     unsetAuthContext
 }) => {
-    const { authenticated, user,  refreshToken, isAdmin } = useContext(authContext);
+    const {authenticated, user, refreshToken, isAdmin} = useContext(authContext);
 
     let handleClickOpen;
     let logout;
@@ -33,12 +32,12 @@ const HeaderContainer = ({
             });
         };
 
-        const { mutate } = useMutation(apiLogout);
+        const {mutate} = useMutation(apiLogout);
 
         logout = () => {
             unsetAuthContext();
             mutate({refreshToken});
-        }
+        };
     }
 
     return (
@@ -52,11 +51,11 @@ const HeaderContainer = ({
             />
         </ErrorBoundary>
     );
-}
+};
 
 HeaderContainer.propTypes = {
     setArticleContext: PropTypes.func.isRequired,
     unsetAuthContext: PropTypes.func.isRequired,
-}
+};
 
 export default HeaderContainer;

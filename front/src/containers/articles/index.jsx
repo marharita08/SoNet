@@ -1,7 +1,6 @@
 import React, {useContext, useEffect, useState} from "react";
-import { useQuery} from "react-query";
+import {useQuery} from "react-query";
 import PropTypes from "prop-types";
-
 import Article from "../article";
 import ErrorBoundary from "../../components/ErrorBoundary";
 import authContext from "../../context/authContext";
@@ -11,22 +10,22 @@ import Loading from "../../components/loading";
 
 
 const ArticlesContainer = ({setArticleContext, param, handleError, articles, setArticles}) => {
-    const { user:{user_id} } = useContext(authContext);
+    const {user: {user_id}} = useContext(authContext);
     const [page, setPage] = useState(1);
     const [amount, setAmount] = useState();
     const limit = 10;
     let getFunc;
     let getCountFunc;
-    if (param === 'news') {
+    if (param === "news") {
         getFunc = getNews(page, limit);
         getCountFunc = getCountOfNews();
-    } else if (param === 'all') {
+    } else if (param === "all") {
         getFunc = getAllNews(page, limit);
         getCountFunc = getCountOfAllNews();
     }
     useEffect(() => {
         setArticles([]);
-    },[param])
+    }, [param]);
     const {isFetching: articlesFetching, isLoading} = useQuery(`articles ${param} ${user_id} ${page}`, () => getFunc, {
         onSuccess: (data) => setArticles([...articles, ...data?.data]),
         refetchInterval: false,
@@ -41,7 +40,7 @@ const ArticlesContainer = ({setArticleContext, param, handleError, articles, set
 
     const handleLoadMore = () => {
         setPage(page + 1);
-    }
+    };
 
     return (
         <div>
@@ -64,7 +63,7 @@ const ArticlesContainer = ({setArticleContext, param, handleError, articles, set
             }
         </div>
     );
-}
+};
 
 ArticlesContainer.propTypes = {
     setArticleContext: PropTypes.func.isRequired,
@@ -82,6 +81,6 @@ ArticlesContainer.propTypes = {
         })
     ),
     setArticles: PropTypes.func.isRequired,
-}
+};
 
 export default ArticlesContainer;

@@ -12,12 +12,11 @@ import {
 import * as Yup from "yup";
 import FormikAutocomplete from "../fields/FormikAutocomplete";
 import Cropper from "react-cropper";
-import SaveIcon from '@mui/icons-material/Save';
-import CloseIcon from '@mui/icons-material/Close';
-
+import SaveIcon from "@mui/icons-material/Save";
+import CloseIcon from "@mui/icons-material/Close";
 import env from "../../config/envConfig";
 import {AddArticlePropTypes} from "./addArticlePropTypes";
-import './addArticle.css';
+import "./addArticle.css";
 import AlertContainer from "../../containers/alert";
 import SNTextarea from "../fields/SNTextarea";
 import CropImageBtn from "../buttons/CropImageBtn";
@@ -38,7 +37,8 @@ const AddArticle = ({
     croppedImage,
     deleteImage,
     message,
-    visibilitiesFetching }) => {
+    visibilitiesFetching
+}) => {
 
     const schema = Yup.object().shape({
         text: Yup.string().required("Text is required"),
@@ -46,7 +46,7 @@ const AddArticle = ({
             value: Yup.number(),
             label: Yup.string(),
         }).nullable(),
-    })
+    });
 
     return (
         <Dialog
@@ -94,12 +94,12 @@ const AddArticle = ({
                                     isImage={(image || croppedImage || (article?.image !== undefined && article?.image))}
                                 />
                                 {((image || (article?.image !== undefined && article?.image)) && !croppedImage) &&
-                                    <CropImageBtn onClick={() => cropImage(setFieldValue)} />}
+                                    <CropImageBtn onClick={() => cropImage(setFieldValue)}/>}
                                 {(croppedImage || image || (article?.image !== undefined && article?.image)) &&
-                                    <DeleteImageBtn onClick={() => deleteImage(setFieldValue)} />}
+                                    <DeleteImageBtn onClick={() => deleteImage(setFieldValue)}/>}
                             </DialogActions>
                             <div className={"fields-margin"}>
-                                <Field label={"Article text"} name={"text"} type={"text"} component={SNTextarea} />
+                                <Field label={"Article text"} name={"text"} type={"text"} component={SNTextarea}/>
                             </div>
                             <div className={"margin"}>
                                 {visibilitiesFetching ? <CircularProgress color="inherit" size={25}/> :
@@ -128,7 +128,7 @@ const AddArticle = ({
             </Formik>
         </Dialog>
     );
-}
+};
 
 AddArticle.propTypes = AddArticlePropTypes;
 

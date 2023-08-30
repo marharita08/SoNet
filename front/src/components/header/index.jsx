@@ -2,11 +2,11 @@ import React, {useState} from "react";
 import {Link} from "react-router-dom";
 import PropTypes from "prop-types";
 import {Avatar} from "@mui/material";
-import HomeIcon from '@mui/icons-material/Home';
-import PersonIcon from '@mui/icons-material/Person';
-import LogoutIcon from '@mui/icons-material/Logout';
-import NoteAddIcon from '@mui/icons-material/NoteAdd';
-import DescriptionIcon from '@mui/icons-material/Description';
+import HomeIcon from "@mui/icons-material/Home";
+import PersonIcon from "@mui/icons-material/Person";
+import LogoutIcon from "@mui/icons-material/Logout";
+import NoteAddIcon from "@mui/icons-material/NoteAdd";
+import DescriptionIcon from "@mui/icons-material/Description";
 import HeaderButton from "./HeaderButton";
 import HeaderMenuItemBody from "../menu/HeaderMenuItemBody";
 import SNMenu from "../menu/SNMenu";
@@ -26,7 +26,7 @@ const Header = ({handleClickOpen, user, authenticated, logout, isAdmin}) => {
     const handleLogout = () => {
         handleMenuClose();
         logout();
-    }
+    };
 
     const menuItems = [
         {
@@ -37,13 +37,13 @@ const Header = ({handleClickOpen, user, authenticated, logout, isAdmin}) => {
             body: <HeaderMenuItemBody text={"Logout"} to={"/"} icon={<LogoutIcon/>}/>,
             onClick: handleLogout
         }
-    ]
+    ];
 
     return (
         <header>
             <div className={"header-logo"}>
                 <Link to={"/"}>
-                    <img src={'/logo.png'} alt={"Social Network"} className={"logo"}/>
+                    <img src={"/logo.png"} alt={"Social Network"} className={"logo"}/>
                 </Link>
             </div>
             {
@@ -58,9 +58,10 @@ const Header = ({handleClickOpen, user, authenticated, logout, isAdmin}) => {
                             <HeaderButton text={"All articles"} icon={<DescriptionIcon fontSize={"small"}/>}/>
                         </Link>
                     }
-                    <HeaderButton text={"Add article"}
-                                  icon={<NoteAddIcon fontSize={"small"}/>}
-                                  onClick={handleClickOpen}/>
+                    <HeaderButton
+                        text={"Add article"}
+                        icon={<NoteAddIcon fontSize={"small"}/>}
+                        onClick={handleClickOpen}/>
                 </div>
             }
             {
@@ -73,14 +74,14 @@ const Header = ({handleClickOpen, user, authenticated, logout, isAdmin}) => {
                                 className={"header-avatar"}
                             />
                         </span>
-                        <span className={'username'}>{user.name}</span>
+                        <span className={"username"}>{user.name}</span>
                     </button>
                     <SNMenu id={"menu-header"} menuItems={menuItems} anchorEl={anchorEl} onClose={handleMenuClose}/>
                 </div>
             }
         </header>
     );
-}
+};
 
 Header.propTypes = {
     handleClickOpen: PropTypes.func,
@@ -88,6 +89,6 @@ Header.propTypes = {
     authenticated: PropTypes.bool.isRequired,
     logout: PropTypes.func,
     isAdmin: PropTypes.bool,
-}
+};
 
 export default Header;

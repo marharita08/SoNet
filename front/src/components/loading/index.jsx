@@ -7,20 +7,20 @@ const Loading = ({align, isLoading}) => {
         <div align={align}>
             {
                 isLoading &&
-                <ReactLoading type={'balls'} color='#001a4d'/>
+                <ReactLoading type={"balls"} color="#001a4d"/>
             }
         </div>
-    )
-}
+    );
+};
 
 Loading.propTypes = {
     isLoading: PropTypes.bool,
     align: PropTypes.string
-}
+};
 
 Loading.defaultProps = {
     isLoading: false,
-    align: 'center'
-}
+    align: "center"
+};
 
 export default Loading;

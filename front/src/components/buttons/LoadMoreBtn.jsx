@@ -1,11 +1,11 @@
 import {Button, CircularProgress} from "@mui/material";
 import PropTypes from "prop-types";
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import React from "react";
 
 const LoadMoreBtn = ({handleLoadMore, loading}) => {
     return (
-        <div align={'center'} className={'margin'}>
+        <div align={"center"} className={"margin"}>
             <Button
                 onClick={handleLoadMore}
                 startIcon={loading ? <CircularProgress color="inherit" size={25}/> : <ExpandMoreIcon/>}
@@ -16,15 +16,15 @@ const LoadMoreBtn = ({handleLoadMore, loading}) => {
             </Button>
         </div>
     );
-}
+};
 
 LoadMoreBtn.propTypes = {
     handleLoadMore: PropTypes.func.isRequired,
     loading: PropTypes.bool
-}
+};
 
 LoadMoreBtn.defaultProps = {
     loading: false
-}
+};
 
 export default LoadMoreBtn;

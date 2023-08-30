@@ -1,11 +1,11 @@
 import React from "react";
 import {Autocomplete, Avatar, Box, CircularProgress, IconButton, TextField} from "@mui/material";
-import SearchIcon from '@mui/icons-material/Search';
+import SearchIcon from "@mui/icons-material/Search";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import {Link} from "react-router-dom";
 import PropTypes from "prop-types";
-import './search.css';
+import "./search.css";
 import {useStyles as useAvatarStyles} from "../avatarSize";
 
 const SearchUsers = ({users, addToFriends, accept, deleteFromFriends, isFetching}) => {
@@ -21,16 +21,16 @@ const SearchUsers = ({users, addToFriends, accept, deleteFromFriends, isFetching
                 getOptionLabel={(option) => `${option.name} ${option.email}`}
                 groupBy={(option) => option.name[0].toUpperCase()}
                 renderOption={(props, option) => (
-                    <div key={option.user_id} >
+                    <div key={option.user_id}>
                         <Link
                             to={`/profile/${option.user_id}`}
-                            className={'search-item inline'}
+                            className={"search-item inline"}
                         >
-                            <Box component="li"  >
+                            <Box component="li">
                                 <span className={"inline"}>
                                     <Avatar
                                         src={option.avatar}
-                                        className={'margin ' + avatarSize.sm}
+                                        className={"margin " + avatarSize.sm}
                                     />
                                 </span>
                                 <span className={"inline"}>
@@ -45,7 +45,7 @@ const SearchUsers = ({users, addToFriends, accept, deleteFromFriends, isFetching
                                     <PersonAddIcon
                                         onClick={() => {
                                             option.is_not_friends ? addToFriends(option.user_id) :
-                                            accept(option.request_id)
+                                                accept(option.request_id);
                                         }}
                                     />
                             }
@@ -55,20 +55,20 @@ const SearchUsers = ({users, addToFriends, accept, deleteFromFriends, isFetching
                 renderInput={props =>
                     <Box className={"search-field"}>
                         {
-                            isFetching ? <CircularProgress color="inherit" size={25}/>:
-                                <SearchIcon sx={{color: 'action.active'}}/>
+                            isFetching ? <CircularProgress color="inherit" size={25}/> :
+                                <SearchIcon sx={{color: "action.active"}}/>
                         }
                         <TextField
                             {...props}
                             variant="standard"
-                            label={'Search'}
+                            label={"Search"}
                         />
                     </Box>
                 }
             />
         </>
     );
-}
+};
 
 SearchUsers.propTypes = {
     addToFriends: PropTypes.func.isRequired,
@@ -88,6 +88,6 @@ SearchUsers.propTypes = {
         })
     ),
     isFetching: PropTypes.bool
-}
+};
 
 export default SearchUsers;

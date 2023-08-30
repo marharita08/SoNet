@@ -8,13 +8,13 @@ const SNMenu = ({id, menuItems, anchorEl, onClose}) => {
             id={id}
             anchorEl={anchorEl}
             anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
+                vertical: "top",
+                horizontal: "right",
             }}
             keepMounted
             transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
+                vertical: "top",
+                horizontal: "right",
             }}
             open={Boolean(anchorEl)}
             onClose={onClose}
@@ -25,8 +25,8 @@ const SNMenu = ({id, menuItems, anchorEl, onClose}) => {
                 </MenuItem>
             ))}
         </Menu>
-    )
-}
+    );
+};
 
 SNMenu.propTypes = {
     id: PropTypes.string,
@@ -38,6 +38,6 @@ SNMenu.propTypes = {
     ),
     anchorEl: PropTypes.object,
     onClose: PropTypes.func
-}
+};
 
 export default SNMenu;

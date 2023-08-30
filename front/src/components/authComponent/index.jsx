@@ -1,17 +1,16 @@
 import React from "react";
-import {GoogleLogin} from 'react-google-login';
-import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
+import {GoogleLogin} from "react-google-login";
+import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
 import {Formik, Form, Field} from "formik";
 import * as Yup from "yup";
 import {Button, Card, CardHeader, CircularProgress} from "@mui/material";
 import PropTypes from "prop-types";
-import FacebookIcon from '@mui/icons-material/Facebook';
-import GoogleIcon from '@mui/icons-material/Google';
-import LoginIcon from '@mui/icons-material/Login';
+import FacebookIcon from "@mui/icons-material/Facebook";
+import GoogleIcon from "@mui/icons-material/Google";
+import LoginIcon from "@mui/icons-material/Login";
 import AuthTextField from "./AuthTextField";
 import LoginWithButton from "./LoginWithButton";
-import './auth.css';
-
+import "./auth.css";
 import env from "../../config/envConfig";
 
 const AuthComponent = ({
@@ -22,19 +21,20 @@ const AuthComponent = ({
     responseFacebook,
     googleLoading,
     facebookLoading,
-    authLoading }) => {
+    authLoading
+}) => {
 
     const schema = Yup.object().shape({
         email: Yup.string().required("Email is required")
             .email("Email is invalid")
             .max(255, "Email should contain no more than 255 symbols"),
         password: Yup.string().required("Password is required").min(8, "Password should contain more than 8 symbols"),
-    })
+    });
 
     return (
-        <Card className={'auth-card'}>
-            <CardHeader title={'Login/Sign Up'}/>
-            <div className={'margin'}>
+        <Card className={"auth-card"}>
+            <CardHeader title={"Login/Sign Up"}/>
+            <div className={"margin"}>
                 <Formik
                     onSubmit={onFormSubmit}
                     validationSchema={schema}
@@ -75,9 +75,9 @@ const AuthComponent = ({
                     <LoginWithButton
                         onClick={renderProps.onClick}
                         text={"Login with Google"}
-                        icon={ googleLoading ?
+                        icon={googleLoading ?
                             <CircularProgress color="inherit" size={25}/> :
-                            <GoogleIcon fontSize={"small"}/> }
+                            <GoogleIcon fontSize={"small"}/>}
                         className={"google-login"}
                     />
                 )}
@@ -90,16 +90,16 @@ const AuthComponent = ({
                     <LoginWithButton
                         onClick={renderProps.onClick}
                         text={"Login with Facebook"}
-                        icon={ facebookLoading ?
+                        icon={facebookLoading ?
                             <CircularProgress color="inherit" size={25}/> :
-                            <FacebookIcon fontSize={"small"}/> }
-                        className={"facebook-login"} />
+                            <FacebookIcon fontSize={"small"}/>}
+                        className={"facebook-login"}/>
                 )}
             />
             <br/>
         </Card>
-    )
-}
+    );
+};
 
 AuthComponent.propTypes = {
     onGoogleSuccess: PropTypes.func.isRequired,
@@ -113,6 +113,6 @@ AuthComponent.propTypes = {
     googleLoading: PropTypes.bool,
     facebookLoading: PropTypes.bool,
     authLoading: PropTypes.bool
-}
+};
 
 export default AuthComponent;

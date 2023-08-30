@@ -13,14 +13,15 @@ const AddCommentContainer = ({
     updateCommentInArray,
     handleError,
     setCurrentInitComment,
-    setCommentsExpanded}) => {
+    setCommentsExpanded
+}) => {
 
-    const { user } = useContext(authContext);
+    const {user} = useContext(authContext);
 
 
-    const { mutate: insertMutate, isLoading: insertLoading } = useMutation(insertComment, {
-        onSuccess:(data) => {
-            const { data: {comment: addedComment}} = data;
+    const {mutate: insertMutate, isLoading: insertLoading} = useMutation(insertComment, {
+        onSuccess: (data) => {
+            const {data: {comment: addedComment}} = data;
             addCommentToArray(addedComment);
             setCurrentInitComment();
             setCommentsExpanded(true);
@@ -28,9 +29,9 @@ const AddCommentContainer = ({
         onError: handleError
     });
 
-    const {mutate: updateMutate, isLoading: updateLoading } = useMutation(updateComment, {
-        onSuccess:(data) => {
-            const { data: {comment: updatedComment}} = data;
+    const {mutate: updateMutate, isLoading: updateLoading} = useMutation(updateComment, {
+        onSuccess: (data) => {
+            const {data: {comment: updatedComment}} = data;
             updateCommentInArray(updatedComment);
             setCurrentInitComment();
             setCommentsExpanded(true);
@@ -44,19 +45,19 @@ const AddCommentContainer = ({
         } else {
             updateMutate(data);
         }
-    }
+    };
 
     return (
         <AddComment
             user={user}
             comment={comment}
             onSubmit={onSubmit}
-            loading={insertLoading||updateLoading}
+            loading={insertLoading || updateLoading}
             addComment={addComment}
             handleCancel={handleCancel}
         />
-    )
-}
+    );
+};
 
 AddCommentContainer.propTypes = {
     comment: PropTypes.shape({
@@ -73,6 +74,6 @@ AddCommentContainer.propTypes = {
     handleError: PropTypes.func.isRequired,
     setCurrentInitComment: PropTypes.func.isRequired,
     setCommentsExpanded: PropTypes.func.isRequired
-}
+};
 
 export default AddCommentContainer;

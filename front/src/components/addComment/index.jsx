@@ -3,10 +3,10 @@ import {Avatar, Button, CircularProgress, Divider} from "@mui/material";
 import * as Yup from "yup";
 import {Formik, Form, Field} from "formik";
 import PropTypes from "prop-types";
-import SaveIcon from '@mui/icons-material/Save';
+import SaveIcon from "@mui/icons-material/Save";
 import SNTextarea from "../fields/SNTextarea";
 import {useStyles as useAvatarStyles} from "../avatarSize";
-import './addComent.css';
+import "./addComent.css";
 
 const AddComment = ({user, comment, onSubmit, loading, addComment, handleCancel}) => {
     const avatarSize = useAvatarStyles();
@@ -26,16 +26,16 @@ const AddComment = ({user, comment, onSubmit, loading, addComment, handleCancel}
             >
                 {({handleSubmit}) =>
                     <Form onSubmit={handleSubmit}>
-                        <div className={'avatar-container'} >
+                        <div className={"avatar-container"}>
                             <Avatar
                                 src={user.avatar}
-                                className={'margin ' + avatarSize.lg}
+                                className={"margin " + avatarSize.lg}
                             />
                         </div>
-                        <div className={'inline comment-field-container'}>
+                        <div className={"inline comment-field-container"}>
                             {
                                 comment.to &&
-                                <div className={'margin'}>
+                                <div className={"margin"}>
                                     Reply to: {comment.to}
                                     <div className={"reply-to-text"}>
                                         {comment.parent_text}
@@ -47,13 +47,13 @@ const AddComment = ({user, comment, onSubmit, loading, addComment, handleCancel}
                                     label={"Comment"}
                                     type={"text"}
                                     name={"text"}
-                                    component = {SNTextarea}
+                                    component={SNTextarea}
                                 />
                             </div>
                             {
                                 (!addComment || comment.level !== 1) &&
                                 <div className={"inline margin"}>
-                                    <Button variant={'outlined'} onClick={handleCancel}>Cancel</Button>
+                                    <Button variant={"outlined"} onClick={handleCancel}>Cancel</Button>
                                 </div>
                             }
                             <div className={"inline margin"}>
@@ -67,7 +67,7 @@ const AddComment = ({user, comment, onSubmit, loading, addComment, handleCancel}
                                         ) : <SaveIcon/>
                                     }
                                 >
-                                    {addComment ? 'Add' : 'Save'}
+                                    {addComment ? "Add" : "Save"}
                                 </Button>
                             </div>
                         </div>
@@ -75,8 +75,8 @@ const AddComment = ({user, comment, onSubmit, loading, addComment, handleCancel}
                 }
             </Formik>
         </>
-    )
-}
+    );
+};
 
 AddComment.propTypes = {
     user: PropTypes.shape({
@@ -93,6 +93,6 @@ AddComment.propTypes = {
     loading: PropTypes.bool,
     addComment: PropTypes.bool.isRequired,
     handleCancel: PropTypes.func.isRequired
-}
+};
 
 export default AddComment;

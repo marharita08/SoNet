@@ -26,4 +26,4 @@ export let EditProfileContainerPropTypes = {
         }),
         avatar: PropTypes.string.isRequired
     }),
-}
+};

@@ -3,11 +3,11 @@ import React, {useState} from "react";
 import moment from "moment";
 import {Avatar, CardContent, CardHeader, Divider, IconButton, Typography} from "@mui/material";
 import PropTypes from "prop-types";
-import ReplyIcon from '@mui/icons-material/Reply';
+import ReplyIcon from "@mui/icons-material/Reply";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import './comment.css';
+import "./comment.css";
 import SNMenu from "../menu/SNMenu";
 import MenuItemBody from "../menu/MenuItemBody";
 import {useStyles as useAvatarStyles} from "../avatarSize";
@@ -37,13 +37,13 @@ const Comment = ({
         event.preventDefault();
         setAnchorEl(null);
         handleEdit();
-    }
+    };
 
     const deleteOnClick = (event) => {
         event.preventDefault();
         setAnchorEl(null);
         handleDelete();
-    }
+    };
 
     const menuItems = [
         {
@@ -54,7 +54,7 @@ const Comment = ({
             body: <MenuItemBody text={"Delete"} icon={<DeleteIcon/>}/>,
             onClick: deleteOnClick
         }
-    ]
+    ];
 
     return (
         <>
@@ -102,14 +102,14 @@ const Comment = ({
                         </div>
                     }
                     subheader={
-                        <Typography style={{fontSize: '12px', color: 'gray'}}>
+                        <Typography style={{fontSize: "12px", color: "gray"}}>
                             {moment(comment.commented_at).fromNow()}
                         </Typography>
                     }
-                    style={{padding: "10px", paddingBottom: '5px'}}
+                    style={{padding: "10px", paddingBottom: "5px"}}
                 />
                 <SNMenu id={"menu-comment"} menuItems={menuItems} anchorEl={anchorEl} onClose={handleClose}/>
-                <CardContent style={{padding: "10px", paddingTop: '5px'}}>
+                <CardContent style={{padding: "10px", paddingTop: "5px"}}>
                     <Typography variant="body2">
                         {comment.text}
                     </Typography>
@@ -117,7 +117,7 @@ const Comment = ({
             </div>
         </>
     );
-}
+};
 
 Comment.propTypes = {
     comment: PropTypes.shape({
@@ -132,6 +132,6 @@ Comment.propTypes = {
     handleDelete: PropTypes.func.isRequired,
     isCurrentUser: PropTypes.bool,
     handleReply: PropTypes.func.isRequired
-}
+};
 
 export default Comment;

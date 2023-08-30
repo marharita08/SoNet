@@ -1,7 +1,6 @@
 import React from "react";
 import {useQuery} from "react-query";
 import PropTypes from "prop-types";
-
 import ErrorBoundary from "../../components/ErrorBoundary";
 import User from "../../components/user";
 import {getIncomingRequests} from "../../api/usersCrud";
@@ -10,7 +9,7 @@ import Loading from "../../components/loading";
 const IncomingRequests = ({id, accept, decline, incomingRequests, setIncomingRequests}) => {
 
     const {isFetching: incomingRequestsFetching} =
-        useQuery('incoming-requests', () => getIncomingRequests(id), {
+        useQuery("incoming-requests", () => getIncomingRequests(id), {
             onSuccess: (data) => setIncomingRequests(data?.data),
             refetchInterval: false,
             refetchOnWindowFocus: false
@@ -22,7 +21,7 @@ const IncomingRequests = ({id, accept, decline, incomingRequests, setIncomingReq
                 (incomingRequestsFetching || incomingRequests?.length !== 0) &&
                 <h2>Incoming Requests</h2>
             }
-            <Loading isLoading={incomingRequestsFetching} align={'left'}/>
+            <Loading isLoading={incomingRequestsFetching} align={"left"}/>
             {incomingRequests?.map((user) =>
                 <ErrorBoundary key={user.user_id}>
                     <User user={user} menu={true} accept={accept} decline={decline}/>
@@ -30,7 +29,7 @@ const IncomingRequests = ({id, accept, decline, incomingRequests, setIncomingReq
             )}
         </div>
     );
-}
+};
 
 IncomingRequests.propTypes = {
     id: PropTypes.number.isRequired,

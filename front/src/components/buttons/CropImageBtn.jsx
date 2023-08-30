@@ -12,18 +12,17 @@ const CropImageBtn = ({onClick}) => {
             <Button
                 variant={"outlined"}
                 onClick={onClick}
-                color={'success'}
                 startIcon={<ContentCutIcon/>}
                 className={classes.button}
             >
                 <span className={classes.buttonText}>Crop image</span>
             </Button>
         </span>
-    )
-}
+    );
+};
 
 CropImageBtn.propTypes = {
     onClick: PropTypes.func.isRequired
-}
+};
 
 export default CropImageBtn;

@@ -2,10 +2,9 @@ import React, {useContext, useState} from "react";
 import {useParams} from "react-router-dom";
 import {useMutation, useQuery} from "react-query";
 import PropTypes from "prop-types";
-
-import Profile from '../../components/profile';
+import Profile from "../../components/profile";
 import ErrorBoundary from "../../components/ErrorBoundary";
-import EditProfileContainer from '../editProfile'
+import EditProfileContainer from "../editProfile";
 import {getUser} from "../../api/usersCrud";
 import OutgoingRequests from "../outgoingRequests";
 import authContext from "../../context/authContext";
@@ -18,12 +17,12 @@ import Loading from "../../components/loading";
 const ProfileContainer = (handleError) => {
     const {id: idStr} = useParams();
     const id = parseInt(idStr, 10);
-    const {user:currentUser, isAdmin} = useContext(authContext);
+    const {user: currentUser, isAdmin} = useContext(authContext);
     const status = {
         underConsideration: 1,
         accepted: 2,
         denied: 3
-    }
+    };
 
     const [openModal, setOpenModal] = useState(false);
     const [friends, setFriends] = useState();
@@ -46,14 +45,14 @@ const ProfileContainer = (handleError) => {
     });
 
     const handleEdit = () => {
-      setOpenModal(true);
-    }
+        setOpenModal(true);
+    };
 
-    const { mutate: addMutate, isLoading: addLoading } = useMutation(insertRequest, {
+    const {mutate: addMutate, isLoading: addLoading} = useMutation(insertRequest, {
         onSuccess: (data) => {
-            const { data: {request}} = data;
+            const {data: {request}} = data;
             if (id !== currentUser.user_id) {
-                setCurrentRequest({...request, is_outgoing_request: true})
+                setCurrentRequest({...request, is_outgoing_request: true});
             } else {
                 setOutgoingRequests([...outgoingRequests, request]);
                 let newUsersForSearch = [...usersForSearch];
@@ -66,9 +65,9 @@ const ProfileContainer = (handleError) => {
         },
         onError: handleError
     });
-    const { mutate: acceptMutate, isLoading: acceptLoading } = useMutation(updateRequest, {
+    const {mutate: acceptMutate, isLoading: acceptLoading} = useMutation(updateRequest, {
         onSuccess: (data) => {
-            let { data: {id: request_id}} = data;
+            let {data: {id: request_id}} = data;
             request_id = parseInt(request_id, 10);
             if (id !== currentUser.user_id) {
                 let newCurrentRequest = currentRequest;
@@ -93,9 +92,9 @@ const ProfileContainer = (handleError) => {
         },
         onError: handleError
     });
-    const { mutate: declineMutate } = useMutation(updateRequest, {
+    const {mutate: declineMutate} = useMutation(updateRequest, {
         onSuccess: (data) => {
-            const { data: {id: request_id}} = data;
+            const {data: {id: request_id}} = data;
             let newIncomingRequestsList = [...incomingRequests];
             const index = newIncomingRequestsList.findIndex((obj => obj.request_id === request_id));
             newIncomingRequestsList.splice(index, 1);
@@ -103,12 +102,12 @@ const ProfileContainer = (handleError) => {
         },
         onError: handleError
     });
-    const { mutate: deleteMutate, isLoading: deleteLoading } = useMutation(deleteRequest, {
+    const {mutate: deleteMutate, isLoading: deleteLoading} = useMutation(deleteRequest, {
         onSuccess: (data) => {
             if (id !== currentUser.user_id) {
-                setCurrentRequest({ is_not_friends: true });
+                setCurrentRequest({is_not_friends: true});
             } else {
-                const { data: {id: request_id}} = data;
+                const {data: {id: request_id}} = data;
 
                 let newFriendsList = [...friends];
                 const friendsIndex = newFriendsList.findIndex((obj => obj.request_id === request_id));
@@ -134,44 +133,44 @@ const ProfileContainer = (handleError) => {
 
     const addToFriends = (fromUserId, toUserId) => {
         addMutate({
-                from_user_id: fromUserId,
-                to_user_id: toUserId
-            });
-    }
+            from_user_id: fromUserId,
+            to_user_id: toUserId
+        });
+    };
 
     const accept = (id) => {
         acceptMutate({
             request_id: id,
             status_id: status.accepted
         });
-    }
+    };
 
     const decline = (id) => {
         declineMutate({
             request_id: id,
             status_id: status.denied
-        })
-    }
+        });
+    };
 
     const deleteFromFriends = (id) => {
         deleteMutate(id);
-    }
+    };
 
     const handleAddToFriends = () => {
-        addToFriends(currentUser.user_id, id)
-    }
+        addToFriends(currentUser.user_id, id);
+    };
 
     const handleAccept = () => {
         accept(currentRequest.request_id);
-    }
+    };
 
     const handleDeleteFromFriends = () => {
         deleteFromFriends(currentRequest.request_id);
-    }
+    };
 
     return (
         <>
-            <Loading isLoading={userFetching} align={'left'}/>
+            <Loading isLoading={userFetching} align={"left"}/>
             <div key={id}>
                 <ErrorBoundary>
                     <Profile
@@ -182,7 +181,7 @@ const ProfileContainer = (handleError) => {
                         handleAccept={handleAccept}
                         handleDeleteFromFriends={handleDeleteFromFriends}
                         currentRequest={currentRequest}
-                        isLoading={acceptLoading||addLoading||deleteLoading}
+                        isLoading={acceptLoading || addLoading || deleteLoading}
                         isAdmin={isAdmin}
                         requestFetching={requestFetching}
                     />
@@ -235,7 +234,7 @@ const ProfileContainer = (handleError) => {
             </div>
         </>
     );
-}
+};
 
 ProfileContainer.propTypes = {
     handleError: PropTypes.func.isRequired

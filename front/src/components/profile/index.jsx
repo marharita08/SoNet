@@ -1,13 +1,13 @@
-import React from 'react';
-import { Formik, Form, Field} from 'formik';
+import React from "react";
+import {Formik, Form, Field} from "formik";
 import {Avatar, Button, CircularProgress} from "@mui/material";
-import { TextField } from 'formik-mui';
-import EditIcon from '@mui/icons-material/Edit';
-import PersonAddIcon from '@mui/icons-material/PersonAdd';
-import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
+import {TextField} from "formik-mui";
+import EditIcon from "@mui/icons-material/Edit";
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
+import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import {ProfilePropTypes} from "./profilePropTypes";
-import 'cropperjs/dist/cropper.css';
-import './profile.css';
+import "cropperjs/dist/cropper.css";
+import "./profile.css";
 import {useStyles as useAvatarStyles} from "../avatarSize";
 
 const Profile = ({
@@ -20,7 +20,8 @@ const Profile = ({
     handleDeleteFromFriends,
     currentRequest,
     isLoading,
-    requestFetching}) => {
+    requestFetching
+}) => {
 
     const avatarSize = useAvatarStyles();
 
@@ -34,68 +35,68 @@ const Profile = ({
             >
                 <Form>
                     <div className={"profile-container"}>
-                        <div className={"profile-image-container"} >
+                        <div className={"profile-image-container"}>
                             <Avatar
                                 className={"profile-image " + avatarSize.xl}
                                 src={user?.avatar}
                             />
                             {
                                 !isCurrentUser && (requestFetching ? <CircularProgress color="inherit" size={25}/> :
-                                    <>
-                                        {
-                                            currentRequest?.is_not_friends &&
-                                            <Button
-                                                size={'small'}
-                                                onClick={handleAddToFriends}
-                                                disabled={isLoading}
-                                                startIcon={
-                                                    isLoading ? (
-                                                        <CircularProgress color="inherit" size={25}/>
-                                                    ) : <PersonAddIcon/>
-                                                }
-                                            >
-                                                Add to friends
-                                            </Button>
-                                        }
-                                        {
-                                            currentRequest?.is_incoming_request &&
-                                            <Button
-                                                size={'small'}
-                                                onClick={handleAccept}
-                                                disabled={isLoading}
-                                                startIcon={
-                                                    isLoading ? (
-                                                        <CircularProgress color="inherit" size={25}/>
-                                                    ) : <PersonAddIcon/>
-                                                }
-                                            >
-                                                Accept request
-                                            </Button>
-                                        }
-                                        {
-                                            (currentRequest?.is_friends || currentRequest?.is_outgoing_request) &&
-                                            <Button
-                                                size={'small'}
-                                                onClick={handleDeleteFromFriends}
-                                                disabled={isLoading}
-                                                startIcon={
-                                                    isLoading ? (
-                                                        <CircularProgress color="inherit" size={25}/>
-                                                    ) : <PersonRemoveIcon/>
-                                                }
-                                            >
-                                                {currentRequest?.is_friends && "Delete from friends"}
-                                                {currentRequest?.is_outgoing_request && "Delete request"}
-                                            </Button>
-                                        }
-                                    </>
+                                        <>
+                                            {
+                                                currentRequest?.is_not_friends &&
+                                                <Button
+                                                    size={"small"}
+                                                    onClick={handleAddToFriends}
+                                                    disabled={isLoading}
+                                                    startIcon={
+                                                        isLoading ? (
+                                                            <CircularProgress color="inherit" size={25}/>
+                                                        ) : <PersonAddIcon/>
+                                                    }
+                                                >
+                                                    Add to friends
+                                                </Button>
+                                            }
+                                            {
+                                                currentRequest?.is_incoming_request &&
+                                                <Button
+                                                    size={"small"}
+                                                    onClick={handleAccept}
+                                                    disabled={isLoading}
+                                                    startIcon={
+                                                        isLoading ? (
+                                                            <CircularProgress color="inherit" size={25}/>
+                                                        ) : <PersonAddIcon/>
+                                                    }
+                                                >
+                                                    Accept request
+                                                </Button>
+                                            }
+                                            {
+                                                (currentRequest?.is_friends || currentRequest?.is_outgoing_request) &&
+                                                <Button
+                                                    size={"small"}
+                                                    onClick={handleDeleteFromFriends}
+                                                    disabled={isLoading}
+                                                    startIcon={
+                                                        isLoading ? (
+                                                            <CircularProgress color="inherit" size={25}/>
+                                                        ) : <PersonRemoveIcon/>
+                                                    }
+                                                >
+                                                    {currentRequest?.is_friends && "Delete from friends"}
+                                                    {currentRequest?.is_outgoing_request && "Delete request"}
+                                                </Button>
+                                            }
+                                        </>
                                 )
                             }
                         </div>
                         <div className={"profile_fields_container"}>
                             <div>
                                 <div className={"profile-field "
-                                + (isAdmin || isCurrentUser ? "profile-field-width-not-full":"profile-field-width-full")}>
+                                    + (isAdmin || isCurrentUser ? "profile-field-width-not-full" : "profile-field-width-full")}>
                                     <Field
                                         component={TextField}
                                         type={"text"}
@@ -114,7 +115,7 @@ const Profile = ({
                                     currentRequest?.is_friends && user?.email_visibility.label === "Friends") &&
                                 <div>
                                     <div className={"profile-field "
-                                        + (isAdmin || isCurrentUser ? "profile-field-width-not-full":"profile-field-width-full")}>
+                                        + (isAdmin || isCurrentUser ? "profile-field-width-not-full" : "profile-field-width-full")}>
                                         <Field
                                             component={TextField}
                                             type={"email"}
@@ -144,7 +145,7 @@ const Profile = ({
                                     currentRequest?.is_friends && user?.phone_visibility.label === "Friends") &&
                                 <div>
                                     <div className={"profile-field "
-                                    + (isAdmin || isCurrentUser ? "profile-field-width-not-full":"profile-field-width-full")}>
+                                        + (isAdmin || isCurrentUser ? "profile-field-width-not-full" : "profile-field-width-full")}>
                                         <Field
                                             component={TextField}
                                             name={"phone"}
@@ -156,13 +157,13 @@ const Profile = ({
                                     {
                                         (isAdmin || isCurrentUser) &&
                                         <div className={"profile-visibility"}>
-                                        <Field
-                                            component={TextField}
-                                            name="phone_visibility.label"
-                                            label={"Available to"}
-                                            disabled
-                                            fullWidth
-                                        />
+                                            <Field
+                                                component={TextField}
+                                                name="phone_visibility.label"
+                                                label={"Available to"}
+                                                disabled
+                                                fullWidth
+                                            />
                                         </div>
                                     }
                                 </div>
@@ -173,7 +174,7 @@ const Profile = ({
                                     currentRequest?.is_friends && user?.university_visibility.label === "Friends") &&
                                 <div>
                                     <div className={"profile-field "
-                                    + (isAdmin || isCurrentUser ? "profile-field-width-not-full":"profile-field-width-full")}>
+                                        + (isAdmin || isCurrentUser ? "profile-field-width-not-full" : "profile-field-width-full")}>
                                         <Field
                                             component={TextField}
                                             disabled
@@ -214,7 +215,7 @@ const Profile = ({
             </Formik>
         </>
     );
-}
+};
 
 Profile.propTypes = ProfilePropTypes;
 
@@ -223,6 +224,6 @@ Profile.defaultProps = {
     isAdmin: false,
     isLoading: false,
     requestFetching: false,
-}
+};
 
 export default Profile;

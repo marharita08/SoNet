@@ -12,18 +12,17 @@ const DeleteImageBtn = ({onClick}) => {
             <Button
                 variant={"outlined"}
                 onClick={onClick}
-                color={'error'}
                 startIcon={<DeleteIcon/>}
                 className={classes.button}
             >
                 <span className={classes.buttonText}>Delete image</span>
             </Button>
         </span>
-    )
-}
+    );
+};
 
 DeleteImageBtn.propTypes = {
     onClick: PropTypes.func.isRequired
-}
+};
 
 export default DeleteImageBtn;

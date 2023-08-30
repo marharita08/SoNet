@@ -4,9 +4,9 @@ import {Avatar, Card, CardHeader, IconButton, Typography} from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
-import CloseIcon from '@mui/icons-material/Close';
-import {useState} from "react";
-import './user.css';
+import CloseIcon from "@mui/icons-material/Close";
+import React, {useState} from "react";
+import "./user.css";
 import MenuItemBody from "../menu/MenuItemBody";
 import SNMenu from "../menu/SNMenu";
 import {useStyles as useAvatarStyles} from "../avatarSize";
@@ -31,18 +31,18 @@ const User = ({user, deleteRequest, menu, accept, decline}) => {
         event.preventDefault();
         setAnchorEl(null);
         accept(user.request_id);
-    }
+    };
 
     const declineOnClick = (event) => {
         event.preventDefault();
         setAnchorEl(null);
         decline(user.request_id);
-    }
+    };
 
     const handleClose = (event) => {
         event.preventDefault();
         deleteRequest(user.request_id);
-    }
+    };
 
     const menuItems = [
         {
@@ -53,12 +53,12 @@ const User = ({user, deleteRequest, menu, accept, decline}) => {
             body: <MenuItemBody text={"Decline"} icon={<PersonRemoveIcon/>}/>,
             onClick: declineOnClick
         }
-    ]
+    ];
 
     return (
         <>
             <Link to={`/profile/${user.user_id}`}>
-                <Card className={'inline margin user-card'}>
+                <Card className={"inline margin user-card"}>
                     <CardHeader
                         avatar={
                             <Avatar
@@ -68,12 +68,12 @@ const User = ({user, deleteRequest, menu, accept, decline}) => {
                         }
                         action={
                             menu ?
-                            <IconButton aria-label="settings" onClick={handleMenu}>
-                                <MoreVertIcon/>
-                            </IconButton>:
-                            <IconButton className="closebtn" onClick={handleClose}>
-                                <CloseIcon />
-                            </IconButton>
+                                <IconButton aria-label="settings" onClick={handleMenu}>
+                                    <MoreVertIcon/>
+                                </IconButton> :
+                                <IconButton className="closebtn" onClick={handleClose}>
+                                    <CloseIcon/>
+                                </IconButton>
                         }
                         title={
                             <Typography sx={{fontWeight: "bold"}}>
@@ -86,7 +86,7 @@ const User = ({user, deleteRequest, menu, accept, decline}) => {
             </Link>
         </>
     );
-}
+};
 
 User.propTypes = {
     user: PropTypes.shape({

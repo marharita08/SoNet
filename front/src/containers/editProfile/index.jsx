@@ -1,9 +1,8 @@
 import React, {useState} from "react";
 import {useMutation, useQuery} from "react-query";
 import {serialize} from "object-to-formdata";
-
 import ErrorBoundary from "../../components/ErrorBoundary";
-import EditProfile from '../../components/editProfile';
+import EditProfile from "../../components/editProfile";
 import {getUniversities} from "../../api/universitiesCrud";
 import {getFieldVisibilities} from "../../api/visibilitiesCrud";
 import {updateUser} from "../../api/usersCrud";
@@ -12,12 +11,12 @@ import {EditProfileContainerPropTypes} from "./editProfileContainerPropTypes";
 const EditProfileContainer = ({openModal, setOpenModal, user, setUser}) => {
 
     const {isFetching: universitiesFetching, data: universitiesData} =
-        useQuery('universities', () => getUniversities(), {
+        useQuery("universities", () => getUniversities(), {
             refetchInterval: false,
             refetchOnWindowFocus: false
         });
     const {isFetching: visibilitiesFetching, data: visibilitiesData} =
-        useQuery('visibilities', () => getFieldVisibilities(), {
+        useQuery("visibilities", () => getFieldVisibilities(), {
             refetchInterval: false,
             refetchOnWindowFocus: false
         });
@@ -30,7 +29,7 @@ const EditProfileContainer = ({openModal, setOpenModal, user, setUser}) => {
     const [cropper, setCropper] = useState();
     const [message, setMessage] = useState();
 
-    const { mutate, isLoading } = useMutation(
+    const {mutate, isLoading} = useMutation(
         updateUser, {
             onSuccess: (data) => {
                 setUser(data.data);
@@ -40,27 +39,27 @@ const EditProfileContainer = ({openModal, setOpenModal, user, setUser}) => {
         });
 
     const onFormSubmit = (data) => {
-        let formData=serialize(data);
+        let formData = serialize(data);
         mutate(formData);
-    }
+    };
 
     const handleChange = e => {
         e.preventDefault();
         const file = e.target.files[0];
 
-        if (file.type.match('image.*') && file.size < 10000000) {
+        if (file.type.match("image.*") && file.size < 10000000) {
             const reader = new FileReader();
             reader.onload = () => {
                 setImage(reader.result);
-            }
+            };
             reader.readAsDataURL(file);
         } else {
-            setMessage('Wrong file format or size!');
+            setMessage("Wrong file format or size!");
         }
-    }
+    };
 
     const cropImage = (setFieldValue) => {
-        if (typeof cropper !== 'undefined') {
+        if (typeof cropper !== "undefined") {
             var img = cropper.getCroppedCanvas().toDataURL();
             setCroppedImage(img);
             setImage(null);
@@ -68,15 +67,15 @@ const EditProfileContainer = ({openModal, setOpenModal, user, setUser}) => {
                 .then(res => res.blob())
                 .then(blob => {
                     setFieldValue("file", blob);
-                })
+                });
         }
-    }
+    };
 
     const deleteImage = (setFieldValue) => {
         setImage(null);
         setCroppedImage(null);
         setFieldValue("file", undefined);
-    }
+    };
 
     const handleClose = () => {
         setOpenModal(false);
@@ -86,9 +85,9 @@ const EditProfileContainer = ({openModal, setOpenModal, user, setUser}) => {
 
     const handleAlertClose = () => {
         setMessage(undefined);
-    }
+    };
 
-    return(
+    return (
         <ErrorBoundary>
             <EditProfile
                 user={user}
@@ -104,13 +103,13 @@ const EditProfileContainer = ({openModal, setOpenModal, user, setUser}) => {
                 handleChange={handleChange}
                 openModal={openModal}
                 handleClose={handleClose}
-                isFetching={universitiesFetching||visibilitiesFetching}
+                isFetching={universitiesFetching || visibilitiesFetching}
                 message={message}
                 handleAlertClose={handleAlertClose}
             />
         </ErrorBoundary>
     );
-}
+};
 
 EditProfileContainer.propTypes = EditProfileContainerPropTypes;
 

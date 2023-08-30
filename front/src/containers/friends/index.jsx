@@ -9,19 +9,20 @@ import Loading from "../../components/loading";
 
 const Friends = ({id, deleteRequest, friends, setFriends}) => {
 
-    const {isFetching: friendsFetching} = useQuery('friends', () => getFriends(id), {
-        onSuccess: (data) => setFriends(data?.data),
-        refetchInterval: false,
-        refetchOnWindowFocus: false
-    });
+    const {isFetching: friendsFetching} = useQuery("friends",
+        () => getFriends(id), {
+            onSuccess: (data) => setFriends(data?.data),
+            refetchInterval: false,
+            refetchOnWindowFocus: false
+        });
 
     return (
         <div className={"margin"}>
             {
                 (friendsFetching || friends?.length !== 0) &&
-                <h2 className={'inline'}>Friends</h2>
+                <h2 className={"inline"}>Friends</h2>
             }
-            <Loading isLoading={friendsFetching} align={'left'}/>
+            <Loading isLoading={friendsFetching} align={"left"}/>
             {friends?.map((user) =>
                 <ErrorBoundary key={user.user_id}>
                     <User user={user} deleteRequest={deleteRequest} menu={false}/>
@@ -29,7 +30,7 @@ const Friends = ({id, deleteRequest, friends, setFriends}) => {
             )}
         </div>
     );
-}
+};
 
 Friends.propTypes = {
     id: PropTypes.number.isRequired,

@@ -1,5 +1,5 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react";
+import PropTypes from "prop-types";
 import {
     Avatar,
     CardActions,
@@ -9,30 +9,29 @@ import {
     styled,
     Typography
 } from "@mui/material";
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import CommentIcon from '@mui/icons-material/Comment';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import AddCommentIcon from '@mui/icons-material/AddComment';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import CommentIcon from "@mui/icons-material/Comment";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import AddCommentIcon from "@mui/icons-material/AddComment";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 import {Link} from "react-router-dom";
 import {useState} from "react";
 import {useStyles as useAvatarStyles} from "../avatarSize";
 import env from "../../config/envConfig";
-import './article.css';
 import MenuItemBody from "../menu/MenuItemBody";
 import SNMenu from "../menu/SNMenu";
 import AvatarPopover from "./AvatarPopover";
 
 const ExpandMore = styled((props) => {
-    const { expand, ...other } = props;
+    const {expand, ...other} = props;
     return <div {...other} />;
-})(({ theme, expand }) => ({
-    transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
-    marginLeft: 'auto',
-    transition: theme.transitions.create('transform', {
+})(({theme, expand}) => ({
+    transform: !expand ? "rotate(0deg)" : "rotate(180deg)",
+    marginLeft: "auto",
+    transition: theme.transitions.create("transform", {
         duration: theme.transitions.duration.shortest,
     }),
 }));
@@ -52,7 +51,9 @@ const Article = ({
     comments,
     users,
     likesFetching,
-    commentsFetching}) => {
+    commentsFetching
+}) => {
+
     const avatarSize = useAvatarStyles();
     const [menuAnchorEl, setMenuAnchorEl] = useState(null);
     const [popoverAnchorEl, setPopoverAnchorEl] = React.useState(null);
@@ -78,13 +79,13 @@ const Article = ({
         event.preventDefault();
         setMenuAnchorEl(null);
         handleEdit(article);
-    }
+    };
 
     const deleteOnClick = (event) => {
         event.preventDefault();
         setMenuAnchorEl(null);
         handleDelete();
-    }
+    };
 
     const menuItems = [
         {
@@ -95,7 +96,7 @@ const Article = ({
             body: <MenuItemBody text={"Delete"} icon={<DeleteIcon/>}/>,
             onClick: deleteOnClick
         }
-    ]
+    ];
 
     return (
         <>
@@ -111,11 +112,11 @@ const Article = ({
                 action={
                     (isCurrentUser || isAdmin) &&
                     <IconButton aria-label="settings">
-                        <MoreVertIcon onClick={handleMenu} />
+                        <MoreVertIcon onClick={handleMenu}/>
                     </IconButton>
                 }
                 title={
-                    <Typography style={{fontWeight: 'bold'}}>
+                    <Typography style={{fontWeight: "bold"}}>
                         <Link to={`/profile/${article.user_id}`}>
                             {article.name}
                         </Link>
@@ -126,7 +127,7 @@ const Article = ({
             <SNMenu id={"menu-article"} menuItems={menuItems} anchorEl={menuAnchorEl} onClose={handleClose}/>
             <Link to={`/article/${article.article_id}`}>
                 {
-                    article.image!==undefined && article.image &&
+                    article.image !== undefined && article.image &&
                     <CardMedia
                         component={"img"}
                         image={`${env.apiUrl}${article.image}`}
@@ -161,7 +162,7 @@ const Article = ({
                         likesFetching ? <CircularProgress color="inherit" size={25}/> :
                             <IconButton
                                 onClick={handleLikeClick}
-                                aria-owns={open ? 'mouse-over-popover' : undefined}
+                                aria-owns={open ? "mouse-over-popover" : undefined}
                                 aria-haspopup="true"
                                 onMouseEnter={handlePopoverOpen}
                                 onMouseLeave={handlePopoverClose}
@@ -181,7 +182,7 @@ const Article = ({
             </Link>
         </>
     );
-}
+};
 
 Article.propTypes = {
     article: PropTypes.shape({

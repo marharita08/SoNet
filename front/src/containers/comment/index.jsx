@@ -11,12 +11,13 @@ const CommentContainer = ({
     setAddComment,
     setCommentFieldExpanded,
     deleteCommentFromArray,
-    handleError}) => {
+    handleError
+}) => {
 
-    const { user:{user_id}, isAdmin} = useContext(authContext);
+    const {user: {user_id}, isAdmin} = useContext(authContext);
 
     const {mutate} = useMutation(deleteComment, {
-        onSuccess:() => {
+        onSuccess: () => {
             deleteCommentFromArray(comment.comment_id);
         },
         onError: handleError
@@ -24,13 +25,13 @@ const CommentContainer = ({
 
     const handleDelete = () => {
         mutate(comment.comment_id);
-    }
+    };
 
     const handleEdit = () => {
         setComment(comment);
         setAddComment(false);
         setCommentFieldExpanded(true);
-    }
+    };
 
     const handleReply = () => {
         setComment({
@@ -41,11 +42,11 @@ const CommentContainer = ({
             user_id,
             article_id: comment.article_id,
             path: comment.path,
-            text: '',
-        })
+            text: "",
+        });
         setCommentFieldExpanded(true);
         setAddComment(true);
-    }
+    };
 
     return (
         <Comment
@@ -56,8 +57,8 @@ const CommentContainer = ({
             handleEdit={handleEdit}
             handleReply={handleReply}
         />
-    )
-}
+    );
+};
 
 CommentContainer.propTypes = {
     comment: PropTypes.shape({
@@ -73,6 +74,6 @@ CommentContainer.propTypes = {
     setCommentFieldExpanded: PropTypes.func.isRequired,
     handleError: PropTypes.func.isRequired,
     deleteCommentFromArray: PropTypes.func.isRequired
-}
+};
 
 export default CommentContainer;

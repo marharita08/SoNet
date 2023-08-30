@@ -1,8 +1,7 @@
-import React , {useContext} from "react";
+import React, {useContext} from "react";
 import {useParams} from "react-router-dom";
 import {useQuery} from "react-query";
-import PropTypes from 'prop-types';
-
+import PropTypes from "prop-types";
 import ErrorBoundary from "../../components/ErrorBoundary";
 import Article from "../article";
 import {getArticle} from "../../api/articlesCrud";
@@ -12,8 +11,8 @@ import Loading from "../../components/loading";
 
 const ArticleOuterContainer = ({setArticleContext, handleError, articles, setArticles}) => {
     let {id} = useParams();
-    const { user:{user_id} } = useContext(authContext);
-    const {isFetching:articleFetching} =
+    const {user: {user_id}} = useContext(authContext);
+    const {isFetching: articleFetching} =
         useQuery(`article ${id}-${user_id}`, () => getArticle(id), {
             onSuccess: (data) => setArticles(data?.data),
             refetchInterval: false,
@@ -36,7 +35,7 @@ const ArticleOuterContainer = ({setArticleContext, handleError, articles, setArt
             )}
         </>
     );
-}
+};
 
 ArticleOuterContainer.propTypes = {
     setArticleContext: PropTypes.func.isRequired,
@@ -53,6 +52,6 @@ ArticleOuterContainer.propTypes = {
         })
     ),
     setArticles: PropTypes.func.isRequired,
-}
+};
 
 export default ArticleOuterContainer;

@@ -9,7 +9,7 @@ const AddImageBtn = ({onChange, isImage}) => {
 
     return (
         <span>
-            <label htmlFor="contained-button-file" >
+            <label htmlFor="contained-button-file">
                 <Button
                     variant="outlined"
                     component="span"
@@ -29,12 +29,12 @@ const AddImageBtn = ({onChange, isImage}) => {
                 </Button>
             </label>
         </span>
-    )
-}
+    );
+};
 
 AddImageBtn.propTypes = {
     onChange: PropTypes.func.isRequired,
     isImage: PropTypes.bool
-}
+};
 
 export default AddImageBtn;
