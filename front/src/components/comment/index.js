@@ -10,6 +10,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import './comment.css';
 import SNMenu from "../menu/SNMenu";
 import MenuItemBody from "../menu/MenuItemBody";
+import {useStyles as useAvatarStyles} from "../avatarSize";
 
 
 const Comment = ({
@@ -20,6 +21,7 @@ const Comment = ({
     isCurrentUser,
     handleReply
 }) => {
+    const avatarSize = useAvatarStyles();
     const [anchorEl, setAnchorEl] = useState(null);
 
     const handleMenu = (event) => {
@@ -64,6 +66,7 @@ const Comment = ({
                             <Avatar
                                 alt={comment.name}
                                 src={comment.avatar}
+                                className={avatarSize.md}
                             />
                         </Link>
                     }

@@ -10,7 +10,7 @@ import {
     IconButton,
 } from "@mui/material";
 import * as Yup from "yup";
-import FormikAutocomplete from "../FormikAutocomplete";
+import FormikAutocomplete from "../fields/FormikAutocomplete";
 import Cropper from "react-cropper";
 import SaveIcon from '@mui/icons-material/Save';
 import CloseIcon from '@mui/icons-material/Close';

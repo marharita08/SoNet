@@ -1,6 +1,6 @@
 import {Field, Form, Formik} from "formik";
 import {TextField} from "formik-mui";
-import FormikAutocomplete from "../FormikAutocomplete";
+import FormikAutocomplete from "../fields/FormikAutocomplete";
 import {
     Avatar,
     Button,
@@ -23,6 +23,7 @@ import CropImageBtn from "../buttons/CropImageBtn";
 import AddImageBtn from "../buttons/AddImageBtn";
 import DeleteImageBtn from "../buttons/DeleteImageBtn";
 import './editProfile.css';
+import {useStyles as useAvatarStyles} from "../avatarSize";
 
 const EditProfile = ({
         universities,
@@ -42,7 +43,9 @@ const EditProfile = ({
         message,
         handleAlertClose}) => {
 
-        const schema = Yup.object().shape({
+    const avatarSize = useAvatarStyles();
+
+    const schema = Yup.object().shape({
         name: Yup.string().required("Name is required").max(255, "Name should contain not more than 255 symbols"),
         email: Yup.string().required("Email is required").max(255, "Name should contain not more than 255 symbols"),
         email_visibility: Yup.object().shape({
@@ -87,9 +90,8 @@ const EditProfile = ({
                         <DialogContent>
                         <Loading isLoading={isFetching}/>
                         <Avatar
-                            className={"edit-profile-avatar"}
+                            className={"edit-profile-avatar " + avatarSize.xl}
                             src={croppedImage||user?.avatar}
-                            sx={{ width: 110, height: 110 }}
                         />
                         {image && (
                             <div className={"margin"}>

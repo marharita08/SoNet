@@ -5,9 +5,11 @@ import {Formik, Form, Field} from "formik";
 import PropTypes from "prop-types";
 import SaveIcon from '@mui/icons-material/Save';
 import SNTextarea from "../fields/SNTextarea";
+import {useStyles as useAvatarStyles} from "../avatarSize";
 import './addComent.css';
 
 const AddComment = ({user, comment, onSubmit, loading, addComment, handleCancel}) => {
+    const avatarSize = useAvatarStyles();
 
     const schema = Yup.object().shape({
         text: Yup.string().required("Text is required")
@@ -27,8 +29,7 @@ const AddComment = ({user, comment, onSubmit, loading, addComment, handleCancel}
                         <div className={'avatar-container'} >
                             <Avatar
                                 src={user.avatar}
-                                style={{width: '60px', height: '60px'}}
-                                className={'margin'}
+                                className={'margin ' + avatarSize.lg}
                             />
                         </div>
                         <div className={'inline comment-field-container'}>

@@ -1,8 +1,11 @@
 import React from "react";
 import {Avatar, AvatarGroup, Popover} from "@mui/material";
 import PropTypes from "prop-types";
+import {useStyles as useAvatarStyles} from "../avatarSize";
 
 const AvatarPopover = ({anchorEl, onClose, users}) => {
+    const avatarSize = useAvatarStyles();
+
     return (
         <Popover
             id="mouse-over-popover"
@@ -27,6 +30,7 @@ const AvatarPopover = ({anchorEl, onClose, users}) => {
                     <Avatar
                         key={user.user_id}
                         src={user.avatar}
+                        className={avatarSize.sm}
                     />
                 )}
             </AvatarGroup>

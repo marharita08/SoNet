@@ -6,12 +6,14 @@ import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import CloseIcon from '@mui/icons-material/Close';
 import {useState} from "react";
-
 import './user.css';
 import MenuItemBody from "../menu/MenuItemBody";
 import SNMenu from "../menu/SNMenu";
+import {useStyles as useAvatarStyles} from "../avatarSize";
 
 const User = ({user, deleteRequest, menu, accept, decline}) => {
+
+    const avatarSize = useAvatarStyles();
 
     const [anchorEl, setAnchorEl] = useState(null);
 
@@ -61,7 +63,7 @@ const User = ({user, deleteRequest, menu, accept, decline}) => {
                         avatar={
                             <Avatar
                                 src={user.avatar}
-                                sx={{ width: 50, height: 50 }}
+                                className={avatarSize.lg}
                             />
                         }
                         action={

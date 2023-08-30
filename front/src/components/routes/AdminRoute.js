@@ -1,7 +1,7 @@
 import {useContext} from "react";
 import {Navigate, Outlet} from "react-router-dom";
 
-import authContext from "../context/authContext";
+import authContext from "../../context/authContext";
 
 function AdminRoute() {
     const { isAdmin, authenticated } = useContext(authContext);

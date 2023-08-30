@@ -16,9 +16,9 @@ import authContext from './context/authContext';
 import articleContext from "./context/articleContext";
 import './App.css';
 import ArticleOuterContainer from "./containers/articleOuter";
-import ProtectedRoute from "./components/ProtectedRoute";
-import GuestRoute from "./components/GuestRoute";
-import AdminRoute from "./components/AdminRoute";
+import ProtectedRoute from "./components/routes/ProtectedRoute";
+import GuestRoute from "./components/routes/GuestRoute";
+import AdminRoute from "./components/routes/AdminRoute";
 
 const queryClient = new QueryClient();
 

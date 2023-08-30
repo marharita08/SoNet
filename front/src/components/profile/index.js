@@ -8,6 +8,7 @@ import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 import {ProfilePropTypes} from "./profilePropTypes";
 import 'cropperjs/dist/cropper.css';
 import './profile.css';
+import {useStyles as useAvatarStyles} from "../avatarSize";
 
 const Profile = ({
     user,
@@ -21,6 +22,8 @@ const Profile = ({
     isLoading,
     requestFetching}) => {
 
+    const avatarSize = useAvatarStyles();
+
     return (
         <>
             <h1 className={"big_margin"}>Profile</h1>
@@ -33,9 +36,8 @@ const Profile = ({
                     <div className={"profile-container"}>
                         <div className={"profile-image-container"} >
                             <Avatar
-                                className={"profile-image"}
+                                className={"profile-image " + avatarSize.xl}
                                 src={user?.avatar}
-                                sx={{ width: 110, height: 110 }}
                             />
                             {
                                 !isCurrentUser && (requestFetching ? <CircularProgress color="inherit" size={25}/> :

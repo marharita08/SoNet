@@ -6,8 +6,12 @@ import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import {Link} from "react-router-dom";
 import PropTypes from "prop-types";
 import './search.css';
+import {useStyles as useAvatarStyles} from "../avatarSize";
 
 const SearchUsers = ({users, addToFriends, accept, deleteFromFriends, isFetching}) => {
+
+    const avatarSize = useAvatarStyles();
+
     return (
         <>
             <Autocomplete
@@ -26,8 +30,7 @@ const SearchUsers = ({users, addToFriends, accept, deleteFromFriends, isFetching
                                 <span className={"inline"}>
                                     <Avatar
                                         src={option.avatar}
-                                        sx={{width: 30, height: 30}}
-                                        className={'margin'}
+                                        className={'margin ' + avatarSize.sm}
                                     />
                                 </span>
                                 <span className={"inline"}>
