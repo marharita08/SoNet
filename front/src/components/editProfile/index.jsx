@@ -18,7 +18,7 @@ import SaveIcon from '@mui/icons-material/Save';
 import CloseIcon from "@mui/icons-material/Close";
 import {EditProfilePropTypes} from "./editProfilePropTypes";
 import AlertContainer from "../../containers/alert";
-import Loading from "../../components/loading";
+import Loading from "../loading";
 import CropImageBtn from "../buttons/CropImageBtn";
 import AddImageBtn from "../buttons/AddImageBtn";
 import DeleteImageBtn from "../buttons/DeleteImageBtn";

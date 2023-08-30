@@ -2,7 +2,7 @@ import React, {useContext, useEffect, useState} from "react";
 import { useQuery} from "react-query";
 import PropTypes from "prop-types";
 
-import Article from "../../containers/article";
+import Article from "../article";
 import ErrorBoundary from "../../components/ErrorBoundary";
 import authContext from "../../context/authContext";
 import {getAllNews, getNews, getCountOfNews, getCountOfAllNews} from "../../api/articlesCrud";

@@ -4,7 +4,7 @@ import {useQuery} from "react-query";
 import PropTypes from 'prop-types';
 
 import ErrorBoundary from "../../components/ErrorBoundary";
-import Article from "../../containers/article";
+import Article from "../article";
 import {getArticle} from "../../api/articlesCrud";
 import authContext from "../../context/authContext";
 import Loading from "../../components/loading";
