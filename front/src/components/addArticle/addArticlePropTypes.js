@@ -24,4 +24,4 @@ export let AddArticlePropTypes = {
     deleteImage: PropTypes.func.isRequired,
     message: PropTypes.string,
     visibilitiesFetching: PropTypes.bool
-}
+};

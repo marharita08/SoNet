@@ -45,4 +45,4 @@ export let EditProfilePropTypes = {
     isFetching: PropTypes.bool,
     message: PropTypes.string,
     handleAlertClose: PropTypes.func
-}
+};
