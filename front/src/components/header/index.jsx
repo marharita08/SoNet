@@ -7,11 +7,14 @@ import PersonIcon from "@mui/icons-material/Person";
 import LogoutIcon from "@mui/icons-material/Logout";
 import NoteAddIcon from "@mui/icons-material/NoteAdd";
 import DescriptionIcon from "@mui/icons-material/Description";
-import HeaderButton from "./HeaderButton";
+import HeaderButton from "../buttons/HeaderButton";
 import HeaderMenuItemBody from "../menu/HeaderMenuItemBody";
 import SNMenu from "../menu/SNMenu";
+import {useStyles as useAvatarStyles} from "../avatarSize";
 
 const Header = ({handleClickOpen, user, authenticated, logout, isAdmin}) => {
+
+    const avatarSize = useAvatarStyles();
     const [anchorEl, setAnchorEl] = useState(null);
 
     const handleMenu = (event) => {
@@ -71,7 +74,7 @@ const Header = ({handleClickOpen, user, authenticated, logout, isAdmin}) => {
                         <span className={"inline"}>
                             <Avatar
                                 src={user.avatar}
-                                className={"header-avatar"}
+                                className={"header-avatar " + avatarSize.md}
                             />
                         </span>
                         <span className={"username"}>{user.name}</span>

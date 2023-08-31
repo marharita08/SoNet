@@ -9,6 +9,7 @@ import {ProfilePropTypes} from "./profilePropTypes";
 import "cropperjs/dist/cropper.css";
 import "./profile.css";
 import {useStyles as useAvatarStyles} from "../avatarSize";
+import FriendRequestBtn from "../buttons/FriendRequestBtn";
 
 const Profile = ({
     user,
@@ -43,52 +44,34 @@ const Profile = ({
                             {
                                 !isCurrentUser && (requestFetching ? <CircularProgress color="inherit" size={25}/> :
                                         <>
-                                            {
-                                                currentRequest?.is_not_friends &&
-                                                <Button
-                                                    size={"small"}
-                                                    onClick={handleAddToFriends}
-                                                    disabled={isLoading}
-                                                    startIcon={
-                                                        isLoading ? (
-                                                            <CircularProgress color="inherit" size={25}/>
-                                                        ) : <PersonAddIcon/>
-                                                    }
-                                                >
-                                                    Add to friends
-                                                </Button>
-                                            }
-                                            {
-                                                currentRequest?.is_incoming_request &&
-                                                <Button
-                                                    size={"small"}
-                                                    onClick={handleAccept}
-                                                    disabled={isLoading}
-                                                    startIcon={
-                                                        isLoading ? (
-                                                            <CircularProgress color="inherit" size={25}/>
-                                                        ) : <PersonAddIcon/>
-                                                    }
-                                                >
-                                                    Accept request
-                                                </Button>
-                                            }
-                                            {
-                                                (currentRequest?.is_friends || currentRequest?.is_outgoing_request) &&
-                                                <Button
-                                                    size={"small"}
-                                                    onClick={handleDeleteFromFriends}
-                                                    disabled={isLoading}
-                                                    startIcon={
-                                                        isLoading ? (
-                                                            <CircularProgress color="inherit" size={25}/>
-                                                        ) : <PersonRemoveIcon/>
-                                                    }
-                                                >
-                                                    {currentRequest?.is_friends && "Delete from friends"}
-                                                    {currentRequest?.is_outgoing_request && "Delete request"}
-                                                </Button>
-                                            }
+                                            <FriendRequestBtn
+                                                isLoading={isLoading}
+                                                onClick={handleAddToFriends}
+                                                isVisible={Boolean(currentRequest?.is_not_friends)}
+                                                text={"Add to friends"}
+                                                icon={<PersonAddIcon/>}
+                                            />
+                                            <FriendRequestBtn
+                                                isLoading={isLoading}
+                                                onClick={handleAccept}
+                                                isVisible={Boolean(currentRequest?.is_incoming_request)}
+                                                text={"Accept request"}
+                                                icon={<PersonAddIcon/>}
+                                            />
+                                            <FriendRequestBtn
+                                                isLoading={isLoading}
+                                                onClick={handleDeleteFromFriends}
+                                                isVisible={Boolean(currentRequest?.is_friends)}
+                                                text={"Delete from friends"}
+                                                icon={<PersonRemoveIcon/>}
+                                            />
+                                            <FriendRequestBtn
+                                                isLoading={isLoading}
+                                                onClick={handleDeleteFromFriends}
+                                                isVisible={Boolean(currentRequest?.is_outgoing_request)}
+                                                text={"Delete request"}
+                                                icon={<PersonRemoveIcon/>}
+                                            />
                                         </>
                                 )
                             }
