@@ -3,15 +3,15 @@ import AddImageBtn from "../../atoms/buttons/AddImageBtn";
 import CropImageBtn from "../../atoms/buttons/CropImageBtn";
 import DeleteImageBtn from "../../atoms/buttons/DeleteImageBtn";
 import {DialogActions} from "@mui/material";
-import {useStyles} from "../../style";
 import PropTypes from "prop-types";
+import {useTheme} from "@mui/material/styles";
 
 const ImageActions = ({addImageOnClick, cropImageOnClick, deleteImageOnclick, isImage, isCropper}) => {
 
-    const classes = useStyles();
+    const theme = useTheme();
 
     return (
-        <DialogActions className={classes.dialogActions}>
+        <DialogActions sx={theme.dialogActions}>
             <AddImageBtn onChange={addImageOnClick} isImage={isImage}/>
             {
                 isCropper &&

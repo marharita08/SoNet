@@ -1,7 +1,9 @@
 import {createTheme} from "@mui/material/styles";
 
 export const theme = createTheme({
-    spacing: 5,
+    dialogActions: {
+        justifyContent: "center"
+    },
     palette: {
         primary: {
             main: "#001a4d"
@@ -30,5 +32,5 @@ export const theme = createTheme({
             width: 120,
             height: 120
         }
-    }
+    },
 });

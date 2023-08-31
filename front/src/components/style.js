@@ -8,7 +8,17 @@ export const useStyles = makeStyles(theme => ({
     margin: {
         margin: theme.spacing(1)
     },
-    dialogActions: {
-        justifyContent: "center"
-    }
+    addArticleField: {
+        margin: theme.spacing(2, 0),
+    },
+    addArticleImg: {
+        margin: theme.spacing(1, 0),
+        width: '100%'
+    },
+    heading: {
+        textAlign: "center"
+    },
+    closeButton: {
+        float: "right",
+    },
 }));

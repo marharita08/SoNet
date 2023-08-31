@@ -1,25 +1,25 @@
 import React from "react";
 import {Formik, Form, Field} from "formik";
 import {
-    Button,
     CircularProgress,
     Dialog,
     DialogActions,
     DialogContent,
     DialogTitle,
-    IconButton,
 } from "@mui/material";
 import * as Yup from "yup";
 import FormikAutocomplete from "../../atoms/fields/FormikAutocomplete";
-import SaveIcon from "@mui/icons-material/Save";
-import CloseIcon from "@mui/icons-material/Close";
 import env from "../../../config/envConfig";
 import {AddArticlePropTypes} from "./addArticlePropTypes";
-import "./addArticle.css";
 import AlertContainer from "../../../containers/alert";
 import SNTextarea from "../../atoms/fields/SNTextarea";
 import SNCropper from "../../atoms/cropper/SNCropper";
 import ImageActions from "../imageActions/ImageActions";
+import {useStyles} from "../../style";
+import {useTheme} from "@mui/material/styles";
+import CancelButton from "../../atoms/buttons/CancelButton";
+import SubmitButton from "../../atoms/buttons/SubmitButton";
+import CloseButton from "../../atoms/buttons/CloseButton";
 
 const AddArticle = ({
     visibilities,
@@ -37,6 +37,9 @@ const AddArticle = ({
     message,
     visibilitiesFetching
 }) => {
+
+    const classes = useStyles();
+    const theme = useTheme();
 
     const schema = Yup.object().shape({
         text: Yup.string().required("Text is required"),
@@ -63,10 +66,8 @@ const AddArticle = ({
             >
                 {({setFieldValue, handleSubmit}) =>
                     <Form onSubmit={handleSubmit}>
-                        <IconButton className="closebtn margin" onClick={handleClose}>
-                            <CloseIcon/>
-                        </IconButton>
-                        <DialogTitle className={"heading"}>
+                        <CloseButton onClick={handleClose}/>
+                        <DialogTitle className={classes.heading}>
                             {addArticle ? "Add article" : "Edit article"}
                         </DialogTitle>
                         <AlertContainer alertMessage={message}/>
@@ -77,9 +78,7 @@ const AddArticle = ({
                             }
                             {
                                 croppedImage &&
-                                <div className={"margin"}>
-                                    <img src={croppedImage} alt={"image"} className={"full-width"}/>
-                                </div>
+                                <img src={croppedImage} alt={"image"} className={classes.addArticleImg}/>
                             }
                             <ImageActions
                                 isCropper={isCropper}
@@ -87,10 +86,10 @@ const AddArticle = ({
                                 cropImageOnClick={() => cropImage(setFieldValue)}
                                 deleteImageOnclick={() => deleteImage(setFieldValue)}
                                 addImageOnClick={handleChange}/>
-                            <div className={"fields-margin"}>
+                            <div className={classes.addArticleField}>
                                 <Field label={"Article text"} name={"text"} type={"text"} component={SNTextarea}/>
                             </div>
-                            <div className={"margin"}>
+                            <div className={classes.addArticleField}>
                                 {
                                     visibilitiesFetching ? <CircularProgress color="inherit" size={25}/> :
                                         <Field
@@ -102,16 +101,9 @@ const AddArticle = ({
                                 }
                             </div>
                         </DialogContent>
-                        <DialogActions style={{justifyContent: "center"}}>
-                            <Button variant="outlined" onClick={handleClose}>Cancel</Button>
-                            <Button
-                                type={"submit"}
-                                variant="contained"
-                                disabled={isLoading}
-                                startIcon={isLoading ? <CircularProgress color="inherit" size={25}/> : <SaveIcon/>}
-                            >
-                                {addArticle ? "Add" : "Save"}
-                            </Button>
+                        <DialogActions sx={theme.dialogActions}>
+                            <CancelButton onClick={handleClose}/>
+                            <SubmitButton isLoading={isLoading} isAdd={addArticle}/>
                         </DialogActions>
                     </Form>
                 }
