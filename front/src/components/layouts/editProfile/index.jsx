@@ -11,19 +11,17 @@ import {
     DialogTitle,
     IconButton
 } from "@mui/material";
-import * as Yup from "yup";
 import React from "react";
 import SaveIcon from "@mui/icons-material/Save";
 import CloseIcon from "@mui/icons-material/Close";
 import {EditProfilePropTypes} from "./editProfilePropTypes";
 import AlertContainer from "../../../containers/alert";
 import Loading from "../../atoms/loading";
-import CropImageBtn from "../../atoms/buttons/CropImageBtn";
-import AddImageBtn from "../../atoms/buttons/AddImageBtn";
-import DeleteImageBtn from "../../atoms/buttons/DeleteImageBtn";
 import "./editProfile.css";
 import {useTheme} from "@mui/material/styles";
 import SNCropper from "../../atoms/cropper/SNCropper";
+import ImageActions from "../imageActions/ImageActions";
+import {schema} from "./editProfileSchema";
 
 const EditProfile = ({
     universities,
@@ -45,29 +43,6 @@ const EditProfile = ({
 }) => {
 
     const theme = useTheme();
-
-    const schema = Yup.object().shape({
-        name: Yup.string().required("Name is required").max(255, "Name should contain not more than 255 symbols"),
-        email: Yup.string().required("Email is required").max(255, "Name should contain not more than 255 symbols"),
-        email_visibility: Yup.object().shape({
-            value: Yup.number(),
-            label: Yup.string(),
-        }).nullable(),
-        password: Yup.string().min(8, "Password should contain at least 8 symbols").nullable(),
-        phone: Yup.string().matches(/^\+380\d{9}$/, "Phone should match +380xxxxxxxxx").nullable(),
-        phone_visibility: Yup.object().shape({
-            value: Yup.number(),
-            label: Yup.string(),
-        }).nullable(),
-        university: Yup.object().shape({
-            value: Yup.number(),
-            label: Yup.string(),
-        }).nullable(),
-        university_visibility: Yup.object().shape({
-            value: Yup.number(),
-            label: Yup.string(),
-        }).nullable()
-    });
 
     return (
         <Dialog
@@ -96,12 +71,12 @@ const EditProfile = ({
                                 sx={theme.avatarSizes.xl}
                             />
                             {image && <SNCropper image={image} setCropper={setCropper} />}
-                            <DialogActions style={{justifyContent: "center"}}>
-                                <AddImageBtn onChange={handleChange} isImage={croppedImage || user?.avatar}/>
-                                {image && <CropImageBtn onClick={() => cropImage(setFieldValue)}/>}
-                                {(croppedImage || image) &&
-                                    <DeleteImageBtn onClick={() => deleteImage(setFieldValue)}/>}
-                            </DialogActions>
+                            <ImageActions
+                                isCropper={Boolean(image)}
+                                isImage={Boolean(croppedImage || image)}
+                                cropImageOnClick={() => cropImage(setFieldValue)}
+                                deleteImageOnclick={() => deleteImage(setFieldValue)}
+                                addImageOnClick={handleChange}/>
                             <div className={"edit-profile-fields-container"}>
                                 <div>
                                     <div className={"edit-profile-field"}>

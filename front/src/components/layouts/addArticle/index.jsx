@@ -18,10 +18,8 @@ import {AddArticlePropTypes} from "./addArticlePropTypes";
 import "./addArticle.css";
 import AlertContainer from "../../../containers/alert";
 import SNTextarea from "../../atoms/fields/SNTextarea";
-import CropImageBtn from "../../atoms/buttons/CropImageBtn";
-import DeleteImageBtn from "../../atoms/buttons/DeleteImageBtn";
-import AddImageBtn from "../../atoms/buttons/AddImageBtn";
 import SNCropper from "../../atoms/cropper/SNCropper";
+import ImageActions from "../imageActions/ImageActions";
 
 const AddArticle = ({
     visibilities,
@@ -83,20 +81,12 @@ const AddArticle = ({
                                     <img src={croppedImage} alt={"image"} className={"full-width"}/>
                                 </div>
                             }
-                            <DialogActions style={{justifyContent: "center"}}>
-                                <AddImageBtn
-                                    onChange={handleChange}
-                                    isImage={isImage}
-                                />
-                                {
-                                    isCropper &&
-                                    <CropImageBtn onClick={() => cropImage(setFieldValue)}/>
-                                }
-                                {
-                                    isImage &&
-                                    <DeleteImageBtn onClick={() => deleteImage(setFieldValue)}/>
-                                }
-                            </DialogActions>
+                            <ImageActions
+                                isCropper={isCropper}
+                                isImage={isImage}
+                                cropImageOnClick={() => cropImage(setFieldValue)}
+                                deleteImageOnclick={() => deleteImage(setFieldValue)}
+                                addImageOnClick={handleChange}/>
                             <div className={"fields-margin"}>
                                 <Field label={"Article text"} name={"text"} type={"text"} component={SNTextarea}/>
                             </div>
@@ -127,7 +117,7 @@ const AddArticle = ({
                 }
             </Formik>
         </Dialog>
-    )
+    );
 };
 
 AddArticle.propTypes = AddArticlePropTypes;

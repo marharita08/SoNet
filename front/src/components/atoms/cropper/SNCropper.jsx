@@ -1,6 +1,6 @@
 import React from "react";
 import Cropper from "react-cropper";
-import {useStyles} from "./style";
+import {useStyles} from "../../style";
 import PropTypes from "prop-types";
 
 const SNCropper = ({image, setCropper}) => {
@@ -14,7 +14,7 @@ const SNCropper = ({image, setCropper}) => {
             onInitialized={instance => setCropper(instance)}
             rotatable={false}
             viewMode={1}
-            className={classes.cropper}
+            className={classes.margin}
         />
     );
 };
