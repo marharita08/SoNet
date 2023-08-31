@@ -4,7 +4,7 @@ import * as Yup from "yup";
 import {Formik, Form, Field} from "formik";
 import PropTypes from "prop-types";
 import SaveIcon from "@mui/icons-material/Save";
-import SNTextarea from "../fields/SNTextarea";
+import SNTextarea from "../../atoms/fields/SNTextarea";
 import "./addComent.css";
 import {useTheme} from "@mui/material/styles";
 

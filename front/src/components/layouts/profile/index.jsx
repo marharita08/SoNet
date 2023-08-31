@@ -8,7 +8,7 @@ import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import {ProfilePropTypes} from "./profilePropTypes";
 import "cropperjs/dist/cropper.css";
 import "./profile.css";
-import FriendRequestBtn from "../buttons/FriendRequestBtn";
+import FriendRequestBtn from "../../atoms/buttons/FriendRequestBtn";
 import {useTheme} from "@mui/material/styles";
 
 const Profile = ({

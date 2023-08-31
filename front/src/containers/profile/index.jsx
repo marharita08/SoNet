@@ -2,7 +2,7 @@ import React, {useContext, useState} from "react";
 import {useParams} from "react-router-dom";
 import {useMutation, useQuery} from "react-query";
 import PropTypes from "prop-types";
-import Profile from "../../components/profile";
+import Profile from "../../components/layouts/profile";
 import ErrorBoundary from "../../components/ErrorBoundary";
 import EditProfileContainer from "../editProfile";
 import {getUser} from "../../api/usersCrud";
@@ -12,7 +12,7 @@ import Friends from "../friends";
 import IncomingRequests from "../incomingRequests";
 import {updateRequest, deleteRequest, getRequest, insertRequest} from "../../api/friendsCrud";
 import SearchUsersContainer from "../searchUsers";
-import Loading from "../../components/loading";
+import Loading from "../../components/atoms/loading";
 
 const ProfileContainer = (handleError) => {
     const {id: idStr} = useParams();

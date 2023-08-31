@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import {useMutation, useQuery} from "react-query";
 import {serialize} from "object-to-formdata";
 import ErrorBoundary from "../../components/ErrorBoundary";
-import EditProfile from "../../components/editProfile";
+import EditProfile from "../../components/layouts/editProfile";
 import {getUniversities} from "../../api/universitiesCrud";
 import {getFieldVisibilities} from "../../api/visibilitiesCrud";
 import {updateUser} from "../../api/usersCrud";

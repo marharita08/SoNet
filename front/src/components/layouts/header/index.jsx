@@ -7,9 +7,9 @@ import PersonIcon from "@mui/icons-material/Person";
 import LogoutIcon from "@mui/icons-material/Logout";
 import NoteAddIcon from "@mui/icons-material/NoteAdd";
 import DescriptionIcon from "@mui/icons-material/Description";
-import HeaderButton from "../buttons/HeaderButton";
-import HeaderMenuItemBody from "../menu/HeaderMenuItemBody";
-import SNMenu from "../menu/SNMenu";
+import HeaderButton from "../../atoms/buttons/HeaderButton";
+import HeaderMenuItemBody from "../../atoms/menu/HeaderMenuItemBody";
+import SNMenu from "../../atoms/menu/SNMenu";
 import {useTheme} from "@mui/material/styles";
 
 const Header = ({handleClickOpen, user, authenticated, logout, isAdmin}) => {

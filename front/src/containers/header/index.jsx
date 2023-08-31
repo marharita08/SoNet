@@ -2,10 +2,10 @@ import React, {useContext} from "react";
 import {useMutation} from "react-query";
 import authContext from "../../context/authContext";
 import ErrorBoundary from "../../components/ErrorBoundary";
-import Header from "../../components/header";
+import Header from "../../components/layouts/header";
 import {apiLogout} from "../../api/auth";
 import PropTypes from "prop-types";
-import "../../components/header/header.css";
+import "../../components/layouts/header/header.css";
 
 const HeaderContainer = ({
     setArticleContext,

@@ -1,4 +1,4 @@
-import SearchUsers from "../../components/searchUsers";
+import SearchUsers from "../../components/layouts/searchUsers";
 import {useQuery} from "react-query";
 import {getForSearch} from "../../api/usersCrud";
 import React, {useContext} from "react";

@@ -1,5 +1,5 @@
 import React, {useContext} from "react";
-import Comment from "../../components/comment";
+import Comment from "../../components/layouts/comment";
 import authContext from "../../context/authContext";
 import {useMutation} from "react-query";
 import {deleteComment} from "../../api/commentCrud";

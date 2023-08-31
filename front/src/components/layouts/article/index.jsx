@@ -19,9 +19,9 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import {Link} from "react-router-dom";
 import {useState} from "react";
-import env from "../../config/envConfig";
-import MenuItemBody from "../menu/MenuItemBody";
-import SNMenu from "../menu/SNMenu";
+import env from "../../../config/envConfig";
+import MenuItemBody from "../../atoms/menu/MenuItemBody";
+import SNMenu from "../../atoms/menu/SNMenu";
 import AvatarPopover from "./AvatarPopover";
 import {useTheme} from "@mui/material/styles";
 

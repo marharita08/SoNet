@@ -11,7 +11,7 @@ import LoginIcon from "@mui/icons-material/Login";
 import AuthTextField from "./AuthTextField";
 import LoginWithButton from "./LoginWithButton";
 import "./auth.css";
-import env from "../../config/envConfig";
+import env from "../../../config/envConfig";
 
 const AuthComponent = ({
     onGoogleSuccess,

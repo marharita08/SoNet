@@ -1,6 +1,6 @@
 import {Field, Form, Formik} from "formik";
 import {TextField} from "formik-mui";
-import FormikAutocomplete from "../fields/FormikAutocomplete";
+import FormikAutocomplete from "../../atoms/fields/FormikAutocomplete";
 import {
     Avatar,
     Button,
@@ -11,19 +11,19 @@ import {
     DialogTitle,
     IconButton
 } from "@mui/material";
-import Cropper from "react-cropper";
 import * as Yup from "yup";
 import React from "react";
 import SaveIcon from "@mui/icons-material/Save";
 import CloseIcon from "@mui/icons-material/Close";
 import {EditProfilePropTypes} from "./editProfilePropTypes";
-import AlertContainer from "../../containers/alert";
-import Loading from "../loading";
-import CropImageBtn from "../buttons/CropImageBtn";
-import AddImageBtn from "../buttons/AddImageBtn";
-import DeleteImageBtn from "../buttons/DeleteImageBtn";
+import AlertContainer from "../../../containers/alert";
+import Loading from "../../atoms/loading";
+import CropImageBtn from "../../atoms/buttons/CropImageBtn";
+import AddImageBtn from "../../atoms/buttons/AddImageBtn";
+import DeleteImageBtn from "../../atoms/buttons/DeleteImageBtn";
 import "./editProfile.css";
 import {useTheme} from "@mui/material/styles";
+import SNCropper from "../../atoms/cropper/SNCropper";
 
 const EditProfile = ({
     universities,
@@ -95,19 +95,7 @@ const EditProfile = ({
                                 src={croppedImage || user?.avatar}
                                 sx={theme.avatarSizes.xl}
                             />
-                            {image && (
-                                <div className={"margin"}>
-                                    <Cropper
-                                        src={image}
-                                        zoomable={false}
-                                        scalable={false}
-                                        onInitialized={instance => setCropper(instance)}
-                                        rotatable={false}
-                                        viewMode={1}
-                                        className={"full-width"}
-                                    />
-                                </div>
-                            )}
+                            {image && <SNCropper image={image} setCropper={setCropper} />}
                             <DialogActions style={{justifyContent: "center"}}>
                                 <AddImageBtn onChange={handleChange} isImage={croppedImage || user?.avatar}/>
                                 {image && <CropImageBtn onClick={() => cropImage(setFieldValue)}/>}

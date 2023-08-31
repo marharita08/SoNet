@@ -2,9 +2,9 @@ import React from "react";
 import PropTypes from "prop-types";
 import {useQuery} from "react-query";
 import ErrorBoundary from "../../components/ErrorBoundary";
-import User from "../../components/user";
+import User from "../../components/layouts/user";
 import {getOutgoingRequests} from "../../api/usersCrud";
-import Loading from "../../components/loading";
+import Loading from "../../components/atoms/loading";
 
 const OutgoingRequests = ({id, deleteRequest, outgoingRequests, setOutgoingRequests}) => {
 

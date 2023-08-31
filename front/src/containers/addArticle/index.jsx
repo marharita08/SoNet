@@ -3,13 +3,14 @@ import {useMutation, useQuery} from "react-query";
 import PropTypes from "prop-types";
 import {serialize} from "object-to-formdata";
 import ErrorBoundary from "../../components/ErrorBoundary";
-import AddArticle from "../../components/addArticle";
+import AddArticle from "../../components/layouts/addArticle";
 import {getArticleVisibilities} from "../../api/visibilitiesCrud";
 import {insertArticle, updateArticle} from "../../api/articlesCrud";
 import articleContext from "../../context/articleContext";
 import {useNavigate, useLocation} from "react-router-dom";
 
 const AddArticleContainer = ({setArticleContext, articles, setArticles}) => {
+
     const {data, isFetching: visibilitiesFetching} = useQuery("visibilities",
         () => getArticleVisibilities(), {
             refetchInterval: false,

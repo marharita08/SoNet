@@ -10,18 +10,18 @@ import {
     IconButton,
 } from "@mui/material";
 import * as Yup from "yup";
-import FormikAutocomplete from "../fields/FormikAutocomplete";
-import Cropper from "react-cropper";
+import FormikAutocomplete from "../../atoms/fields/FormikAutocomplete";
 import SaveIcon from "@mui/icons-material/Save";
 import CloseIcon from "@mui/icons-material/Close";
-import env from "../../config/envConfig";
+import env from "../../../config/envConfig";
 import {AddArticlePropTypes} from "./addArticlePropTypes";
 import "./addArticle.css";
-import AlertContainer from "../../containers/alert";
-import SNTextarea from "../fields/SNTextarea";
-import CropImageBtn from "../buttons/CropImageBtn";
-import DeleteImageBtn from "../buttons/DeleteImageBtn";
-import AddImageBtn from "../buttons/AddImageBtn";
+import AlertContainer from "../../../containers/alert";
+import SNTextarea from "../../atoms/fields/SNTextarea";
+import CropImageBtn from "../../atoms/buttons/CropImageBtn";
+import DeleteImageBtn from "../../atoms/buttons/DeleteImageBtn";
+import AddImageBtn from "../../atoms/buttons/AddImageBtn";
+import SNCropper from "../../atoms/cropper/SNCropper";
 
 const AddArticle = ({
     visibilities,
@@ -48,6 +48,9 @@ const AddArticle = ({
         }).nullable(),
     });
 
+    const isCropper = Boolean((image || (article?.image !== undefined && article?.image)) && !croppedImage);
+    const isImage = Boolean(image || croppedImage || (article?.image !== undefined && article?.image));
+
     return (
         <Dialog
             open={true}
@@ -70,20 +73,12 @@ const AddArticle = ({
                         </DialogTitle>
                         <AlertContainer alertMessage={message}/>
                         <DialogContent>
-                            {((image || (article?.image !== undefined && article?.image)) && !croppedImage) && (
-                                <div className={"margin"}>
-                                    <Cropper
-                                        src={image || `${env.apiUrl}${article?.image}`}
-                                        zoomable={false}
-                                        scalable={false}
-                                        onInitialized={instance => setCropper(instance)}
-                                        rotatable={false}
-                                        viewMode={1}
-                                        className={"full-width"}
-                                    />
-                                </div>
-                            )}
-                            {(croppedImage) &&
+                            {
+                                isCropper &&
+                                <SNCropper image={image || `${env.apiUrl}${article?.image}`} setCropper={setCropper}/>
+                            }
+                            {
+                                croppedImage &&
                                 <div className={"margin"}>
                                     <img src={croppedImage} alt={"image"} className={"full-width"}/>
                                 </div>
@@ -91,24 +86,29 @@ const AddArticle = ({
                             <DialogActions style={{justifyContent: "center"}}>
                                 <AddImageBtn
                                     onChange={handleChange}
-                                    isImage={(image || croppedImage || (article?.image !== undefined && article?.image))}
+                                    isImage={isImage}
                                 />
-                                {((image || (article?.image !== undefined && article?.image)) && !croppedImage) &&
-                                    <CropImageBtn onClick={() => cropImage(setFieldValue)}/>}
-                                {(croppedImage || image || (article?.image !== undefined && article?.image)) &&
-                                    <DeleteImageBtn onClick={() => deleteImage(setFieldValue)}/>}
+                                {
+                                    isCropper &&
+                                    <CropImageBtn onClick={() => cropImage(setFieldValue)}/>
+                                }
+                                {
+                                    isImage &&
+                                    <DeleteImageBtn onClick={() => deleteImage(setFieldValue)}/>
+                                }
                             </DialogActions>
                             <div className={"fields-margin"}>
                                 <Field label={"Article text"} name={"text"} type={"text"} component={SNTextarea}/>
                             </div>
                             <div className={"margin"}>
-                                {visibilitiesFetching ? <CircularProgress color="inherit" size={25}/> :
-                                    <Field
-                                        component={FormikAutocomplete}
-                                        name="visibility"
-                                        label={"Available to"}
-                                        options={visibilities}
-                                    />
+                                {
+                                    visibilitiesFetching ? <CircularProgress color="inherit" size={25}/> :
+                                        <Field
+                                            component={FormikAutocomplete}
+                                            name="visibility"
+                                            label={"Available to"}
+                                            options={visibilities}
+                                        />
                                 }
                             </div>
                         </DialogContent>
@@ -127,7 +127,7 @@ const AddArticle = ({
                 }
             </Formik>
         </Dialog>
-    );
+    )
 };
 
 AddArticle.propTypes = AddArticlePropTypes;

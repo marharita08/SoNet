@@ -15,13 +15,13 @@ export let AddArticlePropTypes = {
     addArticle: PropTypes.bool.isRequired,
     handleClose: PropTypes.func.isRequired,
     onFormSubmit: PropTypes.func.isRequired,
-    loading: PropTypes.bool,
+    isLoading: PropTypes.bool,
     handleChange: PropTypes.func.isRequired,
-    image: PropTypes.object,
+    image: PropTypes.string,
     setCropper: PropTypes.func.isRequired,
     cropImage: PropTypes.func.isRequired,
     croppedImage: PropTypes.object,
     deleteImage: PropTypes.func.isRequired,
     message: PropTypes.string,
-    visibilitiesFetching: PropTypes.bool
+    visibilitiesFetching: PropTypes.bool,
 };

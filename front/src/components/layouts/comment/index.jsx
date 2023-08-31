@@ -8,8 +8,8 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import "./comment.css";
-import SNMenu from "../menu/SNMenu";
-import MenuItemBody from "../menu/MenuItemBody";
+import SNMenu from "../../atoms/menu/SNMenu";
+import MenuItemBody from "../../atoms/menu/MenuItemBody";
 import {useTheme} from "@mui/material/styles";
 
 

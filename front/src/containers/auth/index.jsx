@@ -1,7 +1,7 @@
 import React from "react";
 import {useMutation} from "react-query";
 import PropTypes from "prop-types";
-import AuthComponent from "../../components/authComponent";
+import AuthComponent from "../../components/layouts/authComponent";
 import {googleAuth, facebookAuth, auth} from "../../api/auth";
 
 const AuthContainer = ({setAuthContext, handleError}) => {

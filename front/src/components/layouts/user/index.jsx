@@ -7,8 +7,8 @@ import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import CloseIcon from "@mui/icons-material/Close";
 import React, {useState} from "react";
 import "./user.css";
-import MenuItemBody from "../menu/MenuItemBody";
-import SNMenu from "../menu/SNMenu";
+import MenuItemBody from "../../atoms/menu/MenuItemBody";
+import SNMenu from "../../atoms/menu/SNMenu";
 import {useTheme} from "@mui/material/styles";
 
 const User = ({user, deleteRequest, menu, accept, decline}) => {

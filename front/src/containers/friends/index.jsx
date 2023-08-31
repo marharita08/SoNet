@@ -2,10 +2,10 @@ import React from "react";
 import {useQuery} from "react-query";
 
 import ErrorBoundary from "../../components/ErrorBoundary";
-import User from "../../components/user";
+import User from "../../components/layouts/user";
 import {getFriends} from "../../api/usersCrud";
 import PropTypes from "prop-types";
-import Loading from "../../components/loading";
+import Loading from "../../components/atoms/loading";
 
 const Friends = ({id, deleteRequest, friends, setFriends}) => {
 

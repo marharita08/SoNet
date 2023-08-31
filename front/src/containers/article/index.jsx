@@ -3,7 +3,7 @@ import {useMutation, useQuery} from "react-query";
 import {Collapse, Card} from "@mui/material";
 import PropTypes from "prop-types";
 import ErrorBoundary from "../../components/ErrorBoundary";
-import Article from "../../components/article";
+import Article from "../../components/layouts/article";
 import {deleteArticle, getComments, getLikes, getCommentsAmount, getLikesAmount} from "../../api/articlesCrud";
 import authContext from "../../context/authContext";
 import CommentContainer from "../comment";

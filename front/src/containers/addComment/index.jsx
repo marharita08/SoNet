@@ -1,5 +1,5 @@
 import React, {useContext} from "react";
-import AddComment from "../../components/addComment";
+import AddComment from "../../components/layouts/addComment";
 import authContext from "../../context/authContext";
 import {useMutation} from "react-query";
 import {insertComment, updateComment} from "../../api/commentCrud";

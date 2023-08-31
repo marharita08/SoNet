@@ -34,7 +34,7 @@ export let EditProfilePropTypes = {
     })),
     onFormSubmit: PropTypes.func.isRequired,
     isLoading: PropTypes.bool,
-    image: PropTypes.object,
+    image: PropTypes.string,
     croppedImage: PropTypes.object,
     deleteImage: PropTypes.func.isRequired,
     cropImage: PropTypes.func.isRequired,
