@@ -11,5 +11,23 @@ export const theme = createTheme({
         background: {
             default: "#f2f2f2"
         }
+    },
+    avatarSizes: {
+        sm: {
+            width: 30,
+            height: 30,
+        },
+        md: {
+            width: 40,
+            height: 40,
+        },
+        lg: {
+            width: 60,
+            height: 60
+        },
+        xl: {
+            width: 120,
+            height: 120
+        }
     }
 });

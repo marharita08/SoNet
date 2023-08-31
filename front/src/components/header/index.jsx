@@ -10,11 +10,11 @@ import DescriptionIcon from "@mui/icons-material/Description";
 import HeaderButton from "../buttons/HeaderButton";
 import HeaderMenuItemBody from "../menu/HeaderMenuItemBody";
 import SNMenu from "../menu/SNMenu";
-import {useStyles as useAvatarStyles} from "../avatarSize";
+import {useTheme} from "@mui/material/styles";
 
 const Header = ({handleClickOpen, user, authenticated, logout, isAdmin}) => {
 
-    const avatarSize = useAvatarStyles();
+    const theme = useTheme();
     const [anchorEl, setAnchorEl] = useState(null);
 
     const handleMenu = (event) => {
@@ -74,7 +74,8 @@ const Header = ({handleClickOpen, user, authenticated, logout, isAdmin}) => {
                         <span className={"inline"}>
                             <Avatar
                                 src={user.avatar}
-                                className={"header-avatar " + avatarSize.md}
+                                className={"header-avatar"}
+                                sx={theme.avatarSizes.md}
                             />
                         </span>
                         <span className={"username"}>{user.name}</span>

@@ -19,11 +19,11 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import {Link} from "react-router-dom";
 import {useState} from "react";
-import {useStyles as useAvatarStyles} from "../avatarSize";
 import env from "../../config/envConfig";
 import MenuItemBody from "../menu/MenuItemBody";
 import SNMenu from "../menu/SNMenu";
 import AvatarPopover from "./AvatarPopover";
+import {useTheme} from "@mui/material/styles";
 
 const ExpandMore = styled((props) => {
     const {expand, ...other} = props;
@@ -54,7 +54,7 @@ const Article = ({
     commentsFetching
 }) => {
 
-    const avatarSize = useAvatarStyles();
+    const theme = useTheme();
     const [menuAnchorEl, setMenuAnchorEl] = useState(null);
     const [popoverAnchorEl, setPopoverAnchorEl] = React.useState(null);
 
@@ -105,7 +105,7 @@ const Article = ({
                     <Link to={`/profile/${article.user_id}`}>
                         <Avatar
                             src={article.avatar}
-                            className={avatarSize.lg}
+                            sx={theme.avatarSizes.lg}
                         />
                     </Link>
                 }

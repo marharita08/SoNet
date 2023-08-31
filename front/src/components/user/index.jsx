@@ -9,11 +9,11 @@ import React, {useState} from "react";
 import "./user.css";
 import MenuItemBody from "../menu/MenuItemBody";
 import SNMenu from "../menu/SNMenu";
-import {useStyles as useAvatarStyles} from "../avatarSize";
+import {useTheme} from "@mui/material/styles";
 
 const User = ({user, deleteRequest, menu, accept, decline}) => {
 
-    const avatarSize = useAvatarStyles();
+    const theme = useTheme();
 
     const [anchorEl, setAnchorEl] = useState(null);
 
@@ -63,7 +63,7 @@ const User = ({user, deleteRequest, menu, accept, decline}) => {
                         avatar={
                             <Avatar
                                 src={user.avatar}
-                                className={avatarSize.lg}
+                                sx={theme.avatarSizes.lg}
                             />
                         }
                         action={

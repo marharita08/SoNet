@@ -8,8 +8,8 @@ import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import {ProfilePropTypes} from "./profilePropTypes";
 import "cropperjs/dist/cropper.css";
 import "./profile.css";
-import {useStyles as useAvatarStyles} from "../avatarSize";
 import FriendRequestBtn from "../buttons/FriendRequestBtn";
+import {useTheme} from "@mui/material/styles";
 
 const Profile = ({
     user,
@@ -24,7 +24,7 @@ const Profile = ({
     requestFetching
 }) => {
 
-    const avatarSize = useAvatarStyles();
+    const theme = useTheme();
 
     return (
         <>
@@ -38,8 +38,9 @@ const Profile = ({
                     <div className={"profile-container"}>
                         <div className={"profile-image-container"}>
                             <Avatar
-                                className={"profile-image " + avatarSize.xl}
+                                className={"profile-image"}
                                 src={user?.avatar}
+                                sx={theme.avatarSizes.xl}
                             />
                             {
                                 !isCurrentUser && (requestFetching ? <CircularProgress color="inherit" size={25}/> :

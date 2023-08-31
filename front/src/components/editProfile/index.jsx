@@ -23,7 +23,7 @@ import CropImageBtn from "../buttons/CropImageBtn";
 import AddImageBtn from "../buttons/AddImageBtn";
 import DeleteImageBtn from "../buttons/DeleteImageBtn";
 import "./editProfile.css";
-import {useStyles as useAvatarStyles} from "../avatarSize";
+import {useTheme} from "@mui/material/styles";
 
 const EditProfile = ({
     universities,
@@ -44,7 +44,7 @@ const EditProfile = ({
     handleAlertClose
 }) => {
 
-    const avatarSize = useAvatarStyles();
+    const theme = useTheme();
 
     const schema = Yup.object().shape({
         name: Yup.string().required("Name is required").max(255, "Name should contain not more than 255 symbols"),
@@ -91,8 +91,9 @@ const EditProfile = ({
                         <DialogContent>
                             <Loading isLoading={isFetching}/>
                             <Avatar
-                                className={"edit-profile-avatar " + avatarSize.xl}
+                                className={"edit-profile-avatar"}
                                 src={croppedImage || user?.avatar}
+                                sx={theme.avatarSizes.xl}
                             />
                             {image && (
                                 <div className={"margin"}>
