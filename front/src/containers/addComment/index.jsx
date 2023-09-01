@@ -52,7 +52,7 @@ const AddCommentContainer = ({
             user={user}
             comment={comment}
             onSubmit={onSubmit}
-            loading={insertLoading || updateLoading}
+            isLoading={insertLoading || updateLoading}
             addComment={addComment}
             handleCancel={handleCancel}
         />

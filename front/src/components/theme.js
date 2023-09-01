@@ -4,6 +4,7 @@ export const theme = createTheme({
     dialogActions: {
         justifyContent: "center"
     },
+    spacing: 5,
     palette: {
         primary: {
             main: "#001a4d"

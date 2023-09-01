@@ -1,16 +1,18 @@
 import React from "react";
-import {Avatar, Button, CircularProgress, Divider} from "@mui/material";
+import {Avatar, Divider} from "@mui/material";
 import * as Yup from "yup";
 import {Formik, Form, Field} from "formik";
 import PropTypes from "prop-types";
-import SaveIcon from "@mui/icons-material/Save";
 import SNTextarea from "../../atoms/fields/SNTextarea";
-import "./addComent.css";
 import {useTheme} from "@mui/material/styles";
+import SubmitButton from "../../atoms/buttons/SubmitButton";
+import CancelButton from "../../atoms/buttons/CancelButton";
+import {useStyles} from "../../style";
 
-const AddComment = ({user, comment, onSubmit, loading, addComment, handleCancel}) => {
+const AddComment = ({user, comment, onSubmit, isLoading, addComment, handleCancel}) => {
 
     const theme = useTheme();
+    const classes = useStyles();
 
     const schema = Yup.object().shape({
         text: Yup.string().required("Text is required")
@@ -26,25 +28,23 @@ const AddComment = ({user, comment, onSubmit, loading, addComment, handleCancel}
                 validationSchema={schema}
             >
                 {({handleSubmit}) =>
-                    <Form onSubmit={handleSubmit}>
-                        <div className={"avatar-container"}>
-                            <Avatar
-                                src={user.avatar}
-                                className={"margin"}
-                                sx={theme.avatarSizes.lg}
-                            />
-                        </div>
-                        <div className={"inline comment-field-container"}>
+                    <Form onSubmit={handleSubmit} className={classes.flex}>
+                        <Avatar
+                            src={user.avatar}
+                            className={classes.addCommentAvatar}
+                            sx={theme.avatarSizes.lg}
+                        />
+                        <div className={classes.commentFieldContainer}>
                             {
                                 comment.to &&
-                                <div className={"margin"}>
+                                <div className={classes.margin}>
                                     Reply to: {comment.to}
-                                    <div className={"reply-to-text"}>
+                                    <div className={classes.replyToText}>
                                         {comment.parent_text}
                                     </div>
                                 </div>
                             }
-                            <div className={"margin"}>
+                            <div className={classes.margin}>
                                 <Field
                                     label={"Comment"}
                                     type={"text"}
@@ -54,24 +54,13 @@ const AddComment = ({user, comment, onSubmit, loading, addComment, handleCancel}
                             </div>
                             {
                                 (!addComment || comment.level !== 1) &&
-                                <div className={"inline margin"}>
-                                    <Button variant={"outlined"} onClick={handleCancel}>Cancel</Button>
-                                </div>
+                                <span className={classes.margin}>
+                                    <CancelButton onClick={handleCancel}/>
+                                </span>
                             }
-                            <div className={"inline margin"}>
-                                <Button
-                                    type={"submit"}
-                                    variant="contained"
-                                    disabled={loading}
-                                    startIcon={
-                                        loading ? (
-                                            <CircularProgress color="inherit" size={25}/>
-                                        ) : <SaveIcon/>
-                                    }
-                                >
-                                    {addComment ? "Add" : "Save"}
-                                </Button>
-                            </div>
+                            <span className={classes.margin}>
+                                <SubmitButton isLoading={isLoading} isAdd={addComment}/>
+                            </span>
                         </div>
                     </Form>
                 }
@@ -92,7 +81,7 @@ AddComment.propTypes = {
         parent_id: PropTypes.number,
     }),
     onSubmit: PropTypes.func.isRequired,
-    loading: PropTypes.bool,
+    isLoading: PropTypes.bool,
     addComment: PropTypes.bool.isRequired,
     handleCancel: PropTypes.func.isRequired
 };

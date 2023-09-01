@@ -7,7 +7,7 @@ const SubmitButton = ({isLoading, isAdd}) => {
     return (
         <Button
             type={"submit"}
-            variant="contained"
+            variant={"contained"}
             disabled={isLoading}
             startIcon={isLoading ? <CircularProgress color="inherit" size={25}/> : <SaveIcon/>}
         >

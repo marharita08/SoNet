@@ -21,4 +21,17 @@ export const useStyles = makeStyles(theme => ({
     closeButton: {
         float: "right",
     },
+    flex: {
+        display: "flex"
+    },
+    addCommentAvatar: {
+        margin: theme.spacing(2, 1)
+    },
+    commentFieldContainer: {
+        width: `calc(100% - 60px - ${theme.spacing(4)}px)`,
+        margin: theme.spacing(1, 0),
+    },
+    replyToText: {
+        fontStyle: "italic"
+    }
 }));
