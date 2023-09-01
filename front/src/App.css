@@ -31,9 +31,6 @@ a {
   align-items: flex-end;
 }
 
-.heading {
-  text-align: center;
-}
 
 @media screen and (min-width: 600px) {
   .article-card {

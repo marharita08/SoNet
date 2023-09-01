@@ -17,11 +17,12 @@ const SubmitButton = ({isLoading, isAdd}) => {
 };
 
 SubmitButton.propTypes = {
-    isLoading: PropTypes.bool.isRequired,
+    isLoading: PropTypes.bool,
     isAdd: PropTypes.bool
 };
 
 SubmitButton.defaultProps = {
+    isLoading: false,
     isAdd: false
 };
 

@@ -1,25 +1,18 @@
 import React from "react";
 import {Formik, Form, Field} from "formik";
-import {
-    CircularProgress,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogTitle,
-} from "@mui/material";
-import * as Yup from "yup";
+import {CircularProgress, Dialog, DialogContent} from "@mui/material";
 import FormikAutocomplete from "../../atoms/fields/FormikAutocomplete";
 import env from "../../../config/envConfig";
 import {AddArticlePropTypes} from "./addArticlePropTypes";
 import AlertContainer from "../../../containers/alert";
 import SNTextarea from "../../atoms/fields/SNTextarea";
 import SNCropper from "../../atoms/cropper/SNCropper";
-import ImageActions from "../imageActions/ImageActions";
+import ImageDialogActions from "../dialogActions/ImageDialogActions";
 import {useStyles} from "../../style";
-import {useTheme} from "@mui/material/styles";
-import CancelButton from "../../atoms/buttons/CancelButton";
-import SubmitButton from "../../atoms/buttons/SubmitButton";
 import CloseButton from "../../atoms/buttons/CloseButton";
+import SaveCancelDialogActions from "../dialogActions/SaveCancelDialogActions";
+import {schema} from "./addArticleSchema";
+import SNDialogTitle from "../../atoms/dialogTitle/SNDialogTitle";
 
 const AddArticle = ({
     visibilities,
@@ -39,18 +32,9 @@ const AddArticle = ({
 }) => {
 
     const classes = useStyles();
-    const theme = useTheme();
 
-    const schema = Yup.object().shape({
-        text: Yup.string().required("Text is required"),
-        visibility: Yup.object().shape({
-            value: Yup.number(),
-            label: Yup.string(),
-        }).nullable(),
-    });
-
-    const isCropper = Boolean((image || (article?.image !== undefined && article?.image)) && !croppedImage);
-    const isImage = Boolean(image || croppedImage || (article?.image !== undefined && article?.image));
+    const isCropper = !!((image || (article?.image !== undefined && article?.image)) && !croppedImage);
+    const isImage = !!(image || croppedImage || (article?.image !== undefined && article?.image));
 
     return (
         <Dialog
@@ -67,25 +51,25 @@ const AddArticle = ({
                 {({setFieldValue, handleSubmit}) =>
                     <Form onSubmit={handleSubmit}>
                         <CloseButton onClick={handleClose}/>
-                        <DialogTitle className={classes.heading}>
-                            {addArticle ? "Add article" : "Edit article"}
-                        </DialogTitle>
+                        <SNDialogTitle title={addArticle ? "Add article" : "Edit article"}/>
                         <AlertContainer alertMessage={message}/>
                         <DialogContent>
-                            {
-                                isCropper &&
-                                <SNCropper image={image || `${env.apiUrl}${article?.image}`} setCropper={setCropper}/>
-                            }
+                            <SNCropper
+                                image={image || `${env.apiUrl}${article?.image}`}
+                                setCropper={setCropper}
+                                isVisible={isCropper}
+                            />
                             {
                                 croppedImage &&
                                 <img src={croppedImage} alt={"image"} className={classes.addArticleImg}/>
                             }
-                            <ImageActions
+                            <ImageDialogActions
                                 isCropper={isCropper}
                                 isImage={isImage}
                                 cropImageOnClick={() => cropImage(setFieldValue)}
                                 deleteImageOnclick={() => deleteImage(setFieldValue)}
-                                addImageOnClick={handleChange}/>
+                                addImageOnClick={handleChange}
+                            />
                             <div className={classes.addArticleField}>
                                 <Field label={"Article text"} name={"text"} type={"text"} component={SNTextarea}/>
                             </div>
@@ -101,10 +85,11 @@ const AddArticle = ({
                                 }
                             </div>
                         </DialogContent>
-                        <DialogActions sx={theme.dialogActions}>
-                            <CancelButton onClick={handleClose}/>
-                            <SubmitButton isLoading={isLoading} isAdd={addArticle}/>
-                        </DialogActions>
+                        <SaveCancelDialogActions
+                            cancelOnClick={handleClose}
+                            isAdd={addArticle}
+                            isLoading={isLoading}
+                        />
                     </Form>
                 }
             </Formik>

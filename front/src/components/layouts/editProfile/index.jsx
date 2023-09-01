@@ -1,27 +1,19 @@
-import {Field, Form, Formik} from "formik";
-import {TextField} from "formik-mui";
+import {Form, Formik} from "formik";
 import FormikAutocomplete from "../../atoms/fields/FormikAutocomplete";
-import {
-    Avatar,
-    Button,
-    CircularProgress,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogTitle,
-    IconButton
-} from "@mui/material";
+import {Avatar, Dialog, DialogContent} from "@mui/material";
 import React from "react";
-import SaveIcon from "@mui/icons-material/Save";
-import CloseIcon from "@mui/icons-material/Close";
 import {EditProfilePropTypes} from "./editProfilePropTypes";
 import AlertContainer from "../../../containers/alert";
 import Loading from "../../atoms/loading";
-import "./editProfile.css";
 import {useTheme} from "@mui/material/styles";
 import SNCropper from "../../atoms/cropper/SNCropper";
-import ImageActions from "../imageActions/ImageActions";
+import ImageDialogActions from "../dialogActions/ImageDialogActions";
 import {schema} from "./editProfileSchema";
+import SaveCancelDialogActions from "../dialogActions/SaveCancelDialogActions";
+import CloseButton from "../../atoms/buttons/CloseButton";
+import {useStyles} from "./style";
+import SNDialogTitle from "../../atoms/dialogTitle/SNDialogTitle";
+import EditProfileFieldRow from "./EditProfileFieldRow";
 
 const EditProfile = ({
     universities,
@@ -42,7 +34,9 @@ const EditProfile = ({
     handleAlertClose
 }) => {
 
+    const classes = useStyles();
     const theme = useTheme();
+    const isCropper = !!image;
 
     return (
         <Dialog
@@ -58,121 +52,58 @@ const EditProfile = ({
             >
                 {({setFieldValue, handleSubmit}) =>
                     <Form onSubmit={handleSubmit}>
-                        <IconButton className="closebtn margin" onClick={handleClose}>
-                            <CloseIcon/>
-                        </IconButton>
-                        <DialogTitle className={"heading"}>Edit profile</DialogTitle>
+                        <CloseButton onClick={handleClose}/>
+                        <SNDialogTitle title={"Edit profile"}/>
                         <AlertContainer alertMessage={message} handleClose={handleAlertClose}/>
                         <DialogContent>
                             <Loading isLoading={isFetching}/>
                             <Avatar
-                                className={"edit-profile-avatar"}
+                                className={classes.avatar}
                                 src={croppedImage || user?.avatar}
                                 sx={theme.avatarSizes.xl}
                             />
-                            {image && <SNCropper image={image} setCropper={setCropper} />}
-                            <ImageActions
-                                isCropper={Boolean(image)}
-                                isImage={Boolean(croppedImage || image)}
+                            <SNCropper image={image} setCropper={setCropper} isVisible={isCropper}/>
+                            <ImageDialogActions
+                                isCropper={isCropper}
+                                isImage={!!(croppedImage || image)}
                                 cropImageOnClick={() => cropImage(setFieldValue)}
                                 deleteImageOnclick={() => deleteImage(setFieldValue)}
-                                addImageOnClick={handleChange}/>
-                            <div className={"edit-profile-fields-container"}>
-                                <div>
-                                    <div className={"edit-profile-field"}>
-                                        <Field
-                                            component={TextField}
-                                            type={"text"}
-                                            name={"name"}
-                                            label={"Name"}
-                                            fullWidth
-                                        />
-                                    </div>
-                                    <div className={"edit-profile-visibility"}></div>
-                                </div>
-                                <div>
-                                    <div className={"edit-profile-field"}>
-                                        <Field
-                                            component={TextField}
-                                            type={"email"}
-                                            name={"email"}
-                                            label={"Email"}
-                                            fullWidth
-                                        />
-                                    </div>
-                                    <div className={"edit-profile-visibility"}>
-                                        <Field
-                                            component={FormikAutocomplete}
-                                            name="email_visibility"
-                                            label="Available to"
-                                            options={visibilities}
-
-                                        />
-                                    </div>
-                                </div>
-                                <div>
-                                    <div className={"edit-profile-field"}>
-                                        <Field
-                                            component={TextField}
-                                            type={"password"}
-                                            name={"password"}
-                                            label={"Password"}
-                                            fullWidth
-                                        />
-                                    </div>
-                                    <div className={"edit-profile-visibility"}></div>
-                                </div>
-                                <div>
-                                    <div className={"edit-profile-field"}>
-                                        <Field
-                                            component={TextField}
-                                            name={"phone"}
-                                            label={"Phone"}
-                                            fullWidth
-                                        />
-                                    </div>
-                                    <div className={"edit-profile-visibility"}>
-                                        <Field
-                                            component={FormikAutocomplete}
-                                            name="phone_visibility"
-                                            label={"Available to"}
-                                            options={visibilities}
-                                        />
-                                    </div>
-                                </div>
-                                <div>
-                                    <div className={"edit-profile-field"}>
-                                        <Field
-                                            component={FormikAutocomplete}
-                                            name="university"
-                                            label="University"
-                                            options={universities}
-                                        />
-                                    </div>
-                                    <div className={"edit-profile-visibility"}>
-                                        <Field
-                                            component={FormikAutocomplete}
-                                            name="university_visibility"
-                                            label="Available to"
-                                            options={visibilities}
-                                        />
-                                    </div>
-                                </div>
+                                addImageOnClick={handleChange}
+                            />
+                            <div className={classes.fieldsContainer}>
+                                <EditProfileFieldRow
+                                    fieldName={"name"}
+                                    fieldLabel={"Name"}
+                                />
+                                <EditProfileFieldRow
+                                    fieldName={"email"}
+                                    fieldLabel={"Email"}
+                                    fieldType={"email"}
+                                    visibilityName={"email_visibility"}
+                                    visibilities={visibilities}
+                                />
+                                <EditProfileFieldRow
+                                    fieldName={"password"}
+                                    fieldLabel={"Password"}
+                                    fieldType={"password"}
+                                />
+                                <EditProfileFieldRow
+                                    fieldName={"phone"}
+                                    fieldLabel={"Phone"}
+                                    visibilityName={"phone_visibility"}
+                                    visibilities={visibilities}
+                                />
+                                <EditProfileFieldRow
+                                    fieldName={"university"}
+                                    fieldLabel={"University"}
+                                    fieldComponent={FormikAutocomplete}
+                                    fieldOptions={universities}
+                                    visibilityName={"university_visibility"}
+                                    visibilities={visibilities}
+                                />
                             </div>
                         </DialogContent>
-                        <DialogActions style={{justifyContent: "center"}}>
-                            <Button variant="outlined" onClick={handleClose}>Cancel</Button>
-                            <Button
-                                variant="contained"
-                                type="submit"
-                                disabled={isLoading}
-                                startIcon={
-                                    isLoading ? <CircularProgress color="inherit" size={25}/> : <SaveIcon/>
-                                }
-                            >
-                                Save
-                            </Button>
-                        </DialogActions>
+                        <SaveCancelDialogActions cancelOnClick={handleClose} isLoading={isLoading}/>
                     </Form>
                 }
             </Formik>

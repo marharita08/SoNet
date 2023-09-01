@@ -6,7 +6,7 @@ import {DialogActions} from "@mui/material";
 import PropTypes from "prop-types";
 import {useTheme} from "@mui/material/styles";
 
-const ImageActions = ({addImageOnClick, cropImageOnClick, deleteImageOnclick, isImage, isCropper}) => {
+const ImageDialogActions = ({addImageOnClick, cropImageOnClick, deleteImageOnclick, isImage, isCropper}) => {
 
     const theme = useTheme();
 
@@ -25,7 +25,7 @@ const ImageActions = ({addImageOnClick, cropImageOnClick, deleteImageOnclick, is
     );
 };
 
-ImageActions.propTypes = {
+ImageDialogActions.propTypes = {
     addImageOnClick: PropTypes.func.isRequired,
     cropImageOnClick: PropTypes.func.isRequired,
     deleteImageOnclick: PropTypes.func.isRequired,
@@ -33,4 +33,4 @@ ImageActions.propTypes = {
     isCropper: PropTypes.bool.isRequired
 };
 
-export default ImageActions;
+export default ImageDialogActions;
