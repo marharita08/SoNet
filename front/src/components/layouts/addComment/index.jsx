@@ -8,6 +8,7 @@ import {useTheme} from "@mui/material/styles";
 import SubmitButton from "../../atoms/buttons/SubmitButton";
 import CancelButton from "../../atoms/buttons/CancelButton";
 import {useStyles} from "../../style";
+import {commentAddPropTypes} from "../../../propTypes/commentPropTypes";
 
 const AddComment = ({user, comment, onSubmit, isLoading, addComment, handleCancel}) => {
 
@@ -72,18 +73,16 @@ const AddComment = ({user, comment, onSubmit, isLoading, addComment, handleCance
 AddComment.propTypes = {
     user: PropTypes.shape({
         avatar: PropTypes.string
-    }),
-    comment: PropTypes.shape({
-        level: PropTypes.number.isRequired,
-        to: PropTypes.string,
-        text: PropTypes.string.isRequired,
-        path: PropTypes.string.isRequired,
-        parent_id: PropTypes.number,
-    }),
+    }).isRequired,
+    comment: commentAddPropTypes.isRequired,
     onSubmit: PropTypes.func.isRequired,
     isLoading: PropTypes.bool,
     addComment: PropTypes.bool.isRequired,
     handleCancel: PropTypes.func.isRequired
 };
+
+AddComment.defaultProps = {
+    isLoading: false
+}
 
 export default AddComment;
