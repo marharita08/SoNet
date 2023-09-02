@@ -1,27 +1,17 @@
 import PropTypes from "prop-types";
+import {addArticleContentPropTypes, addArticleContentDefaultProps} from "./addArticleContentPropTypes";
 
-export let AddArticlePropTypes = {
-    visibilities: PropTypes.arrayOf(PropTypes.shape({
-        value: PropTypes.number.isRequired,
-        label: PropTypes.string.isRequired
-    })),
-    article: PropTypes.shape({
-        text: PropTypes.string.isRequired,
-        visibility: PropTypes.shape({
-            value: PropTypes.number.isRequired,
-            label: PropTypes.string.isRequired,
-        }),
-    }),
+export const addArticlePropTypes = {
+    ...addArticleContentPropTypes,
     addArticle: PropTypes.bool.isRequired,
     handleClose: PropTypes.func.isRequired,
     onFormSubmit: PropTypes.func.isRequired,
     isLoading: PropTypes.bool,
-    handleChange: PropTypes.func.isRequired,
-    image: PropTypes.string,
-    setCropper: PropTypes.func.isRequired,
-    cropImage: PropTypes.func.isRequired,
-    croppedImage: PropTypes.object,
-    deleteImage: PropTypes.func.isRequired,
     message: PropTypes.string,
-    visibilitiesFetching: PropTypes.bool,
+};
+
+export const addArticleDefaultProps = {
+    ...addArticleContentDefaultProps,
+    isLoading: false,
+    message: undefined
 };

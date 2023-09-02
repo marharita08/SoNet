@@ -1,19 +1,13 @@
 import React from "react";
-import {Formik, Form, Field} from "formik";
-import {CircularProgress, Dialog, DialogContent} from "@mui/material";
-import FormikAutocomplete from "../../atoms/fields/FormikAutocomplete";
-import env from "../../../config/envConfig";
-import {AddArticlePropTypes} from "./addArticlePropTypes";
+import {Formik, Form} from "formik";
+import {Dialog} from "@mui/material";
+import {addArticlePropTypes, addArticleDefaultProps} from "./addArticlePropTypes";
 import AlertContainer from "../../../containers/alert";
-import SNTextarea from "../../atoms/fields/SNTextarea";
-import SNCropper from "../../atoms/cropper/SNCropper";
-import ImageDialogActions from "../dialogActions/ImageDialogActions";
-import {useStyles} from "../../style";
 import CloseIconBtn from "../../atoms/iconButtons/CloseIconBtn";
 import SaveCancelDialogActions from "../dialogActions/SaveCancelDialogActions";
 import {schema} from "./addArticleSchema";
 import SNDialogTitle from "../../atoms/dialogTitle/SNDialogTitle";
-import ShowAfterFetching from "../../atoms/showAfterFetching/ShowAfterFetching";
+import AddArticleContent from "./AddArticleContent";
 
 const AddArticle = ({
     visibilities,
@@ -32,11 +26,6 @@ const AddArticle = ({
     visibilitiesFetching
 }) => {
 
-    const classes = useStyles();
-
-    const isCropper = !!((image || (article?.image !== undefined && article?.image)) && !croppedImage);
-    const isImage = !!(image || croppedImage || (article?.image !== undefined && article?.image));
-
     return (
         <Dialog
             open={true}
@@ -54,40 +43,18 @@ const AddArticle = ({
                         <CloseIconBtn onClick={handleClose}/>
                         <SNDialogTitle title={addArticle ? "Add article" : "Edit article"}/>
                         <AlertContainer alertMessage={message}/>
-                        <DialogContent>
-                            <SNCropper
-                                image={image || `${env.apiUrl}${article?.image}`}
-                                setCropper={setCropper}
-                                isVisible={isCropper}
-                            />
-                            {
-                                croppedImage &&
-                                <img src={croppedImage} alt={"image"} className={classes.addArticleImg}/>
-                            }
-                            <ImageDialogActions
-                                isCropper={isCropper}
-                                isImage={isImage}
-                                cropImageOnClick={() => cropImage(setFieldValue)}
-                                deleteImageOnclick={() => deleteImage(setFieldValue)}
-                                addImageOnClick={handleChange}
-                            />
-                            <div className={classes.addArticleField}>
-                                <Field label={"Article text"} name={"text"} type={"text"} component={SNTextarea}/>
-                            </div>
-                            <div className={classes.addArticleField}>
-                                <ShowAfterFetching
-                                    isFetching={visibilitiesFetching}
-                                    component={
-                                        <Field
-                                            component={FormikAutocomplete}
-                                            name="visibility"
-                                            label={"Available to"}
-                                            options={visibilities}
-                                        />
-                                    }
-                                />
-                            </div>
-                        </DialogContent>
+                        <AddArticleContent
+                            handleChange={handleChange}
+                            deleteImage={deleteImage}
+                            setCropper={setCropper}
+                            cropImage={cropImage}
+                            image={image}
+                            visibilities={visibilities}
+                            visibilitiesFetching={visibilitiesFetching}
+                            croppedImage={croppedImage}
+                            article={article}
+                            setFieldValue={setFieldValue}
+                        />
                         <SaveCancelDialogActions
                             cancelOnClick={handleClose}
                             isAdd={addArticle}
@@ -100,6 +67,7 @@ const AddArticle = ({
     );
 };
 
-AddArticle.propTypes = AddArticlePropTypes;
+AddArticle.propTypes = addArticlePropTypes;
+AddArticle.defaultProps = addArticleDefaultProps;
 
 export default AddArticle;

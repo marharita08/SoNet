@@ -1,5 +1,5 @@
 import React from "react";
-import ShowAfterFetching from "../../atoms/showAfterFetching/ShowAfterFetching";
+import ProgressOrComponent from "../../atoms/progressOrComponent/ProgressOrComponent";
 import CommentsIconBtn from "../../atoms/iconButtons/CommentsIconBtn";
 import AddCommentIconBtn from "../../atoms/iconButtons/AddCommentIconBtn";
 import LikeIconBtn from "../../atoms/iconButtons/LikeIconBtn";
@@ -33,8 +33,8 @@ const ArticleActions = ({
 
     return (
         <CardActions disableSpacing>
-            <ShowAfterFetching
-                isFetching={commentsFetching}
+            <ProgressOrComponent
+                isProgress={commentsFetching}
                 component={
                     <CommentsIconBtn
                         onClick={handleExpandClick}
@@ -44,8 +44,8 @@ const ArticleActions = ({
                 }
             />
             <AddCommentIconBtn onClick={handleAddCommentClick} expand={addCommentExpanded}/>
-            <ShowAfterFetching
-                isFetching={likesFetching}
+            <ProgressOrComponent
+                isProgress={likesFetching}
                 component={
                     <LikeIconBtn
                         onClick={handleLikeClick}

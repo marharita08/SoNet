@@ -8,7 +8,7 @@ const AlertComponent = ({message, handleClose}) => {
 
     return (
         <Snackbar
-            open={message !== undefined && message !== "undefined"}
+            open={message && message !== "undefined"}
             autoHideDuration={10000}
             anchorOrigin={{vertical: "bottom", horizontal: "right"}}
             onClose={handleClose}
