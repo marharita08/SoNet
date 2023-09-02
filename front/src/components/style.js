@@ -13,7 +13,7 @@ export const useStyles = makeStyles(theme => ({
     },
     addArticleImg: {
         margin: theme.spacing(1, 0),
-        width: '100%'
+        width: "100%"
     },
     heading: {
         textAlign: "center"
@@ -33,5 +33,20 @@ export const useStyles = makeStyles(theme => ({
     },
     replyToText: {
         fontStyle: "italic"
+    },
+    authCard: {
+        width: "95%",
+        textAlign: "center",
+        margin: theme.spacing(2, "auto"),
+        [theme.breakpoints.up("sm")]: {
+            width: "500px"
+        }
+    },
+    authField: {
+        margin: theme.spacing(2, "auto"),
+        width: "95%",
+        [theme.breakpoints.up("sm")]: {
+            width: "320px"
+        }
     }
 }));

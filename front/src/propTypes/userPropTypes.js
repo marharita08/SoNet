@@ -6,3 +6,8 @@ export const usersPopoverPropTypes = PropTypes.arrayOf(
         avatar: PropTypes.string
     })
 );
+
+export const userAuthPropTypes = PropTypes.shape({
+    email: PropTypes.string.isRequired,
+    password: PropTypes.string.isRequired,
+});

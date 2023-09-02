@@ -1,10 +1,14 @@
 import React from "react";
 import PropTypes from "prop-types";
+import {useStyles} from "./loginWithBtnsStyle";
 
 const LoginWithButton = ({icon, text, onClick, className}) => {
+
+    const classes = useStyles();
+
     return (
-        <button onClick={onClick} className={`login-btns ${className}`}>
-            <span className={"icon"}>{icon}</span>
+        <button onClick={onClick} className={`${classes.loginWithBtn} ${className}`}>
+            <span className={classes.icon}>{icon}</span>
             <span>{text}</span>
         </button>
     );

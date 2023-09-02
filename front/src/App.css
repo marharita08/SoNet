@@ -21,11 +21,6 @@ a {
   width: 100%
 }
 
-
-.icon {
-  margin-right: 5px;
-}
-
 .menu-item {
   display: flex;
   align-items: flex-end;
