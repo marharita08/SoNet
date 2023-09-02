@@ -24,7 +24,7 @@ const IncomingRequests = ({id, accept, decline, incomingRequests, setIncomingReq
             <Loading isLoading={incomingRequestsFetching} align={"left"}/>
             {incomingRequests?.map((user) =>
                 <ErrorBoundary key={user.user_id}>
-                    <User user={user} menu={true} accept={accept} decline={decline}/>
+                    <User user={user} isMenu={true} accept={accept} decline={decline}/>
                 </ErrorBoundary>
             )}
         </div>

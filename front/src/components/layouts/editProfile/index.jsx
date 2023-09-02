@@ -10,7 +10,7 @@ import SNCropper from "../../atoms/cropper/SNCropper";
 import ImageDialogActions from "../dialogActions/ImageDialogActions";
 import {schema} from "./editProfileSchema";
 import SaveCancelDialogActions from "../dialogActions/SaveCancelDialogActions";
-import CloseButton from "../../atoms/buttons/CloseButton";
+import CloseIconBtn from "../../atoms/iconButtons/CloseIconBtn";
 import {useStyles} from "./style";
 import SNDialogTitle from "../../atoms/dialogTitle/SNDialogTitle";
 import EditProfileFieldRow from "./EditProfileFieldRow";
@@ -52,7 +52,7 @@ const EditProfile = ({
             >
                 {({setFieldValue, handleSubmit}) =>
                     <Form onSubmit={handleSubmit}>
-                        <CloseButton onClick={handleClose}/>
+                        <CloseIconBtn onClick={handleClose}/>
                         <SNDialogTitle title={"Edit profile"}/>
                         <AlertContainer alertMessage={message} handleClose={handleAlertClose}/>
                         <DialogContent>

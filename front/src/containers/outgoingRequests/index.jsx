@@ -24,7 +24,7 @@ const OutgoingRequests = ({id, deleteRequest, outgoingRequests, setOutgoingReque
             <Loading isLoading={outgoingRequestsFetching} align={"left"}/>
             {outgoingRequests?.map((user) =>
                 <ErrorBoundary key={user.user_id}>
-                    <User user={user} deleteRequest={deleteRequest} menu={false}/>
+                    <User user={user} deleteRequest={deleteRequest} isMenu={false}/>
                 </ErrorBoundary>
             )}
         </div>

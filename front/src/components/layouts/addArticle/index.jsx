@@ -9,10 +9,11 @@ import SNTextarea from "../../atoms/fields/SNTextarea";
 import SNCropper from "../../atoms/cropper/SNCropper";
 import ImageDialogActions from "../dialogActions/ImageDialogActions";
 import {useStyles} from "../../style";
-import CloseButton from "../../atoms/buttons/CloseButton";
+import CloseIconBtn from "../../atoms/iconButtons/CloseIconBtn";
 import SaveCancelDialogActions from "../dialogActions/SaveCancelDialogActions";
 import {schema} from "./addArticleSchema";
 import SNDialogTitle from "../../atoms/dialogTitle/SNDialogTitle";
+import ShowAfterFetching from "../../atoms/showAfterFetching/ShowAfterFetching";
 
 const AddArticle = ({
     visibilities,
@@ -50,7 +51,7 @@ const AddArticle = ({
             >
                 {({setFieldValue, handleSubmit}) =>
                     <Form onSubmit={handleSubmit}>
-                        <CloseButton onClick={handleClose}/>
+                        <CloseIconBtn onClick={handleClose}/>
                         <SNDialogTitle title={addArticle ? "Add article" : "Edit article"}/>
                         <AlertContainer alertMessage={message}/>
                         <DialogContent>
@@ -74,15 +75,17 @@ const AddArticle = ({
                                 <Field label={"Article text"} name={"text"} type={"text"} component={SNTextarea}/>
                             </div>
                             <div className={classes.addArticleField}>
-                                {
-                                    visibilitiesFetching ? <CircularProgress color="inherit" size={25}/> :
+                                <ShowAfterFetching
+                                    isFetching={visibilitiesFetching}
+                                    component={
                                         <Field
                                             component={FormikAutocomplete}
                                             name="visibility"
                                             label={"Available to"}
                                             options={visibilities}
                                         />
-                                }
+                                    }
+                                />
                             </div>
                         </DialogContent>
                         <SaveCancelDialogActions

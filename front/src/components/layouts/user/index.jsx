@@ -1,17 +1,18 @@
 import {Link} from "react-router-dom";
 import PropTypes from "prop-types";
-import {Avatar, Card, CardHeader, IconButton, Typography} from "@mui/material";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
+import {Avatar, Card, CardHeader, Typography} from "@mui/material";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
-import CloseIcon from "@mui/icons-material/Close";
 import React, {useState} from "react";
 import "./user.css";
 import MenuItemBody from "../../atoms/menu/MenuItemBody";
 import SNMenu from "../../atoms/menu/SNMenu";
 import {useTheme} from "@mui/material/styles";
+import MoreVertIconBtn from "../../atoms/iconButtons/MoreVertIconBtn";
+import CloseIconBtn from "../../atoms/iconButtons/CloseIconBtn";
+import CardUsername from "../../atoms/cardUsername/CardUsername";
 
-const User = ({user, deleteRequest, menu, accept, decline}) => {
+const User = ({user, deleteRequest, isMenu, accept, decline}) => {
 
     const theme = useTheme();
 
@@ -67,21 +68,18 @@ const User = ({user, deleteRequest, menu, accept, decline}) => {
                             />
                         }
                         action={
-                            menu ?
-                                <IconButton aria-label="settings" onClick={handleMenu}>
-                                    <MoreVertIcon/>
-                                </IconButton> :
-                                <IconButton className="closebtn" onClick={handleClose}>
-                                    <CloseIcon/>
-                                </IconButton>
+                            isMenu ?
+                                <MoreVertIconBtn onClick={handleMenu}/> :
+                                <CloseIconBtn onClick={handleClose}/>
                         }
-                        title={
-                            <Typography sx={{fontWeight: "bold"}}>
-                                {user.name}
-                            </Typography>
-                        }
+                        title={<CardUsername username={user.name}/>}
                     />
-                    <SNMenu menuItems={menuItems} id={"request-menu"} anchorEl={anchorEl} onClose={handleMenuClose}/>
+                    <SNMenu
+                        menuItems={menuItems}
+                        id={"request-menu"}
+                        anchorEl={anchorEl}
+                        onClose={handleMenuClose}
+                    />
                 </Card>
             </Link>
         </>
@@ -95,9 +93,15 @@ User.propTypes = {
         avatar: PropTypes.string
     }),
     deleteRequest: PropTypes.func,
-    menu: PropTypes.bool.isRequired,
+    isMenu: PropTypes.bool,
     accept: PropTypes.func,
     decline: PropTypes.func,
+};
+
+User.defaultProps = {
+    isMenu: false,
+    accept: () => {},
+    decline: () => {}
 };
 
 export default User;

@@ -60,7 +60,7 @@ const ArticleContainer = ({setArticleContext, article, handleError, articles, se
     const [currentComment, setCurrentComment] = useState(initComment);
     const [addComment, setAddComment] = useState(true);
     const [commentsExpanded, setCommentsExpanded] = useState(false);
-    const [commentFieldExpanded, setCommentFieldExpanded] = useState(false);
+    const [addCommentExpanded, setAddCommentExpanded] = useState(false);
 
     const {mutate: addLikeMutate} = useMutation(insertLike, {
         onSuccess: () => {
@@ -133,7 +133,7 @@ const ArticleContainer = ({setArticleContext, article, handleError, articles, se
 
     const handleAddCommentClick = (event) => {
         event.preventDefault();
-        setCommentFieldExpanded(!commentFieldExpanded);
+        setAddCommentExpanded(!addCommentExpanded);
     };
 
     const handleEdit = (article) => {
@@ -172,6 +172,7 @@ const ArticleContainer = ({setArticleContext, article, handleError, articles, se
                 <Article
                     article={article}
                     commentsExpanded={commentsExpanded}
+                    addCommentExpanded={addCommentExpanded}
                     handleEdit={handleEdit}
                     handleExpandClick={handleExpandClick}
                     isCurrentUser={article.user_id === user_id}
@@ -187,7 +188,7 @@ const ArticleContainer = ({setArticleContext, article, handleError, articles, se
                     commentsFetching={commentsFetching || commentsAmountFetching}
                 />
             </ErrorBoundary>
-            <Collapse in={commentFieldExpanded} timeout="auto" unmountOnExit>
+            <Collapse in={addCommentExpanded} timeout="auto" unmountOnExit>
                 <AddCommentContainer
                     comment={currentComment}
                     addComment={addComment}
@@ -206,7 +207,7 @@ const ArticleContainer = ({setArticleContext, article, handleError, articles, se
                             comment={comment}
                             setComment={setCurrentComment}
                             setAddComment={setAddComment}
-                            setCommentFieldExpanded={setCommentFieldExpanded}
+                            setCommentFieldExpanded={setAddCommentExpanded}
                             deleteCommentFromArray={deleteCommentFromArray}
                             handleError={handleError}
                         />

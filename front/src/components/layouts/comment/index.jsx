@@ -11,6 +11,7 @@ import "./comment.css";
 import SNMenu from "../../atoms/menu/SNMenu";
 import MenuItemBody from "../../atoms/menu/MenuItemBody";
 import {useTheme} from "@mui/material/styles";
+import MoreVertIconBtn from "../../atoms/iconButtons/MoreVertIconBtn";
 
 
 const Comment = ({
@@ -78,9 +79,7 @@ const Comment = ({
                             </IconButton>
                             {
                                 (isCurrentUser || isAdmin) &&
-                                <IconButton aria-label="settings">
-                                    <MoreVertIcon onClick={handleMenu}/>
-                                </IconButton>
+                                <MoreVertIconBtn onClick={handleMenu}/>
                             }
                         </div>
                     }

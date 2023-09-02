@@ -1,6 +1,11 @@
 import {createTheme} from "@mui/material/styles";
 
 export const theme = createTheme({
+    typography: {
+        subtitle1: {
+            fontWeight: "bold"
+        }
+    },
     dialogActions: {
         justifyContent: "center"
     },
