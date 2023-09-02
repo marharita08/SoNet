@@ -2,7 +2,7 @@ import React from "react";
 import {CardContent, CardMedia, Typography} from "@mui/material";
 import env from "../../../config/envConfig";
 import {Link} from "react-router-dom";
-import PropTypes from "prop-types";
+import {articlePropTypes} from "../../../propTypes/articlePropTypes";
 
 const ArticleContent = ({article}) => {
     return (
@@ -24,15 +24,7 @@ const ArticleContent = ({article}) => {
 }
 
 ArticleContent.propTypes = {
-    article: PropTypes.shape({
-        article_id: PropTypes.number.isRequired,
-        user_id: PropTypes.number.isRequired,
-        name: PropTypes.string.isRequired,
-        avatar: PropTypes.string,
-        text: PropTypes.string.isRequired,
-        created_at: PropTypes.string.isRequired,
-        image: PropTypes.string,
-    })
+    article: articlePropTypes
 }
 
 export default ArticleContent;

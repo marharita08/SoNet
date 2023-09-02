@@ -7,10 +7,10 @@ import SNMenu from "../../atoms/menu/SNMenu";
 import MenuItemBody from "../../atoms/menu/MenuItemBody";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import PropTypes from "prop-types";
 import {useTheme} from "@mui/material/styles";
+import {articleHeaderPropTypes} from "./articleHeaderPropTypes";
 
-const ArticleHeader = ({article, isMenu, handleEdit, handleDelete}) => {
+const ArticleHeader = ({article, isCurrentUser, isAdmin, handleEdit, handleDelete}) => {
 
     const theme = useTheme();
     const [menuAnchorEl, setMenuAnchorEl] = useState(null);
@@ -58,7 +58,7 @@ const ArticleHeader = ({article, isMenu, handleEdit, handleDelete}) => {
                         />
                     </Link>
                 }
-                action={isMenu && <MoreVertIconBtn onClick={handleMenu}/>}
+                action={(isCurrentUser || isAdmin) && <MoreVertIconBtn onClick={handleMenu}/>}
                 title={
                     <Link to={`/profile/${article.user_id}`}>
                         <CardUsername username={article.name}/>
@@ -76,19 +76,6 @@ const ArticleHeader = ({article, isMenu, handleEdit, handleDelete}) => {
     );
 };
 
-ArticleHeader.propTypes = {
-    article: PropTypes.shape({
-        article_id: PropTypes.number.isRequired,
-        user_id: PropTypes.number.isRequired,
-        name: PropTypes.string.isRequired,
-        avatar: PropTypes.string,
-        text: PropTypes.string.isRequired,
-        created_at: PropTypes.string.isRequired,
-        image: PropTypes.string,
-    }),
-    isMenu: PropTypes.bool.isRequired,
-    handleEdit: PropTypes.func.isRequired,
-    handleDelete: PropTypes.func.isRequired,
-}
+ArticleHeader.propTypes = articleHeaderPropTypes;
 
 export default ArticleHeader;

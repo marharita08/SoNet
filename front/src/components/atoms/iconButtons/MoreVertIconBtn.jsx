@@ -5,8 +5,8 @@ import PropTypes from "prop-types";
 
 const MoreVertIconBtn = ({onClick}) => {
     return (
-        <IconButton aria-label="settings">
-            <MoreVertIcon onClick={onClick}/>
+        <IconButton aria-label="settings" onClick={onClick}>
+            <MoreVertIcon/>
         </IconButton>
     );
 };

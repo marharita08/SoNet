@@ -2,6 +2,7 @@ import React from "react";
 import {Avatar, AvatarGroup, Popover} from "@mui/material";
 import PropTypes from "prop-types";
 import {useTheme} from "@mui/material/styles";
+import {usersPopoverPropTypes} from "../../../propTypes/userPropTypes";
 
 const AvatarPopover = ({anchorEl, onClose, users}) => {
 
@@ -13,7 +14,7 @@ const AvatarPopover = ({anchorEl, onClose, users}) => {
             sx={{
                 pointerEvents: "none",
             }}
-            open={Boolean(anchorEl)}
+            open={!!anchorEl}
             anchorEl={anchorEl}
             anchorOrigin={{
                 vertical: "top",
@@ -41,13 +42,8 @@ const AvatarPopover = ({anchorEl, onClose, users}) => {
 
 AvatarPopover.propTypes = {
     anchorEl: PropTypes.object,
-    onClose: PropTypes.func,
-    users: PropTypes.arrayOf(
-        PropTypes.shape({
-            user_id: PropTypes.number.isRequired,
-            avatar: PropTypes.string
-        })
-    )
+    onClose: PropTypes.func.isRequired,
+    users: usersPopoverPropTypes
 };
 
 export default AvatarPopover;

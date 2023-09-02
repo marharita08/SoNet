@@ -5,7 +5,7 @@ import AddCommentIconBtn from "../../atoms/iconButtons/AddCommentIconBtn";
 import LikeIconBtn from "../../atoms/iconButtons/LikeIconBtn";
 import AvatarPopover from "./AvatarPopover";
 import {CardActions} from "@mui/material";
-import PropTypes from "prop-types";
+import {articleActionsPropTypes, articleActionsDefaultProps} from "./articleActionsPropTypes";
 
 const ArticleActions = ({
     commentsFetching,
@@ -63,23 +63,7 @@ const ArticleActions = ({
     )
 }
 
-ArticleActions.propTypes = {
-    commentsExpanded: PropTypes.bool.isRequired,
-    addCommentExpanded: PropTypes.bool.isRequired,
-    handleExpandClick: PropTypes.func.isRequired,
-    handleAddCommentClick: PropTypes.func.isRequired,
-    handleLikeClick: PropTypes.func.isRequired,
-    isLiked: PropTypes.bool,
-    likes: PropTypes.number,
-    comments: PropTypes.number,
-    users: PropTypes.arrayOf(
-        PropTypes.shape({
-            user_id: PropTypes.number.isRequired,
-            avatar: PropTypes.string
-        })
-    ),
-    likesFetching: PropTypes.bool,
-    commentsFetching: PropTypes.bool
-}
+ArticleActions.propTypes = articleActionsPropTypes;
+ArticleActions.defaultProps = articleActionsDefaultProps;
 
 export default ArticleActions;
