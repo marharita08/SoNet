@@ -1,7 +1,6 @@
 import React from "react";
 import {Card, CardHeader} from "@mui/material";
 import PropTypes from "prop-types";
-import "./auth.css";
 import LoginWithFacebookBtn from "../../atoms/buttons/loginWith/LoginWithFacebookBtn";
 import LoginWithGoogleBtn from "../../atoms/buttons/loginWith/LoginWithGoogleBtn";
 import {useStyles} from "../../style";
@@ -29,17 +28,17 @@ const AuthComponent = ({
                 isLoading={authLoading}
                 initialUser={initialUser}
             />
-            <br/>
-            <LoginWithGoogleBtn
-                onFailure={onGoogleFailure}
-                onSuccess={onGoogleSuccess}
-                isLoading={googleLoading}
-            />
-            <LoginWithFacebookBtn
-                callback={responseFacebook}
-                isLoading={facebookLoading}
-            />
-            <br/>
+            <div className={classes.loginWithBtns}>
+                <LoginWithGoogleBtn
+                    onFailure={onGoogleFailure}
+                    onSuccess={onGoogleSuccess}
+                    isLoading={googleLoading}
+                />
+                <LoginWithFacebookBtn
+                    callback={responseFacebook}
+                    isLoading={facebookLoading}
+                />
+            </div>
         </Card>
     );
 };
@@ -59,6 +58,6 @@ AuthComponent.defaultProps = {
     googleLoading: false,
     facebookLoading: false,
     authLoading: false
-}
+};
 
 export default AuthComponent;

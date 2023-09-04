@@ -1,4 +1,4 @@
-import {makeStyles} from "@material-ui/core";
+import {makeStyles} from "@mui/styles";
 
 export const useStyles = makeStyles(theme => ({
     loginWithBtn: {
@@ -12,20 +12,20 @@ export const useStyles = makeStyles(theme => ({
         cursor: "pointer"
     },
     facebookLogin: {
-        backgroundColor: "#395697",
-        color: "white",
-        borderColor: "#395697",
+        backgroundColor: theme.palette.facebook.main,
+        color: theme.palette.facebook.contrastText,
+        borderColor: theme.palette.facebook.main,
         "&:hover": {
-            backgroundColor: "#003366",
-            borderColor: "#003366",
+            backgroundColor: theme.palette.facebook.dark,
+            borderColor: theme.palette.facebook.dark,
         }
     },
     googleLogin: {
-        backgroundColor: "white",
-        color: "black",
-        borderColor: "#E8E8E8",
+        backgroundColor: theme.palette.google.main,
+        color: theme.palette.google.contrastText,
+        borderColor: theme.palette.google.darker,
         "&:hover": {
-            backgroundColor: "#f2f2f2"
+            backgroundColor: theme.palette.google.dark
         }
     },
     icon: {

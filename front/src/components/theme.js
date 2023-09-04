@@ -19,6 +19,17 @@ export const theme = createTheme({
         },
         background: {
             default: "#f2f2f2"
+        },
+        facebook: {
+            main: "#395697",
+            dark: "#003366",
+            contrastText: "#FFF"
+        },
+        google: {
+            main: "#FFF",
+            dark: "#f2f2f2",
+            darker: "#E8E8E8",
+            contrastText: "#000"
         }
     },
     avatarSizes: {

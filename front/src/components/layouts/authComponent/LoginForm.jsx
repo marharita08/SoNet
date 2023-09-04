@@ -26,7 +26,7 @@ const LoginForm = ({onFormSubmit, initialUser, isLoading}) => {
             validationSchema={schema}
             initialValues={initialUser}
         >
-            <Form className={classes.margin}>
+            <Form className={classes.authForm}>
                 <div className={classes.authField}>
                     <Field
                         component={TextField}

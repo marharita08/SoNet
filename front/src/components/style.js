@@ -1,4 +1,4 @@
-import {makeStyles} from "@material-ui/core";
+import {makeStyles} from "@mui/styles";
 
 export const useStyles = makeStyles(theme => ({
     root: {
@@ -28,7 +28,7 @@ export const useStyles = makeStyles(theme => ({
         margin: theme.spacing(2, 1)
     },
     commentFieldContainer: {
-        width: `calc(100% - 60px - ${theme.spacing(4)}px)`,
+        width: `calc(100% - ${theme.avatarSizes.lg.width}px - ${theme.spacing(4)})`,
         margin: theme.spacing(1, 0),
     },
     replyToText: {
@@ -48,5 +48,11 @@ export const useStyles = makeStyles(theme => ({
         [theme.breakpoints.up("sm")]: {
             width: "320px"
         }
+    },
+    authForm: {
+        margin: theme.spacing(2, 0, 6)
+    },
+    loginWithBtns: {
+        margin: theme.spacing(5, 0)
     }
 }));
