@@ -33,5 +33,11 @@ export const useStyles = makeStyles(theme => ({
     },
     replyToText: {
         fontStyle: "italic"
+    },
+    leftMargin: {
+        marginLeft: theme.spacing(1)
+    },
+    bold: {
+        fontWeight: "bold"
     }
 }));

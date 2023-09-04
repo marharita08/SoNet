@@ -1,6 +1,6 @@
 import {createTheme} from "@mui/material/styles";
 
-export const theme = createTheme({
+let theme = createTheme({
     typography: {
         subtitle1: {
             fontWeight: "bold"
@@ -51,3 +51,17 @@ export const theme = createTheme({
         }
     },
 });
+
+theme = createTheme(theme, {
+    commentCardHeader: {
+        padding: theme.spacing(2, 2, 1)
+    },
+    commentCardContent: {
+        padding: theme.spacing(1, 2, 2),
+        "&:last-child": {
+            paddingBottom: theme.spacing(3)
+        }
+    }
+})
+
+export default theme;

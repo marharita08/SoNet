@@ -8,9 +8,9 @@ import SNMenu from "../../atoms/menu/SNMenu";
 import MenuItemBody from "../../atoms/menu/MenuItemBody";
 import {commentPropTypes} from "../../../propTypes/commentPropTypes";
 import CommentHeaderTitle from "./CommentHeaderTitle";
-import {useStyles} from "./style";
 import CommentHeaderAvatar from "./CommentHeaderAvatar";
 import CommentHeaderActions from "./CommentHeaderActions";
+import {useTheme} from "@mui/material/styles";
 
 const Comment = ({
     comment,
@@ -21,7 +21,7 @@ const Comment = ({
     handleReply
 }) => {
 
-    const classes = useStyles();
+    const theme = useTheme();
     const [anchorEl, setAnchorEl] = useState(null);
 
     const handleMenu = (event) => {
@@ -75,7 +75,7 @@ const Comment = ({
                         <CommentHeaderTitle comment={comment}/>
                     }
                     subheader={moment(comment.commented_at).fromNow()}
-                    className={classes.cardHeader}
+                    sx={theme.commentCardHeader}
                 />
                 <SNMenu
                     id={"menu-comment"}
@@ -83,7 +83,7 @@ const Comment = ({
                     anchorEl={anchorEl}
                     onClose={handleClose}
                 />
-                <CardContent className={classes.cardContent}>
+                <CardContent sx={theme.commentCardContent}>
                     <Typography variant="body2">
                         {comment.text}
                     </Typography>

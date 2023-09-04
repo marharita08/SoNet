@@ -1,6 +1,6 @@
 import React from "react";
 import {commentPropTypes} from "../../../propTypes/commentPropTypes";
-import {useStyles} from "./style";
+import {useStyles} from "../../style";
 import LinkToProfile from "../../atoms/links/LinkToProfile";
 
 const CommentHeaderTitle = ({comment}) => {
@@ -12,6 +12,7 @@ const CommentHeaderTitle = ({comment}) => {
             <LinkToProfile
                 user_id={comment.user_id}
                 content={comment.name}
+                className={classes.bold}
             />
             {
                 comment.p_user_id &&

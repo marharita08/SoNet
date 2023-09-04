@@ -12,7 +12,7 @@ const LinkToProfile = ({user_id, content, className}) => {
 
 LinkToProfile.propTypes = {
     user_id: PropTypes.number.isRequired,
-    content: PropTypes.string.isRequired|PropTypes.node.isRequired,
+    content: PropTypes.any.isRequired,
     className: PropTypes.string
 }
 
