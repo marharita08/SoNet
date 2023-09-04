@@ -7,7 +7,7 @@ import * as Yup from "yup";
 import PropTypes from "prop-types";
 import {userAuthPropTypes} from "../../../propTypes/userPropTypes";
 import ProgressOrComponent from "../../atoms/progressOrComponent/ProgressOrComponent";
-import {useStyles} from "../../style";
+import {useStyles} from "./style";
 
 const LoginForm = ({onFormSubmit, initialUser, isLoading}) => {
 

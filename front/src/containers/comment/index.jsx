@@ -4,6 +4,7 @@ import authContext from "../../context/authContext";
 import {useMutation} from "react-query";
 import {deleteComment} from "../../api/commentCrud";
 import PropTypes from "prop-types";
+import {commentPropTypes} from "../../propTypes/commentPropTypes";
 
 const CommentContainer = ({
     comment,
@@ -61,14 +62,7 @@ const CommentContainer = ({
 };
 
 CommentContainer.propTypes = {
-    comment: PropTypes.shape({
-        level: PropTypes.number.isRequired,
-        name: PropTypes.string.isRequired,
-        avatar: PropTypes.string,
-        to: PropTypes.string,
-        commented_at: PropTypes.string.isRequired,
-        text: PropTypes.string.isRequired
-    }),
+    comment: commentPropTypes,
     setComment: PropTypes.func.isRequired,
     setAddComment: PropTypes.func.isRequired,
     setCommentFieldExpanded: PropTypes.func.isRequired,

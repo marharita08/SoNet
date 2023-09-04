@@ -1,18 +1,16 @@
-import {Link} from "react-router-dom";
 import React, {useState} from "react";
 import moment from "moment";
-import {Avatar, CardContent, CardHeader, Divider, IconButton, Typography} from "@mui/material";
+import {CardContent, CardHeader, Divider, Typography} from "@mui/material";
 import PropTypes from "prop-types";
-import ReplyIcon from "@mui/icons-material/Reply";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import "./comment.css";
 import SNMenu from "../../atoms/menu/SNMenu";
 import MenuItemBody from "../../atoms/menu/MenuItemBody";
-import {useTheme} from "@mui/material/styles";
-import MoreVertIconBtn from "../../atoms/iconButtons/MoreVertIconBtn";
-
+import {commentPropTypes} from "../../../propTypes/commentPropTypes";
+import CommentHeaderTitle from "./CommentHeaderTitle";
+import {useStyles} from "./style";
+import CommentHeaderAvatar from "./CommentHeaderAvatar";
+import CommentHeaderActions from "./CommentHeaderActions";
 
 const Comment = ({
     comment,
@@ -23,7 +21,7 @@ const Comment = ({
     handleReply
 }) => {
 
-    const theme = useTheme();
+    const classes = useStyles();
     const [anchorEl, setAnchorEl] = useState(null);
 
     const handleMenu = (event) => {
@@ -64,52 +62,28 @@ const Comment = ({
             <div style={{paddingLeft: (comment.level - 1) * 30}}>
                 <CardHeader
                     avatar={
-                        <Link to={`/profile/${comment.user_id}`}>
-                            <Avatar
-                                alt={comment.name}
-                                src={comment.avatar}
-                                sx={theme.avatarSizes.md}
-                            />
-                        </Link>
+                        <CommentHeaderAvatar comment={comment}/>
                     }
                     action={
-                        <div>
-                            <IconButton>
-                                <ReplyIcon onClick={handleReply}/>
-                            </IconButton>
-                            {
-                                (isCurrentUser || isAdmin) &&
-                                <MoreVertIconBtn onClick={handleMenu}/>
-                            }
-                        </div>
+                        <CommentHeaderActions
+                            handleMenu={handleMenu}
+                            handleReply={handleReply}
+                            isMenu={isCurrentUser || isAdmin}
+                        />
                     }
                     title={
-                        <div>
-                            <span className="name">
-                                <Link to={`/profile/${comment.user_id}`}>
-                                    {comment.name}
-                                </Link>
-                            </span>
-                            {
-                                comment.level !== 1 &&
-                                <span className={"margin_left"}>
-                                    to:
-                                    <Link to={`/profile/${comment.p_user_id}`} className={"margin_left"}>
-                                        {comment.to}
-                                    </Link>
-                                </span>
-                            }
-                        </div>
+                        <CommentHeaderTitle comment={comment}/>
                     }
-                    subheader={
-                        <Typography style={{fontSize: "12px", color: "gray"}}>
-                            {moment(comment.commented_at).fromNow()}
-                        </Typography>
-                    }
-                    style={{padding: "10px", paddingBottom: "5px"}}
+                    subheader={moment(comment.commented_at).fromNow()}
+                    className={classes.cardHeader}
                 />
-                <SNMenu id={"menu-comment"} menuItems={menuItems} anchorEl={anchorEl} onClose={handleClose}/>
-                <CardContent style={{padding: "10px", paddingTop: "5px"}}>
+                <SNMenu
+                    id={"menu-comment"}
+                    menuItems={menuItems}
+                    anchorEl={anchorEl}
+                    onClose={handleClose}
+                />
+                <CardContent className={classes.cardContent}>
                     <Typography variant="body2">
                         {comment.text}
                     </Typography>
@@ -120,18 +94,12 @@ const Comment = ({
 };
 
 Comment.propTypes = {
-    comment: PropTypes.shape({
-        level: PropTypes.number.isRequired,
-        name: PropTypes.string.isRequired,
-        avatar: PropTypes.string,
-        to: PropTypes.string,
-        commented_at: PropTypes.string.isRequired,
-        text: PropTypes.string.isRequired
-    }),
+    comment: commentPropTypes.isRequired,
     handleEdit: PropTypes.func.isRequired,
     handleDelete: PropTypes.func.isRequired,
-    isCurrentUser: PropTypes.bool,
-    handleReply: PropTypes.func.isRequired
+    isCurrentUser: PropTypes.bool.isRequired,
+    handleReply: PropTypes.func.isRequired,
+    isAdmin: PropTypes.bool.isRequired
 };
 
 export default Comment;
