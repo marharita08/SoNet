@@ -1,37 +1,12 @@
 import PropTypes from "prop-types";
+import {userProfilePropTypes} from "../../../propTypes/userPropTypes";
+import {universitiesPropTypes} from "../../../propTypes/universitiesPropTypes";
+import {visibilitiesPropTypes} from "../../../propTypes/visibilitiesPropTypes";
 
 export let EditProfilePropTypes = {
-    user: PropTypes.shape({
-        user_id: PropTypes.number.isRequired,
-        name: PropTypes.string.isRequired,
-        email: PropTypes.string,
-        email_visibility: PropTypes.shape({
-            value: PropTypes.number.isRequired,
-            label: PropTypes.string.isRequired
-        }),
-        phone: PropTypes.string,
-        phone_visibility: PropTypes.shape({
-            value: PropTypes.number.isRequired,
-            label: PropTypes.string.isRequired
-        }),
-        university: PropTypes.shape({
-            value: PropTypes.number.isRequired,
-            label: PropTypes.string.isRequired
-        }),
-        university_visibility: PropTypes.shape({
-            value: PropTypes.number.isRequired,
-            label: PropTypes.string.isRequired
-        }),
-        avatar: PropTypes.string
-    }),
-    universities: PropTypes.arrayOf(PropTypes.shape({
-        value: PropTypes.number.isRequired,
-        label: PropTypes.string.isRequired
-    })),
-    visibilities: PropTypes.arrayOf(PropTypes.shape({
-        value: PropTypes.number.isRequired,
-        label: PropTypes.string.isRequired
-    })),
+    user: userProfilePropTypes,
+    universities: universitiesPropTypes,
+    visibilities: visibilitiesPropTypes,
     onFormSubmit: PropTypes.func.isRequired,
     isLoading: PropTypes.bool,
     image: PropTypes.string,
