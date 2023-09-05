@@ -1,9 +1,10 @@
 import React, {useContext} from "react";
-import AddComment from "../../components/addComment";
+import AddComment from "../../components/layouts/addComment";
 import authContext from "../../context/authContext";
 import {useMutation} from "react-query";
 import {insertComment, updateComment} from "../../api/commentCrud";
 import PropTypes from "prop-types";
+import {commentAddPropTypes} from "../../propTypes/commentPropTypes";
 
 const AddCommentContainer = ({
     comment,
@@ -52,7 +53,7 @@ const AddCommentContainer = ({
             user={user}
             comment={comment}
             onSubmit={onSubmit}
-            loading={insertLoading || updateLoading}
+            isLoading={insertLoading || updateLoading}
             addComment={addComment}
             handleCancel={handleCancel}
         />
@@ -60,13 +61,7 @@ const AddCommentContainer = ({
 };
 
 AddCommentContainer.propTypes = {
-    comment: PropTypes.shape({
-        level: PropTypes.number.isRequired,
-        to: PropTypes.string,
-        text: PropTypes.string.isRequired,
-        path: PropTypes.string.isRequired,
-        parent_id: PropTypes.number,
-    }),
+    comment: commentAddPropTypes.isRequired,
     addComment: PropTypes.bool.isRequired,
     handleCancel: PropTypes.func.isRequired,
     addCommentToArray: PropTypes.func.isRequired,

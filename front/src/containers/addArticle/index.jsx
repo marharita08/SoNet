@@ -3,13 +3,15 @@ import {useMutation, useQuery} from "react-query";
 import PropTypes from "prop-types";
 import {serialize} from "object-to-formdata";
 import ErrorBoundary from "../../components/ErrorBoundary";
-import AddArticle from "../../components/addArticle";
+import AddArticle from "../../components/layouts/addArticle";
 import {getArticleVisibilities} from "../../api/visibilitiesCrud";
 import {insertArticle, updateArticle} from "../../api/articlesCrud";
 import articleContext from "../../context/articleContext";
 import {useNavigate, useLocation} from "react-router-dom";
+import {articlesPropTypes} from "../../propTypes/articlePropTypes";
 
 const AddArticleContainer = ({setArticleContext, articles, setArticles}) => {
+
     const {data, isFetching: visibilitiesFetching} = useQuery("visibilities",
         () => getArticleVisibilities(), {
             refetchInterval: false,
@@ -21,7 +23,7 @@ const AddArticleContainer = ({setArticleContext, articles, setArticles}) => {
     const [image, setImage] = useState();
     const [croppedImage, setCroppedImage] = useState();
     const [cropper, setCropper] = useState();
-    const [message, setMessage] = useState();
+    const [message, setMessage] = useState("");
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -30,7 +32,7 @@ const AddArticleContainer = ({setArticleContext, articles, setArticles}) => {
             setArticleContext({
                 openModal: false,
             });
-            setMessage(undefined);
+            setMessage("");
             const updatedArticle = data?.data;
             const newArticles = [...articles];
             const index = newArticles.findIndex((obj => obj.article_id === updatedArticle.article_id));
@@ -45,7 +47,7 @@ const AddArticleContainer = ({setArticleContext, articles, setArticles}) => {
             setArticleContext({
                 openModal: false,
             });
-            setMessage(undefined);
+            setMessage("");
             const newArticle = data?.data;
             if (location.pathname === "/articles") {
                 let newArticles = [...articles, newArticle];
@@ -96,7 +98,7 @@ const AddArticleContainer = ({setArticleContext, articles, setArticles}) => {
             };
             reader.readAsDataURL(file);
             if (message) {
-                setMessage(undefined);
+                setMessage("");
             }
         } else {
             setMessage("Wrong file format or size!");
@@ -105,7 +107,7 @@ const AddArticleContainer = ({setArticleContext, articles, setArticles}) => {
 
     const cropImage = (setFieldValue) => {
         if (typeof cropper !== "undefined") {
-            var img = cropper.getCroppedCanvas().toDataURL();
+            let img = cropper.getCroppedCanvas().toDataURL();
             setCroppedImage(img);
             setImage(null);
             fetch(img)
@@ -147,17 +149,7 @@ const AddArticleContainer = ({setArticleContext, articles, setArticles}) => {
 
 AddArticleContainer.propTypes = {
     setArticleContext: PropTypes.func.isRequired,
-    articles: PropTypes.arrayOf(
-        PropTypes.shape({
-            article_id: PropTypes.number.isRequired,
-            user_id: PropTypes.number.isRequired,
-            name: PropTypes.string.isRequired,
-            avatar: PropTypes.string,
-            text: PropTypes.string.isRequired,
-            created_at: PropTypes.string.isRequired,
-            image: PropTypes.string,
-        })
-    ),
+    articles: articlesPropTypes,
     setArticles: PropTypes.func.isRequired,
 };
 

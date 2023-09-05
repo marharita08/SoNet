@@ -2,9 +2,9 @@ import React from "react";
 import PropTypes from "prop-types";
 import {useQuery} from "react-query";
 import ErrorBoundary from "../../components/ErrorBoundary";
-import User from "../../components/user";
+import User from "../../components/layouts/user";
 import {getOutgoingRequests} from "../../api/usersCrud";
-import Loading from "../../components/loading";
+import Loading from "../../components/atoms/loading";
 
 const OutgoingRequests = ({id, deleteRequest, outgoingRequests, setOutgoingRequests}) => {
 
@@ -24,7 +24,7 @@ const OutgoingRequests = ({id, deleteRequest, outgoingRequests, setOutgoingReque
             <Loading isLoading={outgoingRequestsFetching} align={"left"}/>
             {outgoingRequests?.map((user) =>
                 <ErrorBoundary key={user.user_id}>
-                    <User user={user} deleteRequest={deleteRequest} menu={false}/>
+                    <User user={user} deleteRequest={deleteRequest} isMenu={false}/>
                 </ErrorBoundary>
             )}
         </div>

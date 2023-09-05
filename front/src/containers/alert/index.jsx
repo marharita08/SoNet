@@ -1,4 +1,4 @@
-import AlertComponent from "../../components/alert";
+import AlertComponent from "../../components/atoms/alert";
 import PropTypes from "prop-types";
 
 const AlertContainer = ({alertMessage, handleClose}) => {

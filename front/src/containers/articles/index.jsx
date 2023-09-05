@@ -5,8 +5,8 @@ import Article from "../article";
 import ErrorBoundary from "../../components/ErrorBoundary";
 import authContext from "../../context/authContext";
 import {getAllNews, getNews, getCountOfNews, getCountOfAllNews} from "../../api/articlesCrud";
-import LoadMoreBtn from "../../components/buttons/LoadMoreBtn";
-import Loading from "../../components/loading";
+import LoadMoreBtn from "../../components/atoms/buttons/LoadMoreBtn";
+import Loading from "../../components/atoms/loading";
 
 
 const ArticlesContainer = ({setArticleContext, param, handleError, articles, setArticles}) => {

@@ -16,25 +16,9 @@ a {
   text-decoration: none;
 }
 
-.closebtn {
-  margin-left: 15px;
-  color: black;
-  font-weight: bold;
-  float: right;
-  font-size: 26px;
-  line-height: 20px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
 .article-card {
   margin: 10px auto 0 auto;
   width: 100%
-}
-
-
-.icon {
-  margin-right: 5px;
 }
 
 .menu-item {
@@ -42,9 +26,6 @@ a {
   align-items: flex-end;
 }
 
-.heading {
-  text-align: center;
-}
 
 @media screen and (min-width: 600px) {
   .article-card {

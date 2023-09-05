@@ -6,7 +6,7 @@ import ErrorBoundary from "../../components/ErrorBoundary";
 import Article from "../article";
 import {getArticle} from "../../api/articlesCrud";
 import authContext from "../../context/authContext";
-import Loading from "../../components/loading";
+import Loading from "../../components/atoms/loading";
 
 
 const ArticleOuterContainer = ({setArticleContext, handleError, articles, setArticles}) => {
