@@ -1,11 +1,15 @@
 import React from "react";
 import PropTypes from "prop-types";
+import {useStyles} from "../../layouts/header/style";
 
 const HeaderButton = ({icon, text, className, onClick}) => {
+
+    const classes = useStyles();
+
     return (
-        <button className={className} onClick={onClick}>
+        <button className={`${classes.button} ${className}`} onClick={onClick}>
             <div>{icon}</div>
-            <div className={"header-btn-text"}>{text}</div>
+            <div className={classes.buttonText}>{text}</div>
         </button>
     );
 };

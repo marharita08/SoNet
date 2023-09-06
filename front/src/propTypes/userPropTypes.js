@@ -24,4 +24,10 @@ export const userProfilePropTypes = PropTypes.shape({
     university: universityPropTypes,
     university_visibility: visibilityPropTypes,
     avatar: PropTypes.string
-})
+});
+
+export const userCardPropTypes = PropTypes.shape({
+    user_id: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired,
+    avatar: PropTypes.string
+});
