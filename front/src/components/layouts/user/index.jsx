@@ -1,6 +1,6 @@
 import {Link} from "react-router-dom";
 import PropTypes from "prop-types";
-import {Avatar, Card, CardHeader, Typography} from "@mui/material";
+import {Avatar, Card, CardHeader} from "@mui/material";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import React, {useState} from "react";

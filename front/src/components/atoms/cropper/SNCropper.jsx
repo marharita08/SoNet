@@ -1,5 +1,6 @@
 import React from "react";
 import Cropper from "react-cropper";
+import "cropperjs/dist/cropper.css";
 import {useStyles} from "../../style";
 import PropTypes from "prop-types";
 
