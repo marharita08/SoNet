@@ -1,5 +1,4 @@
 import React from "react";
-import Loading from "../../atoms/loading";
 import {Avatar, DialogContent} from "@mui/material";
 import SNCropper from "../../atoms/cropper/SNCropper";
 import ImageDialogActions from "../dialogActions/ImageDialogActions";
@@ -10,6 +9,7 @@ import {userProfilePropTypes} from "../../../propTypes/userPropTypes";
 import {universitiesPropTypes} from "../../../propTypes/universitiesPropTypes";
 import {visibilitiesPropTypes} from "../../../propTypes/visibilitiesPropTypes";
 import EditProfileFields from "./EditProfileFields";
+import CentredLoading from "../../atoms/loading/CentredLoading";
 
 const EditProfileContent = ({
     isLoading,
@@ -31,7 +31,7 @@ const EditProfileContent = ({
 
     return (
         <DialogContent>
-            <Loading isLoading={isLoading}/>
+            <CentredLoading isLoading={isLoading}/>
             <Avatar
                 className={classes.avatar}
                 src={croppedImage || user?.avatar}

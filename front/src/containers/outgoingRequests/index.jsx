@@ -1,47 +1,36 @@
 import React from "react";
 import PropTypes from "prop-types";
 import {useQuery} from "react-query";
-import ErrorBoundary from "../../components/ErrorBoundary";
-import User from "../../components/layouts/user";
 import {getOutgoingRequests} from "../../api/usersCrud";
-import Loading from "../../components/atoms/loading";
+import {requestsPropTypes} from "../../propTypes/requestPropTypes";
+import UserCards from "../../components/layouts/userCards/UserCards";
 
 const OutgoingRequests = ({id, deleteRequest, outgoingRequests, setOutgoingRequests}) => {
 
-    const {isFetching: outgoingRequestsFetching} =
-        useQuery("outgoing-requests", () => getOutgoingRequests(id), {
+    const {isFetching} = useQuery(
+        "outgoing-requests",
+        () => getOutgoingRequests(id),
+        {
             onSuccess: (data) => setOutgoingRequests(data?.data),
             refetchInterval: false,
             refetchOnWindowFocus: false
-        });
+        }
+    );
 
     return (
-        <div className={"margin"}>
-            {
-                (outgoingRequestsFetching || outgoingRequests?.length !== 0) &&
-                <h2>Outgoing Requests</h2>
-            }
-            <Loading isLoading={outgoingRequestsFetching} align={"left"}/>
-            {outgoingRequests?.map((user) =>
-                <ErrorBoundary key={user.user_id}>
-                    <User user={user} deleteRequest={deleteRequest} isMenu={false}/>
-                </ErrorBoundary>
-            )}
-        </div>
+        <UserCards
+            heading={"Outgoing Requests"}
+            users={outgoingRequests}
+            deleteRequest={deleteRequest}
+            isFetching={isFetching}
+        />
     );
 };
 
 OutgoingRequests.propTypes = {
     id: PropTypes.number.isRequired,
     deleteRequest: PropTypes.func.isRequired,
-    outgoingRequests: PropTypes.arrayOf(
-        PropTypes.shape({
-            request_id: PropTypes.number.isRequired,
-            user_id: PropTypes.number.isRequired,
-            name: PropTypes.string.isRequired,
-            avatar: PropTypes.string,
-        })
-    ),
+    outgoingRequests: requestsPropTypes,
     setOutgoingRequests: PropTypes.func.isRequired,
 };
 

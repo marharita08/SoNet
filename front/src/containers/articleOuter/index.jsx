@@ -6,33 +6,40 @@ import ErrorBoundary from "../../components/ErrorBoundary";
 import Article from "../article";
 import {getArticle} from "../../api/articlesCrud";
 import authContext from "../../context/authContext";
-import Loading from "../../components/atoms/loading";
+import {articlesPropTypes} from "../../propTypes/articlePropTypes";
+import CentredLoading from "../../components/atoms/loading/CentredLoading";
 
 
 const ArticleOuterContainer = ({setArticleContext, handleError, articles, setArticles}) => {
     let {id} = useParams();
     const {user: {user_id}} = useContext(authContext);
-    const {isFetching: articleFetching} =
-        useQuery(`article ${id}-${user_id}`, () => getArticle(id), {
+
+    const {isFetching} = useQuery(
+        `article ${id}-${user_id}`,
+        () => getArticle(id),
+        {
             onSuccess: (data) => setArticles(data?.data),
             refetchInterval: false,
             refetchOnWindowFocus: false
-        });
+        }
+    );
 
     return (
         <>
-            <Loading isLoading={articleFetching}/>
-            {articles?.map((article) =>
-                <ErrorBoundary key={article.article_id}>
-                    <Article
-                        setArticleContext={setArticleContext}
-                        article={article}
-                        handleError={handleError}
-                        articles={articles}
-                        setArticles={setArticles}
-                    />
-                </ErrorBoundary>
-            )}
+            <CentredLoading isLoading={isFetching}/>
+            {
+                articles?.map((article) =>
+                    <ErrorBoundary key={article.article_id}>
+                        <Article
+                            setArticleContext={setArticleContext}
+                            article={article}
+                            handleError={handleError}
+                            articles={articles}
+                            setArticles={setArticles}
+                        />
+                    </ErrorBoundary>
+                )
+            }
         </>
     );
 };
@@ -40,17 +47,7 @@ const ArticleOuterContainer = ({setArticleContext, handleError, articles, setArt
 ArticleOuterContainer.propTypes = {
     setArticleContext: PropTypes.func.isRequired,
     handleError: PropTypes.func.isRequired,
-    articles: PropTypes.arrayOf(
-        PropTypes.shape({
-            article_id: PropTypes.number.isRequired,
-            user_id: PropTypes.number.isRequired,
-            name: PropTypes.string.isRequired,
-            avatar: PropTypes.string,
-            text: PropTypes.string.isRequired,
-            created_at: PropTypes.string.isRequired,
-            image: PropTypes.string,
-        })
-    ),
+    articles: articlesPropTypes,
     setArticles: PropTypes.func.isRequired,
 };
 

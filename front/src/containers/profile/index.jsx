@@ -12,7 +12,7 @@ import Friends from "../friends";
 import IncomingRequests from "../incomingRequests";
 import {updateRequest, deleteRequest, getRequest, insertRequest} from "../../api/friendsCrud";
 import SearchUsersContainer from "../searchUsers";
-import Loading from "../../components/atoms/loading";
+import SNLoading from "../../components/atoms/loading/SNLoading";
 
 const ProfileContainer = (handleError) => {
     const {id: idStr} = useParams();
@@ -170,7 +170,7 @@ const ProfileContainer = (handleError) => {
 
     return (
         <>
-            <Loading isLoading={userFetching} align={"left"}/>
+            <SNLoading isLoading={userFetching}/>
             <div key={id}>
                 <ErrorBoundary>
                     <Profile
