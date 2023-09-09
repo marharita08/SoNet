@@ -31,3 +31,17 @@ export const userCardPropTypes = PropTypes.shape({
     name: PropTypes.string.isRequired,
     avatar: PropTypes.string
 });
+
+export const userForSearchPropTypes = PropTypes.shape({
+    request_id: PropTypes.number,
+    user_id: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired,
+    email: PropTypes.string,
+    avatar: PropTypes.string,
+    is_not_friends: PropTypes.bool,
+    is_friends: PropTypes.bool,
+    is_incoming_request: PropTypes.bool,
+    is_outgoing_request: PropTypes.bool
+});
+
+export const usersForSearchPropTypes = PropTypes.arrayOf(userForSearchPropTypes);
