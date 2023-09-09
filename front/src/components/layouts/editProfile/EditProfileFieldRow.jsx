@@ -4,6 +4,7 @@ import {TextField} from "formik-mui";
 import FormikAutocomplete from "../../atoms/fields/FormikAutocomplete";
 import {useStyles} from "./style";
 import PropTypes from "prop-types";
+import {visibilitiesPropTypes} from "../../../propTypes/visibilitiesPropTypes";
 
 const EditProfileFieldRow = ({
     fieldType,
@@ -51,10 +52,7 @@ EditProfileFieldRow.propTypes = {
     fieldComponent: PropTypes.elementType,
     fieldOptions: PropTypes.array,
     visibilityName: PropTypes.string,
-    visibilities: PropTypes.arrayOf(PropTypes.shape({
-        value: PropTypes.number.isRequired,
-        label: PropTypes.string.isRequired
-    })),
+    visibilities: visibilitiesPropTypes
 };
 
 EditProfileFieldRow.defaultProps = {

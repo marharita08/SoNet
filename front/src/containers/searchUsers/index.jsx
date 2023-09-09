@@ -4,6 +4,7 @@ import {getForSearch} from "../../api/usersCrud";
 import React, {useContext} from "react";
 import PropTypes from "prop-types";
 import authContext from "../../context/authContext";
+import {usersForSearchPropTypes} from "../../propTypes/userPropTypes";
 
 const SearchUsersContainer = ({addToFriends, accept, deleteFromFriends, usersForSearch, setUsersForSearch}) => {
 
@@ -34,19 +35,7 @@ SearchUsersContainer.propTypes = {
     addToFriends: PropTypes.func.isRequired,
     accept: PropTypes.func.isRequired,
     deleteFromFriends: PropTypes.func.isRequired,
-    usersForSearch: PropTypes.arrayOf(
-        PropTypes.shape({
-            request_id: PropTypes.number,
-            user_id: PropTypes.number.isRequired,
-            name: PropTypes.string.isRequired,
-            email: PropTypes.string,
-            avatar: PropTypes.string,
-            is_not_friends: PropTypes.bool,
-            is_friends: PropTypes.bool,
-            is_incoming_request: PropTypes.bool,
-            is_outgoing_request: PropTypes.bool
-        })
-    ),
+    usersForSearch: usersForSearchPropTypes,
     setUsersForSearch: PropTypes.func.isRequired,
     isLoading: PropTypes.bool
 };

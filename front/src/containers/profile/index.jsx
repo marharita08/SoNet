@@ -16,7 +16,7 @@ import Loading from "../../components/atoms/loading";
 
 const ProfileContainer = (handleError) => {
     const {id: idStr} = useParams();
-    const id = parseInt(idStr, 10);
+    const id = +idStr;
     const {user: currentUser, isAdmin} = useContext(authContext);
     const status = {
         underConsideration: 1,
