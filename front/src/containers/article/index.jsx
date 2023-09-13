@@ -11,10 +11,12 @@ import AddCommentContainer from "../addComment";
 import {deleteLike, getIsLiked, insertLike} from "../../api/likesCrud";
 import {useNavigate, useLocation} from "react-router-dom";
 import {articlePropTypes, articlesPropTypes} from "../../propTypes/articlePropTypes";
+import {useStyles} from "../../components/style";
 
 const ArticleContainer = ({setArticleContext, article, handleError, articles, setArticles}) => {
 
     let id = article.article_id;
+    const classes = useStyles();
 
     const {user: {user_id, avatar}, isAdmin} = useContext(authContext);
 
@@ -192,7 +194,7 @@ const ArticleContainer = ({setArticleContext, article, handleError, articles, se
     };
 
     return (
-        <Card className={"article-card"}>
+        <Card className={classes.articleCard}>
             <ErrorBoundary>
                 <Article
                     article={article}

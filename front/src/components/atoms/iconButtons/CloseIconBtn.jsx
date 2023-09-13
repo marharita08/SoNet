@@ -5,6 +5,7 @@ import PropTypes from "prop-types";
 import {useStyles} from "../../style";
 
 const CloseIconBtn = ({onClick}) => {
+
     const classes = useStyles();
 
     return (

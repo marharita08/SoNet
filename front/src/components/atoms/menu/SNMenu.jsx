@@ -16,7 +16,7 @@ const SNMenu = ({id, menuItems, anchorEl, onClose}) => {
                 vertical: "top",
                 horizontal: "right",
             }}
-            open={Boolean(anchorEl)}
+            open={!!anchorEl}
             onClose={onClose}
         >
             {menuItems.map((item, index) => (

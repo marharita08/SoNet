@@ -1,14 +1,14 @@
 import React from "react";
 import {IconButton, Snackbar} from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
 import Alert from "@mui/material/Alert";
 import PropTypes from "prop-types";
+import CloseIcon from "@mui/icons-material/Close";
 
-const AlertComponent = ({message, handleClose}) => {
+const ErrorAlertComponent = ({message, handleClose}) => {
 
     return (
         <Snackbar
-            open={message && message !== "undefined"}
+            open={(!!message) && message !== "undefined"}
             autoHideDuration={10000}
             anchorOrigin={{vertical: "bottom", horizontal: "right"}}
             onClose={handleClose}
@@ -27,7 +27,6 @@ const AlertComponent = ({message, handleClose}) => {
                         <CloseIcon fontSize="inherit"/>
                     </IconButton>
                 }
-                sx={{mb: 2}}
             >
                 {message}
             </Alert>
@@ -35,9 +34,9 @@ const AlertComponent = ({message, handleClose}) => {
     );
 };
 
-AlertComponent.propTypes = {
+ErrorAlertComponent.propTypes = {
     message: PropTypes.string,
     handleClose: PropTypes.func
 };
 
-export default AlertComponent;
+export default ErrorAlertComponent;

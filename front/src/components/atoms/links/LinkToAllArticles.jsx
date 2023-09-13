@@ -2,21 +2,20 @@ import React from "react";
 import PropTypes from "prop-types";
 import SNLink from "./SNLink";
 
-const LinkToProfile = ({user_id, content, className}) => {
+const LinkToAllArticles = ({content, className}) => {
 
     return (
         <SNLink
-            to={`/profile/${user_id}`}
+            to={"/all-articles"}
             className={className}
             content={content}
         />
     )
 }
 
-LinkToProfile.propTypes = {
-    user_id: PropTypes.number.isRequired,
+LinkToAllArticles.propTypes = {
     content: PropTypes.any.isRequired,
     className: PropTypes.string
 }
 
-export default LinkToProfile;
+export default LinkToAllArticles;

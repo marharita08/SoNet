@@ -1,7 +1,8 @@
 import React from "react";
-import {Button, CircularProgress} from "@mui/material";
+import {Button} from "@mui/material";
 import SaveIcon from "@mui/icons-material/Save";
 import PropTypes from "prop-types";
+import ProgressOrComponent from "../progressOrComponent/ProgressOrComponent";
 
 const SubmitButton = ({isLoading, isAdd}) => {
     return (
@@ -9,7 +10,12 @@ const SubmitButton = ({isLoading, isAdd}) => {
             type={"submit"}
             variant={"contained"}
             disabled={isLoading}
-            startIcon={isLoading ? <CircularProgress color="inherit" size={25}/> : <SaveIcon/>}
+            startIcon={
+                <ProgressOrComponent
+                    isProgress={isLoading}
+                    component={<SaveIcon/>}
+                />
+            }
         >
             {isAdd ? "Add" : "Save"}
         </Button>

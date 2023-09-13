@@ -1,11 +1,15 @@
 import React from "react";
 import PropTypes from "prop-types";
+import {useStyles} from "../../style";
 
 const MenuItemBody = ({icon, text}) => {
+
+    const classes = useStyles();
+
     return (
-        <div className={"menu-item"}>
+        <div className={classes.menuItem}>
             <span>{icon}</span>
-            <span className={"margin"}>{text}</span>
+            <span className={classes.margin}>{text}</span>
         </div>
     );
 };

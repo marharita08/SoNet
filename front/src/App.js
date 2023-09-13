@@ -13,7 +13,6 @@ import AuthContainer from "./containers/auth";
 import AlertContainer from "./containers/alert";
 import authContext from "./context/authContext";
 import articleContext from "./context/articleContext";
-import "./App.css";
 import ArticleOuterContainer from "./containers/articleOuter";
 import ProtectedRoute from "./components/routes/ProtectedRoute";
 import GuestRoute from "./components/routes/GuestRoute";

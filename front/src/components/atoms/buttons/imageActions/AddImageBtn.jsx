@@ -5,6 +5,7 @@ import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
 import {useStyles} from "./imageButtonsStyle";
 
 const AddImageBtn = ({onChange, isImage}) => {
+
     const classes = useStyles();
 
     return (

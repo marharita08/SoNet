@@ -1,11 +1,12 @@
 import React from "react";
-import {Link} from "react-router-dom";
 import HeaderButton from "../../atoms/buttons/HeaderButton";
 import HomeIcon from "@mui/icons-material/Home";
 import DescriptionIcon from "@mui/icons-material/Description";
 import NoteAddIcon from "@mui/icons-material/NoteAdd";
 import PropTypes from "prop-types";
 import {useStyles} from "./style";
+import LinkToRoot from "../../atoms/links/LinkToRoot";
+import LinkToAllArticles from "../../atoms/links/LinkToAllArticles";
 
 const HeaderButtons = ({authenticated, isAdmin, handleClickOpen}) => {
 
@@ -16,20 +17,25 @@ const HeaderButtons = ({authenticated, isAdmin, handleClickOpen}) => {
             {
                 authenticated &&
                 <div className={classes.buttonsContainer}>
-                    <Link to={"/"}>
-                        <HeaderButton
-                            text={"Home"}
-                            icon={<HomeIcon fontSize={"small"}/>}
-                            className={classes.homeButton}/>
-                    </Link>
+                    <LinkToRoot
+                        content={
+                            <HeaderButton
+                                text={"Home"}
+                                icon={<HomeIcon fontSize={"small"}/>}
+                                className={classes.homeButton}
+                            />
+                        }
+                    />
                     {
                         isAdmin &&
-                        <Link to={"/all-articles"}>
-                            <HeaderButton
-                                text={"All articles"}
-                                icon={<DescriptionIcon fontSize={"small"}/>}
-                            />
-                        </Link>
+                        <LinkToAllArticles
+                            content={
+                                <HeaderButton
+                                    text={"All articles"}
+                                    icon={<DescriptionIcon fontSize={"small"}/>}
+                                />
+                            }
+                        />
                     }
                     <HeaderButton
                         text={"Add article"}

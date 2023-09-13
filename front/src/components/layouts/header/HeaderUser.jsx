@@ -2,12 +2,14 @@ import React, {useState} from "react";
 import {Avatar} from "@mui/material";
 import SNMenu from "../../atoms/menu/SNMenu";
 import {useTheme} from "@mui/material/styles";
-import HeaderMenuItemBody from "../../atoms/menu/HeaderMenuItemBody";
 import PersonIcon from "@mui/icons-material/Person";
 import LogoutIcon from "@mui/icons-material/Logout";
 import PropTypes from "prop-types";
 import {userCardPropTypes} from "../../../propTypes/userPropTypes";
 import {useStyles} from "./style";
+import LinkToProfile from "../../atoms/links/LinkToProfile";
+import MenuItemBody from "../../atoms/menu/MenuItemBody";
+import LinkToRoot from "../../atoms/links/LinkToRoot";
 
 const HeaderUser = ({authenticated, user, logout}) => {
 
@@ -31,11 +33,22 @@ const HeaderUser = ({authenticated, user, logout}) => {
 
     const menuItems = [
         {
-            body: <HeaderMenuItemBody text={"Profile"} to={`/profile/${user?.user_id}`} icon={<PersonIcon/>}/>,
+            body:
+                <LinkToProfile
+                    user_id={user?.user_id}
+                    content={
+                        <MenuItemBody text={"Profile"} icon={<PersonIcon/>}/>
+                    }
+                />,
             onClick: handleMenuClose
         },
         {
-            body: <HeaderMenuItemBody text={"Logout"} to={"/"} icon={<LogoutIcon/>}/>,
+            body:
+                <LinkToRoot
+                    content={
+                        <MenuItemBody text={"Logout"} icon={<LogoutIcon/>}/>
+                    }
+                />,
             onClick: handleLogout
         }
     ];

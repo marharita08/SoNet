@@ -1,6 +1,5 @@
 import React, {useState} from "react";
 import {Avatar, CardHeader} from "@mui/material";
-import {Link} from "react-router-dom";
 import MoreVertIconBtn from "../../atoms/iconButtons/MoreVertIconBtn";
 import CardUsername from "../../atoms/cardUsername/CardUsername";
 import SNMenu from "../../atoms/menu/SNMenu";
@@ -9,6 +8,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import {useTheme} from "@mui/material/styles";
 import {articleHeaderPropTypes} from "./articleHeaderPropTypes";
+import LinkToProfile from "../../atoms/links/LinkToProfile";
 
 const ArticleHeader = ({article, isCurrentUser, isAdmin, handleEdit, handleDelete}) => {
 
@@ -51,18 +51,24 @@ const ArticleHeader = ({article, isCurrentUser, isAdmin, handleEdit, handleDelet
         <>
             <CardHeader
                 avatar={
-                    <Link to={`/profile/${article.user_id}`}>
-                        <Avatar
-                            src={article.avatar}
-                            sx={theme.avatarSizes.lg}
-                        />
-                    </Link>
+                    <LinkToProfile
+                        user_id={article.user_id}
+                        content={
+                            <Avatar
+                                src={article.avatar}
+                                sx={theme.avatarSizes.lg}
+                            />
+                        }
+                    />
                 }
                 action={(isCurrentUser || isAdmin) && <MoreVertIconBtn onClick={handleMenu}/>}
                 title={
-                    <Link to={`/profile/${article.user_id}`}>
-                        <CardUsername username={article.name}/>
-                    </Link>
+                    <LinkToProfile
+                        user_id={article.user_id}
+                        content={
+                            <CardUsername username={article.name}/>
+                        }
+                    />
                 }
                 subheader={article.created_at}
             />

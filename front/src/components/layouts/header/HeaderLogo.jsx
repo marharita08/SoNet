@@ -1,6 +1,6 @@
 import React from "react";
-import {Link} from "react-router-dom";
 import {useStyles} from "./style";
+import LinkToRoot from "../../atoms/links/LinkToRoot";
 
 const HeaderLogo = () => {
 
@@ -8,13 +8,15 @@ const HeaderLogo = () => {
 
     return (
         <div className={classes.logoContainer}>
-            <Link to={"/"}>
-                <img
-                    src={"/logo.png"}
-                    alt={"Social Network"}
-                    className={classes.logo}
-                />
-            </Link>
+            <LinkToRoot
+                content={
+                    <img
+                        src={"/logo.png"}
+                        alt={"Social Network"}
+                        className={classes.logo}
+                    />
+                }
+            />
         </div>
     );
 };

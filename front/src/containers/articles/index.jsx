@@ -74,7 +74,7 @@ const ArticlesContainer = ({setArticleContext, param, handleError, articles, set
             }
             {
                 amount > articles.length &&
-                <LoadMoreBtn handleLoadMore={handleLoadMore} loading={isLoading || isCountFetching}/>
+                <LoadMoreBtn handleLoadMore={handleLoadMore} isLoading={isLoading || isCountFetching}/>
             }
         </>
     );

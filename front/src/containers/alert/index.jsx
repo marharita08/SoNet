@@ -1,10 +1,10 @@
-import AlertComponent from "../../components/atoms/alert";
+import ErrorAlertComponent from "../../components/atoms/alert/ErrorAlertComponent";
 import PropTypes from "prop-types";
 
 const AlertContainer = ({alertMessage, handleClose}) => {
 
     return (
-        <AlertComponent message={alertMessage} handleClose={handleClose}/>
+        <ErrorAlertComponent message={alertMessage} handleClose={handleClose}/>
     );
 };
 

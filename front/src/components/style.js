@@ -39,5 +39,25 @@ export const useStyles = makeStyles(theme => ({
     },
     bold: {
         fontWeight: "bold"
+    },
+    loadMoreBtn: {
+        display: "flex",
+        justifyContent: "center",
+        margin: theme.spacing(1)
+    },
+    menuItem: {
+        display: "flex",
+        alignItems: "flex-end"
+    },
+    articleCard: {
+        margin: theme.spacing(2, "auto", 0, "auto"),
+        width: "100%",
+        [theme.breakpoints.up("sm")]: {
+            width: "500px"
+        }
+    },
+    link: {
+        textDecoration: "none !important",
+        color: "#000"
     }
 }));
