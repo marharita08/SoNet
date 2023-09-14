@@ -3,15 +3,15 @@ import {addArticleContentPropTypes, addArticleContentDefaultProps} from "./addAr
 
 export const addArticlePropTypes = {
     ...addArticleContentPropTypes,
-    addArticle: PropTypes.bool.isRequired,
-    handleClose: PropTypes.func.isRequired,
-    onFormSubmit: PropTypes.func.isRequired,
+    isAdd: PropTypes.bool.isRequired,
+    handleModalClose: PropTypes.func.isRequired,
+    handleFormSubmit: PropTypes.func.isRequired,
     isLoading: PropTypes.bool,
-    message: PropTypes.string,
+    errorMessage: PropTypes.string,
 };
 
 export const addArticleDefaultProps = {
     ...addArticleContentDefaultProps,
     isLoading: false,
-    message: undefined
+    errorMessage: undefined
 };

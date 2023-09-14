@@ -7,7 +7,7 @@ import {
 import {QueryClient, QueryClientProvider} from "react-query";
 import HeaderContainer from "./containers/header";
 import ArticlesContainer from "./containers/articles";
-import AddArticleContainer from "./containers/addArticle";
+import AddArticleContainer from "./containers/addArticle/AddArticleContainer";
 import ProfileContainer from "./containers/profile";
 import AuthContainer from "./containers/auth";
 import AlertContainer from "./containers/alert";
@@ -26,7 +26,7 @@ function App() {
     const [authenticationContext, setAuthenticationContext] =
         useState(JSON.parse(window.localStorage.getItem("context")) || useContext(authContext));
     const [articleModalContext, setArticleModalContext] = useState(useContext(articleContext));
-    const {openModal} = articleModalContext;
+    const {isModalOpen} = articleModalContext;
     const [alertMessage, setAlertMessage] = useState();
     const {authenticated} = authenticationContext;
     const [articles, setArticles] = useState([]);
@@ -63,7 +63,7 @@ function App() {
                                     unsetAuthContext={unsetAuthContext}
                                 />
                                 {
-                                    authenticated && openModal &&
+                                    authenticated && isModalOpen &&
                                     <AddArticleContainer
                                         setArticleContext={setArticleContext}
                                         articles={articles}

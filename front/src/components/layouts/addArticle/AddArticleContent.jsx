@@ -16,10 +16,10 @@ const AddArticleContent = ({
     article,
     setCropper,
     croppedImage,
-    cropImage,
-    deleteImage,
-    handleChange,
-    visibilitiesFetching,
+    handleCropImage,
+    handleDeleteImage,
+    handleAddImage,
+    isVisibilitiesFetching,
     visibilities,
     setFieldValue
 }) => {
@@ -43,16 +43,16 @@ const AddArticleContent = ({
             <ImageDialogActions
                 isCropper={isCropper}
                 isImage={isImage}
-                cropImageOnClick={() => cropImage(setFieldValue)}
-                deleteImageOnclick={() => deleteImage(setFieldValue)}
-                addImageOnClick={handleChange}
+                cropImageOnClick={() => handleCropImage(setFieldValue)}
+                deleteImageOnclick={() => handleDeleteImage(setFieldValue)}
+                addImageOnClick={handleAddImage}
             />
             <div className={classes.addArticleField}>
                 <Field label={"Article text"} name={"text"} type={"text"} component={SNTextarea}/>
             </div>
             <div className={classes.addArticleField}>
                 <ProgressOrComponent
-                    isProgress={visibilitiesFetching}
+                    isProgress={isVisibilitiesFetching}
                     component={
                         <Field
                             component={FormikAutocomplete}

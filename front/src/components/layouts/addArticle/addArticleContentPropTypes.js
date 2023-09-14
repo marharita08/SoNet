@@ -5,13 +5,13 @@ import {articleAddEditPropTypes} from "../../../propTypes/articlePropTypes";
 export const addArticleContentPropTypes = {
     visibilities: visibilitiesPropTypes,
     article: articleAddEditPropTypes,
-    handleChange: PropTypes.func.isRequired,
+    handleAddImage: PropTypes.func.isRequired,
     image: PropTypes.string,
     setCropper: PropTypes.func.isRequired,
-    cropImage: PropTypes.func.isRequired,
+    handleCropImage: PropTypes.func.isRequired,
     croppedImage: PropTypes.object,
-    deleteImage: PropTypes.func.isRequired,
-    visibilitiesFetching: PropTypes.bool,
+    handleDeleteImage: PropTypes.func.isRequired,
+    isVisibilitiesFetching: PropTypes.bool,
 }
 
 export const addArticleContentDefaultProps = {
@@ -25,5 +25,5 @@ export const addArticleContentDefaultProps = {
     },
     image: undefined,
     croppedImage: undefined,
-    visibilitiesFetching: false
+    isVisibilitiesFetching: false
 }

@@ -18,8 +18,8 @@ const HeaderContainer = ({
     if (authenticated) {
         handleClickOpen = () => {
             setArticleContext({
-                openModal: true,
-                addArticle: true,
+                isModalOpen: true,
+                isAdd: true,
                 article: {
                     text: "",
                     user_id: user.user_id,

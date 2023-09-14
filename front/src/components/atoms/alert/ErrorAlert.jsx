@@ -4,7 +4,7 @@ import Alert from "@mui/material/Alert";
 import PropTypes from "prop-types";
 import CloseIcon from "@mui/icons-material/Close";
 
-const ErrorAlertComponent = ({message, handleClose}) => {
+const ErrorAlert = ({message, handleClose}) => {
 
     return (
         <Snackbar
@@ -34,9 +34,9 @@ const ErrorAlertComponent = ({message, handleClose}) => {
     );
 };
 
-ErrorAlertComponent.propTypes = {
+ErrorAlert.propTypes = {
     message: PropTypes.string,
     handleClose: PropTypes.func
 };
 
-export default ErrorAlertComponent;
+export default ErrorAlert;
