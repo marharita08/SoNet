@@ -3,7 +3,7 @@ import {Formik, Form} from "formik";
 import {Avatar} from "@mui/material";
 import {ProfilePropTypes} from "./profilePropTypes";
 import {useTheme} from "@mui/material/styles";
-import ProfileFriendRequestBtnContainer from "./ProfileFriendRequestBtnContainer";
+import ProfileFriendRequestBtn from "./ProfileFriendRequestBtn";
 import EditProfileBtn from "./EditProfileBtn";
 import ProfileFields from "./ProfileFields";
 import {useStyles} from "./style";
@@ -39,7 +39,7 @@ const Profile = ({
                                 src={user?.avatar}
                                 sx={theme.avatarSizes.xl}
                             />
-                            <ProfileFriendRequestBtnContainer
+                            <ProfileFriendRequestBtn
                                 handleAddToFriends={handleAddToFriends}
                                 handleDeleteFromFriends={handleDeleteFromFriends}
                                 handleAccept={handleAccept}

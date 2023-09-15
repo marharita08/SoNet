@@ -20,7 +20,15 @@ const addArticle = (articles, newArticle) => {
     return newArticles;
 }
 
+const deleteArticle = (articles, id) => {
+    const newArticles = [...articles];
+    const index = newArticles.findIndex((obj => obj.article_id === id));
+    newArticles.splice(index, 1);
+    return newArticles;
+}
+
 export default {
     updateArticle,
-    addArticle
+    addArticle,
+    deleteArticle
 }

@@ -11,7 +11,7 @@ import LinkToProfile from "../../atoms/links/LinkToProfile";
 import MenuItemBody from "../../atoms/menu/MenuItemBody";
 import LinkToRoot from "../../atoms/links/LinkToRoot";
 
-const HeaderUser = ({authenticated, user, logout}) => {
+const HeaderUser = ({authenticated, user, handleLogout}) => {
 
     const classes = useStyles();
     const theme = useTheme();
@@ -26,9 +26,9 @@ const HeaderUser = ({authenticated, user, logout}) => {
         setAnchorEl(null);
     };
 
-    const handleLogout = () => {
+    const logoutOnClick = () => {
         handleMenuClose();
-        logout();
+        handleLogout();
     };
 
     const menuItems = [
@@ -49,7 +49,7 @@ const HeaderUser = ({authenticated, user, logout}) => {
                         <MenuItemBody text={"Logout"} icon={<LogoutIcon/>}/>
                     }
                 />,
-            onClick: handleLogout
+            onClick: logoutOnClick
         }
     ];
 
@@ -83,7 +83,7 @@ const HeaderUser = ({authenticated, user, logout}) => {
 HeaderUser.propTypes = {
     authenticated: PropTypes.bool,
     user: userCardPropTypes,
-    logout: PropTypes.func
+    handleLogout: PropTypes.func
 };
 
 export default HeaderUser;

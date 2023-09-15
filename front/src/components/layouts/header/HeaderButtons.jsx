@@ -8,7 +8,7 @@ import {useStyles} from "./style";
 import LinkToRoot from "../../atoms/links/LinkToRoot";
 import LinkToAllArticles from "../../atoms/links/LinkToAllArticles";
 
-const HeaderButtons = ({authenticated, isAdmin, handleClickOpen}) => {
+const HeaderButtons = ({authenticated, isAdmin, handleAddArticle}) => {
 
     const classes = useStyles();
 
@@ -40,7 +40,7 @@ const HeaderButtons = ({authenticated, isAdmin, handleClickOpen}) => {
                     <HeaderButton
                         text={"Add article"}
                         icon={<NoteAddIcon fontSize={"small"}/>}
-                        onClick={handleClickOpen}
+                        onClick={handleAddArticle}
                     />
                 </div>
             }
@@ -51,7 +51,7 @@ const HeaderButtons = ({authenticated, isAdmin, handleClickOpen}) => {
 HeaderButtons.propTypes = {
     authenticated: PropTypes.bool,
     isAdmin: PropTypes.bool,
-    handleClickOpen: PropTypes.func.isRequired
+    handleAddArticle: PropTypes.func.isRequired
 };
 
 export default HeaderButtons;
