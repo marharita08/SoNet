@@ -13,7 +13,7 @@ import {userCardPropTypes} from "../../../propTypes/userPropTypes";
 import LinkToProfile from "../../atoms/links/LinkToProfile";
 import {useStyles} from "./style";
 
-const UserCard = ({user, deleteRequest, isMenu, accept, decline}) => {
+const UserCard = ({user, deleteRequest, isMenu, acceptRequest, declineRequest}) => {
 
     const theme = useTheme();
     const classes = useStyles();
@@ -33,13 +33,13 @@ const UserCard = ({user, deleteRequest, isMenu, accept, decline}) => {
     const acceptOnClick = (event) => {
         event.preventDefault();
         setAnchorEl(null);
-        accept(user.request_id);
+        acceptRequest(user.request_id);
     };
 
     const declineOnClick = (event) => {
         event.preventDefault();
         setAnchorEl(null);
-        decline(user.request_id);
+        declineRequest(user.request_id);
     };
 
     const handleClose = (event) => {
@@ -98,8 +98,8 @@ UserCard.propTypes = {
     user: userCardPropTypes,
     deleteRequest: PropTypes.func,
     isMenu: PropTypes.bool,
-    accept: PropTypes.func,
-    decline: PropTypes.func,
+    acceptRequest: PropTypes.func,
+    declineRequest: PropTypes.func,
 };
 
 UserCard.defaultProps = {

@@ -10,6 +10,7 @@ import {useNavigate, useLocation} from "react-router-dom";
 import {articlesPropTypes} from "../../../propTypes/articlePropTypes";
 import imageService from "../../../services/imageService";
 import articlesService from "../../../services/articlesService";
+import {refetchOff} from "../../../config/refetchOff";
 
 const AddOrEditArticleContainer = ({setArticleContext, articles, setArticles}) => {
 
@@ -17,8 +18,7 @@ const AddOrEditArticleContainer = ({setArticleContext, articles, setArticles}) =
         "visibilities",
         () => getArticleVisibilities(),
         {
-            refetchInterval: false,
-            refetchOnWindowFocus: false
+            ...refetchOff
         }
     );
     const visibilities = data?.data;

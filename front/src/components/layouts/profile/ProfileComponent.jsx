@@ -8,7 +8,7 @@ import EditProfileBtn from "./EditProfileBtn";
 import ProfileFields from "./ProfileFields";
 import {useStyles} from "./style";
 
-const Profile = ({
+const ProfileComponent = ({
     user,
     handleEdit,
     isAdmin,
@@ -69,13 +69,13 @@ const Profile = ({
     );
 };
 
-Profile.propTypes = ProfilePropTypes;
+ProfileComponent.propTypes = ProfilePropTypes;
 
-Profile.defaultProps = {
+ProfileComponent.defaultProps = {
     isCurrentUser: false,
     isAdmin: false,
     isLoading: false,
     requestFetching: false,
 };
 
-export default Profile;
+export default ProfileComponent;

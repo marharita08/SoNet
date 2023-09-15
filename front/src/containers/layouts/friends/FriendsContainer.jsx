@@ -4,16 +4,16 @@ import {getFriends} from "../../../api/usersCrud";
 import PropTypes from "prop-types";
 import {requestsPropTypes} from "../../../propTypes/requestPropTypes";
 import UserCards from "../../../components/layouts/userCards/UserCards";
+import {refetchOff} from "../../../config/refetchOff";
 
-const Friends = ({id, deleteRequest, friends, setFriends}) => {
+const FriendsContainer = ({id, deleteRequest, friends, setFriends}) => {
 
     const {isFetching} = useQuery(
         "friends",
         () => getFriends(id),
         {
             onSuccess: (data) => setFriends(data?.data),
-            refetchInterval: false,
-            refetchOnWindowFocus: false
+            ...refetchOff
         }
     );
 
@@ -27,11 +27,11 @@ const Friends = ({id, deleteRequest, friends, setFriends}) => {
     );
 };
 
-Friends.propTypes = {
+FriendsContainer.propTypes = {
     id: PropTypes.number.isRequired,
     deleteRequest: PropTypes.func.isRequired,
     friends: requestsPropTypes,
     setFriends: PropTypes.func.isRequired,
 };
 
-export default Friends;
+export default FriendsContainer;

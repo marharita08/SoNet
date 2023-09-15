@@ -4,16 +4,16 @@ import {useQuery} from "react-query";
 import {getOutgoingRequests} from "../../../api/usersCrud";
 import {requestsPropTypes} from "../../../propTypes/requestPropTypes";
 import UserCards from "../../../components/layouts/userCards/UserCards";
+import {refetchOff} from "../../../config/refetchOff";
 
-const OutgoingRequests = ({id, deleteRequest, outgoingRequests, setOutgoingRequests}) => {
+const OutgoingRequestsContainer = ({id, deleteRequest, outgoingRequests, setOutgoingRequests}) => {
 
     const {isFetching} = useQuery(
         "outgoing-requests",
         () => getOutgoingRequests(id),
         {
             onSuccess: (data) => setOutgoingRequests(data?.data),
-            refetchInterval: false,
-            refetchOnWindowFocus: false
+            ...refetchOff
         }
     );
 
@@ -27,11 +27,11 @@ const OutgoingRequests = ({id, deleteRequest, outgoingRequests, setOutgoingReque
     );
 };
 
-OutgoingRequests.propTypes = {
+OutgoingRequestsContainer.propTypes = {
     id: PropTypes.number.isRequired,
     deleteRequest: PropTypes.func.isRequired,
     outgoingRequests: requestsPropTypes,
     setOutgoingRequests: PropTypes.func.isRequired,
 };
 
-export default OutgoingRequests;
+export default OutgoingRequestsContainer;

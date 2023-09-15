@@ -8,8 +8,8 @@ import {QueryClient, QueryClientProvider} from "react-query";
 import HeaderContainer from "./containers/layouts/header/HeaderContainer";
 import ArticlesPageContainer from "./containers/pages/articlesPage/ArticlesPageContainer";
 import AddOrEditArticleContainer from "./containers/modals/addOrEditArticle/AddOrEditArticleContainer";
-import ProfileContainer from "./containers/layouts/profile";
-import AuthContainer from "./containers/layouts/auth/AuthContainer";
+import ProfilePageContainer from "./containers/pages/profilePage/ProfilePageContainer";
+import AuthPageContainer from "./containers/pages/authPage/AuthPageContainer";
 import authContext from "./context/authContext";
 import articleContext from "./context/articleContext";
 import ArticlePageContainer from "./containers/pages/articlePage/ArticlePageContainer";
@@ -89,7 +89,6 @@ function App() {
                                                     <ArticlesPageContainer
                                                         setArticleContext={setArticleContext}
                                                         param="news"
-                                                        handleError={handleError}
                                                         articles={articles}
                                                         setArticles={setArticles}
                                                     />
@@ -101,7 +100,6 @@ function App() {
                                                     <ArticlesPageContainer
                                                         setArticleContext={setArticleContext}
                                                         param="news"
-                                                        handleError={handleError}
                                                         articles={articles}
                                                         setArticles={setArticles}
                                                     />
@@ -112,7 +110,6 @@ function App() {
                                                 element={
                                                     <ArticlePageContainer
                                                         setArticleContext={setArticleContext}
-                                                        handleError={handleError}
                                                         articles={articles}
                                                         setArticles={setArticles}
                                                     />
@@ -121,7 +118,7 @@ function App() {
                                             <Route
                                                 path="/profile/:id"
                                                 element={
-                                                    <ProfileContainer handleError={handleError}/>
+                                                    <ProfilePageContainer/>
                                                 }
                                             />
                                         </Route>
@@ -129,9 +126,8 @@ function App() {
                                             <Route
                                                 path="/auth"
                                                 element={
-                                                    <AuthContainer
+                                                    <AuthPageContainer
                                                         setAuthContext={setAuthContext}
-                                                        handleError={handleError}
                                                         setErrorMessage={setErrorMessage}
                                                     />
                                                 }
@@ -144,7 +140,6 @@ function App() {
                                                     <ArticlesPageContainer
                                                         setArticleContext={setArticleContext}
                                                         param="all"
-                                                        handleError={handleError}
                                                         articles={articles}
                                                         setArticles={setArticles}
                                                     />

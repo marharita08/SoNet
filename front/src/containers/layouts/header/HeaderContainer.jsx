@@ -5,6 +5,7 @@ import ErrorBoundary from "../../../components/ErrorBoundary";
 import Header from "../../../components/layouts/header/HeaderComponent";
 import {apiLogout} from "../../../api/auth";
 import PropTypes from "prop-types";
+import {initArticle} from "../../../config/initValues";
 
 const HeaderContainer = ({
     setArticleContext,
@@ -17,18 +18,7 @@ const HeaderContainer = ({
 
     if (authenticated) {
         handleAddArticle = () => {
-            setArticleContext({
-                isModalOpen: true,
-                isAdd: true,
-                article: {
-                    text: "",
-                    user_id: user.user_id,
-                    visibility: {
-                        value: 1,
-                        label: "All",
-                    }
-                }
-            });
+            setArticleContext(initArticle(user.user_id));
         };
 
         const {mutate} = useMutation(apiLogout);

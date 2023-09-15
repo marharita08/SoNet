@@ -6,7 +6,7 @@ import SearchField from "./SearchField";
 import SearchUsersOption from "./SearchUsersOption";
 import {useStyles} from "./style";
 
-const SearchUsers = ({users, addToFriends, accept, deleteFromFriends, isFetching}) => {
+const SearchUsersComponent = ({users, addToFriends, acceptRequest, deleteFromFriends, isFetching}) => {
 
     const classes = useStyles();
 
@@ -25,7 +25,7 @@ const SearchUsers = ({users, addToFriends, accept, deleteFromFriends, isFetching
                             user={option}
                             addToFriends={addToFriends}
                             deleteFromFriends={deleteFromFriends}
-                            accept={accept}
+                            acceptRequest={acceptRequest}
                         />
                     )
                 }
@@ -41,12 +41,12 @@ const SearchUsers = ({users, addToFriends, accept, deleteFromFriends, isFetching
     );
 };
 
-SearchUsers.propTypes = {
+SearchUsersComponent.propTypes = {
     addToFriends: PropTypes.func.isRequired,
-    accept: PropTypes.func.isRequired,
+    acceptRequest: PropTypes.func.isRequired,
     deleteFromFriends: PropTypes.func.isRequired,
     users: usersForSearchPropTypes,
     isFetching: PropTypes.bool
 };
 
-export default SearchUsers;
+export default SearchUsersComponent;

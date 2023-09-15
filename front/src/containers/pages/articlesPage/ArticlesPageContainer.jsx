@@ -7,6 +7,7 @@ import authContext from "../../../context/authContext";
 import {getAllNews, getNews, getCountOfNews, getCountOfAllNews} from "../../../api/articlesCrud";
 import {articlesPropTypes} from "../../../propTypes/articlePropTypes";
 import ArticlesPageComponent from "../../../components/pages/articlesPage/ArticlesPageComponent";
+import {refetchOff} from "../../../config/refetchOff";
 
 
 const ArticlesPageContainer = ({setArticleContext, param, articles, setArticles}) => {
@@ -36,8 +37,7 @@ const ArticlesPageContainer = ({setArticleContext, param, articles, setArticles}
         () => getFunc,
         {
             onSuccess: (data) => setArticles([...articles, ...data?.data]),
-            refetchInterval: false,
-            refetchOnWindowFocus: false
+            ...refetchOff
         }
     );
 
@@ -46,8 +46,7 @@ const ArticlesPageContainer = ({setArticleContext, param, articles, setArticles}
         () => getCountFunc,
         {
             onSuccess: (data) => setAmount(data?.data.count),
-            refetchInterval: false,
-            refetchOnWindowFocus: false
+            ...refetchOff
         }
     );
 

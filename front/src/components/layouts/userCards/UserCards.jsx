@@ -6,7 +6,7 @@ import PropTypes from "prop-types";
 import {usersCardPropTypes} from "../../../propTypes/userPropTypes";
 import {useStyles} from "./style";
 
-const UserCards = ({users, heading, isMenu, isFetching, accept, decline, deleteRequest}) => {
+const UserCards = ({users, heading, isMenu, isFetching, acceptRequest, declineRequest, deleteRequest}) => {
 
     const classes = useStyles();
 
@@ -24,8 +24,8 @@ const UserCards = ({users, heading, isMenu, isFetching, accept, decline, deleteR
                             <UserCard
                                 user={user}
                                 deleteRequest={deleteRequest}
-                                accept={accept}
-                                decline={decline}
+                                acceptRequest={acceptRequest}
+                                declineRequest={declineRequest}
                                 isMenu={isMenu}
                             />
                         </ErrorBoundary>
@@ -40,8 +40,8 @@ UserCards.propTypes = {
     heading: PropTypes.string.isRequired,
     isMenu: PropTypes.bool,
     isFetching: PropTypes.bool,
-    accept: PropTypes.func,
-    decline: PropTypes.func,
+    acceptRequest: PropTypes.func,
+    declineRequest: PropTypes.func,
     deleteRequest: PropTypes.func
 };
 

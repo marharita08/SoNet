@@ -7,7 +7,7 @@ import {useStyles} from "./style";
 import LoginForm from "./LoginForm";
 import {userAuthPropTypes} from "../../../propTypes/userPropTypes";
 
-const AuthComponent = ({
+const AuthPageComponent = ({
     onGoogleSuccess,
     onGoogleFailure,
     onFormSubmit,
@@ -43,7 +43,7 @@ const AuthComponent = ({
     );
 };
 
-AuthComponent.propTypes = {
+AuthPageComponent.propTypes = {
     onGoogleSuccess: PropTypes.func.isRequired,
     onGoogleFailure: PropTypes.func.isRequired,
     onFormSubmit: PropTypes.func.isRequired,
@@ -54,10 +54,10 @@ AuthComponent.propTypes = {
     isAuthLoading: PropTypes.bool
 };
 
-AuthComponent.defaultProps = {
+AuthPageComponent.defaultProps = {
     isGoogleLoading: false,
     isFacebookLoading: false,
     isAuthLoading: false
 };
 
-export default AuthComponent;
+export default AuthPageComponent;

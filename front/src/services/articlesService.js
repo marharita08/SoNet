@@ -21,10 +21,7 @@ const addArticle = (articles, newArticle) => {
 }
 
 const deleteArticle = (articles, id) => {
-    const newArticles = [...articles];
-    const index = newArticles.findIndex((obj => obj.article_id === id));
-    newArticles.splice(index, 1);
-    return newArticles;
+    return articles.filter((obj => obj.article_id !== id));
 }
 
 export default {

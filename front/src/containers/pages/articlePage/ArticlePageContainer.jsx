@@ -8,6 +8,7 @@ import {getArticle} from "../../../api/articlesCrud";
 import authContext from "../../../context/authContext";
 import {articlesPropTypes} from "../../../propTypes/articlePropTypes";
 import ArticlePageComponent from "../../../components/pages/articlePage/ArticlePageComponent";
+import {refetchOff} from "../../../config/refetchOff";
 
 
 const ArticlePageContainer = ({setArticleContext, articles, setArticles}) => {
@@ -20,8 +21,7 @@ const ArticlePageContainer = ({setArticleContext, articles, setArticles}) => {
         () => getArticle(id),
         {
             onSuccess: (data) => setArticles(data?.data),
-            refetchInterval: false,
-            refetchOnWindowFocus: false
+            ...refetchOff
         }
     );
 

@@ -6,6 +6,7 @@ import {deleteComment} from "../../../api/commentCrud";
 import PropTypes from "prop-types";
 import {commentPropTypes} from "../../../propTypes/commentPropTypes";
 import handleErrorContext from "../../../context/handleErrorContext";
+import {initCommentForReply} from "../../../config/initValues";
 
 const CommentContainer = ({
     comment,
@@ -36,16 +37,7 @@ const CommentContainer = ({
     };
 
     const handleReply = () => {
-        setComment({
-            parent_id: comment.comment_id,
-            level: comment.level + 1,
-            to: comment.name,
-            parent_text: comment.text,
-            user_id,
-            article_id: comment.article_id,
-            path: comment.path,
-            text: "",
-        });
+        setComment(initCommentForReply(comment, user_id));
         setIsExpanded(true);
         setIsCommentAdd(true);
     };

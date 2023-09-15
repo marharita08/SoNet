@@ -1,21 +1,19 @@
-import React from "react";
+import React, {useContext} from "react";
 import {useMutation} from "react-query";
 import PropTypes from "prop-types";
-import AuthComponent from "../../../components/layouts/auth/AuthComponent";
+import AuthPageComponent from "../../../components/pages/authPage/AuthPageComponent";
 import {googleAuth, facebookAuth, auth} from "../../../api/auth";
+import handleErrorContext from "../../../context/handleErrorContext";
+import {initialUser, getAuthContext} from "../../../config/initValues";
 
-const AuthContainer = ({setAuthContext, handleError, setErrorMessage}) => {
+const AuthPageContainer = ({setAuthContext, setErrorMessage}) => {
+
+    const {handleError} = useContext(handleErrorContext);
 
     const options = {
         onSuccess: (data) => {
             const {data: {user, accessToken, refreshToken}} = data;
-            setAuthContext({
-                authenticated: true,
-                user,
-                isAdmin: user.role === "admin",
-                accessToken,
-                refreshToken
-            });
+            setAuthContext(getAuthContext(user, accessToken, refreshToken));
         },
         onError: handleError
     };
@@ -46,13 +44,8 @@ const AuthContainer = ({setAuthContext, handleError, setErrorMessage}) => {
         authMutate(data);
     };
 
-    const initialUser = {
-        email: "",
-        password: ""
-    };
-
     return (
-        <AuthComponent
+        <AuthPageComponent
             onGoogleSuccess={onGoogleSuccess}
             onGoogleFailure={onGoogleFailure}
             onFormSubmit={onFormSubmit}
@@ -65,10 +58,9 @@ const AuthContainer = ({setAuthContext, handleError, setErrorMessage}) => {
     );
 };
 
-AuthContainer.propTypes = {
+AuthPageContainer.propTypes = {
     setAuthContext: PropTypes.func.isRequired,
-    handleError: PropTypes.func.isRequired,
     setErrorMessage: PropTypes.func.isRequired,
 };
 
-export default AuthContainer;
+export default AuthPageContainer;

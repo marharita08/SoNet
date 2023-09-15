@@ -7,18 +7,18 @@ import {getUniversities} from "../../../api/universitiesCrud";
 import {getFieldVisibilities} from "../../../api/visibilitiesCrud";
 import {updateUser} from "../../../api/usersCrud";
 import {EditProfileContainerPropTypes} from "./editProfileContainerPropTypes";
+import {refetchOff} from "../../../config/refetchOff";
+import imageService from "../../../services/imageService";
 
 const EditProfileContainer = ({openModal, setOpenModal, user, setUser}) => {
 
     const {isFetching: universitiesFetching, data: universitiesData} =
         useQuery("universities", () => getUniversities(), {
-            refetchInterval: false,
-            refetchOnWindowFocus: false
+            ...refetchOff
         });
     const {isFetching: visibilitiesFetching, data: visibilitiesData} =
         useQuery("visibilities", () => getFieldVisibilities(), {
-            refetchInterval: false,
-            refetchOnWindowFocus: false
+            ...refetchOff
         });
 
     let universities = universitiesData?.data;
@@ -45,36 +45,15 @@ const EditProfileContainer = ({openModal, setOpenModal, user, setUser}) => {
 
     const handleChange = e => {
         e.preventDefault();
-        const file = e.target.files[0];
-
-        if (file.type.match("image.*") && file.size < 10000000) {
-            const reader = new FileReader();
-            reader.onload = () => {
-                setImage(reader.result);
-            };
-            reader.readAsDataURL(file);
-        } else {
-            setMessage("Wrong file format or size!");
-        }
+        imageService.addImage(e.target.files[0], setImage, message, setMessage);
     };
 
     const cropImage = (setFieldValue) => {
-        if (typeof cropper !== "undefined") {
-            var img = cropper.getCroppedCanvas().toDataURL();
-            setCroppedImage(img);
-            setImage(null);
-            fetch(img)
-                .then(res => res.blob())
-                .then(blob => {
-                    setFieldValue("file", blob);
-                });
-        }
+        imageService.cropImage(cropper, setCroppedImage, setImage, setFieldValue);
     };
 
     const deleteImage = (setFieldValue) => {
-        setImage(null);
-        setCroppedImage(null);
-        setFieldValue("file", undefined);
+        imageService.deleteImage(setImage, setCroppedImage, setFieldValue);
     };
 
     const handleClose = () => {

@@ -14,6 +14,8 @@ import articlesService from "../../../services/articlesService";
 import handleErrorContext from "../../../context/handleErrorContext";
 import commentsService from "../../../services/commentsService";
 import ArticleCardComponent from "../../../components/layouts/articleCard/ArticleCardComponent";
+import {refetchOff} from "../../../config/refetchOff";
+import {initComment as initCommentFn} from "../../../config/initValues";
 
 const ArticleCardContainer = ({setArticleContext, article, articles, setArticles}) => {
 
@@ -22,13 +24,7 @@ const ArticleCardContainer = ({setArticleContext, article, articles, setArticles
     const {user: {user_id, avatar}, isAdmin} = useContext(authContext);
     const {handleError} = useContext(handleErrorContext);
 
-    const initComment = {
-        article_id: id,
-        user_id,
-        text: "",
-        level: 1,
-        path: ""
-    };
+    const initComment = initCommentFn(id, user_id);
 
     // for add comment layout
     const [currentComment, setCurrentComment] = useState(initComment);
@@ -48,38 +44,48 @@ const ArticleCardContainer = ({setArticleContext, article, articles, setArticles
     const navigate = useNavigate();
     const location = useLocation();
 
-    const refetchOff = {
-        refetchInterval: false,
-        refetchOnWindowFocus: false
-    };
 
     // load data from back
 
-    const {isFetching: isCommentsFetching} = useQuery(`comments ${id}`,
+    const {isFetching: isCommentsFetching} = useQuery(
+        `comments ${id}`,
         () => getComments(id), {
             onSuccess: (data) => setComments(data?.data),
             ...refetchOff
-        });
+        }
+    );
 
-    const {isFetching: isLikesFetching} = useQuery(`users ${id}`, () => getLikes(id), {
-        onSuccess: (data) => setLikedUsers(data?.data),
-        ...refetchOff
-    });
+    const {isFetching: isLikesFetching} = useQuery(
+        `users ${id}`,
+        () => getLikes(id), {
+            onSuccess: (data) => setLikedUsers(data?.data),
+            ...refetchOff
+        }
+    );
 
-    const {isFetching: isIsLikedFetching} = useQuery(`is liked ${id}-${user_id}`, () => getIsLiked(id), {
-        onSuccess: (data) => setIsLiked(data?.data),
-        ...refetchOff
-    });
+    const {isFetching: isIsLikedFetching} = useQuery(
+        `is liked ${id}-${user_id}`,
+        () => getIsLiked(id), {
+            onSuccess: (data) => setIsLiked(data?.data),
+            ...refetchOff
+        }
+    );
 
-    const {isFetching: isCommentsAmountFetching} = useQuery(`comments amount ${id}`, () => getCommentsAmount(id), {
-        onSuccess: (data) => setCommentsAmount(+data?.data.count),
-        ...refetchOff
-    });
+    const {isFetching: isCommentsAmountFetching} = useQuery(
+        `comments amount ${id}`,
+        () => getCommentsAmount(id), {
+            onSuccess: (data) => setCommentsAmount(+data?.data.count),
+            ...refetchOff
+        }
+    );
 
-    const {isFetching: isLikesAmountFetching} = useQuery(`likes amount ${id}`, () => getLikesAmount(id), {
-        onSuccess: (data) => setLikesAmount(+data?.data.count),
-        ...refetchOff
-    });
+    const {isFetching: isLikesAmountFetching} = useQuery(
+        `likes amount ${id}`,
+        () => getLikesAmount(id), {
+            onSuccess: (data) => setLikesAmount(+data?.data.count),
+            ...refetchOff
+        }
+    );
 
 
     // update data on back
@@ -95,10 +101,7 @@ const ArticleCardContainer = ({setArticleContext, article, articles, setArticles
 
     const {mutate: deleteLikeMutate} = useMutation(deleteLike, {
         onSuccess: () => {
-            let newLikedUsers = [...likedUsers];
-            const index = newLikedUsers.findIndex(((obj) => obj.user_id === user_id));
-            newLikedUsers.splice(index, 1);
-            setLikedUsers(newLikedUsers);
+            setLikedUsers(likedUsers.filter(((obj) => obj.user_id !== user_id)));
             setLikesAmount(likesAmount - 1);
             setIsLiked(false);
         },
