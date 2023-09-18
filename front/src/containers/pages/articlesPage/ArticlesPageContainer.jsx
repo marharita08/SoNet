@@ -63,7 +63,6 @@ const ArticlesPageContainer = ({setArticleContext, param, articles, setArticles}
                             <ArticleCardContainer
                                 setArticleContext={setArticleContext}
                                 article={article}
-                                handleError={handleError}
                                 articles={articles}
                                 setArticles={setArticles}
                             />

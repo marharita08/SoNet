@@ -3,7 +3,7 @@ import {useMutation} from "react-query";
 import authContext from "../../../context/authContext";
 import ErrorBoundary from "../../../components/ErrorBoundary";
 import Header from "../../../components/layouts/header/HeaderComponent";
-import {apiLogout} from "../../../api/auth";
+import {apiLogout} from "../../../api/authCrud";
 import PropTypes from "prop-types";
 import {initArticle} from "../../../config/initValues";
 

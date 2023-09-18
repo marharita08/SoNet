@@ -8,7 +8,7 @@ export const facebookAuth = async (data) => {
     return apiClient.post("/auth/facebook", data);
 };
 
-export const auth = async (data) => {
+export const authCrud = async (data) => {
     return apiClient.post("/auth", data);
 };
 

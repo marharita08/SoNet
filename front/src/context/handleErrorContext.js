@@ -1,7 +1,7 @@
 import {createContext} from "react";
 
 const handleErrorContext = createContext({
-    handleError: undefined
+    handleError: (err) => {}
 });
 
 export default handleErrorContext;

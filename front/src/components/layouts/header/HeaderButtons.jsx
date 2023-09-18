@@ -8,49 +8,43 @@ import {useStyles} from "./style";
 import LinkToRoot from "../../atoms/links/LinkToRoot";
 import LinkToAllArticles from "../../atoms/links/LinkToAllArticles";
 
-const HeaderButtons = ({authenticated, isAdmin, handleAddArticle}) => {
+const HeaderButtons = ({isAdmin, handleAddArticle}) => {
 
     const classes = useStyles();
 
     return (
-        <>
-            {
-                authenticated &&
-                <div className={classes.buttonsContainer}>
-                    <LinkToRoot
-                        content={
-                            <HeaderButton
-                                text={"Home"}
-                                icon={<HomeIcon fontSize={"small"}/>}
-                                className={classes.homeButton}
-                            />
-                        }
+        <div className={classes.buttonsContainer}>
+            <LinkToRoot
+                content={
+                    <HeaderButton
+                        text={"Home"}
+                        icon={<HomeIcon fontSize={"small"}/>}
+                        className={classes.homeButton}
                     />
-                    {
-                        isAdmin &&
-                        <LinkToAllArticles
-                            content={
-                                <HeaderButton
-                                    text={"All articles"}
-                                    icon={<DescriptionIcon fontSize={"small"}/>}
-                                />
-                            }
+                }
+            />
+            {
+                isAdmin &&
+                <LinkToAllArticles
+                    content={
+                        <HeaderButton
+                            text={"All articles"}
+                            icon={<DescriptionIcon fontSize={"small"}/>}
                         />
                     }
-                    <HeaderButton
-                        text={"Add article"}
-                        icon={<NoteAddIcon fontSize={"small"}/>}
-                        onClick={handleAddArticle}
-                    />
-                </div>
+                />
             }
-        </>
+            <HeaderButton
+                text={"Add article"}
+                icon={<NoteAddIcon fontSize={"small"}/>}
+                onClick={handleAddArticle}
+            />
+        </div>
     );
 };
 
 HeaderButtons.propTypes = {
-    authenticated: PropTypes.bool,
-    isAdmin: PropTypes.bool,
+    isAdmin: PropTypes.bool.isRequired,
     handleAddArticle: PropTypes.func.isRequired
 };
 

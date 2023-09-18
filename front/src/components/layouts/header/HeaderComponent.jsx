@@ -13,16 +13,19 @@ const Header = ({handleAddArticle, user, authenticated, handleLogout, isAdmin}) 
     return (
         <header className={classes.header}>
             <HeaderLogo/>
-            <HeaderButtons
-                handleAddArticle={handleAddArticle}
-                isAdmin={isAdmin}
-                authenticated={authenticated}
-            />
-            <HeaderUser
-                handleLogout={handleLogout}
-                authenticated={authenticated}
-                user={user}
-            />
+            {
+                authenticated &&
+                <>
+                    <HeaderButtons
+                        handleAddArticle={handleAddArticle}
+                        isAdmin={isAdmin}
+                    />
+                    <HeaderUser
+                        handleLogout={handleLogout}
+                        user={user}
+                    />
+                </>
+            }
         </header>
     );
 };

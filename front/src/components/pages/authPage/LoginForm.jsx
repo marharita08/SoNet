@@ -8,6 +8,7 @@ import PropTypes from "prop-types";
 import {userAuthPropTypes} from "../../../propTypes/userPropTypes";
 import ProgressOrComponent from "../../atoms/progressOrComponent/ProgressOrComponent";
 import {useStyles} from "./style";
+import PasswordField from "../../atoms/fields/PasswordField";
 
 const LoginForm = ({onFormSubmit, initialUser, isLoading}) => {
 
@@ -38,8 +39,7 @@ const LoginForm = ({onFormSubmit, initialUser, isLoading}) => {
                 </div>
                 <div className={classes.authField}>
                     <Field
-                        component={TextField}
-                        type={"password"}
+                        component={PasswordField}
                         name={"password"}
                         label={"Password"}
                         fullWidth

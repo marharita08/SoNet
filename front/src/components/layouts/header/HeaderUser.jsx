@@ -11,7 +11,7 @@ import LinkToProfile from "../../atoms/links/LinkToProfile";
 import MenuItemBody from "../../atoms/menu/MenuItemBody";
 import LinkToRoot from "../../atoms/links/LinkToRoot";
 
-const HeaderUser = ({authenticated, user, handleLogout}) => {
+const HeaderUser = ({user, handleLogout}) => {
 
     const classes = useStyles();
     const theme = useTheme();
@@ -54,36 +54,30 @@ const HeaderUser = ({authenticated, user, handleLogout}) => {
     ];
 
     return (
-        <>
-            {
-                authenticated &&
-                <div className={classes.currentUser}>
-                    <button onClick={handleMenu} className={`${classes.button} ${classes.userButton}`}>
-                        <Avatar
-                            src={user.avatar}
-                            className={classes.avatar}
-                            sx={theme.avatarSizes.md}
-                        />
-                        <span className={classes.username}>
+        <div className={classes.currentUser}>
+            <button onClick={handleMenu} className={`${classes.button} ${classes.userButton}`}>
+                <Avatar
+                    src={user.avatar}
+                    className={classes.avatar}
+                    sx={theme.avatarSizes.md}
+                />
+                <span className={classes.username}>
                             {user.name}
                         </span>
-                    </button>
-                    <SNMenu
-                        id={"menu-header"}
-                        menuItems={menuItems}
-                        anchorEl={anchorEl}
-                        onClose={handleMenuClose}
-                    />
-                </div>
-            }
-        </>
+            </button>
+            <SNMenu
+                id={"menu-header"}
+                menuItems={menuItems}
+                anchorEl={anchorEl}
+                onClose={handleMenuClose}
+            />
+        </div>
     );
 };
 
 HeaderUser.propTypes = {
-    authenticated: PropTypes.bool,
-    user: userCardPropTypes,
-    handleLogout: PropTypes.func
+    user: userCardPropTypes.isRequired,
+    handleLogout: PropTypes.func.isRequired
 };
 
 export default HeaderUser;

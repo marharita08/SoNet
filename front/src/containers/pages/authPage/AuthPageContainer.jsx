@@ -2,7 +2,7 @@ import React, {useContext} from "react";
 import {useMutation} from "react-query";
 import PropTypes from "prop-types";
 import AuthPageComponent from "../../../components/pages/authPage/AuthPageComponent";
-import {googleAuth, facebookAuth, auth} from "../../../api/auth";
+import {googleAuth, facebookAuth, authCrud} from "../../../api/authCrud";
 import handleErrorContext from "../../../context/handleErrorContext";
 import {initialUser, getAuthContext} from "../../../config/initValues";
 
@@ -22,7 +22,7 @@ const AuthPageContainer = ({setAuthContext, setErrorMessage}) => {
 
     const {mutate: facebookAuthMutate, isLoading: isFacebookLoading} = useMutation(facebookAuth, options);
 
-    const {mutate: authMutate, isLoading: isAuthLoading} = useMutation(auth, options);
+    const {mutate: authMutate, isLoading: isAuthLoading} = useMutation(authCrud, options);
 
     const onGoogleSuccess = (response) => {
         const token = response.accessToken;
@@ -41,6 +41,7 @@ const AuthPageContainer = ({setAuthContext, setErrorMessage}) => {
     };
 
     const onFormSubmit = (data) => {
+        console.log("submit");
         authMutate(data);
     };
 

@@ -163,7 +163,7 @@ const ArticleCardContainer = ({setArticleContext, article, articles, setArticles
 
     const handleArticleEdit = (article) => {
         setArticleContext({
-            openModal: true,
+            isModalOpen: true,
             addArticle: false,
             article
         });
@@ -197,7 +197,7 @@ const ArticleCardContainer = ({setArticleContext, article, articles, setArticles
                     likesAmount={likesAmount}
                     commentsAmount={commentsAmount}
                     handleLike={handleLike}
-                    users={likedUsers}
+                    likedUsers={likedUsers}
                     isLikesFetching={isLikesFetching || isLikesAmountFetching || isIsLikedFetching}
                     isCommentsFetching={isCommentsFetching || isCommentsAmountFetching}
                 />

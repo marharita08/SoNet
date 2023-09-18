@@ -24,8 +24,8 @@ const queryClient = new QueryClient();
 
 function App() {
     const classes = useStyles();
-    const [authenticationContext, setAuthenticationContext] =
-        useState(JSON.parse(window.localStorage.getItem("context")) || useContext(authContext));
+    const authInitialState = JSON.parse(window.localStorage.getItem("context")) || useContext(authContext);
+    const [authenticationContext, setAuthenticationContext] = useState(authInitialState);
     const [articleModalContext, setArticleModalContext] = useState(useContext(articleContext));
     const {isModalOpen: isAddOrEditArticleModalOpen} = articleModalContext;
     const [errorMessage, setErrorMessage] = useState();
@@ -51,15 +51,13 @@ function App() {
         setArticleModalContext(data);
     };
 
-    const handleError = (err) => setErrorMessage(err.response.data.message);
-
     useEffect(() => {
-        setErrorHandler(handleError);
-    }, [handleError]);
+        setErrorHandler({handleError:(err) => {setErrorMessage(err.response.data.message)}});
+    }, [setErrorMessage]);
 
     return (
         <>
-            <handleErrorContex.Provider value={errorHandler}>
+            <handleErrorContext.Provider value={errorHandler}>
                 <authContext.Provider value={authenticationContext}>
                     <articleContext.Provider value={articleModalContext}>
                         <QueryClientProvider client={queryClient}>
@@ -152,7 +150,7 @@ function App() {
                         </QueryClientProvider>
                     </articleContext.Provider>
                 </authContext.Provider>
-            </handleErrorContex.Provider>
+            </handleErrorContext.Provider>
         </>
     );
 }

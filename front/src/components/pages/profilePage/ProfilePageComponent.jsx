@@ -55,7 +55,7 @@ ProfilePageComponent.propTypes = {
     outgoingRequestsComponent: PropTypes.node.isRequired,
     isLoading: PropTypes.bool,
     isCurrentUser: PropTypes.bool.isRequired,
-    key: PropTypes.number.isRequired
+    key: PropTypes.number
 }
 
 export default ProfilePageComponent;

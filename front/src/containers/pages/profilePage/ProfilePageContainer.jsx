@@ -2,7 +2,7 @@ import React, {useContext, useState} from "react";
 import {useParams} from "react-router-dom";
 import {useMutation, useQuery} from "react-query";
 import ProfileComponent from "../../../components/layouts/profile/ProfileComponent";
-import EditProfileContainer from "../../modals/editProfile";
+import EditProfileContainer from "../../modals/editProfile/EditProfileContainer";
 import {getUser} from "../../../api/usersCrud";
 import OutgoingRequestsContainer from "../../layouts/outgoingRequests/OutgoingRequestsContainer";
 import authContext from "../../../context/authContext";
@@ -15,6 +15,7 @@ import handleErrorContext from "../../../context/handleErrorContext";
 import ProfilePageComponent from "../../../components/pages/profilePage/ProfilePageComponent";
 import usersForSearchService from "../../../services/usersForSearchService";
 import requestsService from "../../../services/requestsService";
+import currentRequestService from "../../../services/currentRequestService";
 
 const ProfilePageContainer = () => {
     const {id: idStr} = useParams();
@@ -27,39 +28,44 @@ const ProfilePageContainer = () => {
         denied: 3
     };
 
-    const [openModal, setOpenModal] = useState(false);
+    const [isEditProfileModalOpen, setIsEditProfileModalOpen] = useState(false);
     const [friends, setFriends] = useState([]);
     const [incomingRequests, setIncomingRequests] = useState([]);
     const [outgoingRequests, setOutgoingRequests] = useState([]);
-    const [currentRequest, setCurrentRequest] = useState(null);
     const [usersForSearch, setUsersForSearch] = useState([]);
+    // owner of currently open profile
     const [user, setUser] = useState();
+    // friends request between currently authenticated user
+    // and owner of currently open profile
+    const [currentRequest, setCurrentRequest] = useState(null);
 
 
     const {isFetching: isUserFetching} = useQuery(
         `user ${id}`,
-        () => getUser(id), {
+        () => getUser(id),
+        {
             onSuccess: (data) => setUser(data.data),
             ...refetchOff
         }
     );
     const {isFetching: isRequestFetching} = useQuery(
         `request ${id}`,
-        () => getRequest(id), {
+        () => getRequest(id),
+        {
             onSuccess: (data) => setCurrentRequest(data?.data),
             ...refetchOff
         }
     );
 
     const handleEdit = () => {
-        setOpenModal(true);
+        setIsEditProfileModalOpen(true);
     };
 
     const {mutate: addMutate, isLoading: isAddLoading} = useMutation(insertRequest, {
         onSuccess: (data) => {
             const {data: {request}} = data;
             if (id !== currentUser.user_id) {
-                setCurrentRequest({...request, is_outgoing_request: true});
+                setCurrentRequest(currentRequestService.addRequest(request));
             } else {
                 setOutgoingRequests(requestsService.addRequest(outgoingRequests, request));
                 setUsersForSearch(usersForSearchService.addRequest(usersForSearch, request));
@@ -69,14 +75,11 @@ const ProfilePageContainer = () => {
     });
     const {mutate: acceptMutate, isLoading: isAcceptLoading} = useMutation(updateRequest, {
         onSuccess: (data) => {
-            let {data: {id: request_id}} = data;
-            request_id = parseInt(request_id, 10);
             if (id !== currentUser.user_id) {
-                let newCurrentRequest = currentRequest;
-                newCurrentRequest.is_friends = true;
-                newCurrentRequest.is_incoming_request = false;
-                setCurrentRequest(newCurrentRequest);
+                setCurrentRequest(currentRequestService.acceptRequest(currentRequest));
             } else {
+                const {data: {id: requestIdStr}} = data;
+                const request_id = +requestIdStr;
                 const request = requestsService.getRequest(incomingRequests, request_id);
                 setFriends(requestsService.addRequest(friends, request));
                 setIncomingRequests(requestsService.deleteRequest(incomingRequests, request_id));
@@ -95,7 +98,7 @@ const ProfilePageContainer = () => {
     const {mutate: deleteMutate, isLoading: isDeleteLoading} = useMutation(deleteRequest, {
         onSuccess: (data) => {
             if (id !== currentUser.user_id) {
-                setCurrentRequest({is_not_friends: true});
+                setCurrentRequest(currentRequestService.deleteRequest());
             } else {
                 const {data: {id: request_id}} = data;
                 setFriends(requestsService.deleteRequest(friends, request_id));
@@ -164,8 +167,8 @@ const ProfilePageContainer = () => {
             }
             editProfileComponent={
                 <EditProfileContainer
-                    openModal={openModal}
-                    setOpenModal={setOpenModal}
+                    isModalOpen={isEditProfileModalOpen}
+                    setIsModalOpen={setIsEditProfileModalOpen}
                     user={user}
                     setUser={setUser}
                 />
