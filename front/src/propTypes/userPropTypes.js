@@ -32,6 +32,8 @@ export const userCardPropTypes = PropTypes.shape({
     avatar: PropTypes.string
 });
 
+export const usersCardPropTypes = PropTypes.arrayOf(userCardPropTypes);
+
 export const userForSearchPropTypes = PropTypes.shape({
     request_id: PropTypes.number,
     user_id: PropTypes.number.isRequired,

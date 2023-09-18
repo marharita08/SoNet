@@ -1,12 +1,15 @@
 import React from "react";
-import {Link} from "react-router-dom";
 import PropTypes from "prop-types";
+import SNLink from "./SNLink";
 
 const LinkToProfile = ({user_id, content, className}) => {
+
     return (
-        <Link to={`/profile/${user_id}`} className={className}>
-            {content}
-        </Link>
+        <SNLink
+            to={`/profile/${user_id}`}
+            className={className}
+            content={content}
+        />
     )
 }
 

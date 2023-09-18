@@ -8,17 +8,17 @@ import {CardActions} from "@mui/material";
 import {articleActionsPropTypes, articleActionsDefaultProps} from "./articleActionsPropTypes";
 
 const ArticleActions = ({
-    commentsFetching,
-    likesFetching,
-    handleExpandClick,
-    handleAddCommentClick,
-    handleLikeClick,
-    commentsExpanded,
-    addCommentExpanded,
+    isCommentsFetching,
+    isLikesFetching,
+    handleCommentsExpand,
+    handleAddComment,
+    handleLike,
+    isCommentsExpanded,
+    isAddOrEditCommentExpanded,
     isLiked,
-    comments,
-    likes,
-    users
+    commentsAmount,
+    likesAmount,
+    likedUsers
 }) => {
 
     const [popoverAnchorEl, setPopoverAnchorEl] = React.useState(null);
@@ -34,30 +34,30 @@ const ArticleActions = ({
     return (
         <CardActions disableSpacing>
             <ProgressOrComponent
-                isProgress={commentsFetching}
+                isProgress={isCommentsFetching}
                 component={
                     <CommentsIconBtn
-                        onClick={handleExpandClick}
-                        commentsExpanded={commentsExpanded}
-                        comments={comments}
+                        onClick={handleCommentsExpand}
+                        commentsExpanded={isCommentsExpanded}
+                        comments={commentsAmount}
                     />
                 }
             />
-            <AddCommentIconBtn onClick={handleAddCommentClick} expand={addCommentExpanded}/>
+            <AddCommentIconBtn onClick={handleAddComment} expand={isAddOrEditCommentExpanded}/>
             <ProgressOrComponent
-                isProgress={likesFetching}
+                isProgress={isLikesFetching}
                 component={
                     <LikeIconBtn
-                        onClick={handleLikeClick}
+                        onClick={handleLike}
                         onMouseEnter={handlePopoverOpen}
                         onMouseLeave={handlePopoverClose}
                         isLiked={isLiked}
-                        likes={likes}/>
+                        likes={likesAmount}/>
                 }
             />
             {
-                users?.length !== 0 &&
-                <AvatarPopover anchorEl={popoverAnchorEl} onClose={handlePopoverClose} users={users}/>
+                likedUsers?.length !== 0 &&
+                <AvatarPopover anchorEl={popoverAnchorEl} onClose={handlePopoverClose} users={likedUsers}/>
             }
         </CardActions>
     )

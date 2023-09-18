@@ -1,39 +1,40 @@
-import React, {useContext, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {
     BrowserRouter,
     Routes,
     Route
 } from "react-router-dom";
 import {QueryClient, QueryClientProvider} from "react-query";
-import HeaderContainer from "./containers/header";
-import ArticlesContainer from "./containers/articles";
-import AddArticleContainer from "./containers/addArticle";
-import ProfileContainer from "./containers/profile";
-import AuthContainer from "./containers/auth";
-import AlertContainer from "./containers/alert";
+import HeaderContainer from "./containers/layouts/header/HeaderContainer";
+import ArticlesPageContainer from "./containers/pages/articlesPage/ArticlesPageContainer";
+import AddOrEditArticleContainer from "./containers/modals/addOrEditArticle/AddOrEditArticleContainer";
+import ProfilePageContainer from "./containers/pages/profilePage/ProfilePageContainer";
+import AuthPageContainer from "./containers/pages/authPage/AuthPageContainer";
 import authContext from "./context/authContext";
 import articleContext from "./context/articleContext";
-import "./App.css";
-import ArticleOuterContainer from "./containers/articleOuter";
+import ArticlePageContainer from "./containers/pages/articlePage/ArticlePageContainer";
 import ProtectedRoute from "./components/routes/ProtectedRoute";
 import GuestRoute from "./components/routes/GuestRoute";
 import AdminRoute from "./components/routes/AdminRoute";
 import {useStyles} from "./components/style";
+import ErrorAlert from "./components/atoms/alert/ErrorAlert";
+import handleErrorContext from "./context/handleErrorContext";
 
 const queryClient = new QueryClient();
 
 function App() {
     const classes = useStyles();
-    const [authenticationContext, setAuthenticationContext] =
-        useState(JSON.parse(window.localStorage.getItem("context")) || useContext(authContext));
+    const authInitialState = JSON.parse(window.localStorage.getItem("context")) || useContext(authContext);
+    const [authenticationContext, setAuthenticationContext] = useState(authInitialState);
     const [articleModalContext, setArticleModalContext] = useState(useContext(articleContext));
-    const {openModal} = articleModalContext;
-    const [alertMessage, setAlertMessage] = useState();
+    const {isModalOpen: isAddOrEditArticleModalOpen} = articleModalContext;
+    const [errorMessage, setErrorMessage] = useState();
     const {authenticated} = authenticationContext;
     const [articles, setArticles] = useState([]);
+    const [errorHandler, setErrorHandler] = useState(useContext(handleErrorContext));
 
     const handleAlertClose = () => {
-        setAlertMessage(undefined);
+        setErrorMessage(undefined);
     };
 
     const setAuthContext = (data) => {
@@ -50,90 +51,106 @@ function App() {
         setArticleModalContext(data);
     };
 
-    const handleError = (err) => setAlertMessage(err.response.data.message);
+    useEffect(() => {
+        setErrorHandler({handleError:(err) => {setErrorMessage(err.response.data.message)}});
+    }, [setErrorMessage]);
 
     return (
         <>
-            <authContext.Provider value={authenticationContext}>
-                <articleContext.Provider value={articleModalContext}>
-                    <QueryClientProvider client={queryClient}>
-                        <BrowserRouter>
-                            <div className={classes.root}>
-                                <HeaderContainer
-                                    setArticleContext={setArticleContext}
-                                    unsetAuthContext={unsetAuthContext}
-                                />
-                                {
-                                    authenticated && openModal &&
-                                    <AddArticleContainer
+            <handleErrorContext.Provider value={errorHandler}>
+                <authContext.Provider value={authenticationContext}>
+                    <articleContext.Provider value={articleModalContext}>
+                        <QueryClientProvider client={queryClient}>
+                            <BrowserRouter>
+                                <div className={classes.root}>
+                                    <HeaderContainer
                                         setArticleContext={setArticleContext}
-                                        articles={articles}
-                                        setArticles={setArticles}
+                                        unsetAuthContext={unsetAuthContext}
                                     />
-                                }
-                                <AlertContainer
-                                    alertMessage={alertMessage}
-                                    handleClose={handleAlertClose}
-                                />
-                                <Routes>
-                                    <Route element={<ProtectedRoute/>}>
-                                        <Route path="/" element={
-                                            <ArticlesContainer
-                                                setArticleContext={setArticleContext}
-                                                param="news"
-                                                handleError={handleError}
-                                                articles={articles}
-                                                setArticles={setArticles}
-                                            />
-                                        }/>
-                                        <Route path="/articles" element={
-                                            <ArticlesContainer
-                                                setArticleContext={setArticleContext}
-                                                param="news"
-                                                handleError={handleError}
-                                                articles={articles}
-                                                setArticles={setArticles}
-                                            />
-                                        }/>
-                                        <Route path="/article/:id" element={
-                                            <ArticleOuterContainer
-                                                setArticleContext={setArticleContext}
-                                                handleError={handleError}
-                                                articles={articles}
-                                                setArticles={setArticles}
-                                            />
-                                        }/>
-                                        <Route
-                                            path="/profile/:id"
-                                            element={<ProfileContainer handleError={handleError}/>}
+                                    {
+                                        authenticated && isAddOrEditArticleModalOpen &&
+                                        <AddOrEditArticleContainer
+                                            setArticleContext={setArticleContext}
+                                            articles={articles}
+                                            setArticles={setArticles}
                                         />
-                                    </Route>
-                                    <Route element={<GuestRoute/>}>
-                                        <Route
-                                            path="/auth"
-                                            element={<AuthContainer
-                                                setAuthContext={setAuthContext}
-                                                handleError={handleError}
-                                            />}
-                                        />
-                                    </Route>
-                                    <Route element={<AdminRoute/>}>
-                                        <Route path="/all-articles"
-                                               element={<ArticlesContainer
-                                                   setArticleContext={setArticleContext}
-                                                   param="all"
-                                                   handleError={handleError}
-                                                   articles={articles}
-                                                   setArticles={setArticles}
-                                               />}
-                                        />
-                                    </Route>
-                                </Routes>
-                            </div>
-                        </BrowserRouter>
-                    </QueryClientProvider>
-                </articleContext.Provider>
-            </authContext.Provider>
+                                    }
+                                    <ErrorAlert
+                                        message={errorMessage}
+                                        handleClose={handleAlertClose}
+                                    />
+                                    <Routes>
+                                        <Route element={<ProtectedRoute/>}>
+                                            <Route
+                                                path="/"
+                                                element={
+                                                    <ArticlesPageContainer
+                                                        setArticleContext={setArticleContext}
+                                                        param="news"
+                                                        articles={articles}
+                                                        setArticles={setArticles}
+                                                    />
+                                                }
+                                            />
+                                            <Route
+                                                path="/articles"
+                                                element={
+                                                    <ArticlesPageContainer
+                                                        setArticleContext={setArticleContext}
+                                                        param="news"
+                                                        articles={articles}
+                                                        setArticles={setArticles}
+                                                    />
+                                                }
+                                            />
+                                            <Route
+                                                path="/article/:id"
+                                                element={
+                                                    <ArticlePageContainer
+                                                        setArticleContext={setArticleContext}
+                                                        articles={articles}
+                                                        setArticles={setArticles}
+                                                    />
+                                                }
+                                            />
+                                            <Route
+                                                path="/profile/:id"
+                                                element={
+                                                    <ProfilePageContainer/>
+                                                }
+                                            />
+                                        </Route>
+                                        <Route element={<GuestRoute/>}>
+                                            <Route
+                                                path="/auth"
+                                                element={
+                                                    <AuthPageContainer
+                                                        setAuthContext={setAuthContext}
+                                                        setErrorMessage={setErrorMessage}
+                                                    />
+                                                }
+                                            />
+                                        </Route>
+                                        <Route element={<AdminRoute/>}>
+                                            <Route
+                                                path="/all-articles"
+                                                element={
+                                                    <ArticlesPageContainer
+                                                        setArticleContext={setArticleContext}
+                                                        param="all"
+                                                        articles={articles}
+                                                        setArticles={setArticles}
+                                                    />
+                                                }
+                                            />
+                                        </Route>
+                                    </Routes>
+                                </div>
+                            </BrowserRouter>
+                        </QueryClientProvider>
+                    </articleContext.Provider>
+                </authContext.Provider>
+            </handleErrorContext.Provider>
         </>
     );
 }

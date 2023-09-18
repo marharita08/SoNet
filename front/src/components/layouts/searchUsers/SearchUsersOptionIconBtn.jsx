@@ -4,7 +4,7 @@ import RemoveFriendIconBtn from "../../atoms/iconButtons/RemoveFriendIconBtn";
 import PropTypes from "prop-types";
 import {userForSearchPropTypes} from "../../../propTypes/userPropTypes";
 
-const SearchUsersOptionIconBtn = ({user, deleteFromFriends, addToFriends, accept}) => {
+const SearchUsersOptionIconBtn = ({user, deleteFromFriends, addToFriends, acceptRequest}) => {
     return (
         <>
             {
@@ -16,7 +16,7 @@ const SearchUsersOptionIconBtn = ({user, deleteFromFriends, addToFriends, accept
                     /> :
                     <AddFriendIconBtn
                         onClick={
-                            () => user.is_not_friends ? addToFriends(user.user_id) : accept(user.request_id)
+                            () => user.is_not_friends ? addToFriends(user.user_id) : acceptRequest(user.request_id)
                         }
                     />
             }
@@ -28,7 +28,7 @@ SearchUsersOptionIconBtn.propTypes = {
     user: userForSearchPropTypes,
     deleteFromFriends: PropTypes.func.isRequired,
     addToFriends: PropTypes.func.isRequired,
-    accept: PropTypes.func.isRequired
+    acceptRequest: PropTypes.func.isRequired
 }
 
 export default SearchUsersOptionIconBtn;

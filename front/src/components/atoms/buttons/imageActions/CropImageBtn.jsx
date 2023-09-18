@@ -5,6 +5,7 @@ import PropTypes from "prop-types";
 import {useStyles} from "./imageButtonsStyle";
 
 const CropImageBtn = ({onClick}) => {
+
     const classes = useStyles();
 
     return (

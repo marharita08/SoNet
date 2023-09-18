@@ -1,9 +1,0 @@
-.user-card {
-    width: 100%
-}
-
-@media screen and (min-width: 600px) {
-    .user-card {
-        width: 350px;
-    }
-}

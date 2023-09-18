@@ -5,6 +5,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import {useStyles} from "./imageButtonsStyle";
 
 const DeleteImageBtn = ({onClick}) => {
+
     const classes = useStyles();
 
     return (

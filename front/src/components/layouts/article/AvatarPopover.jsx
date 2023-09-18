@@ -3,10 +3,12 @@ import {Avatar, AvatarGroup, Popover} from "@mui/material";
 import PropTypes from "prop-types";
 import {useTheme} from "@mui/material/styles";
 import {usersPopoverPropTypes} from "../../../propTypes/userPropTypes";
+import {useStyles} from "../../style";
 
 const AvatarPopover = ({anchorEl, onClose, users}) => {
 
     const theme = useTheme();
+    const classes = useStyles();
 
     return (
         <Popover
@@ -27,7 +29,7 @@ const AvatarPopover = ({anchorEl, onClose, users}) => {
             onClose={onClose}
             disableRestoreFocus
         >
-            <AvatarGroup max={4} className={"margin"}>
+            <AvatarGroup max={4} className={classes.margin}>
                 {users?.map((user) =>
                     <Avatar
                         key={user.user_id}

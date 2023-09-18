@@ -144,7 +144,7 @@ router.post(
       if (accessToken) {
         return res.send({
           accessToken,
-          refreshToken: session.refresh_token,
+          refreshToken: session.token,
           success: true,
         });
       }

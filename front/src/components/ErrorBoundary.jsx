@@ -1,5 +1,5 @@
 import React from "react";
-import AlertContainer from "../containers/alert";
+import ErrorAlert from "./atoms/alert/ErrorAlert";
 
 export default class ErrorBoundary extends React.Component {
     constructor(props) {
@@ -17,7 +17,7 @@ export default class ErrorBoundary extends React.Component {
 
     render() {
         if (this.state.hasError) {
-            return <AlertContainer alertMessage="Something went wrong"/>;
+            return <ErrorAlert alertMessage="Something went wrong"/>;
         }
 
         return this.props.children;

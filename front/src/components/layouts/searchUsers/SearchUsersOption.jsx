@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 import {userForSearchPropTypes} from "../../../propTypes/userPropTypes";
 import {useStyles} from "./style";
 
-const SearchUsersOption = ({user, deleteFromFriends, addToFriends, accept}) => {
+const SearchUsersOption = ({user, deleteFromFriends, addToFriends, acceptRequest}) => {
 
     const classes = useStyles();
 
@@ -16,7 +16,7 @@ const SearchUsersOption = ({user, deleteFromFriends, addToFriends, accept}) => {
                 user={user}
                 addToFriends={addToFriends}
                 deleteFromFriends={deleteFromFriends}
-                accept={accept}
+                acceptRequest={acceptRequest}
             />
         </div>
     )
@@ -26,7 +26,7 @@ SearchUsersOption.propTypes = {
     user: userForSearchPropTypes,
     deleteFromFriends: PropTypes.func.isRequired,
     addToFriends: PropTypes.func.isRequired,
-    accept: PropTypes.func.isRequired
+    acceptRequest: PropTypes.func.isRequired
 }
 
 export default SearchUsersOption;
