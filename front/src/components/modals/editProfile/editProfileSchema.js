@@ -7,7 +7,6 @@ export const schema = Yup.object().shape({
         value: Yup.number(),
         label: Yup.string(),
     }).nullable(),
-    password: Yup.string().min(8, "Password should contain at least 8 symbols").nullable(),
     phone: Yup.string().matches(/^\+380\d{9}$/, "Phone should match +380xxxxxxxxx").nullable(),
     phone_visibility: Yup.object().shape({
         value: Yup.number(),
