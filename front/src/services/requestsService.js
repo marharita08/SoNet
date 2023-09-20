@@ -8,7 +8,7 @@ const getRequest = (requests, request_id) => {
 }
 
 const deleteRequest = (requests, request_id) => {
-    return requests.filter((obj => obj.request_id !== request_id));
+    return requests.filter(obj => (+obj.request_id) !== (+request_id));
 }
 
 export default {

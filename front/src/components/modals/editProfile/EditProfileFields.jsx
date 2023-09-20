@@ -23,11 +23,6 @@ const EditProfileFields = ({visibilities, universities}) => {
                 visibilities={visibilities}
             />
             <EditProfileFieldRow
-                fieldName={"password"}
-                fieldLabel={"Password"}
-                fieldType={"password"}
-            />
-            <EditProfileFieldRow
                 fieldName={"phone"}
                 fieldLabel={"Phone"}
                 visibilityName={"phone_visibility"}

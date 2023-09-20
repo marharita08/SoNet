@@ -8,7 +8,6 @@ const authMiddleware = require('../middleware/authMiddleware');
 const aclMiddleware = require('../middleware/aclMiddleware');
 const NotFoundException = require('../errors/NotFoundException');
 const validationMiddleware = require('../middleware/validationMiddleware');
-const passwordHasher = require('../services/passwordHasher');
 const config = require('../services/config');
 
 const getProfile = async (id) => {
@@ -131,7 +130,6 @@ router.put(
           value: /^\+380\d{9}$/,
         },
       ],
-      password: [{ name: 'min', value: 8 }],
       email_visibility: [{ name: 'required' }],
       phone_visibility: [{ name: 'required' }],
       university_visibility: [{ name: 'required' }],
@@ -155,17 +153,11 @@ router.put(
       university_visibility: { value: universityVisibilityID },
       university: { value: universityID },
     } = req.body;
-    let { phone, password } = req.body;
+    let { phone } = req.body;
     const fileData = req.file;
     const id = parseInt(req.params.id, 10);
     if (phone === '') {
       phone = null;
-    }
-    const { password: oldHashedPassword } = await storage.getPassword(id);
-    if (password !== '' && password !== oldHashedPassword) {
-      password = passwordHasher(password, config.salt);
-    } else if (password === '') {
-      password = null;
     }
     let avatarUrl;
     let avatarPath;
@@ -186,7 +178,6 @@ router.put(
     const user = {
       name,
       email,
-      password,
       phone,
       university_id: universityID,
       avatar: avatarUrl,

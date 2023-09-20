@@ -17,7 +17,7 @@ const acceptRequest = (usersForSearch, request_id) => {
 
 const deleteRequest = (usersForSearch, request_id) => {
     let newUsersForSearch = [...usersForSearch];
-    const index = newUsersForSearch.findIndex((obj => obj.request_id === request_id));
+    const index = newUsersForSearch.findIndex((obj => (+obj.request_id) === (+request_id)));
     newUsersForSearch[index].is_outgoing_request = false;
     newUsersForSearch[index].is_friends = false;
     newUsersForSearch[index].is_not_friends = true;

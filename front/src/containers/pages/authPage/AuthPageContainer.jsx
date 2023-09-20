@@ -41,7 +41,6 @@ const AuthPageContainer = ({setAuthContext, setErrorMessage}) => {
     };
 
     const onFormSubmit = (data) => {
-        console.log("submit");
         authMutate(data);
     };
 
