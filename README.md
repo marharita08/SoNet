@@ -2,10 +2,6 @@
 
 This repository contains the code for a prototype of a social network web application. The backend of the application is built using the Express.js framework, while the frontend is built using React. The database used is PostgreSQL. Both the backend and the database are deployed in Docker containers.
 
-## Reasons for Development
-
-This project was developed as part of the "MinK Dev Camp" course.
-
 ## Features
 The application provides the following features:
   - User authentication and registration (including Google and Facebook authentication)
@@ -20,7 +16,16 @@ The application provides the following features:
  - Express.js
  - React.js
  - PostgreSQL
- - Docker
+ - Docker 
+ - Container Component Pattern
+
+## React libraries
+
+ - Axios
+ - Material UI
+ - React Query
+ - Formik
+ - PropTypes
 
 ## Prerequisites
 
@@ -120,3 +125,40 @@ Open `localhost:3000` in your browser.
 To manage the database you can use the Adminer tool in your browser using the following URL: `appurl:adminerport` (e.g., `localhost:8080`).
 Then, connect to the database using the credentials specified in the .env file.
 
+## Examples of usage
+
+Login/Sign up
+
+![Login](gifs/login.gif)
+
+Article
+
+![Article](gifs/article.gif)
+
+Comments
+
+![Comments](gifs/comments.gif)
+
+Add article
+
+![Add article](gifs/add_article.gif)
+
+Profile
+
+![Profile](gifs/profile.gif)
+
+Manage friends and friend requests
+
+![Friends](gifs/friends.gif)
+
+Search Users
+
+![Search users](gifs/search.gif)
+
+Profile on smartphone
+
+![Profile](gifs/profile_smartphone.gif)
+
+Articles on smartphone
+
+![Articles](gifs/articles_smartphone.gif)
