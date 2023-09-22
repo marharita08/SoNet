@@ -125,3 +125,10 @@ create table if not exists session(
  token   char(37) not null,
  foreign key (user_id) references users (user_id) on delete cascade
 );
+
+create table if not exists reset_password_tokens(
+ user_id    int not null,
+ token      char(37) not null,
+ expires_on timestamp not null default (NOW() + INTERVAL '1 hour'),
+ foreign key (user_id) references users (user_id) on delete cascade
+)

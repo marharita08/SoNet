@@ -11,7 +11,7 @@ import IncomingRequestsContainer from "../../layouts/incomingRequests/IncomingRe
 import {updateRequest, deleteRequest, getRequest, insertRequest} from "../../../api/friendsCrud";
 import SearchUsersContainer from "../../layouts/searchUsers/SearchUsersContainer";
 import {refetchOff} from "../../../config/refetchOff";
-import handleErrorContext from "../../../context/handleErrorContext";
+import handleResponseContext from "../../../context/handleResponseContext";
 import ProfilePageComponent from "../../../components/pages/profilePage/ProfilePageComponent";
 import usersForSearchService from "../../../services/usersForSearchService";
 import requestsService from "../../../services/requestsService";
@@ -21,7 +21,7 @@ const ProfilePageContainer = () => {
     const {id: idStr} = useParams();
     const id = +idStr;
     const {user: currentUser, isAdmin} = useContext(authContext);
-    const {handleError} = useContext(handleErrorContext);
+    const {handleError} = useContext(handleResponseContext);
     const status = {
         underConsideration: 1,
         accepted: 2,

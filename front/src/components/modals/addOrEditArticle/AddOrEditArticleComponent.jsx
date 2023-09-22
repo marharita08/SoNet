@@ -8,7 +8,6 @@ import {schema} from "./addOrEditArticleSchema";
 import SNDialogTitle from "../../atoms/dialogTitle/SNDialogTitle";
 import AddOrEditArticleContent from "./AddOrEditArticleContent";
 import ErrorBoundary from "../../ErrorBoundary";
-import ErrorAlert from "../../atoms/alert/ErrorAlert";
 
 const AddOrEditArticleComponent = ({
     visibilities,
@@ -23,7 +22,6 @@ const AddOrEditArticleComponent = ({
     handleCropImage,
     croppedImage,
     handleDeleteImage,
-    errorMessage,
     isVisibilitiesFetching
 }) => {
 
@@ -44,7 +42,6 @@ const AddOrEditArticleComponent = ({
                         <Form onSubmit={handleSubmit}>
                             <CloseIconBtn onClick={handleModalClose}/>
                             <SNDialogTitle title={isAdd ? "Add article" : "Edit article"}/>
-                            <ErrorAlert message={errorMessage}/>
                             <AddOrEditArticleContent
                                 handleAddImage={handleAddImage}
                                 handleDeleteImage={handleDeleteImage}

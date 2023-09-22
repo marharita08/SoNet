@@ -3,7 +3,7 @@ import {Card, CardHeader} from "@mui/material";
 import PropTypes from "prop-types";
 import LoginWithFacebookBtn from "../../atoms/buttons/loginWith/LoginWithFacebookBtn";
 import LoginWithGoogleBtn from "../../atoms/buttons/loginWith/LoginWithGoogleBtn";
-import {useStyles} from "./style";
+import {useStyles} from "../../style";
 import LoginForm from "./LoginForm";
 import {userAuthPropTypes} from "../../../propTypes/userPropTypes";
 

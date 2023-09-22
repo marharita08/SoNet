@@ -1,15 +1,12 @@
-const addImage = (file, setImage, errorMessage, setErrorMessage) => {
+const addImage = (file, setImage, showErrorAlert) => {
     if (file.type.match("image.*") && file.size < 10000000) {
         const reader = new FileReader();
         reader.onload = () => {
             setImage(reader.result);
         };
         reader.readAsDataURL(file);
-        if (errorMessage) {
-            setErrorMessage("");
-        }
     } else {
-        setErrorMessage("Wrong file format or size!");
+        showErrorAlert("Wrong file format or size!");
     }
 }
 

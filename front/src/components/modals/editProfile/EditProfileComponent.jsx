@@ -7,7 +7,6 @@ import SaveCancelDialogActions from "../dialogActions/SaveCancelDialogActions";
 import CloseIconBtn from "../../atoms/iconButtons/CloseIconBtn";
 import SNDialogTitle from "../../atoms/dialogTitle/SNDialogTitle";
 import EditProfileContent from "./EditProfileContent";
-import ErrorAlert from "../../atoms/alert/ErrorAlert";
 import ErrorBoundary from "../../ErrorBoundary";
 
 const EditProfileComponent = ({
@@ -25,8 +24,6 @@ const EditProfileComponent = ({
     handleModalClose,
     user,
     isFetching,
-    errorMessage,
-    handleAlertClose
 }) => {
 
     return (
@@ -46,7 +43,6 @@ const EditProfileComponent = ({
                         <Form onSubmit={handleSubmit}>
                             <CloseIconBtn onClick={handleModalClose}/>
                             <SNDialogTitle title={"Edit profile"}/>
-                            <ErrorAlert message={errorMessage} handleClose={handleAlertClose}/>
                             <EditProfileContent
                                 handleChange={handleAddImage}
                                 setFieldValue={setFieldValue}

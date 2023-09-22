@@ -4,17 +4,17 @@ import Alert from "@mui/material/Alert";
 import PropTypes from "prop-types";
 import CloseIcon from "@mui/icons-material/Close";
 
-const ErrorAlert = ({message, handleClose}) => {
+const SNAlert = ({message, handleClose, severity}) => {
 
     return (
         <Snackbar
-            open={(!!message) && message !== "undefined"}
-            autoHideDuration={10000}
+            open={(!!message)}
+            autoHideDuration={6000}
             anchorOrigin={{vertical: "bottom", horizontal: "right"}}
             onClose={handleClose}
         >
             <Alert
-                severity="error"
+                severity={severity}
                 variant="filled"
                 action={
                     handleClose &&
@@ -34,9 +34,10 @@ const ErrorAlert = ({message, handleClose}) => {
     );
 };
 
-ErrorAlert.propTypes = {
-    message: PropTypes.string,
-    handleClose: PropTypes.func
+SNAlert.propTypes = {
+    message: PropTypes.string.isRequired,
+    handleClose: PropTypes.func,
+    severity: PropTypes.string.isRequired
 };
 
-export default ErrorAlert;
+export default SNAlert;
