@@ -53,5 +53,5 @@ export const getAuthContext = (user, accessToken, refreshToken) => {
 
 export const initAlertState = {
     message: "",
-    severity: ""
+    severity: "error"
 }
