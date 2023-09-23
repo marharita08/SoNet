@@ -3,9 +3,10 @@ const tables = {
     users: "users",
     articleVisibilities: "article_visibilities",
     friends: "friends",
-    status: "status"
+    status: "status",
+    comments: "comments"
 };
-const columns = {
+const fullColumns = {
     articles: {
         articleId: `${tables.articles}.article_id`,
         text: `${tables.articles}.text`,
@@ -32,23 +33,44 @@ const columns = {
     status: {
         statusId: `${tables.status}.status_id`,
         status: `${tables.status}.status`
+    }
+};
+
+const shortColumns = {
+    articles: {
+        articleId: "article_id",
+        createdAt: "created_at"
     },
-    articleId: "article_id",
-    createdAt: "created_at"
+    comments: {
+        commentId: "comment_id",
+        articleId: "article_id",
+        userId: "user_id",
+        text: "text",
+        parentId: "parent_id",
+        path: "path",
+        level: "level",
+        commentedAt: "commented_at",
+    },
+    users: {
+        userId: "user_id",
+        name: "name",
+        avatar: "avatar"
+    }
 };
 
 const articleVisibilities = {
     all: "All",
     friends: "Friends",
     onlyMe: "Only Me"
-}
+};
 
 const status = {
     accepted: "Accepted",
-}
+};
 module.exports = {
     tables,
-    columns,
+    fullColumns,
+    shortColumns,
     articleVisibilities,
     status
-}
+};
