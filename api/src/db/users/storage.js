@@ -41,8 +41,6 @@ module.exports = {
   updatePassword: async (id, password) => db('users').update({password: password}).where('user_id', id),
   getAvatarPath: async (id) =>
     db('users').select('avatar_path').first().where('user_id', id),
-  getPassword: async (id) =>
-    db('users').select('password').first().where('user_id', id),
   delete: async (id) => db('users').delete().where('user_id', id),
   getFriends: async (id) =>
     db

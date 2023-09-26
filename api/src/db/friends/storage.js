@@ -1,32 +1,27 @@
-const db = require('../../services/db');
+const db = require("../../services/db");
+const {shortColumns, tables} = require("../dbSchema");
+const {friends, users} = shortColumns;
 
 module.exports = {
-  create: (friends) => db('friends').insert(friends).returning('request_id'),
-  update: (friends, id) =>
-    db('friends').update(friends).where('request_id', id),
-  delete: (id) => db('friends').delete().where('request_id', id),
-  getByUsersId: (userID, currentUserID) =>
-    db('friends')
-      .select()
-      .first()
-      .where(function () {
-        this.where('from_user_id', userID).andWhere(
-          'to_user_id',
-          currentUserID
-        );
-      })
-      .orWhere(function () {
-        this.where('to_user_id', userID).andWhere(
-          'from_user_id',
-          currentUserID
-        );
-      }),
-  getRequestById: (id) =>
-    db
-      .select('request_id', 'user_id', 'name', 'avatar')
-      .first()
-      .from('users')
-      .join({ f: 'friends' }, function () {
-        this.on('user_id', 'to_user_id').andOn(id, 'f.request_id');
-      }),
+    create: (friends) => db(tables.friends).insert(friends).returning(friends.requestId),
+    update: (friends, id) => db(tables.friends).update(friends).where(friends.requestId, id),
+    delete: (id) => db(tables.friends).delete().where(friends.requestId, id),
+    getByUsersId: (userID, currentUserID) =>
+        db(tables.friends)
+            .select()
+            .first()
+            .where(function () {
+                this.where(friends.fromUserId, userID).andWhere(friends.toUserId, currentUserID);
+            })
+            .orWhere(function () {
+                this.where(friends.toUserId, userID).andWhere(friends.fromUserId, currentUserID);
+            }),
+    getRequestById: (id) =>
+        db
+            .select(friends.requestId, users.userId, users.name, users.avatar)
+            .first()
+            .from(tables.users)
+            .join(tables.friends, function () {
+                this.on(users.userId, friends.toUserId).andOn(id, friends.requestId);
+            }),
 };

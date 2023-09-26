@@ -1,9 +1,13 @@
-const db = require('../../services/db');
+const db = require("../../services/db");
+const {tables, shortColumns} = require("../dbSchema");
 
 module.exports = {
-  getAll: () =>
-    db
-      .select('university_id as value', 'name as label')
-      .from('universities')
-      .orderBy('name'),
+    getAll: () =>
+        db
+            .select(
+                `${shortColumns.universities.universityId} as value`,
+                `${shortColumns.universities.name} as label`
+            )
+            .from(tables.universities)
+            .orderBy(shortColumns.universities.name),
 };
