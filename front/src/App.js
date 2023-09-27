@@ -17,8 +17,11 @@ import ProtectedRoute from "./components/routes/ProtectedRoute";
 import GuestRoute from "./components/routes/GuestRoute";
 import AdminRoute from "./components/routes/AdminRoute";
 import {useStyles} from "./components/style";
-import ErrorAlert from "./components/atoms/alert/ErrorAlert";
-import handleErrorContext from "./context/handleErrorContext";
+import SNAlert from "./components/atoms/alert/SNAlert";
+import handleResponseContext from "./context/handleResponseContext";
+import {initAlertState} from "./config/initValues";
+import ResetPasswordPageContainer from "./containers/pages/restorePasswordPage/ResetPasswordPageContainer";
+import NewPasswordPageContainer from "./containers/pages/newPasswordPage/NewPasswordPageContainer";
 
 const queryClient = new QueryClient();
 
@@ -28,13 +31,13 @@ function App() {
     const [authenticationContext, setAuthenticationContext] = useState(authInitialState);
     const [articleModalContext, setArticleModalContext] = useState(useContext(articleContext));
     const {isModalOpen: isAddOrEditArticleModalOpen} = articleModalContext;
-    const [errorMessage, setErrorMessage] = useState();
+    const [alertState, setAlertState] = useState(initAlertState);
     const {authenticated} = authenticationContext;
     const [articles, setArticles] = useState([]);
-    const [errorHandler, setErrorHandler] = useState(useContext(handleErrorContext));
+    const [responseHandler, setResponseHandler] = useState(useContext(handleResponseContext));
 
     const handleAlertClose = () => {
-        setErrorMessage(undefined);
+        setAlertState(initAlertState);
     };
 
     const setAuthContext = (data) => {
@@ -52,12 +55,37 @@ function App() {
     };
 
     useEffect(() => {
-        setErrorHandler({handleError:(err) => {setErrorMessage(err.response.data.message)}});
-    }, [setErrorMessage]);
+        setResponseHandler({
+            handleError:(err) => {
+                setAlertState({
+                    message: err.response.data.message,
+                    severity: "error"
+                })
+            },
+            handleSuccess: (res) => {
+                setAlertState({
+                    message: res.data.message,
+                    severity: "success"
+                })
+            },
+            showErrorAlert: (message) => {
+                setAlertState({
+                    message,
+                    severity: "error"
+                })
+            },
+            showSuccessAlert: (message) => {
+                setAlertState({
+                    message,
+                    severity: "success"
+                })
+            }
+        });
+    }, [setAlertState]);
 
     return (
         <>
-            <handleErrorContext.Provider value={errorHandler}>
+            <handleResponseContext.Provider value={responseHandler}>
                 <authContext.Provider value={authenticationContext}>
                     <articleContext.Provider value={articleModalContext}>
                         <QueryClientProvider client={queryClient}>
@@ -75,9 +103,10 @@ function App() {
                                             setArticles={setArticles}
                                         />
                                     }
-                                    <ErrorAlert
-                                        message={errorMessage}
+                                    <SNAlert
+                                        message={alertState.message}
                                         handleClose={handleAlertClose}
+                                        severity={alertState.severity}
                                     />
                                     <Routes>
                                         <Route element={<ProtectedRoute/>}>
@@ -126,7 +155,6 @@ function App() {
                                                 element={
                                                     <AuthPageContainer
                                                         setAuthContext={setAuthContext}
-                                                        setErrorMessage={setErrorMessage}
                                                     />
                                                 }
                                             />
@@ -144,13 +172,21 @@ function App() {
                                                 }
                                             />
                                         </Route>
+                                        <Route
+                                            path={"/reset-password"}
+                                            element={<ResetPasswordPageContainer/>}
+                                        />
+                                        <Route
+                                            path={"/new-password/:token"}
+                                            element={<NewPasswordPageContainer/>}
+                                        />
                                     </Routes>
                                 </div>
                             </BrowserRouter>
                         </QueryClientProvider>
                     </articleContext.Provider>
                 </authContext.Provider>
-            </handleErrorContext.Provider>
+            </handleResponseContext.Provider>
         </>
     );
 }

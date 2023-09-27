@@ -7,8 +7,9 @@ import * as Yup from "yup";
 import PropTypes from "prop-types";
 import {userAuthPropTypes} from "../../../propTypes/userPropTypes";
 import ProgressOrComponent from "../../atoms/progressOrComponent/ProgressOrComponent";
-import {useStyles} from "./style";
+import {useStyles} from "../../style";
 import PasswordField from "../../atoms/fields/PasswordField";
+import {Link} from "react-router-dom";
 
 const LoginForm = ({onFormSubmit, initialUser, isLoading}) => {
 
@@ -58,6 +59,9 @@ const LoginForm = ({onFormSubmit, initialUser, isLoading}) => {
                 >
                     Log in
                 </Button>
+                <div className={classes.authField}>
+                    <Link to={"/reset-password"}>Forgot password?</Link>
+                </div>
             </Form>
         </Formik>
     );

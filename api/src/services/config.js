@@ -18,4 +18,11 @@ module.exports = {
   },
   appKey: process.env.APP_KEY,
   salt: process.env.HASH_SALT,
+  smtpService: process.env.SMTP_SERVICE,
+  smtpAuth: {
+    user: process.env.SMTP_AUTH_USER,
+    pass: process.env.SMTP_AUTH_PASS,
+  },
+  mailFrom: process.env.MAIL_FROM,
+  resetPasswordUrl: process.env.RESET_PASSWORD_URL
 };

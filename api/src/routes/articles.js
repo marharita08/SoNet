@@ -249,7 +249,7 @@ router.get(
   authMiddleware,
   asyncHandler(async (req, res) => {
     const id = parseInt(req.params.id, 10);
-    res.send(await commentStorage.getByArticleId(id));
+    res.send(await commentStorage.getFullDataByArticleId(id));
   })
 );
 

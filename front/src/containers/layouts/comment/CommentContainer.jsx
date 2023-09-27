@@ -5,7 +5,7 @@ import {useMutation} from "react-query";
 import {deleteComment} from "../../../api/commentCrud";
 import PropTypes from "prop-types";
 import {commentPropTypes} from "../../../propTypes/commentPropTypes";
-import handleErrorContext from "../../../context/handleErrorContext";
+import handleResponseContext from "../../../context/handleResponseContext";
 import {initCommentForReply} from "../../../config/initValues";
 
 const CommentContainer = ({
@@ -17,7 +17,7 @@ const CommentContainer = ({
 }) => {
 
     const {user: {user_id}, isAdmin} = useContext(authContext);
-    const {handleError} = useContext(handleErrorContext);
+    const {handleError} = useContext(handleResponseContext);
 
     const {mutate} = useMutation(deleteComment, {
         onSuccess: () => {

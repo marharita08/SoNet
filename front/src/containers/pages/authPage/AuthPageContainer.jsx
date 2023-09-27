@@ -3,12 +3,12 @@ import {useMutation} from "react-query";
 import PropTypes from "prop-types";
 import AuthPageComponent from "../../../components/pages/authPage/AuthPageComponent";
 import {googleAuth, facebookAuth, authCrud} from "../../../api/authCrud";
-import handleErrorContext from "../../../context/handleErrorContext";
+import handleResponseContext from "../../../context/handleResponseContext";
 import {initialUser, getAuthContext} from "../../../config/initValues";
 
-const AuthPageContainer = ({setAuthContext, setErrorMessage}) => {
+const AuthPageContainer = ({setAuthContext}) => {
 
-    const {handleError} = useContext(handleErrorContext);
+    const {handleError, showErrorAlert} = useContext(handleResponseContext);
 
     const options = {
         onSuccess: (data) => {
@@ -31,7 +31,7 @@ const AuthPageContainer = ({setAuthContext, setErrorMessage}) => {
     };
 
     const onGoogleFailure = (response) => {
-        setErrorMessage(response.message);
+        showErrorAlert(response.message);
     };
 
     const onFacebookResponse = (response) => {
@@ -60,7 +60,6 @@ const AuthPageContainer = ({setAuthContext, setErrorMessage}) => {
 
 AuthPageContainer.propTypes = {
     setAuthContext: PropTypes.func.isRequired,
-    setErrorMessage: PropTypes.func.isRequired,
 };
 
 export default AuthPageContainer;

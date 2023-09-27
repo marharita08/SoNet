@@ -1,7 +1,10 @@
-const db = require('../../services/db');
+const db = require("../../services/db");
+const {tables, shortColumns} = require("../dbSchema");
 
 module.exports = {
-  update: async (id, settings) =>
-    db('user_settings').update(settings).where('user_id', id),
-  create: async (settings) => db('user_settings').insert(settings),
+    update: async (id, settings) =>
+        db(tables.userSettings)
+            .update(settings)
+            .where(shortColumns.userSettings.userId, id),
+    create: async (settings) => db(tables.userSettings).insert(settings),
 };

@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useContext, useState} from "react";
 import {useMutation, useQuery} from "react-query";
 import {serialize} from "object-to-formdata";
 import EditProfileComponent from "../../../components/modals/editProfile/EditProfileComponent";
@@ -8,9 +8,11 @@ import {updateUser} from "../../../api/usersCrud";
 import {EditProfileContainerPropTypes} from "./editProfileContainerPropTypes";
 import {refetchOff} from "../../../config/refetchOff";
 import imageService from "../../../services/imageService";
+import handleResponseContext from "../../../context/handleResponseContext";
 
 const EditProfileContainer = ({isModalOpen, setIsModalOpen, user, setUser}) => {
 
+    const {handleError, showErrorAlert} = useContext(handleResponseContext);
     const {isFetching: isUniversitiesFetching, data: universitiesData} = useQuery(
         "universities",
         () => getUniversities(),
@@ -28,7 +30,6 @@ const EditProfileContainer = ({isModalOpen, setIsModalOpen, user, setUser}) => {
     const [image, setImage] = useState();
     const [croppedImage, setCroppedImage] = useState();
     const [cropper, setCropper] = useState();
-    const [errorMessage, setErrorMessage] = useState();
 
     const {mutate, isLoading} = useMutation(
         updateUser, {
@@ -36,7 +37,7 @@ const EditProfileContainer = ({isModalOpen, setIsModalOpen, user, setUser}) => {
                 setUser(data.data);
                 setIsModalOpen(false);
             },
-            onError: (err) => setErrorMessage(err.response.data.message)
+            onError: handleError
         }
     );
 
@@ -47,7 +48,7 @@ const EditProfileContainer = ({isModalOpen, setIsModalOpen, user, setUser}) => {
 
     const handleAddImage = e => {
         e.preventDefault();
-        imageService.addImage(e.target.files[0], setImage, errorMessage, setErrorMessage);
+        imageService.addImage(e.target.files[0], setImage, showErrorAlert);
     };
 
     const handleCropImage = (setFieldValue) => {
@@ -62,10 +63,6 @@ const EditProfileContainer = ({isModalOpen, setIsModalOpen, user, setUser}) => {
         setIsModalOpen(false);
         setCroppedImage(null);
         setImage(null);
-    };
-
-    const handleAlertClose = () => {
-        setErrorMessage(undefined);
     };
 
     return (
@@ -84,8 +81,6 @@ const EditProfileContainer = ({isModalOpen, setIsModalOpen, user, setUser}) => {
             isModalOpen={isModalOpen}
             handleModalClose={handleModalClose}
             isFetching={isUniversitiesFetching || isVisibilitiesFetching}
-            errorMessage={errorMessage}
-            handleAlertClose={handleAlertClose}
         />
     );
 };

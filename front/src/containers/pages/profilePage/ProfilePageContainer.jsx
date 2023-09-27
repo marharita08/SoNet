@@ -11,7 +11,7 @@ import IncomingRequestsContainer from "../../layouts/incomingRequests/IncomingRe
 import {updateRequest, deleteRequest, getRequest, insertRequest} from "../../../api/friendsCrud";
 import SearchUsersContainer from "../../layouts/searchUsers/SearchUsersContainer";
 import {refetchOff} from "../../../config/refetchOff";
-import handleErrorContext from "../../../context/handleErrorContext";
+import handleResponseContext from "../../../context/handleResponseContext";
 import ProfilePageComponent from "../../../components/pages/profilePage/ProfilePageComponent";
 import usersForSearchService from "../../../services/usersForSearchService";
 import requestsService from "../../../services/requestsService";
@@ -21,7 +21,7 @@ const ProfilePageContainer = () => {
     const {id: idStr} = useParams();
     const id = +idStr;
     const {user: currentUser, isAdmin} = useContext(authContext);
-    const {handleError} = useContext(handleErrorContext);
+    const {handleError} = useContext(handleResponseContext);
     const status = {
         underConsideration: 1,
         accepted: 2,
@@ -147,67 +147,68 @@ const ProfilePageContainer = () => {
     };
 
     return (
-        <ProfilePageComponent
-            key={id}
-            isCurrentUser={user?.user_id === currentUser.user_id}
-            isLoading={isUserFetching}
-            profileComponent={
-                <ProfileComponent
-                    user={user}
-                    handleEdit={handleEdit}
-                    isCurrentUser={user?.user_id === currentUser.user_id}
-                    handleAddToFriends={handleAddToFriends}
-                    handleAccept={handleAccept}
-                    handleDeleteFromFriends={handleDeleteFromFriends}
-                    currentRequest={currentRequest}
-                    isLoading={isAcceptLoading || isAddLoading || isDeleteLoading}
-                    isAdmin={isAdmin}
-                    requestFetching={isRequestFetching}
-                />
-            }
-            editProfileComponent={
-                <EditProfileContainer
-                    isModalOpen={isEditProfileModalOpen}
-                    setIsModalOpen={setIsEditProfileModalOpen}
-                    user={user}
-                    setUser={setUser}
-                />
-            }
-            searchUsersComponent={
-                <SearchUsersContainer
-                    acceptRequest={acceptRequest}
-                    addToFriends={addToFriends}
-                    deleteFromFriends={deleteFromFriends}
-                    usersForSearch={usersForSearch}
-                    setUsersForSearch={setUsersForSearch}
-                />
-            }
-            friendsComponent={
-                <FriendsContainer
-                    id={id}
-                    deleteRequest={deleteFromFriends}
-                    friends={friends}
-                    setFriends={setFriends}
-                />
-            }
-            incomingRequestsComponent={
-                <IncomingRequestsContainer
-                    id={id}
-                    acceptRequest={acceptRequest}
-                    declineRequest={declineRequest}
-                    incomingRequests={incomingRequests}
-                    setIncomingRequests={setIncomingRequests}
-                />
-            }
-            outgoingRequestsComponent={
-                <OutgoingRequestsContainer
-                    id={id}
-                    deleteRequest={deleteFromFriends}
-                    outgoingRequests={outgoingRequests}
-                    setOutgoingRequests={setOutgoingRequests}
-                />
-            }
-        />
+        <div key={id}>
+            <ProfilePageComponent
+                isCurrentUser={user?.user_id === currentUser.user_id}
+                isLoading={isUserFetching}
+                profileComponent={
+                    <ProfileComponent
+                        user={user}
+                        handleEdit={handleEdit}
+                        isCurrentUser={user?.user_id === currentUser.user_id}
+                        handleAddToFriends={handleAddToFriends}
+                        handleAccept={handleAccept}
+                        handleDeleteFromFriends={handleDeleteFromFriends}
+                        currentRequest={currentRequest}
+                        isLoading={isAcceptLoading || isAddLoading || isDeleteLoading}
+                        isAdmin={isAdmin}
+                        requestFetching={isRequestFetching}
+                    />
+                }
+                editProfileComponent={
+                    <EditProfileContainer
+                        isModalOpen={isEditProfileModalOpen}
+                        setIsModalOpen={setIsEditProfileModalOpen}
+                        user={user}
+                        setUser={setUser}
+                    />
+                }
+                searchUsersComponent={
+                    <SearchUsersContainer
+                        acceptRequest={acceptRequest}
+                        addToFriends={addToFriends}
+                        deleteFromFriends={deleteFromFriends}
+                        usersForSearch={usersForSearch}
+                        setUsersForSearch={setUsersForSearch}
+                    />
+                }
+                friendsComponent={
+                    <FriendsContainer
+                        id={id}
+                        deleteRequest={deleteFromFriends}
+                        friends={friends}
+                        setFriends={setFriends}
+                    />
+                }
+                incomingRequestsComponent={
+                    <IncomingRequestsContainer
+                        id={id}
+                        acceptRequest={acceptRequest}
+                        declineRequest={declineRequest}
+                        incomingRequests={incomingRequests}
+                        setIncomingRequests={setIncomingRequests}
+                    />
+                }
+                outgoingRequestsComponent={
+                    <OutgoingRequestsContainer
+                        id={id}
+                        deleteRequest={deleteFromFriends}
+                        outgoingRequests={outgoingRequests}
+                        setOutgoingRequests={setOutgoingRequests}
+                    />
+                }
+            />
+        </div>
     );
 };
 

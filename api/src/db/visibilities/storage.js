@@ -1,14 +1,20 @@
-const db = require('../../services/db');
+const db = require("../../services/db");
+const {tables, shortColumns} = require("../dbSchema");
 
 module.exports = {
-  getForFiled: () =>
-    db
-      .select('visibility_id as value', 'visibility as label')
-      .from('field_visibilities')
-      .orderBy('visibility_id'),
-  getForArticle: () =>
-    db
-      .select('visibility_id as value', 'visibility as label')
-      .from('article_visibilities')
-      .orderBy('visibility_id'),
+    getForFiled: () =>
+        db
+            .select(
+                `${shortColumns.fieldVisibilities.visibilityId} as value`,
+                `${shortColumns.fieldVisibilities.visibility} as label`
+            )
+            .from(tables.fieldVisibilities)
+            .orderBy(shortColumns.fieldVisibilities.visibilityId),
+    getForArticle: () =>
+        db
+            .select(
+                `${shortColumns.articleVisibilities.visibilityId} as value`,
+                `${shortColumns.articleVisibilities.visibility} as label`)
+            .from(tables.articleVisibilities)
+            .orderBy(shortColumns.articleVisibilities.visibilityId),
 };

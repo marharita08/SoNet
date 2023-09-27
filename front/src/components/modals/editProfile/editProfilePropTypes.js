@@ -18,6 +18,4 @@ export let EditProfilePropTypes = {
     isModalOpen: PropTypes.bool.isRequired,
     handleModalClose: PropTypes.func.isRequired,
     isFetching: PropTypes.bool,
-    errorMessage: PropTypes.string,
-    handleAlertClose: PropTypes.func
 };

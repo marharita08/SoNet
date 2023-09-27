@@ -11,9 +11,11 @@ import {articlesPropTypes} from "../../../propTypes/articlePropTypes";
 import imageService from "../../../services/imageService";
 import articlesService from "../../../services/articlesService";
 import {refetchOff} from "../../../config/refetchOff";
+import handleResponseContext from "../../../context/handleResponseContext";
 
 const AddOrEditArticleContainer = ({setArticleContext, articles, setArticles}) => {
 
+    const {handleError, showErrorAlert} = useContext(handleResponseContext);
     const {data, isFetching: isVisibilitiesFetching} = useQuery(
         "visibilities",
         () => getArticleVisibilities(),
@@ -29,7 +31,6 @@ const AddOrEditArticleContainer = ({setArticleContext, articles, setArticles}) =
     const [image, setImage] = useState();
     const [croppedImage, setCroppedImage] = useState();
     const [cropper, setCropper] = useState();
-    const [errorMessage, setErrorMessage] = useState("");
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -38,10 +39,9 @@ const AddOrEditArticleContainer = ({setArticleContext, articles, setArticles}) =
             setArticleContext({
                 openModal: false,
             });
-            setErrorMessage("");
             setArticles(articlesService.updateArticle(articles, data?.data));
         },
-        onError: (err) => setErrorMessage(err.response.data.message)
+        onError: handleError
     });
 
     const {mutate: insertMutate, isLoading: isInsertLoading} = useMutation(insertArticle, {
@@ -49,14 +49,13 @@ const AddOrEditArticleContainer = ({setArticleContext, articles, setArticles}) =
             setArticleContext({
                 openModal: false,
             });
-            setErrorMessage("");
             if (location.pathname === "/articles") {
                 setArticles(articlesService.addArticle(articles, data?.data));
             } else {
                 navigate("/articles");
             }
         },
-        onError: (err) => setErrorMessage(err.response.data.message)
+        onError: handleError
     });
 
     const handleFormSubmit = (data) => {
@@ -74,12 +73,11 @@ const AddOrEditArticleContainer = ({setArticleContext, articles, setArticles}) =
         });
         setCroppedImage(null);
         setImage(null);
-        setErrorMessage(undefined);
     };
 
     const handleAddImage = e => {
         e.preventDefault();
-        imageService.addImage(e.target.files[0], setImage, errorMessage, setErrorMessage);
+        imageService.addImage(e.target.files[0], setImage, showErrorAlert);
     };
 
     const handleCropImage = (setFieldValue) => {
@@ -105,7 +103,6 @@ const AddOrEditArticleContainer = ({setArticleContext, articles, setArticles}) =
             croppedImage={croppedImage}
             handleCropImage={handleCropImage}
             handleAddImage={handleAddImage}
-            errorMessage={errorMessage}
             isVisibilitiesFetching={isVisibilitiesFetching}
         />
     );

@@ -11,7 +11,7 @@ import {deleteLike, getIsLiked, insertLike} from "../../../api/likesCrud";
 import {useNavigate, useLocation} from "react-router-dom";
 import {articlePropTypes, articlesPropTypes} from "../../../propTypes/articlePropTypes";
 import articlesService from "../../../services/articlesService";
-import handleErrorContext from "../../../context/handleErrorContext";
+import handleResponseContext from "../../../context/handleResponseContext";
 import commentsService from "../../../services/commentsService";
 import ArticleCardComponent from "../../../components/layouts/articleCard/ArticleCardComponent";
 import {refetchOff} from "../../../config/refetchOff";
@@ -22,7 +22,7 @@ const ArticleCardContainer = ({setArticleContext, article, articles, setArticles
     let id = article.article_id;
 
     const {user: {user_id, avatar}, isAdmin} = useContext(authContext);
-    const {handleError} = useContext(handleErrorContext);
+    const {handleError} = useContext(handleResponseContext);
 
     const initComment = initCommentFn(id, user_id);
 

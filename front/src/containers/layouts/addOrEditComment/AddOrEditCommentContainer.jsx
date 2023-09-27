@@ -5,7 +5,7 @@ import {useMutation} from "react-query";
 import {insertComment, updateComment} from "../../../api/commentCrud";
 import PropTypes from "prop-types";
 import {commentAddPropTypes} from "../../../propTypes/commentPropTypes";
-import handleErrorContext from "../../../context/handleErrorContext";
+import handleResponseContext from "../../../context/handleResponseContext";
 
 const AddOrEditCommentContainer = ({
     comment,
@@ -18,7 +18,7 @@ const AddOrEditCommentContainer = ({
 }) => {
 
     const {user} = useContext(authContext);
-    const {handleError} = useContext(handleErrorContext);
+    const {handleError} = useContext(handleResponseContext);
 
 
     const {mutate: insertMutate, isLoading: insertLoading} = useMutation(insertComment, {
