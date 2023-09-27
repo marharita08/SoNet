@@ -12,39 +12,36 @@ const ProfilePageComponent = ({
     outgoingRequestsComponent,
     isLoading,
     isCurrentUser,
-    key
 }) => {
     return (
         <>
             <SNLoading isLoading={isLoading}/>
-            <div key={key}>
-                <ErrorBoundary>
-                    {profileComponent}
-                </ErrorBoundary>
-                {
-                    isCurrentUser &&
-                    <>
-                        <ErrorBoundary>
-                            {editProfileComponent}
-                        </ErrorBoundary>
-                        <ErrorBoundary>
-                            {searchUsersComponent}
-                        </ErrorBoundary>
-                        <ErrorBoundary>
-                            {friendsComponent}
-                        </ErrorBoundary>
-                        <ErrorBoundary>
-                            {incomingRequestsComponent}
-                        </ErrorBoundary>
-                        <ErrorBoundary>
-                            {outgoingRequestsComponent}
-                        </ErrorBoundary>
-                    </>
-                }
-            </div>
+            <ErrorBoundary>
+                {profileComponent}
+            </ErrorBoundary>
+            {
+                isCurrentUser &&
+                <>
+                    <ErrorBoundary>
+                        {editProfileComponent}
+                    </ErrorBoundary>
+                    <ErrorBoundary>
+                        {searchUsersComponent}
+                    </ErrorBoundary>
+                    <ErrorBoundary>
+                        {friendsComponent}
+                    </ErrorBoundary>
+                    <ErrorBoundary>
+                        {incomingRequestsComponent}
+                    </ErrorBoundary>
+                    <ErrorBoundary>
+                        {outgoingRequestsComponent}
+                    </ErrorBoundary>
+                </>
+            }
         </>
-    )
-}
+    );
+};
 
 ProfilePageComponent.propTypes = {
     profileComponent: PropTypes.node.isRequired,
@@ -54,8 +51,7 @@ ProfilePageComponent.propTypes = {
     incomingRequestsComponent: PropTypes.node.isRequired,
     outgoingRequestsComponent: PropTypes.node.isRequired,
     isLoading: PropTypes.bool,
-    isCurrentUser: PropTypes.bool.isRequired,
-    key: PropTypes.number
-}
+    isCurrentUser: PropTypes.bool.isRequired
+};
 
 export default ProfilePageComponent;

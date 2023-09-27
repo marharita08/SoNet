@@ -6,7 +6,10 @@ export const useStyles = makeStyles(theme => ({
         backgroundColor: theme.palette.primary.main,
         height: "70px",
         display: "grid",
-        gridTemplateColumns: "auto auto auto"
+        gridTemplateColumns: "auto auto auto",
+        position: "sticky",
+        top: 0,
+        zIndex: 1
     },
     button: {
         padding: theme.spacing(1, 4),

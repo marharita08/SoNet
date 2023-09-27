@@ -85,7 +85,7 @@ router.post("/save",
             return next(new ForbiddenException("Token has been expired"));
         }
 
-        const user = usersStorage.getById(reset_password_token.user_id);
+        const user = await usersStorage.getById(reset_password_token.user_id);
         const hashedPassword = passwordHasher(password, salt);
         await usersStorage.update(reset_password_token.user_id, {password: hashedPassword});
         await passwordStorage.delete(token);
@@ -93,7 +93,7 @@ router.post("/save",
             from: mailFrom,
             to: user.email,
             subject: "Reset password for Social Network",
-            text: "Your password for Social Network has been changed successfully"
+            text: "Your password for Social Network has been changed successfully."
         };
 
         await transporter.sendMail(mailOptions);
