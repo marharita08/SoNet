@@ -110,6 +110,13 @@ You also need to ensure that `api/.env` contains valid information. It should ho
 | FACEBOOK_API_CLIENT_ID     | Facebook client ID, required for login with Facebook     |
 | FACEBOOK_API_CLIENT_SECRET | Facebook client secret, required for login with Facebook |
 | HASH_SALT                  | Salt for password hashing                                |
+| SMTP_SERVICE               | Name of SMTP service                                     |
+| SMTP_AUTH_USER             | SMTP username                                            |
+| SMTP_AUTH_PASS             | SMTP password                                            |
+| MAIL_FROM                  | Mail address to sent mails from                          |
+| RESET_PASSWORD_URL         | Front URL to reset password                              |
+
+
 
 Refresh `GOOGLE_API_CLIENT_ID`, `GOOGLE_API_CLIENT_SECRET`, `FACEBOOK_API_CLIENT_ID` and `FACEBOOK_API_CLIENT_SECRET` as it described in [previous section](#setting-up-authentication-credentials).
 Update `APP_KEY` and `HASH_SALT`. If it's necessary, update other properties.
