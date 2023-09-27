@@ -1,17 +1,17 @@
-const ClientException = require('./ClientExceptoin');
+const ClientException = require("./ClientExceptoin");
 
 class UnauthorizedException extends ClientException {
-  constructor(message) {
-    let msg;
-    if (message === undefined) {
-      msg = 'Unauthorized';
-    } else {
-      msg = message;
+    constructor(message) {
+        let msg;
+        if (message === undefined) {
+            msg = "Unauthorized";
+        } else {
+            msg = message;
+        }
+        super(msg);
+        this.name = "UnauthorizedException";
+        this.statusCode = 401;
     }
-    super(msg);
-    this.name = 'UnauthorizedException';
-    this.statusCode = 401;
-  }
 }
 
 module.exports = UnauthorizedException;
