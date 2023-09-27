@@ -31,7 +31,11 @@ const shortColumns = {
     users: {
         userId: "user_id",
         name: "name",
-        avatar: "avatar"
+        avatar: "avatar",
+        universityId: "university_id",
+        avatarPath: "avatar_path",
+        email: "email",
+        fbId: "fb_id"
     },
     friends: {
         requestId: "request_id",
@@ -50,7 +54,10 @@ const shortColumns = {
         token: "token"
     },
     userSettings: {
-        userId: "user_id"
+        userId: "user_id",
+        emailVisibilityId: "email_visibility_id",
+        phoneVisibilityId: "phone_visibility_id",
+        universityVisibilityId: "university_visibility_id"
     },
     universities: {
         universityId: "university_id",
@@ -79,6 +86,8 @@ const fullColumns = {
         userId: `${tables.users}.${shortColumns.users.userId}`,
         name: `${tables.users}.${shortColumns.users.name}`,
         avatar: `${tables.users}.${shortColumns.users.avatar}`,
+        email: `${tables.users}.${shortColumns.users.email}`,
+        universityId: `${tables.users}.${shortColumns.users.universityId}`,
     },
     articleVisibilities: {
         visibilityId: `${tables.articleVisibilities}.${shortColumns.articleVisibilities.visibilityId}`,
@@ -96,6 +105,13 @@ const fullColumns = {
     },
     articleLikes: {
         userId: `${tables.articleLikes}.${shortColumns.articleLikes.userId}`,
+    },
+    universities: {
+        universityId: `${tables.universities}.${shortColumns.universities.universityId}`,
+        name: `${tables.universities}.${shortColumns.universities.name}`,
+    },
+    userSettings: {
+        userId: `${tables.userSettings}.${shortColumns.userSettings.userId}`,
     }
 };
 
@@ -107,6 +123,7 @@ const articleVisibilities = {
 
 const status = {
     accepted: "Accepted",
+    underConsideration: "Under consideration"
 };
 module.exports = {
     tables,

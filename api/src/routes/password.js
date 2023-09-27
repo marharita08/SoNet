@@ -87,7 +87,7 @@ router.post("/save",
 
         const user = usersStorage.getById(reset_password_token.user_id);
         const hashedPassword = passwordHasher(password, salt);
-        await usersStorage.updatePassword(reset_password_token.user_id, hashedPassword);
+        await usersStorage.update(reset_password_token.user_id, {password: hashedPassword});
         await passwordStorage.delete(token);
         const mailOptions = {
             from: mailFrom,
