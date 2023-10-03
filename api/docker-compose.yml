@@ -15,6 +15,14 @@ services:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
       - ${DB_HOST_PORT}:${DB_CONTAINER_PORT}
+  token-cleaner:
+    build:
+      context: .
+      dockerfile: Dockerfile-token-cleaner
+    depends_on:
+      - db
+    volumes:
+      - ./tmp/log/cron.log:/var/log/cron.log
   adminer:
     image: adminer
     container_name: db_adminer

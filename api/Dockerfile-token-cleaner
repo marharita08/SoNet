@@ -1,0 +1,13 @@
+FROM postgres:latest
+
+COPY delete-expired-password-tokens.sh /delete-expired-password-tokens.sh
+
+RUN chmod +x /delete-expired-password-tokens.sh
+
+RUN apt-get update && apt-get install -y cron
+RUN echo "0 7,15,23 * * * /delete-expired-password-tokens.sh" > /etc/cron.d/delete-expired-password-tokens-cron
+RUN chmod 0644 /etc/cron.d/delete-expired-password-tokens-cron
+RUN crontab /etc/cron.d/delete-expired-password-tokens-cron
+RUN touch /var/log/cron.log
+
+CMD cron && tail -f /var/log/cron.log
