@@ -1,10 +1,10 @@
 const router = require("express").Router();
-const passwordHasher = require("../services/passwordHasher");
+const passwordHasher = require("../utils/passwordHasher");
 const usersStorage = require("../db/users/storage");
-const transporter = require("../services/transporterConfig");
+const transporter = require("../configs/transporterConfig");
 const NotFoundException = require("../errors/NotFoundException");
 const {v4: uuidv4} = require("uuid");
-const config = require("../services/config");
+const config = require("../configs/config");
 const asyncHandler = require("../middleware/asyncHandler");
 const passwordStorage = require("../db/password/storage");
 const ForbiddenException = require("../errors/ForbiddenException");

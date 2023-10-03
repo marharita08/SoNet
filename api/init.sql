@@ -59,7 +59,7 @@ create table if not exists articles(
  user_id       int not null,
  "text"        text not null,
  visibility_id int not null default 1,
- "created_at"  timestamp not null,
+ "created_at"  timestamp not null default now(),
  image         varchar(255),
  foreign key (user_id) references users (user_id) on delete cascade,
  foreign key (visibility_id) references article_visibilities (visibility_id)
@@ -81,7 +81,7 @@ create table if not exists comments(
  parent_id    int,
  path         varchar(100),
  level        int not null,
- commented_at timestamp not null,
+ commented_at timestamp not null default now(),
  foreign key (user_id) references users (user_id) on delete cascade,
  foreign key (article_id) references articles (article_id) on delete cascade,
  foreign key (parent_id) references comments (comment_id) on update cascade on delete cascade

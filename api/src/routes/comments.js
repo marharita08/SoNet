@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const db = require("../services/db");
+const db = require("../configs/db");
 const asyncHandler = require("../middleware/asyncHandler");
 const storage = require("../db/comments/storage");
 const authMiddleware = require("../middleware/authMiddleware");

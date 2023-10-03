@@ -5,10 +5,10 @@ const passport = require("passport");
 const asyncHandler = require("../middleware/asyncHandler");
 const storage = require("../db/users/storage");
 const sessionStorage = require("../db/sessions/storage");
-const {appKey} = require("../services/config");
-const config = require("../services/config");
+const {appKey} = require("../configs/config");
+const config = require("../configs/config");
 const settingsStorage = require("../db/settings/storage");
-const passwordHasher = require("../services/passwordHasher");
+const passwordHasher = require("../utils/passwordHasher");
 const UnauthorizedException = require("../errors/UnauthorizedException");
 const validationMiddleware = require("../middleware/validationMiddleware");
 

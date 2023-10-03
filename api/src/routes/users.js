@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const fs = require("fs");
-const upload = require("../services/multerConfig");
+const upload = require("../configs/multerConfig");
 const asyncHandler = require("../middleware/asyncHandler");
 const storage = require("../db/users/storage");
 const settingsStorage = require("../db/settings/storage");
@@ -8,7 +8,7 @@ const authMiddleware = require("../middleware/authMiddleware");
 const aclMiddleware = require("../middleware/aclMiddleware");
 const NotFoundException = require("../errors/NotFoundException");
 const validationMiddleware = require("../middleware/validationMiddleware");
-const config = require("../services/config");
+const config = require("../configs/config");
 
 const getProfile = async (id) => {
     const dbResponse = await storage.getProfileById(id);

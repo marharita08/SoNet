@@ -1,4 +1,4 @@
-const db = require("../services/db");
+const db = require("../configs/db");
 const ClientException = require("../errors/ClientExceptoin");
 
 const errorHandler = (logTable) => async (err, req, res, next) => {

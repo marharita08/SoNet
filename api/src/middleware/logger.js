@@ -1,4 +1,4 @@
-const db = require("../services/db");
+const db = require("../configs/db");
 
 const logger = (logTable) => async (req, res, next) => {
     const status = "info";
