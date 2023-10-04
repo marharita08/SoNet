@@ -7,7 +7,6 @@ import ProgressOrComponent from "../../atoms/progressOrComponent/ProgressOrCompo
 import SaveIcon from "@mui/icons-material/Save";
 import PasswordField from "../../atoms/fields/PasswordField";
 import PropTypes from "prop-types";
-import {userAuthPropTypes} from "../../../propTypes/userPropTypes";
 
 const NewPasswordPageComponent = ({onFormSubmit, initialValues, isLoading}) => {
 
@@ -68,7 +67,10 @@ const NewPasswordPageComponent = ({onFormSubmit, initialValues, isLoading}) => {
 
 NewPasswordPageComponent.propTypes = {
     onFormSubmit: PropTypes.func.isRequired,
-    initialValues: userAuthPropTypes.isRequired,
+    initialValues: PropTypes.shape({
+        password: PropTypes.string,
+        confirmPassword: PropTypes.string
+    }),
     isLoading: PropTypes.bool
 }
 
