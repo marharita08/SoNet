@@ -3,7 +3,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const passport = require("passport");
 
-const config = require("./services/config");
+const config = require("./configs/config");
 const usersRoutes = require("./routes/users");
 const articlesRoutes = require("./routes/articles");
 const likesRoutes = require("./routes/likes");
@@ -21,7 +21,7 @@ const containerPort = config.appContainerPort;
 
 const app = express();
 
-require("./services/passportConfig")(passport);
+require("./configs/passportConfig")(passport);
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.json());

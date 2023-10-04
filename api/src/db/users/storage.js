@@ -1,4 +1,4 @@
-const db = require("../../services/db");
+const db = require("../../configs/db");
 const {tables, shortColumns, fullColumns, status} = require("../dbSchema");
 const friendsAndRequestsColumns = [
     shortColumns.friends.requestId,

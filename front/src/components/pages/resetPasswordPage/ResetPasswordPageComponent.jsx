@@ -6,7 +6,6 @@ import {Button, Card, CardHeader, Typography} from "@mui/material";
 import ProgressOrComponent from "../../atoms/progressOrComponent/ProgressOrComponent";
 import SendIcon from '@mui/icons-material/Send';
 import PropTypes from "prop-types";
-import {userAuthPropTypes} from "../../../propTypes/userPropTypes";
 import {useStyles} from "../../style";
 
 const ResetPasswordPageComponent = ({onFormSubmit, initialValues, isLoading}) => {
@@ -63,7 +62,9 @@ const ResetPasswordPageComponent = ({onFormSubmit, initialValues, isLoading}) =>
 
 ResetPasswordPageComponent.propTypes = {
     onFormSubmit: PropTypes.func.isRequired,
-    initialValues: userAuthPropTypes.isRequired,
+    initialValues: PropTypes.shape({
+        email: PropTypes.string
+    }),
     isLoading: PropTypes.bool
 };
 

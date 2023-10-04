@@ -1,4 +1,4 @@
-const db = require("../../services/db");
+const db = require("../../configs/db");
 const {shortColumns, tables} = require("../dbSchema");
 const {friends, users} = shortColumns;
 
