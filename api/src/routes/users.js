@@ -1,63 +1,25 @@
 const router = require("express").Router();
-const fs = require("fs");
 const upload = require("../configs/multerConfig");
 const asyncHandler = require("../middleware/asyncHandler");
-const storage = require("../db/users/storage");
-const settingsStorage = require("../db/settings/storage");
 const authMiddleware = require("../middleware/authMiddleware");
 const aclMiddleware = require("../middleware/aclMiddleware");
-const NotFoundException = require("../errors/NotFoundException");
 const validationMiddleware = require("../middleware/validationMiddleware");
-const config = require("../configs/config");
-
-const getProfile = async (id) => {
-    const dbResponse = await storage.getProfileById(id);
-    if (dbResponse[0]) {
-        const result = {
-            ...dbResponse[0],
-            email_visibility: {
-                value: dbResponse[0].email_visibility_id,
-                label: dbResponse[0].ev_label,
-            },
-            phone_visibility: {
-                value: dbResponse[0].phone_visibility_id,
-                label: dbResponse[0].pv_label,
-            },
-            university: {
-                value: dbResponse[0].university_id,
-                label: dbResponse[0].university_label,
-            },
-            university_visibility: {
-                value: dbResponse[0].university_visibility_id,
-                label: dbResponse[0].uv_label,
-            },
-        };
-        if (result.university.value == null) {
-            result.university = null;
-        }
-        return result;
-    }
-    return undefined;
-};
+const usersService = require("../services/users");
 
 router.get(
     "/",
     authMiddleware,
     asyncHandler(async (req, res) => {
-        res.send(await storage.getAll());
+        res.send(await usersService.getAll());
     })
 );
 
 router.get(
     "/:id",
     authMiddleware,
-    asyncHandler(async (req, res, next) => {
-        const id = parseInt(req.params.id, 10);
-        const profile = await getProfile(id);
-        if (profile) {
-            return res.send(profile);
-        }
-        return next(new NotFoundException("User not found"));
+    asyncHandler(async (req, res) => {
+        const {id} = req.params;
+        res.send(usersService.getProfileById(+id));
     })
 );
 
@@ -69,7 +31,7 @@ router.put(
             resource: "user",
             action: "update",
             possession: "own",
-            getResource: (req) => storage.getById(req.params.id),
+            getResource: (req) => usersService.getById(req.params.id),
             isOwn: (resource, userId) => resource.user_id === userId,
         },
     ]),
@@ -116,57 +78,30 @@ router.put(
                     name: "user_id",
                     value: (req) => req.params.id,
                 },
-                getResourceByField: (email) => storage.getByEmail(email),
+                getResourceByField: (email) => usersService.getByEmail(email),
             },
         }
     ),
     asyncHandler(async (req, res, next) => {
         const {
-            name,
-            email,
-            email_visibility: {value: emailVisibilityID},
-            phone_visibility: {value: phoneVisibilityID},
-            university_visibility: {value: universityVisibilityID},
-            university: {value: universityID},
+            email_visibility: {value: email_visibility_id},
+            phone_visibility: {value: phone_visibility_id},
+            university_visibility: {value: university_visibility_id},
+            university: {value: university_id},
+            ...rest
         } = req.body;
-        let {phone} = req.body;
         const fileData = req.file;
-        const id = parseInt(req.params.id, 10);
-        if (phone === "") {
-            phone = null;
-        }
-        let avatarUrl;
-        let avatarPath;
-        if (fileData) {
-            const {avatar_path: oldAvatarPath} = await storage.getAvatarPath(id);
-            avatarPath = fileData.path;
-            avatarUrl =
-                config.appUrl +
-                avatarPath.substr(avatarPath.indexOf("/"), avatarPath.length);
-            if (oldAvatarPath != null) {
-                fs.unlink(oldAvatarPath, (err) => {
-                    if (err) {
-                        next(err);
-                    }
-                });
-            }
-        }
+        const {id} = req.params;
         const user = {
-            name,
-            email,
-            phone,
-            university_id: universityID,
-            avatar: avatarUrl,
-            avatar_path: avatarPath,
-        };
-        await storage.update(id, user);
+            ...rest,
+            university_id
+        }
         const settings = {
-            email_visibility_id: emailVisibilityID,
-            phone_visibility_id: phoneVisibilityID,
-            university_visibility_id: universityVisibilityID,
-        };
-        await settingsStorage.update(id, settings);
-        res.send(await getProfile(id));
+            email_visibility_id,
+            phone_visibility_id,
+            university_visibility_id
+        }
+        res.send(await usersService.update(+id, user, settings, fileData, next));
     })
 );
 
@@ -178,13 +113,13 @@ router.delete(
             resource: "user",
             action: "delete",
             possession: "own",
-            getResource: (req) => storage.getById(req.params.id),
+            getResource: (req) => usersService.getById(req.params.id),
             isOwn: (resource, userId) => resource.user_id === userId,
         },
     ]),
     asyncHandler(async (req, res) => {
-        const id = parseInt(req.params.id, 10);
-        await storage.delete(id);
+        const {id} = req.params;
+        await usersService.delete(id);
         res.sendStatus(204);
     })
 );
@@ -194,7 +129,7 @@ router.get(
     authMiddleware,
     asyncHandler(async (req, res) => {
         const id = parseInt(req.params.id, 10);
-        res.send(await storage.getFriends(id));
+        res.send(await usersService.getFriends(id));
     })
 );
 
@@ -203,7 +138,7 @@ router.get(
     authMiddleware,
     asyncHandler(async (req, res) => {
         const id = parseInt(req.params.id, 10);
-        res.send(await storage.getIncomingRequests(id));
+        res.send(await usersService.getIncomingRequests(id));
     })
 );
 
@@ -212,7 +147,7 @@ router.get(
     authMiddleware,
     asyncHandler(async (req, res) => {
         const id = parseInt(req.params.id, 10);
-        res.send(await storage.getOutgoingRequests(id));
+        res.send(await usersService.getOutgoingRequests(id));
     })
 );
 
@@ -220,7 +155,7 @@ router.get(
     "/:id/search",
     asyncHandler(async (req, res) => {
         const id = parseInt(req.params.id, 10);
-        res.send(await storage.getAllForSearch(id));
+        res.send(await usersService.getAllForSearch(id));
     })
 );
 
