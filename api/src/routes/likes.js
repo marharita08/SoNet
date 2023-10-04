@@ -1,14 +1,14 @@
 const router = require("express").Router();
 const asyncHandler = require("../middleware/asyncHandler");
-const storage = require("../db/likes/storage");
 const authMiddleware = require("../middleware/authMiddleware");
 const validationMiddleware = require("../middleware/validationMiddleware");
+const likesService = require("../services/likes");
 
 router.get(
     "/",
     authMiddleware,
     asyncHandler(async (req, res) => {
-        res.send(await storage.getAll());
+        res.send(await likesService.getAll());
     })
 );
 
@@ -18,11 +18,7 @@ router.get(
     asyncHandler(async (req, res) => {
         const {user_id: userId} = req.auth;
         const {article_id: articleId} = req.params;
-        const row = await storage.getByArticleIdAndUserId(articleId, userId);
-        if (row) {
-            return res.send(true);
-        }
-        return res.send(false);
+        res.send(likesService.isLiked(articleId, userId));
     })
 );
 
@@ -33,12 +29,9 @@ router.post(
         article_id: [{name: "required"}],
     }),
     asyncHandler(async (req, res) => {
-        const {article_id: articleID} = req.body;
-        const {user_id: userID} = req.auth;
-        await storage.create({
-            article_id: articleID,
-            user_id: userID,
-        });
+        const {article_id: articleId} = req.body;
+        const {user_id: userId} = req.auth;
+        await likesService.add(articleId, userId);
         res.sendStatus(204);
     })
 );
@@ -47,9 +40,9 @@ router.delete(
     "/article/:article_id",
     authMiddleware,
     asyncHandler(async (req, res) => {
-        const {article_id: articleID} = req.params;
-        const {user_id: userID} = req.auth;
-        await storage.delete(articleID, userID);
+        const {article_id: articleId} = req.params;
+        const {user_id: userId} = req.auth;
+        await likesService.delete(articleId, userId);
         res.sendStatus(204);
     })
 );

@@ -1,12 +1,12 @@
 const router = require("express").Router();
 const upload = require("../configs/multerConfig");
 const asyncHandler = require("../middleware/asyncHandler");
-const likeStorage = require("../db/likes/storage");
 const authMiddleware = require("../middleware/authMiddleware");
 const aclMiddleware = require("../middleware/aclMiddleware");
 const validationMiddleware = require("../middleware/validationMiddleware");
 const articlesService = require("../services/articles");
 const commentsService = require("../services/comments");
+const likesService = require("../services/likes");
 
 router.get(
     "/all-news",
@@ -144,7 +144,7 @@ router.get(
     authMiddleware,
     asyncHandler(async (req, res) => {
         const {id} = req.params;
-        res.send(await commentsService.getAmountByArticleId(id));
+        res.send(await commentsService.getAmountByArticleId(+id));
     })
 );
 
@@ -152,8 +152,8 @@ router.get(
     "/:id/likes",
     authMiddleware,
     asyncHandler(async (req, res) => {
-        const id = parseInt(req.params.id, 10);
-        res.send(await likeStorage.getByArticleId(id));
+        const {id} = req.params;
+        res.send(await likesService.getByArticleId(+id));
     })
 );
 
@@ -161,8 +161,8 @@ router.get(
     "/:id/likes-count",
     authMiddleware,
     asyncHandler(async (req, res) => {
-        const id = parseInt(req.params.id, 10);
-        res.send(await likeStorage.getAmountByArticleId(id));
+        const {id} = req.params;
+        res.send(await likesService.getAmountByArticleId(+id));
     })
 );
 
