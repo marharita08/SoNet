@@ -13,8 +13,8 @@ const parseArticle = (article) => {
             value: visibilityId,
             label: visibility,
         }
-    }
-}
+    };
+};
 
 const parseArticles = (articles) => {
     const result = [];
@@ -22,7 +22,7 @@ const parseArticles = (articles) => {
         result.push(parseArticle(article));
     });
     return result;
-}
+};
 
 const getAllNews = async (userId, page, limit) => {
     const user = await userStorage.getById(userId);
@@ -54,7 +54,7 @@ const getAll = async () => {
 
 const getById = async (articleId) => {
     return await articleStorage.getById(articleId);
-}
+};
 
 const getWholeArticleById = async (articleId, userId) => {
     const user = await userStorage.getById(userId);
@@ -70,21 +70,19 @@ const getWholeArticleById = async (articleId, userId) => {
     throw new NotFoundException("Article not found");
 };
 
-const addArticle = async (userId, text, visibilityId, fileData) => {
+const add = async (article, fileData) => {
     let path = null;
     if (fileData) {
         path = fileHelper.getUrlPath(fileData);
     }
     const id = await storage.create({
-        user_id: userId,
-        text,
-        visibility_id: visibilityId,
+        ...article,
         image: path,
     });
     return parseArticle(await storage.getWholeArticleById(id[0]));
 };
 
-const updateArticle = async (articleId, text, visibilityId, fileData, errorHandler) => {
+const update = async (articleId, text, visibilityId, fileData, errorHandler) => {
     let path = null;
     if (fileData) {
         const {image: oldFile} = await storage.getImageByArticleId(articleId);
@@ -97,13 +95,13 @@ const updateArticle = async (articleId, text, visibilityId, fileData, errorHandl
         image: path,
     });
     return parseArticle(await storage.getWholeArticleById(articleId));
-}
+};
 
-const deleteArticle = async (articleId, errorHandler) => {
+const _delete = async (articleId, errorHandler) => {
     const {image} = await storage.getImageByArticleId(articleId);
     fileHelper.deleteFile(image, errorHandler);
     return await storage.delete(articleId);
-}
+};
 
 module.exports = {
     getAllNews,
@@ -112,8 +110,8 @@ module.exports = {
     getNewsAmountByUserId,
     getAll,
     getWholeArticleById,
-    addArticle,
-    updateArticle,
-    deleteArticle,
+    add,
+    update,
+    delete: _delete,
     getById
 };

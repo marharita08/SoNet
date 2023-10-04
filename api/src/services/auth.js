@@ -55,7 +55,7 @@ const loginOrSignUp = async (email, password) => {
         throw new UnauthorizedException("Wrong password");
     }
     return createTokens(user);
-}
+};
 
 const refresh = async (refreshToken) => {
     const session = await sessionStorage.getByToken(refreshToken);
@@ -72,15 +72,15 @@ const refresh = async (refreshToken) => {
         }
     }
     throw new UnauthorizedException();
-}
+};
 
 const logout = async (refreshToken) => {
     return await sessionStorage.deleteByToken(refreshToken);
-}
+};
 
 module.exports = {
     createTokens,
     loginOrSignUp,
     refresh,
     logout
-}
+};

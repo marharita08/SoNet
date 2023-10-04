@@ -1,12 +1,12 @@
 const router = require("express").Router();
 const upload = require("../configs/multerConfig");
 const asyncHandler = require("../middleware/asyncHandler");
-const commentStorage = require("../db/comments/storage");
 const likeStorage = require("../db/likes/storage");
 const authMiddleware = require("../middleware/authMiddleware");
 const aclMiddleware = require("../middleware/aclMiddleware");
 const validationMiddleware = require("../middleware/validationMiddleware");
 const articlesService = require("../services/articles");
+const commentsService = require("../services/comments");
 
 router.get(
     "/all-news",
@@ -14,7 +14,7 @@ router.get(
     asyncHandler(async (req, res) => {
         const {user_id: userId} = req.auth;
         const {page, limit} = req.query;
-        return res.send(await articlesService.getAllNews(+userId, +page, +limit));
+        res.send(await articlesService.getAllNews(+userId, +page, +limit));
     })
 );
 
@@ -23,7 +23,7 @@ router.get(
     authMiddleware,
     asyncHandler(async (req, res) => {
         const {user_id: userId} = req.auth;
-        return res.send(await articlesService.getAllNewsAmount(+userId));
+        res.send(await articlesService.getAllNewsAmount(+userId));
     })
 );
 
@@ -33,7 +33,7 @@ router.get(
     asyncHandler(async (req, res) => {
         const {user_id: userId} = req.auth;
         const {page, limit} = req.query;
-        return res.send(await articlesService.getNewsByUserId(+userId, +page, +limit));
+        res.send(await articlesService.getNewsByUserId(+userId, +page, +limit));
     })
 );
 
@@ -42,7 +42,7 @@ router.get(
     authMiddleware,
     asyncHandler(async (req, res) => {
         const {user_id: userId} = req.auth;
-        return res.send(await articlesService.getNewsAmountByUserId(+userId));
+        res.send(await articlesService.getNewsAmountByUserId(+userId));
     })
 );
 
@@ -75,12 +75,11 @@ router.post(
     }),
     asyncHandler(async (req, res) => {
         const {
-            user_id: userID,
-            text,
-            visibility: {value: visibilityID},
+            visibility: {value: visibilityId},
+            ...rest
         } = req.body;
         const fileData = req.file;
-        return res.send(await articlesService.addArticle(userID, text, visibilityID, fileData));
+        return res.send(await articlesService.add({visibility_id: visibilityId, ...rest}, fileData));
     })
 );
 
@@ -108,7 +107,7 @@ router.put(
         } = req.body;
         const {id: articleId} = req.params;
         const fileData = req.file;
-        return res.send(articlesService.updateArticle(+articleId, text, visibilityId, fileData, next));
+        res.send(articlesService.update(+articleId, text, visibilityId, fileData, next));
     })
 );
 
@@ -126,7 +125,7 @@ router.delete(
     ]),
     asyncHandler(async (req, res, next) => {
         const {id: articleId} = req.params;
-        await articlesService.deleteArticle(+articleId, next);
+        await articlesService.delete(+articleId, next);
         res.sendStatus(204);
     })
 );
@@ -135,8 +134,8 @@ router.get(
     "/:id/comments",
     authMiddleware,
     asyncHandler(async (req, res) => {
-        const id = parseInt(req.params.id, 10);
-        res.send(await commentStorage.getFullDataByArticleId(id));
+        const {id} = req.params;
+        res.send(await commentsService.getByArticleId(+id));
     })
 );
 
@@ -144,8 +143,8 @@ router.get(
     "/:id/comments-count",
     authMiddleware,
     asyncHandler(async (req, res) => {
-        const id = parseInt(req.params.id, 10);
-        res.send(await commentStorage.getAmountByArticleId(id));
+        const {id} = req.params;
+        res.send(await commentsService.getAmountByArticleId(id));
     })
 );
 
