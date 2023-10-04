@@ -24,18 +24,18 @@ const parseArticles = (articles) => {
     return result;
 }
 
-const getAllNews = async (userId, page, limit, errorHandler) => {
+const getAllNews = async (userId, page, limit) => {
     const user = await userStorage.getById(userId);
     if (user.role !== "admin") {
-        return errorHandler(new ForbiddenException());
+        throw new ForbiddenException();
     }
     return parseArticles(await articleStorage.getAllNews(page, limit));
 };
 
-const getAllNewsAmount = async (userId, errorHandler) => {
+const getAllNewsAmount = async (userId) => {
     const user = await userStorage.getById(userId);
     if (user.role !== "admin") {
-        return errorHandler(new ForbiddenException());
+        throw new ForbiddenException();
     }
     return await articleStorage.getCountOfAllNews();
 };
@@ -56,7 +56,7 @@ const getById = async (articleId) => {
     return await articleStorage.getById(articleId);
 }
 
-const getWholeArticleById = async (articleId, userId, errorHandler) => {
+const getWholeArticleById = async (articleId, userId) => {
     const user = await userStorage.getById(userId);
     let dbResponse;
     if (user.role === "admin") {
@@ -67,7 +67,7 @@ const getWholeArticleById = async (articleId, userId, errorHandler) => {
     if (dbResponse) {
         return [parseArticle(dbResponse)];
     }
-    return errorHandler(new NotFoundException("Article not found"));
+    throw new NotFoundException("Article not found");
 };
 
 const addArticle = async (userId, text, visibilityId, fileData) => {

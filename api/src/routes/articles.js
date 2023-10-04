@@ -11,19 +11,19 @@ const articlesService = require("../services/articles");
 router.get(
     "/all-news",
     authMiddleware,
-    asyncHandler(async (req, res, next) => {
+    asyncHandler(async (req, res) => {
         const {user_id: userId} = req.auth;
         const {page, limit} = req.query;
-        return res.send(await articlesService.getAllNews(+userId, +page, +limit, next));
+        return res.send(await articlesService.getAllNews(+userId, +page, +limit));
     })
 );
 
 router.get(
     "/all-news/amount",
     authMiddleware,
-    asyncHandler(async (req, res, next) => {
+    asyncHandler(async (req, res) => {
         const {user_id: userId} = req.auth;
-        return res.send(await articlesService.getAllNewsAmount(+userId, next));
+        return res.send(await articlesService.getAllNewsAmount(+userId));
     })
 );
 
@@ -57,10 +57,10 @@ router.get(
 router.get(
     "/:id",
     authMiddleware,
-    asyncHandler(async (req, res, next) => {
+    asyncHandler(async (req, res) => {
         const {id: articleId} = req.params;
         const {user_id: userId} = req.auth;
-        return res.send(await articlesService.getWholeArticleById(+articleId, +userId, next));
+        return res.send(await articlesService.getWholeArticleById(+articleId, +userId));
     })
 );
 
