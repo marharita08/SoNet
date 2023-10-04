@@ -1,13 +1,13 @@
-const commentStorage = require("../db/comments/storage");
+const commentsStorage = require("../db/comments/storage");
 const NotFoundException = require("../errors/NotFoundException");
 const db = require("../configs/db");
 
 const getAll = async () => {
-    return await commentStorage.getAll();
+    return await commentsStorage.getAll();
 };
 
 const getById = async (commentId) => {
-    const comment = await commentStorage.getById(commentId);
+    const comment = await commentsStorage.getById(commentId);
     if (comment[0]) {
         return comment;
     }
@@ -17,37 +17,37 @@ const getById = async (commentId) => {
 const add = async (comment) => {
     let id;
     await db.transaction(async () => {
-        id = await commentStorage.create(comment);
+        id = await commentsStorage.create(comment);
         let path;
         if (comment.path === "") {
             path = id[0];
         } else {
             path = `${comment.path}.${id[0]}`;
         }
-        await commentStorage.update(id[0], {
+        await commentsStorage.update(id[0], {
             path,
         });
     });
-    return {comment: await commentStorage.getFullDataById(id[0])};
+    return {comment: await commentsStorage.getFullDataById(id[0])};
 };
 
 const update = async (commentId, text) => {
-    await commentStorage.update(commentId, {
+    await commentsStorage.update(commentId, {
         text,
     });
     return {comment: {comment_id: commentId, text}};
 };
 
 const _delete = async (commentId) => {
-    return await commentStorage.delete(commentId);
+    return await commentsStorage.delete(commentId);
 };
 
 const getByArticleId = async (articleId) => {
-    return await commentStorage.getFullDataByArticleId(articleId);
+    return await commentsStorage.getFullDataByArticleId(articleId);
 };
 
 const getAmountByArticleId = async (articleId) => {
-    return await commentStorage.getAmountByArticleId(articleId);
+    return await commentsStorage.getAmountByArticleId(articleId);
 };
 
 module.exports = {

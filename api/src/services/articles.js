@@ -1,8 +1,7 @@
-const userStorage = require("../db/users/storage");
+const usersStorage = require("../db/users/storage");
 const ForbiddenException = require("../errors/ForbiddenException");
-const articleStorage = require("../db/articles/storage");
+const articlesStorage = require("../db/articles/storage");
 const NotFoundException = require("../errors/NotFoundException");
-const storage = require("../db/articles/storage");
 const fileHelper = require("../utils/fileHelper");
 
 const parseArticle = (article) => {
@@ -25,44 +24,44 @@ const parseArticles = (articles) => {
 };
 
 const getAllNews = async (userId, page, limit) => {
-    const user = await userStorage.getById(userId);
+    const user = await usersStorage.getById(userId);
     if (user.role !== "admin") {
         throw new ForbiddenException();
     }
-    return parseArticles(await articleStorage.getAllNews(page, limit));
+    return parseArticles(await articlesStorage.getAllNews(page, limit));
 };
 
 const getAllNewsAmount = async (userId) => {
-    const user = await userStorage.getById(userId);
+    const user = await usersStorage.getById(userId);
     if (user.role !== "admin") {
         throw new ForbiddenException();
     }
-    return await articleStorage.getCountOfAllNews();
+    return await articlesStorage.getCountOfAllNews();
 };
 
 const getNewsByUserId = async (userId, page, limit) => {
-    return parseArticles(await articleStorage.getNewsByUserId(userId, page, limit));
+    return parseArticles(await articlesStorage.getNewsByUserId(userId, page, limit));
 };
 
 const getNewsAmountByUserId = async (userId) => {
-    return await articleStorage.getCountOfNewsByUserId(userId);
+    return await articlesStorage.getCountOfNewsByUserId(userId);
 };
 
 const getAll = async () => {
-    return await articleStorage.getAll();
+    return await articlesStorage.getAll();
 };
 
 const getById = async (articleId) => {
-    return await articleStorage.getById(articleId);
+    return await articlesStorage.getById(articleId);
 };
 
 const getWholeArticleById = async (articleId, userId) => {
-    const user = await userStorage.getById(userId);
+    const user = await usersStorage.getById(userId);
     let dbResponse;
     if (user.role === "admin") {
-        dbResponse = await articleStorage.getWholeArticleById(articleId);
+        dbResponse = await articlesStorage.getWholeArticleById(articleId);
     } else {
-        dbResponse = await articleStorage.getByIdAndUserId(articleId, userId);
+        dbResponse = await articlesStorage.getByIdAndUserId(articleId, userId);
     }
     if (dbResponse) {
         return [parseArticle(dbResponse)];
@@ -75,32 +74,32 @@ const add = async (article, fileData) => {
     if (fileData) {
         path = fileHelper.getUrlPath(fileData);
     }
-    const id = await storage.create({
+    const id = await articlesStorage.create({
         ...article,
         image: path,
     });
-    return parseArticle(await storage.getWholeArticleById(id[0]));
+    return parseArticle(await articlesStorage.getWholeArticleById(id[0]));
 };
 
 const update = async (articleId, text, visibilityId, fileData, errorHandler) => {
     let path = null;
     if (fileData) {
-        const {image: oldFile} = await storage.getImageByArticleId(articleId);
+        const {image: oldFile} = await articlesStorage.getImageByArticleId(articleId);
         path = fileHelper.getUrlPath(fileData);
         fileHelper.deleteFile(oldFile, errorHandler);
     }
-    await storage.update(articleId, {
+    await articlesStorage.update(articleId, {
         text,
         visibility_id: visibilityId,
         image: path,
     });
-    return parseArticle(await storage.getWholeArticleById(articleId));
+    return parseArticle(await articlesStorage.getWholeArticleById(articleId));
 };
 
 const _delete = async (articleId, errorHandler) => {
-    const {image} = await storage.getImageByArticleId(articleId);
+    const {image} = await articlesStorage.getImageByArticleId(articleId);
     fileHelper.deleteFile(image, errorHandler);
-    return await storage.delete(articleId);
+    return await articlesStorage.delete(articleId);
 };
 
 module.exports = {
