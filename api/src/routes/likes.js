@@ -18,7 +18,7 @@ router.get(
     asyncHandler(async (req, res) => {
         const {user_id: userId} = req.auth;
         const {article_id: articleId} = req.params;
-        res.send(likesService.isLiked(articleId, userId));
+        res.send(await likesService.isLiked(articleId, userId));
     })
 );
 
