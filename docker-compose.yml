@@ -20,6 +20,7 @@ services:
       context: api
       dockerfile: Dockerfile-token-cleaner
     container_name: network-token-cleaner
+    restart: always
     depends_on:
       - db
     environment:
