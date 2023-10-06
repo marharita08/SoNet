@@ -17,8 +17,8 @@ const parseArticle = (article) => {
 
 const parseArticles = (articles) => {
     const result = [];
-    Object.keys(articles).forEach((article) => {
-        result.push(parseArticle(article));
+    Object.keys(articles).forEach((key) => {
+        result.push(parseArticle(articles[key]));
     });
     return result;
 };

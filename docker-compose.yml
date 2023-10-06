@@ -1,0 +1,80 @@
+version: '3.5'
+
+services:
+  db:
+    image: postgres:14
+    container_name: network-db
+    restart: always
+    environment:
+      POSTGRES_HOST: ${DB_HOST}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_DATABASE}
+    volumes:
+      - ./api/tmp/db_data:/var/lib/postgresql/data
+      - ./api/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - ${DB_HOST_PORT}:${DB_CONTAINER_PORT}
+  token-cleaner:
+    build:
+      context: api
+      dockerfile: Dockerfile-token-cleaner
+    container_name: network-token-cleaner
+    restart: always
+    depends_on:
+      - db
+    environment:
+      PGHOST: ${DB_HOST}
+      PGUSER: ${DB_USER}
+      PGPASSWORD: ${DB_PASSWORD}
+      PGDATABASE: ${DB_DATABASE}
+      PGPORT: ${DB_HOST_PORT}
+    volumes:
+      - ./api/tmp/log/cron.log:/var/log/cron.log
+  adminer:
+    image: adminer
+    container_name: network-adminer
+    restart: always
+    ports:
+      - ${ADMINER_HOST_PORT}:${ADMINER_CONTAINER_PORT}
+    depends_on:
+      - db
+  api:
+    image: node:12
+    container_name: network-api
+    working_dir: /api
+    env_file:
+      - ./api/.env
+    volumes:
+      - ./api/:/api/
+    ports:
+      - ${API_HOST_PORT}:${API_CONTAINER_PORT}
+    depends_on:
+      - db
+    environment:
+      DB_HOST: ${DB_HOST}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_DATABASE: ${DB_DATABASE}
+      DB_HOST_PORT: ${DB_HOST_PORT}
+      APP_HOST_PORT: ${API_HOST_PORT}
+      APP_CONTAINER_PORT: ${API_CONTAINER_PORT}
+      APP_URL: ${API_URL}
+      GOOGLE_API_CLIENT_ID: ${GOOGLE_API_CLIENT_ID}
+      FACEBOOK_API_CLIENT_ID: ${FACEBOOK_API_CLIENT_ID}
+    command: "npm run start:dev"
+  front:
+    image: node:12
+    container_name: network-front
+    working_dir: /front
+    volumes:
+      - ./front/:/front/
+    ports:
+      - ${FRONT_HOST_PORT}:${FRONT_CONTAINER_PORT}
+    depends_on:
+      - api
+    environment:
+      REACT_APP_API_URL: ${API_URL}
+      REACT_APP_GOOGLE_API_CLIENT_ID: ${GOOGLE_API_CLIENT_ID}
+      REACT_APP_FACEBOOK_API_CLIENT_ID: ${FACEBOOK_API_CLIENT_ID}
+    command: "npm start"

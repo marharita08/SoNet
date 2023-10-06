@@ -19,7 +19,7 @@ router.get(
     authMiddleware,
     asyncHandler(async (req, res) => {
         const {id} = req.params;
-        res.send(usersService.getProfileById(+id));
+        res.send(await usersService.getProfileById(+id));
     })
 );
 
@@ -128,8 +128,8 @@ router.get(
     "/:id/friends",
     authMiddleware,
     asyncHandler(async (req, res) => {
-        const id = parseInt(req.params.id, 10);
-        res.send(await usersService.getFriends(id));
+        const {id} = req.params;
+        res.send(await usersService.getFriends(+id));
     })
 );
 
@@ -137,8 +137,8 @@ router.get(
     "/:id/incoming-requests",
     authMiddleware,
     asyncHandler(async (req, res) => {
-        const id = parseInt(req.params.id, 10);
-        res.send(await usersService.getIncomingRequests(id));
+        const {id} = req.params;
+        res.send(await usersService.getIncomingRequests(+id));
     })
 );
 
@@ -146,16 +146,16 @@ router.get(
     "/:id/outgoing-requests",
     authMiddleware,
     asyncHandler(async (req, res) => {
-        const id = parseInt(req.params.id, 10);
-        res.send(await usersService.getOutgoingRequests(id));
+        const {id} = req.params;
+        res.send(await usersService.getOutgoingRequests(+id));
     })
 );
 
 router.get(
     "/:id/search",
     asyncHandler(async (req, res) => {
-        const id = parseInt(req.params.id, 10);
-        res.send(await usersService.getAllForSearch(id));
+        const {id} = req.params;
+        res.send(await usersService.getAllForSearch(+id));
     })
 );
 

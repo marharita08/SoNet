@@ -8,6 +8,7 @@ const fullDataColumns = [
     fullColumns.articles.text,
     fullColumns.articles.image,
     db.raw(createdAt),
+    fullColumns.articles.visibilityId,
     fullColumns.users.userId,
     fullColumns.users.name,
     fullColumns.users.avatar,
@@ -90,24 +91,29 @@ module.exports = {
     getCountOfAllNews: async () => db(tables.articles).count(fullColumns.articles.articleId).first(),
     getCountOfNewsByUserId: async (userId) =>
         db
-            .select(fullColumns.articles.articleId)
-            .from(tables.articles)
-            .join(tables.friends, function () {
-                this.on(fullColumns.users.userId, fullColumns.friends.fromUserId)
-                    .andOn(fullColumns.friends.toUserId, userId)
-                    .orOn(fullColumns.users.userId, fullColumns.friends.toUserId)
-                    .andOn(fullColumns.friends.fromUserId, userId);
-            })
-            .join(tables.status, function () {
-                this.on(fullColumns.status.statusId, fullColumns.friends.statusId).andOnVal(fullColumns.status.status, status.accepted);
-            })
-            .join(tables.articleVisibilities, function () {
-                this.on(fullColumns.articleVisibilities.visibilityId, fullColumns.articles.visibilityId).andOnIn(
-                    fullColumns.articleVisibilities.visibility,
-                    [articleVisibilities.all, articleVisibilities.friends]
-                );
-            })
-            .unionAll(function () {
-                this.select(fullColumns.articles.articleId).from(tables.articles).where(fullColumns.articles.userId, userId);
-            }).count(shortColumns.articles.articleId).first(),
+            .count(shortColumns.articles.articleId)
+            .first()
+            .from({
+                main: db
+                    .select(fullColumns.articles.articleId)
+                    .from(tables.articles)
+                    .join(tables.friends, function () {
+                        this.on(fullColumns.articles.userId, fullColumns.friends.fromUserId)
+                            .andOn(fullColumns.friends.toUserId, userId)
+                            .orOn(fullColumns.articles.userId, fullColumns.friends.toUserId)
+                            .andOn(fullColumns.friends.fromUserId, userId);
+                    })
+                    .join(tables.status, function () {
+                        this.on(fullColumns.status.statusId, fullColumns.friends.statusId).andOnVal(fullColumns.status.status, status.accepted);
+                    })
+                    .join(tables.articleVisibilities, function () {
+                        this.on(fullColumns.articleVisibilities.visibilityId, fullColumns.articles.visibilityId).andOnIn(
+                            fullColumns.articleVisibilities.visibility,
+                            [articleVisibilities.all, articleVisibilities.friends]
+                        );
+                    })
+                    .unionAll(function () {
+                        this.select(fullColumns.articles.articleId).from(tables.articles).where(fullColumns.articles.userId, userId);
+                    }),
+            }),
 };
