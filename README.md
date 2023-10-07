@@ -122,6 +122,11 @@ Then, connect to the database using the credentials specified in the .env file.
 
 ## Examples of usage
 
+<video  width="640" height="360" controls>
+  <source src="gifs/login.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+
 Login/Sign up
 
 ![Login](gifs/login.gif)
