@@ -37,12 +37,12 @@ export const useStyles = makeStyles(theme => ({
         }
     },
     logo: {
-        height: "50px"
+        height: "38px"
     },
     logoContainer: {
         justifySelf: "self-start",
         alignSelf: "center",
-        width: "45px",
+        width: "48px",
         overflow: "hidden",
         [theme.breakpoints.up("md")]: {
             width: "auto"

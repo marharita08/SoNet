@@ -1,6 +1,6 @@
-# Social Network
+# SoNet
 
-This repository contains the code for a prototype of a social network web application. The backend of the application is built using the Express.js framework, while the frontend is built using React. The database used is PostgreSQL. Both the backend and the database are deployed in Docker containers.
+The SoNet a prototype of a social network web application. The backend of the application is built using the Express.js framework, while the frontend is built using React. The database used is PostgreSQL. The frontend, the backend and the database are deployed in Docker containers.
 
 ## Features
 The application provides the following features:
@@ -66,7 +66,7 @@ Refer to the [Facebook for Developers documentation](https://developers.facebook
 
 ## Installation
 
-Clone this repository: `git clone https://github.com/marharita08/Social-Network-MindKDevCamp`.
+Clone this repository: `git clone https://github.com/marharita08/SoNet`.
 
 To install the required libraries, simply execute the following files depending on your OS:
   - `install_api.cmd` or `install_api.sh`
