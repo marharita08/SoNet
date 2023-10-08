@@ -124,12 +124,8 @@ Then, connect to the database using the credentials specified in the .env file.
 
 Login/Sign up
 
-<video width="640" height="360" controls>
-  <source src="gifs/login-min.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
-
 ![Login1](gifs/login.gif)
+![Login](gifs/login1.0.gif)
 
 Article
 
