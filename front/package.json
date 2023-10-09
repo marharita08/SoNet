@@ -16,6 +16,7 @@
     "formik": "^2.2.9",
     "formik-mui": "^4.0.0-alpha.3",
     "moment": "^2.29.3",
+    "nodemon": "^3.0.1",
     "object-to-formdata": "^4.4.1",
     "prop-types": "^15.8.1",
     "query-string": "^7.1.1",
@@ -32,7 +33,7 @@
     "yup": "^0.32.11"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "nodemon --exec 'react-scripts start'",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

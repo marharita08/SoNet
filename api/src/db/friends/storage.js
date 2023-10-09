@@ -3,8 +3,8 @@ const {shortColumns, tables} = require("../dbSchema");
 const {friends, users} = shortColumns;
 
 module.exports = {
-    create: (friends) => db(tables.friends).insert(friends).returning(friends.requestId),
-    update: (friends, id) => db(tables.friends).update(friends).where(friends.requestId, id),
+    create: (request) => db(tables.friends).insert(request).returning(friends.requestId),
+    update: (request, id) => db(tables.friends).update(request).where(friends.requestId, id),
     delete: (id) => db(tables.friends).delete().where(friends.requestId, id),
     getByUsersId: (userID, currentUserID) =>
         db(tables.friends)

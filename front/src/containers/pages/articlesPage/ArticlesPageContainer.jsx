@@ -8,6 +8,7 @@ import {getAllNews, getNews, getCountOfNews, getCountOfAllNews} from "../../../a
 import {articlesPropTypes} from "../../../propTypes/articlePropTypes";
 import ArticlesPageComponent from "../../../components/pages/articlesPage/ArticlesPageComponent";
 import {refetchOff} from "../../../config/refetchOff";
+import NavigateFabContainer from "../../layouts/navigateFab/NavigateFabContainer";
 
 
 const ArticlesPageContainer = ({setArticleContext, param, articles, setArticles}) => {
@@ -58,16 +59,21 @@ const ArticlesPageContainer = ({setArticleContext, param, articles, setArticles}
         <>
             <ArticlesPageComponent
                 articlesComponent={
-                    articles?.map((article) =>
-                        <ErrorBoundary key={article.article_id}>
-                            <ArticleCardContainer
-                                setArticleContext={setArticleContext}
-                                article={article}
-                                articles={articles}
-                                setArticles={setArticles}
-                            />
-                        </ErrorBoundary>
-                    )
+                    <>
+                        {
+                            articles?.map((article) =>
+                                <ErrorBoundary key={article.article_id}>
+                                    <ArticleCardContainer
+                                        setArticleContext={setArticleContext}
+                                        article={article}
+                                        articles={articles}
+                                        setArticles={setArticles}
+                                    />
+                                </ErrorBoundary>
+                            )
+                        }
+                        <NavigateFabContainer/>
+                    </>
                 }
                 isArticlesFetching={isArticlesFetching}
                 isCountFetching={isCountFetching}

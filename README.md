@@ -1,6 +1,6 @@
-# Social Network
+# SoNet
 
-This repository contains the code for a prototype of a social network web application. The backend of the application is built using the Express.js framework, while the frontend is built using React. The database used is PostgreSQL. Both the backend and the database are deployed in Docker containers.
+The SoNet a prototype of a social network web application. The backend of the application is built using the Express.js framework, while the frontend is built using React. The database used is PostgreSQL. The frontend, the backend and the database are deployed in Docker containers.
 
 ## Features
 The application provides the following features:
@@ -66,7 +66,7 @@ Refer to the [Facebook for Developers documentation](https://developers.facebook
 
 ## Installation
 
-Clone this repository: `git clone https://github.com/marharita08/Social-Network-MindKDevCamp`.
+Clone this repository: `git clone https://github.com/marharita08/SoNet`.
 
 To install the required libraries, simply execute the following files depending on your OS:
   - `install_api.cmd` or `install_api.sh`
@@ -122,38 +122,50 @@ Then, connect to the database using the credentials specified in the .env file.
 
 ## Examples of usage
 
-Login/Sign up
+### Login/Sign up
 
 ![Login](gifs/login.gif)
 
-Article
+### Login with Google
+
+![Login with Google](gifs/login-with-google.gif)
+
+### Reset password
+
+![Reset password](gifs/reset-password.gif)
+
+### Article
 
 ![Article](gifs/article.gif)
 
-Comments
+### Comments
 
 ![Comments](gifs/comments.gif)
 
-Add article
+### Add article
 
-![Add article](gifs/add_article.gif)
+![Add article](gifs/add-article.gif)
 
-Profile
+### Profile
 
 ![Profile](gifs/profile.gif)
 
-Manage friends and friend requests
+### Manage friends and friend requests
 
-![Friends](gifs/friends.gif)
+![Friends](gifs/requests.gif)
 
-Search Users
+### Search Users
 
 ![Search users](gifs/search.gif)
 
-Profile on smartphone
+### Profile on smartphone
 
-![Profile](gifs/profile_smartphone.gif)
+<div align="center">
+    <img src="gifs/profile-smartphone.gif" width="350" alt="Profile on smartphone"/>
+</div>
 
-Articles on smartphone
+### Articles on smartphone
 
-![Articles](gifs/articles_smartphone.gif)
+<div align="center">
+    <img src="gifs/articles-smartphone.gif" width="350" alt="Articles on smartphone"/>
+</div>

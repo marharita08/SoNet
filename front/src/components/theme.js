@@ -61,6 +61,11 @@ theme = createTheme(theme, {
         "&:last-child": {
             paddingBottom: theme.spacing(3)
         }
+    },
+    navigateFab: {
+        position: "sticky",
+        bottom: theme.spacing(2),
+        left: "calc(100% - (100%/6))"
     }
 })
 

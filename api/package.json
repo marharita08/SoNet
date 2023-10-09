@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/marharita08/my_project.git"
+    "url": "git+https://github.com/marharita08/SoNet.git"
   },
   "author": "marharita08",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/marharita08/my_project/issues"
+    "url": "https://github.com/marharita08/SoNet/issues"
   },
-  "homepage": "https://github.com/marharita08/my_project#readme",
+  "homepage": "https://github.com/marharita08/SoNet#readme",
   "dependencies": {
     "body-parser": "^1.19.1",
     "cors": "^2.8.5",
