@@ -160,8 +160,12 @@ Then, connect to the database using the credentials specified in the .env file.
 
 ### Profile on smartphone
 
-![Profile](gifs/profile-smartphone.gif)
+<div align="center">
+    <img src="gifs/profile-smartphone.gif" width="350" alt="Profile on smartphone"/>
+</div>
 
 ### Articles on smartphone
 
-![Articles](gifs/articles-smartphone.gif)
+<div align="center">
+    <img src="gifs/articles-smartphone.gif" width="350" alt="Articles on smartphone"/>
+</div>
