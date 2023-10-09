@@ -8,7 +8,7 @@ const getAll = async () => {
 
 const getById = async (commentId) => {
     const comment = await commentsStorage.getById(commentId);
-    if (comment[0]) {
+    if (comment) {
         return comment;
     }
     throw new NotFoundException("Comment not found");

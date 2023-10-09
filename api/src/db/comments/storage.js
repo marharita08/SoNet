@@ -13,7 +13,7 @@ function commentFullData() {
             `ch.${comments.path}`,
             `ch.${comments.level}`,
             db.raw(
-                `ch.${comments.commentedAt}::timestamp AT TIME ZONE 'Europe/Kiev' as ${comments.commentedAt}`
+                `ch.${comments.commentedAt} as ${comments.commentedAt}`
             ),
             `chu.${users.name}`,
             `chu.${users.avatar}`,

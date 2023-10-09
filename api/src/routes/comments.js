@@ -48,7 +48,8 @@ router.post(
         ],
     }),
     asyncHandler(async (req, res) => {
-        res.send(await commentsService.add(req.body));
+        const {to, parent_text, ...comment} = req.body;
+        res.send(await commentsService.add(comment));
     })
 );
 

@@ -1,7 +1,7 @@
 const db = require("../../configs/db");
 const {tables, fullColumns, shortColumns, status, articleVisibilities} = require("../dbSchema");
 
-const createdAt = `to_char(${fullColumns.articles.createdAt}, 'DD.MM.YYYY HH24:MI:SS') as ${shortColumns.articles.createdAt}`;
+const createdAt = `to_char(${fullColumns.articles.createdAt} AT TIME ZONE 'UTC' AT TIME ZONE 'Europe/Kiev', 'DD.MM.YYYY HH24:MI:SS') as ${shortColumns.articles.createdAt}`;
 
 const fullDataColumns = [
     fullColumns.articles.articleId,

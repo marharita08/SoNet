@@ -122,39 +122,46 @@ Then, connect to the database using the credentials specified in the .env file.
 
 ## Examples of usage
 
-Login/Sign up
+### Login/Sign up
 
-![Login1](gifs/login.gif)
-![Login](gifs/login1.0.gif)
+![Login](gifs/login.gif)
 
-Article
+### Login with Google
+
+![Login with Google](gifs/login-with-google.gif)
+
+### Reset password
+
+![Reset password](gifs/reset-password.gif)
+
+### Article
 
 ![Article](gifs/article.gif)
 
-Comments
+### Comments
 
 ![Comments](gifs/comments.gif)
 
-Add article
+### Add article
 
-![Add article](gifs/add_article.gif)
+![Add article](gifs/add-article.gif)
 
-Profile
+### Profile
 
 ![Profile](gifs/profile.gif)
 
-Manage friends and friend requests
+### Manage friends and friend requests
 
-![Friends](gifs/friends.gif)
+![Friends](gifs/requests.gif)
 
-Search Users
+### Search Users
 
 ![Search users](gifs/search.gif)
 
-Profile on smartphone
+### Profile on smartphone
 
-![Profile](gifs/profile_smartphone.gif)
+![Profile](gifs/profile-smartphone.gif)
 
-Articles on smartphone
+### Articles on smartphone
 
-![Articles](gifs/articles_smartphone.gif)
+![Articles](gifs/articles-smartphone.gif)

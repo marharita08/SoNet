@@ -27,8 +27,8 @@ const resetPassword = async (email) => {
     const mailOptions = {
         from: mailFrom,
         to: email,
-        subject: "Reset password for Social Network",
-        html: `To change your password for Social Network use this <a href="${resetLink}">link</a>.`
+        subject: "Reset password for SoNet",
+        html: `To change your password for SoNet use this <a href="${resetLink}">link</a>.`
     };
 
     await transporter.sendMail(mailOptions);
@@ -52,8 +52,8 @@ const saveNewPassword = async (token, password) => {
     const mailOptions = {
         from: mailFrom,
         to: user.email,
-        subject: "Reset password for Social Network",
-        text: "Your password for Social Network has been changed successfully."
+        subject: "Reset password for SoNet",
+        text: "Your password for SoNet has been changed successfully."
     };
 
     await transporter.sendMail(mailOptions);
