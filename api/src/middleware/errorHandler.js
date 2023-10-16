@@ -8,12 +8,8 @@ const errorHandler = (logTable) => async (err, req, res, next) => {
     const type = err.type || "Server Exception";
     const statusCode = err.statusCode || 500;
     const ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress;
-    const date = new Date().toLocaleString("ua", {
-        timeZone: "Europe/Kiev",
-    });
     await db(logTable).insert({
         ip,
-        date,
         status,
         status_code: statusCode,
         type,

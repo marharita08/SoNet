@@ -110,7 +110,7 @@ values ('Sumy State University'),
 create table if not exists logger(
  id          serial primary key,
  ip          varchar(30),
- date        timestamp not null,
+ date        timestamp not null default now(),
  type        varchar(30),
  status      varchar(6) not null,
  status_code smallint,
