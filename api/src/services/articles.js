@@ -3,6 +3,7 @@ const ForbiddenException = require("../errors/ForbiddenException");
 const articlesStorage = require("../db/articles/storage");
 const NotFoundException = require("../errors/NotFoundException");
 const fileHelper = require("../utils/fileHelper");
+const {ARTICLE_NOT_FOUND} = require("../constants/errorMessages");
 
 const parseArticle = (article) => {
     const {visibility, visibility_id: visibilityId, ...rest} = article;
@@ -66,7 +67,7 @@ const getWholeArticleById = async (articleId, userId) => {
     if (dbResponse) {
         return [parseArticle(dbResponse)];
     }
-    throw new NotFoundException("Article not found");
+    throw new NotFoundException(ARTICLE_NOT_FOUND);
 };
 
 const add = async (article, fileData) => {

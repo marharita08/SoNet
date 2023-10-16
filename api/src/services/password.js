@@ -6,6 +6,7 @@ const transporter = require("../configs/transporterConfig");
 const config = require("../configs/config");
 const ForbiddenException = require("../errors/ForbiddenException");
 const passwordHasher = require("../utils/passwordHasher");
+const {USER_NOT_FOUND, TOKEN_NOT_FOUND, EXPIRED_TOKEN} = require("../constants/errorMessages");
 
 const {mailFrom, salt, resetPasswordUrl} = config;
 
@@ -13,7 +14,7 @@ const resetPassword = async (email) => {
     const user = await usersStorage.getByEmail(email);
 
     if (!user) {
-        throw new NotFoundException("User not found");
+        throw new NotFoundException(USER_NOT_FOUND);
     }
 
     const token = uuidv4();
@@ -39,10 +40,10 @@ const saveNewPassword = async (token, password) => {
     const reset_password_token = await passwordStorage.getByToken(token);
 
     if (!reset_password_token) {
-        throw new NotFoundException("Token not found");
+        throw new NotFoundException(TOKEN_NOT_FOUND);
     }
     if (new Date() > new Date(reset_password_token.expires_on)) {
-        throw new ForbiddenException("Token has been expired");
+        throw new ForbiddenException(EXPIRED_TOKEN);
     }
 
     const user = await usersStorage.getById(reset_password_token.user_id);

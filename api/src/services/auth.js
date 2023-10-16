@@ -7,6 +7,7 @@ const userStorage = require("../db/users/storage");
 const passwordHasher = require("../utils/passwordHasher");
 const config = require("../configs/config");
 const settingsStorage = require("../db/settings/storage");
+const {WRONG_PASSWORD} = require("../constants/errorMessages");
 
 const createAccessToken = (user) =>
     jwt.sign({user_id: user.user_id, name: user.name}, appKey, {
@@ -52,7 +53,7 @@ const loginOrSignUp = async (email, password) => {
         await settingsStorage.create({user_id: id[0]});
         user = await userStorage.getByEmail(email);
     } else if (user.password !== hashedPassword) {
-        throw new UnauthorizedException("Wrong password");
+        throw new UnauthorizedException(WRONG_PASSWORD);
     }
     return createTokens(user);
 };

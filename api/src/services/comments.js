@@ -1,6 +1,7 @@
 const commentsStorage = require("../db/comments/storage");
 const NotFoundException = require("../errors/NotFoundException");
 const db = require("../configs/db");
+const {COMMENT_NOT_FOUND} = require("../constants/errorMessages");
 
 const getAll = async () => {
     return await commentsStorage.getAll();
@@ -11,7 +12,7 @@ const getById = async (commentId) => {
     if (comment) {
         return comment;
     }
-    throw new NotFoundException("Comment not found");
+    throw new NotFoundException(COMMENT_NOT_FOUND);
 };
 
 const add = async (comment) => {
