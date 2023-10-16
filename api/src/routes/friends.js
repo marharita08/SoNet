@@ -3,6 +3,7 @@ const asyncHandler = require("../middleware/asyncHandler");
 const authMiddleware = require("../middleware/authMiddleware");
 const validationMiddleware = require("../middleware/validationMiddleware");
 const friendsService = require("../services/friends");
+const {rules: validation} = require("../utils/validationRules");
 
 router.get(
     "/request/:user_id",
@@ -18,8 +19,8 @@ router.post(
     "/",
     authMiddleware,
     validationMiddleware({
-        from_user_id: [{name: "required"}],
-        to_user_id: [{name: "required"}],
+        from_user_id: validation.required,
+        to_user_id: validation.required,
     }),
     asyncHandler(async (req, res) => {
         res.send(await friendsService.add(req.body));
@@ -30,7 +31,7 @@ router.put(
     "/:id",
     authMiddleware,
     validationMiddleware({
-        status_id: [{name: "required"}],
+        status_id: validation.required,
     }),
     asyncHandler(async (req, res) => {
         const {status_id: statusID} = req.body;

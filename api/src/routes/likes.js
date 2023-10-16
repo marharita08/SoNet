@@ -3,6 +3,7 @@ const asyncHandler = require("../middleware/asyncHandler");
 const authMiddleware = require("../middleware/authMiddleware");
 const validationMiddleware = require("../middleware/validationMiddleware");
 const likesService = require("../services/likes");
+const {rules: validation} = require("../utils/validationRules");
 
 router.get(
     "/",
@@ -26,7 +27,7 @@ router.post(
     "/",
     authMiddleware,
     validationMiddleware({
-        article_id: [{name: "required"}],
+        article_id: validation.required,
     }),
     asyncHandler(async (req, res) => {
         const {article_id: articleId} = req.body;

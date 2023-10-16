@@ -5,6 +5,7 @@ const authMiddleware = require("../middleware/authMiddleware");
 const aclMiddleware = require("../middleware/aclMiddleware");
 const validationMiddleware = require("../middleware/validationMiddleware");
 const usersService = require("../services/users");
+const {rules: validation} = require("../utils/validationRules");
 
 router.get(
     "/",
@@ -38,39 +39,12 @@ router.put(
     upload.single("file"),
     validationMiddleware(
         {
-            email: [
-                {
-                    name: "required",
-                },
-                {
-                    name: "email",
-                },
-                {
-                    name: "max",
-                    value: 255,
-                },
-                {
-                    name: "unique",
-                },
-            ],
-            name: [
-                {
-                    name: "required",
-                },
-                {
-                    name: "max",
-                    value: 255,
-                },
-            ],
-            phone: [
-                {
-                    name: "regexp",
-                    value: /^\+380\d{9}$/,
-                },
-            ],
-            email_visibility: [{name: "required"}],
-            phone_visibility: [{name: "required"}],
-            university_visibility: [{name: "required"}],
+            email: validation.emailUpdate,
+            name: validation.name,
+            phone: validation.phone,
+            email_visibility: validation.required,
+            phone_visibility: validation.required,
+            university_visibility: validation.required,
         },
         {
             email: {

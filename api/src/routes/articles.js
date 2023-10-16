@@ -7,6 +7,7 @@ const validationMiddleware = require("../middleware/validationMiddleware");
 const articlesService = require("../services/articles");
 const commentsService = require("../services/comments");
 const likesService = require("../services/likes");
+const {rules: validation} = require("../utils/validationRules");
 
 router.get(
     "/all-news",
@@ -69,9 +70,9 @@ router.post(
     authMiddleware,
     upload.single("file"),
     validationMiddleware({
-        user_id: [{name: "required"}],
-        text: [{name: "required"}],
-        visibility: [{name: "required"}],
+        user_id: validation.required,
+        text: validation.required,
+        visibility: validation.required,
     }),
     asyncHandler(async (req, res) => {
         const {
@@ -97,8 +98,8 @@ router.put(
     ]),
     upload.single("file"),
     validationMiddleware({
-        text: [{name: "required"}],
-        visibility: [{name: "required"}],
+        text: validation.required,
+        visibility: validation.required,
     }),
     asyncHandler(async (req, res, next) => {
         const {

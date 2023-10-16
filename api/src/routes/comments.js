@@ -3,7 +3,8 @@ const asyncHandler = require("../middleware/asyncHandler");
 const authMiddleware = require("../middleware/authMiddleware");
 const aclMiddleware = require("../middleware/aclMiddleware");
 const validationMiddleware = require("../middleware/validationMiddleware");
-const commentsService = require("../services/comments")
+const commentsService = require("../services/comments");
+const {rules: validation} = require("../utils/validationRules");
 
 router.get(
     "/",
@@ -26,26 +27,10 @@ router.post(
     "/",
     authMiddleware,
     validationMiddleware({
-        article_id: [
-            {
-                name: "required",
-            },
-        ],
-        user_id: [
-            {
-                name: "required",
-            },
-        ],
-        text: [
-            {
-                name: "required",
-            },
-        ],
-        level: [
-            {
-                name: "required",
-            },
-        ],
+        article_id: validation.required,
+        user_id: validation.required,
+        text: validation.required,
+        level: validation.required,
     }),
     asyncHandler(async (req, res) => {
         const {to, parent_text, ...comment} = req.body;
@@ -66,11 +51,7 @@ router.put(
         },
     ]),
     validationMiddleware({
-        text: [
-            {
-                name: "required",
-            },
-        ],
+        text: validation.required,
     }),
     asyncHandler(async (req, res) => {
         const {text} = req.body;
