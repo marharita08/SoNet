@@ -6,15 +6,16 @@ const transporter = require("../configs/transporterConfig");
 const config = require("../configs/config");
 const ForbiddenException = require("../errors/ForbiddenException");
 const passwordHasher = require("../utils/passwordHasher");
-const {USER_NOT_FOUND, TOKEN_NOT_FOUND, EXPIRED_TOKEN} = require("../constants/errorMessages");
+const Messages = require("../constants/messages");
 
 const {mailFrom, salt, resetPasswordUrl} = config;
+const subject = "Reset password for SoNet";
 
 const resetPassword = async (email) => {
     const user = await usersStorage.getByEmail(email);
 
     if (!user) {
-        throw new NotFoundException(USER_NOT_FOUND);
+        throw new NotFoundException(Messages.USER_NOT_FOUND);
     }
 
     const token = uuidv4();
@@ -28,22 +29,22 @@ const resetPassword = async (email) => {
     const mailOptions = {
         from: mailFrom,
         to: email,
-        subject: "Reset password for SoNet",
+        subject,
         html: `To change your password for SoNet use this <a href="${resetLink}">link</a>.`
     };
 
     await transporter.sendMail(mailOptions);
-    return {message: "Check your mailbox"};
+    return {message: Messages.CHECK_MAILBOX};
 }
 
 const saveNewPassword = async (token, password) => {
     const reset_password_token = await passwordStorage.getByToken(token);
 
     if (!reset_password_token) {
-        throw new NotFoundException(TOKEN_NOT_FOUND);
+        throw new NotFoundException(Messages.TOKEN_NOT_FOUND);
     }
     if (new Date() > new Date(reset_password_token.expires_on)) {
-        throw new ForbiddenException(EXPIRED_TOKEN);
+        throw new ForbiddenException(Messages.EXPIRED_TOKEN);
     }
 
     const user = await usersStorage.getById(reset_password_token.user_id);
@@ -53,12 +54,12 @@ const saveNewPassword = async (token, password) => {
     const mailOptions = {
         from: mailFrom,
         to: user.email,
-        subject: "Reset password for SoNet",
+        subject,
         text: "Your password for SoNet has been changed successfully."
     };
 
     await transporter.sendMail(mailOptions);
-    return {message: "Password has been changed successfully"};
+    return {message: Messages.PASSWORD_CHANGED};
 }
 
 module.exports = {

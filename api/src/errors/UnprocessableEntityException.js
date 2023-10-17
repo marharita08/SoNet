@@ -1,10 +1,11 @@
 const ClientException = require("./ClientExceptoin");
+const {Name, Code} = require("../constants/exceptions");
 
 class UnprocessableEntityException extends ClientException {
     constructor(message) {
         super(message);
-        this.name = "UnprocessableEntityException";
-        this.statusCode = 422;
+        this.name = Name.UNPROCESSABLE_ENTITY;
+        this.statusCode = Code.UNPROCESSABLE_ENTITY;
     }
 }
 

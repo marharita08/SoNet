@@ -18,6 +18,7 @@ const errorHandler = require("./middleware/errorHandler");
 
 const hostPort = config.appHostPort;
 const containerPort = config.appContainerPort;
+const logTable = "logger";
 
 const app = express();
 
@@ -27,7 +28,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.json());
 app.use(cors());
 app.use(express.static(`public`));
-app.use(logger("logger"));
+app.use(logger(logTable));
 app.use(passport.initialize());
 
 app.use("/users", usersRoutes);
@@ -40,7 +41,7 @@ app.use("/auth", authRoutes);
 app.use("/friends", friendsRoutes);
 app.use("/password", passwordRoutes);
 
-app.use(errorHandler("logger"));
+app.use(errorHandler(logTable));
 
 app.listen(containerPort, () => {
     console.log(`Example app listening at http://localhost:${hostPort}`);

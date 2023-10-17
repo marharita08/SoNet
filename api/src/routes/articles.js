@@ -8,6 +8,7 @@ const articlesService = require("../services/articles");
 const commentsService = require("../services/comments");
 const likesService = require("../services/likes");
 const {rules: validation} = require("../utils/validationRules");
+const {Possession, Action, Resources} = require("../middleware/aclRules");
 
 router.get(
     "/all-news",
@@ -89,9 +90,9 @@ router.put(
     authMiddleware,
     aclMiddleware([
         {
-            resource: "post",
-            action: "update",
-            possession: "own",
+            resource: Resources.POST,
+            action: Action.UPDATE,
+            possession: Possession.OWN,
             getResource: (req) => articlesService.getById(req.params.id),
             isOwn: (resource, userId) => resource.user_id === userId,
         },
@@ -117,9 +118,9 @@ router.delete(
     authMiddleware,
     aclMiddleware([
         {
-            resource: "post",
-            action: "delete",
-            possession: "own",
+            resource: Resources.POST,
+            action: Action.DELETE,
+            possession: Possession.OWN,
             getResource: (req) => articlesService.getById(req.params.id),
             isOwn: (resource, userId) => resource.user_id === userId,
         },

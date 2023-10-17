@@ -10,3 +10,5 @@ export const USER_NOT_FOUND = notFound("User");
 export const TOKEN_NOT_FOUND = notFound("Token");
 export const EXPIRED_TOKEN = "Token has been expired";
 export const WRONG_PASSWORD = "Wrong password";
+export const CHECK_MAILBOX = "Check your mailbox";
+export const PASSWORD_CHANGED = "Password has been changed successfully";

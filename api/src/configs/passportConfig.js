@@ -4,6 +4,7 @@ const FacebookTokenStrategy = require("passport-facebook-token");
 const storage = require("../db/users/storage");
 const settingsStorage = require("../db/settings/storage");
 const config = require("./config");
+const {Roles} = require("../middleware/aclRules");
 
 const {facebookEnv, googleEnv} = config;
 
@@ -30,7 +31,7 @@ module.exports = () => {
                         email,
                         fb_id: fbId,
                         avatar,
-                        role: "user",
+                        role: Roles.USER,
                     };
                     const id = await storage.create(user);
                     await settingsStorage.create({user_id: id[0]});
@@ -58,7 +59,7 @@ module.exports = () => {
                         name,
                         email,
                         avatar,
-                        role: "user",
+                        role: Roles.USER,
                     };
                     const id = await storage.create(user);
                     await settingsStorage.create({user_id: id[0]});

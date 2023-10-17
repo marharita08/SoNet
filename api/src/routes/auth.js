@@ -15,7 +15,7 @@ router.post(
     }),
     asyncHandler(async (req, res) => {
         const {user} = req;
-        return res.send(await authService.createTokens(user));
+        return res.send(await authService.loginWithFacebook(user));
     })
 );
 
@@ -29,7 +29,7 @@ router.post(
     }),
     asyncHandler(async (req, res) => {
         const {user} = req;
-        return res.send(await authService.createTokens(user));
+        return res.send(await authService.loginWithGoogle(user));
     })
 );
 

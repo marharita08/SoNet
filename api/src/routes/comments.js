@@ -5,6 +5,7 @@ const aclMiddleware = require("../middleware/aclMiddleware");
 const validationMiddleware = require("../middleware/validationMiddleware");
 const commentsService = require("../services/comments");
 const {rules: validation} = require("../utils/validationRules");
+const {Possession, Action, Resources} = require("../middleware/aclRules");
 
 router.get(
     "/",
@@ -43,9 +44,9 @@ router.put(
     authMiddleware,
     aclMiddleware([
         {
-            resource: "comment",
-            action: "update",
-            possession: "own",
+            resource: Resources.COMMENT,
+            action: Action.UPDATE,
+            possession: Possession.OWN,
             getResource: (req) => commentsService.getById(req.params.id),
             isOwn: (resource, userId) => resource.user_id === userId,
         },
@@ -65,9 +66,9 @@ router.delete(
     authMiddleware,
     aclMiddleware([
         {
-            resource: "comment",
-            action: "delete",
-            possession: "own",
+            resource: Resources.COMMENT,
+            action: Action.DELETE,
+            possession: Possession.OWN,
             getResource: (req) => commentsService.getById(req.params.id),
             isOwn: (resource, userId) => resource.user_id === userId,
         },

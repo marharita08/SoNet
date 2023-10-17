@@ -6,6 +6,7 @@ const aclMiddleware = require("../middleware/aclMiddleware");
 const validationMiddleware = require("../middleware/validationMiddleware");
 const usersService = require("../services/users");
 const {rules: validation} = require("../utils/validationRules");
+const {Possession, Action, Resources} = require("../middleware/aclRules");
 
 router.get(
     "/",
@@ -29,9 +30,9 @@ router.put(
     authMiddleware,
     aclMiddleware([
         {
-            resource: "user",
-            action: "update",
-            possession: "own",
+            resource: Resources.USER,
+            action: Action.UPDATE,
+            possession: Possession.OWN,
             getResource: (req) => usersService.getById(req.params.id),
             isOwn: (resource, userId) => resource.user_id === userId,
         },
@@ -84,9 +85,9 @@ router.delete(
     authMiddleware,
     aclMiddleware([
         {
-            resource: "user",
-            action: "delete",
-            possession: "own",
+            resource: Resources.USER,
+            action: Action.DELETE,
+            possession: Possession.OWN,
             getResource: (req) => usersService.getById(req.params.id),
             isOwn: (resource, userId) => resource.user_id === userId,
         },

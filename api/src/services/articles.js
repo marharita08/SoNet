@@ -3,7 +3,8 @@ const ForbiddenException = require("../errors/ForbiddenException");
 const articlesStorage = require("../db/articles/storage");
 const NotFoundException = require("../errors/NotFoundException");
 const fileHelper = require("../utils/fileHelper");
-const {ARTICLE_NOT_FOUND} = require("../constants/errorMessages");
+const Messages = require("../constants/messages");
+const {Roles} = require("../middleware/aclRules");
 
 const parseArticle = (article) => {
     const {visibility, visibility_id: visibilityId, ...rest} = article;
@@ -26,7 +27,7 @@ const parseArticles = (articles) => {
 
 const getAllNews = async (userId, page, limit) => {
     const user = await usersStorage.getById(userId);
-    if (user.role !== "admin") {
+    if (user.role !== Roles.ADMIN) {
         throw new ForbiddenException();
     }
     return parseArticles(await articlesStorage.getAllNews(page, limit));
@@ -34,7 +35,7 @@ const getAllNews = async (userId, page, limit) => {
 
 const getAllNewsAmount = async (userId) => {
     const user = await usersStorage.getById(userId);
-    if (user.role !== "admin") {
+    if (user.role !== Roles.ADMIN) {
         throw new ForbiddenException();
     }
     return await articlesStorage.getCountOfAllNews();
@@ -59,7 +60,7 @@ const getById = async (articleId) => {
 const getWholeArticleById = async (articleId, userId) => {
     const user = await usersStorage.getById(userId);
     let dbResponse;
-    if (user.role === "admin") {
+    if (user.role === Roles.ADMIN) {
         dbResponse = await articlesStorage.getWholeArticleById(articleId);
     } else {
         dbResponse = await articlesStorage.getByIdAndUserId(articleId, userId);
@@ -67,7 +68,7 @@ const getWholeArticleById = async (articleId, userId) => {
     if (dbResponse) {
         return [parseArticle(dbResponse)];
     }
-    throw new NotFoundException(ARTICLE_NOT_FOUND);
+    throw new NotFoundException(Messages.ARTICLE_NOT_FOUND);
 };
 
 const add = async (article, fileData) => {

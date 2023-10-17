@@ -1,11 +1,12 @@
 const ClientException = require("./ClientExceptoin");
-const {NOT_FOUND} = require("../constants/errorMessages");
+const Messages = require("../constants/messages");
+const {Name, Code} = require("../constants/exceptions");
 
 class NotFoundException extends ClientException {
     constructor(message) {
-        super(message || NOT_FOUND);
-        this.name = "NotFoundException";
-        this.statusCode = 404;
+        super(message || Messages.NOT_FOUND);
+        this.name = Name.NOT_FOUND;
+        this.statusCode = Code.NOT_FOUND;
     }
 }
 
