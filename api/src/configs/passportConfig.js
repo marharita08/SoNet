@@ -5,12 +5,13 @@ const storage = require("../db/users/storage");
 const settingsStorage = require("../db/settings/storage");
 const config = require("./config");
 const {Roles} = require("../middleware/aclRules");
+const {AuthTokens} = require("../constants/authTokens");
 
 const {facebookEnv, googleEnv} = config;
 
 module.exports = () => {
     passport.use(
-        "facebookToken",
+        AuthTokens.FACEBOOK,
         new FacebookTokenStrategy(
             {
                 clientID: facebookEnv.clientID,
@@ -43,7 +44,7 @@ module.exports = () => {
     );
 
     passport.use(
-        "googleToken",
+        AuthTokens.GOOGLE,
         new GoogleTokenStrategy(
             {
                 clientID: googleEnv.clientID,

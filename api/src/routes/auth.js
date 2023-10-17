@@ -4,13 +4,14 @@ const asyncHandler = require("../middleware/asyncHandler");
 const validationMiddleware = require("../middleware/validationMiddleware");
 const authService = require("../services/auth");
 const {rules: validation} = require("../utils/validationRules");
+const {AuthTokens} = require("../constants/authTokens");
 
 router.post(
     "/facebook",
     validationMiddleware({
         access_token: validation.required,
     }),
-    passport.authenticate("facebookToken", {
+    passport.authenticate(AuthTokens.FACEBOOK, {
         session: false,
     }),
     asyncHandler(async (req, res) => {
@@ -24,7 +25,7 @@ router.post(
     validationMiddleware({
         access_token: validation.required,
     }),
-    passport.authenticate("googleToken", {
+    passport.authenticate(AuthTokens.GOOGLE, {
         session: false,
     }),
     asyncHandler(async (req, res) => {
