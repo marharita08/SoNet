@@ -1,16 +1,12 @@
 const ClientException = require("./ClientExceptoin");
+const Messages = require("../constants/messages");
+const {Name, Code} = require("../constants/exceptions");
 
 class ForbiddenException extends ClientException {
     constructor(message) {
-        let msg;
-        if (message === undefined) {
-            msg = "Forbidden";
-        } else {
-            msg = message;
-        }
-        super(msg);
-        this.name = "ForbiddenException";
-        this.statusCode = 403;
+        super(message || Messages.FORBIDDEN);
+        this.name = Name.FORBIDDEN;
+        this.statusCode = Code.FORBIDDEN;
     }
 }
 

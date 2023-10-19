@@ -17,7 +17,7 @@ module.exports = async (req, res, next) => {
                 });
             });
         } catch (e) {
-            // do nothing
+            next(e);
         }
         if (decoded) {
             req.auth = decoded;

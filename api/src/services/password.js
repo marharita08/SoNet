@@ -6,14 +6,20 @@ const transporter = require("../configs/transporterConfig");
 const config = require("../configs/config");
 const ForbiddenException = require("../errors/ForbiddenException");
 const passwordHasher = require("../utils/passwordHasher");
+const Messages = require("../constants/messages");
+const hbs = require("../configs/handlebarsConfig");
+const commonMailOptions = require("../configs/commonMailOptions");
+const views = require("../constants/views");
+const frontUrls = require("../constants/frontUrls");
 
-const {mailFrom, salt, resetPasswordUrl} = config;
+const {salt} = config;
+const subject = "Reset password for SoNet";
 
 const resetPassword = async (email) => {
     const user = await usersStorage.getByEmail(email);
 
     if (!user) {
-        throw new NotFoundException("User not found");
+        throw new NotFoundException(Messages.USER_NOT_FOUND);
     }
 
     const token = uuidv4();
@@ -22,42 +28,54 @@ const resetPassword = async (email) => {
         user_id: user.user_id,
         token
     });
+    const resetLink = `${frontUrls.RESET_PASSWORD}${token}`;
 
-    const resetLink = `${resetPasswordUrl}${token}`;
+    const htmlContent = await hbs.render(views.RESET_PASSWORD, {
+        link: resetLink,
+        user: user.name,
+        home: frontUrls.HOME
+    });
+
     const mailOptions = {
-        from: mailFrom,
+        ...commonMailOptions,
         to: email,
-        subject: "Reset password for SoNet",
-        html: `To change your password for SoNet use this <a href="${resetLink}">link</a>.`
+        subject,
+        html: htmlContent,
     };
 
     await transporter.sendMail(mailOptions);
-    return {message: "Check your mailbox"};
+    return {message: Messages.CHECK_MAILBOX};
 }
 
 const saveNewPassword = async (token, password) => {
     const reset_password_token = await passwordStorage.getByToken(token);
 
     if (!reset_password_token) {
-        throw new NotFoundException("Token not found");
+        throw new NotFoundException(Messages.TOKEN_NOT_FOUND);
     }
     if (new Date() > new Date(reset_password_token.expires_on)) {
-        throw new ForbiddenException("Token has been expired");
+        throw new ForbiddenException(Messages.EXPIRED_TOKEN);
     }
 
     const user = await usersStorage.getById(reset_password_token.user_id);
     const hashedPassword = passwordHasher(password, salt);
     await usersStorage.update(reset_password_token.user_id, {password: hashedPassword});
     await passwordStorage.delete(token);
+
+    const htmlContent = await hbs.render(views.PASSWORD_CHANGED, {
+        user: user.name,
+        home: frontUrls.HOME
+    });
+
     const mailOptions = {
-        from: mailFrom,
+        ...commonMailOptions,
         to: user.email,
-        subject: "Reset password for SoNet",
-        text: "Your password for SoNet has been changed successfully."
+        subject,
+        html: htmlContent
     };
 
     await transporter.sendMail(mailOptions);
-    return {message: "Password has been changed successfully"};
+    return {message: Messages.PASSWORD_CHANGED};
 }
 
 module.exports = {

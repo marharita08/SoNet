@@ -72,4 +72,4 @@ const aclRules = {
     },
 };
 
-module.exports = {Possession, aclRules};
+module.exports = {Possession, aclRules, Action, Roles, Resources};

@@ -23,5 +23,5 @@ module.exports = {
         pass: process.env.SMTP_AUTH_PASS,
     },
     mailFrom: process.env.MAIL_FROM,
-    resetPasswordUrl: process.env.RESET_PASSWORD_URL
+    frontUrl: process.env.FRONT_URL
 };

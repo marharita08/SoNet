@@ -3,6 +3,7 @@ const NotFoundException = require("../errors/NotFoundException");
 const config = require("../configs/config");
 const settingsStorage = require("../db/settings/storage");
 const fileHelper = require("../utils/fileHelper");
+const {USER_NOT_FOUND} = require("../constants/messages");
 
 const getProfile = async (id) => {
     const dbResponse = await usersStorage.getProfileById(id);
@@ -58,7 +59,7 @@ const getProfileById = async (id) => {
     if (profile) {
         return profile;
     }
-    throw new NotFoundException("User not found");
+    throw new NotFoundException(USER_NOT_FOUND);
 }
 
 const update = async (id, user, settings, fileData, errorHandler) => {

@@ -1,20 +1,18 @@
 const db = require("../configs/db");
 const ClientException = require("../errors/ClientExceptoin");
+const Messages = require("../constants/messages");
+const {status, X_FORWARDED_FOR} = require("../constants/logger");
+const {Type, Code} = require("../constants/exceptions");
 
 const errorHandler = (logTable) => async (err, req, res, next) => {
-    const status = "error";
     const {method, originalUrl: url} = req;
     const {message, stack} = err;
-    const type = err.type || "Server Exception";
-    const statusCode = err.statusCode || 500;
-    const ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress;
-    const date = new Date().toLocaleString("ua", {
-        timeZone: "Europe/Kiev",
-    });
+    const type = err.type || Type.SERVER;
+    const statusCode = err.statusCode || Code.INTERNAL_SERVER_ERROR;
+    const ip = req.headers[X_FORWARDED_FOR] || req.connection.remoteAddress;
     await db(logTable).insert({
         ip,
-        date,
-        status,
+        status: status.ERROR,
         status_code: statusCode,
         type,
         method,
@@ -25,7 +23,7 @@ const errorHandler = (logTable) => async (err, req, res, next) => {
     if (err instanceof ClientException) {
         return res.status(statusCode).send({message});
     }
-    res.status(statusCode).send({message: "Something went wrong!"});
+    res.status(statusCode).send({message: Messages.INTERNAL_SERVER_ERROR});
     return next();
 };
 

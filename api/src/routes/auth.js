@@ -3,67 +3,43 @@ const passport = require("passport");
 const asyncHandler = require("../middleware/asyncHandler");
 const validationMiddleware = require("../middleware/validationMiddleware");
 const authService = require("../services/auth");
+const validation = require("../utils/validationRules");
+const AuthTokens = require("../constants/authTokens");
+
 
 router.post(
     "/facebook",
     validationMiddleware({
-        access_token: [
-            {
-                name: "required",
-            },
-        ],
+        access_token: validation.required,
     }),
-    passport.authenticate("facebookToken", {
+    passport.authenticate(AuthTokens.FACEBOOK, {
         session: false,
     }),
     asyncHandler(async (req, res) => {
         const {user} = req;
-        return res.send(await authService.createTokens(user));
+        return res.send(await authService.loginWithFacebook(user));
     })
 );
 
 router.post(
     "/google",
     validationMiddleware({
-        access_token: [
-            {
-                name: "required",
-            },
-        ],
+        access_token: validation.required,
     }),
-    passport.authenticate("googleToken", {
+    passport.authenticate(AuthTokens.GOOGLE, {
         session: false,
     }),
     asyncHandler(async (req, res) => {
         const {user} = req;
-        return res.send(await authService.createTokens(user));
+        return res.send(await authService.loginWithGoogle(user));
     })
 );
 
 router.post(
     "/",
     validationMiddleware({
-        email: [
-            {
-                name: "required",
-            },
-            {
-                name: "email",
-            },
-            {
-                name: "max",
-                value: 255,
-            },
-        ],
-        password: [
-            {
-                name: "required",
-            },
-            {
-                name: "min",
-                value: 8,
-            },
-        ],
+        email: validation.email,
+        password: validation.password,
     }),
     asyncHandler(async (req, res) => {
         const {email, password} = req.body;
@@ -74,11 +50,7 @@ router.post(
 router.post(
     "/refresh",
     validationMiddleware({
-        refreshToken: [
-            {
-                name: "required",
-            },
-        ],
+        refreshToken: validation.required,
     }),
     asyncHandler(async (req, res) => {
         return res.send(await authService.refresh(req.body.refreshToken));
@@ -88,11 +60,7 @@ router.post(
 router.post(
     "/logout",
     validationMiddleware({
-        refreshToken: [
-            {
-                name: "required",
-            },
-        ],
+        refreshToken: validation.required,
     }),
     asyncHandler(async (req, res) => {
         await authService.logout(req.body.refreshToken);

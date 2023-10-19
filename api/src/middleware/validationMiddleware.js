@@ -1,76 +1,71 @@
 const UnprocessableEntityException = require("../errors/UnprocessableEntityException");
+const {names, errorMessages} = require("../constants/validation");
 
 module.exports = (validationRules, storages) => async (req, res, next) => {
-    let messages = "";
+    let messages = [];
     for await (const field of Object.keys(validationRules)) {
         const rules = validationRules[field];
         for await (const rule of rules) {
             switch (rule.name) {
-            case "required":
+            case names.REQUIRED:
                 if (!req.body[field] || req.body[field] === "") {
-                    messages += `${field} is required, `;
+                    messages.push(errorMessages.required(field));
                 }
                 break;
-            case "email":
+            case names.EMAIL:
                 if (req.body[field] && req.body[field] !== "") {
-                    if (
-                        !/^\w+([\\.-]?\w+)*@\w+([\\.-]?\w+)*(\.\w{2,3})+$/.test(
-                            req.body[field]
-                        )
-                    ) {
-                        messages += "email is invalid, ";
+                    if (!/^\w+([\\.-]?\w+)*@\w+([\\.-]?\w+)*(\.\w{2,3})+$/.test(req.body[field])) {
+                        messages.push(errorMessages.email);
                     }
                 }
                 break;
-            case "min":
-                const minValue = parseInt(rule.value, 10);
+            case names.MIN:
+                const minValue = +rule.value;
                 if (
                     req.body[field] &&
                     req.body[field] !== "" &&
                     req.body[field].length < minValue
                 ) {
-                    messages += `${field} should contain at least ${minValue} symbols, `;
+                    messages.push(errorMessages.min(field, minValue));
                 }
                 break;
-            case "max":
-                const maxValue = parseInt(rule.value, 10);
+            case names.MAX:
+                const maxValue = +rule.value;
                 if (
                     req.body[field] &&
                     req.body[field] !== "" &&
                     req.body[field].length > maxValue
                 ) {
-                    messages += `${field} should contain not more than ${maxValue} symbols, `;
+                    messages.push(errorMessages.max(field, maxValue));
                 }
                 break;
-            case "unique":
+            case names.UNIQUE:
                 if (req.body[field] && req.body[field] !== "") {
                     const {id, getResourceByField} = storages[field];
                     const resource = await getResourceByField(req.body[field]);
                     if (id && resource) {
-                        const currId = parseInt(id.value(req), 10);
-                        const resourceId = parseInt(resource[id.name], 10);
+                        const currId = +id.value(req);
+                        const resourceId = +resource[id.name];
                         if (resourceId !== currId) {
-                            messages += `${field} is not unique, `;
+                            messages.push(errorMessages.unique(field));
                         }
                     } else if (resource) {
-                        messages += `${field} is not unique, `;
+                        messages.push(errorMessages.unique(field));
                     }
                 }
                 break;
-            case "regexp":
+            case names.REGEXP:
                 if (req.body[field] && req.body[field] !== "") {
                     if (!rule.value.test(req.body[field])) {
-                        messages += `${field} should match ${rule.value}, `;
+                        messages.push(errorMessages.regexp(field, rule.value));
                     }
                 }
                 break;
             }
         }
     }
-    if (messages === "") {
+    if (messages.length === 0) {
         return next();
     }
-    return next(
-        new UnprocessableEntityException(messages.substring(0, messages.length - 2))
-    );
+    return next(new UnprocessableEntityException(messages.join(", ")));
 };

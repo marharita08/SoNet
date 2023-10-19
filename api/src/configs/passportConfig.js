@@ -4,12 +4,14 @@ const FacebookTokenStrategy = require("passport-facebook-token");
 const storage = require("../db/users/storage");
 const settingsStorage = require("../db/settings/storage");
 const config = require("./config");
+const {Roles} = require("../middleware/aclRules");
+const AuthTokens = require("../constants/authTokens");
 
 const {facebookEnv, googleEnv} = config;
 
 module.exports = () => {
     passport.use(
-        "facebookToken",
+        AuthTokens.FACEBOOK,
         new FacebookTokenStrategy(
             {
                 clientID: facebookEnv.clientID,
@@ -30,7 +32,7 @@ module.exports = () => {
                         email,
                         fb_id: fbId,
                         avatar,
-                        role: "user",
+                        role: Roles.USER,
                     };
                     const id = await storage.create(user);
                     await settingsStorage.create({user_id: id[0]});
@@ -42,7 +44,7 @@ module.exports = () => {
     );
 
     passport.use(
-        "googleToken",
+        AuthTokens.GOOGLE,
         new GoogleTokenStrategy(
             {
                 clientID: googleEnv.clientID,
@@ -58,7 +60,7 @@ module.exports = () => {
                         name,
                         email,
                         avatar,
-                        role: "user",
+                        role: Roles.USER,
                     };
                     const id = await storage.create(user);
                     await settingsStorage.create({user_id: id[0]});

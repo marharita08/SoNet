@@ -1,5 +1,3 @@
-const jwt = require("jsonwebtoken");
-const {appKey} = require("../configs/config");
 const {v4: uuidv4} = require("uuid");
 const sessionStorage = require("../db/sessions/storage");
 const UnauthorizedException = require("../errors/UnauthorizedException");
@@ -7,11 +5,9 @@ const userStorage = require("../db/users/storage");
 const passwordHasher = require("../utils/passwordHasher");
 const config = require("../configs/config");
 const settingsStorage = require("../db/settings/storage");
-
-const createAccessToken = (user) =>
-    jwt.sign({user_id: user.user_id, name: user.name}, appKey, {
-        expiresIn: "30m",
-    });
+const Messages = require("../constants/messages");
+const createAccessToken = require("../utils/createAccessToken");
+const {Roles} = require("../middleware/aclRules");
 
 const createTokens = async (user) => {
     let accessToken;
@@ -46,16 +42,24 @@ const loginOrSignUp = async (email, password) => {
             name,
             email,
             password: hashedPassword,
-            role: "user",
+            role: Roles.USER,
         };
         const id = await userStorage.create(user);
         await settingsStorage.create({user_id: id[0]});
         user = await userStorage.getByEmail(email);
     } else if (user.password !== hashedPassword) {
-        throw new UnauthorizedException("Wrong password");
+        throw new UnauthorizedException(Messages.WRONG_PASSWORD);
     }
     return createTokens(user);
 };
+
+const loginWithGoogle = async (user) => {
+    return createTokens(user);
+}
+
+const loginWithFacebook = async (user) => {
+    return createTokens(user);
+}
 
 const refresh = async (refreshToken) => {
     const session = await sessionStorage.getByToken(refreshToken);
@@ -79,8 +83,9 @@ const logout = async (refreshToken) => {
 };
 
 module.exports = {
-    createTokens,
     loginOrSignUp,
+    loginWithGoogle,
+    loginWithFacebook,
     refresh,
     logout
 };
