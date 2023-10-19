@@ -3,7 +3,7 @@ const asyncHandler = require("../middleware/asyncHandler");
 const authMiddleware = require("../middleware/authMiddleware");
 const validationMiddleware = require("../middleware/validationMiddleware");
 const friendsService = require("../services/friends");
-const {rules: validation} = require("../utils/validationRules");
+const validation = require("../utils/validationRules");
 
 router.get(
     "/request/:user_id",

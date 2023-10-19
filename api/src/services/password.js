@@ -7,8 +7,12 @@ const config = require("../configs/config");
 const ForbiddenException = require("../errors/ForbiddenException");
 const passwordHasher = require("../utils/passwordHasher");
 const Messages = require("../constants/messages");
+const hbs = require("../configs/handlebarsConfig");
+const commonMailOptions = require("../configs/commonMailOptions");
+const views = require("../constants/views");
+const frontUrls = require("../constants/frontUrls");
 
-const {mailFrom, salt, resetPasswordUrl} = config;
+const {salt} = config;
 const subject = "Reset password for SoNet";
 
 const resetPassword = async (email) => {
@@ -24,13 +28,19 @@ const resetPassword = async (email) => {
         user_id: user.user_id,
         token
     });
+    const resetLink = `${frontUrls.RESET_PASSWORD}${token}`;
 
-    const resetLink = `${resetPasswordUrl}${token}`;
+    const htmlContent = await hbs.render(views.RESET_PASSWORD, {
+        link: resetLink,
+        user: user.name,
+        home: frontUrls.HOME
+    });
+
     const mailOptions = {
-        from: mailFrom,
+        ...commonMailOptions,
         to: email,
         subject,
-        html: `To change your password for SoNet use this <a href="${resetLink}">link</a>.`
+        html: htmlContent,
     };
 
     await transporter.sendMail(mailOptions);
@@ -51,11 +61,17 @@ const saveNewPassword = async (token, password) => {
     const hashedPassword = passwordHasher(password, salt);
     await usersStorage.update(reset_password_token.user_id, {password: hashedPassword});
     await passwordStorage.delete(token);
+
+    const htmlContent = await hbs.render(views.PASSWORD_CHANGED, {
+        user: user.name,
+        home: frontUrls.HOME
+    });
+
     const mailOptions = {
-        from: mailFrom,
+        ...commonMailOptions,
         to: user.email,
         subject,
-        text: "Your password for SoNet has been changed successfully."
+        html: htmlContent
     };
 
     await transporter.sendMail(mailOptions);

@@ -3,8 +3,9 @@ const passport = require("passport");
 const asyncHandler = require("../middleware/asyncHandler");
 const validationMiddleware = require("../middleware/validationMiddleware");
 const authService = require("../services/auth");
-const {rules: validation} = require("../utils/validationRules");
-const {AuthTokens} = require("../constants/authTokens");
+const validation = require("../utils/validationRules");
+const AuthTokens = require("../constants/authTokens");
+
 
 router.post(
     "/facebook",

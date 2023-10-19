@@ -4,7 +4,7 @@ const authMiddleware = require("../middleware/authMiddleware");
 const aclMiddleware = require("../middleware/aclMiddleware");
 const validationMiddleware = require("../middleware/validationMiddleware");
 const commentsService = require("../services/comments");
-const {rules: validation} = require("../utils/validationRules");
+const validation = require("../utils/validationRules");
 const {Possession, Action, Resources} = require("../middleware/aclRules");
 
 router.get(

@@ -1,4 +1,4 @@
-import {names as validation} from "../constants/validation";
+const {names: validation} = require("../constants/validation");
 
 const baseEmailRules = [
     {
@@ -13,7 +13,7 @@ const baseEmailRules = [
     },
 ];
 
-export const rules = {
+module.exports = {
     required: [{name: validation.REQUIRED}],
     password: [
         {

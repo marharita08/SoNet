@@ -5,7 +5,7 @@ const storage = require("../db/users/storage");
 const settingsStorage = require("../db/settings/storage");
 const config = require("./config");
 const {Roles} = require("../middleware/aclRules");
-const {AuthTokens} = require("../constants/authTokens");
+const AuthTokens = require("../constants/authTokens");
 
 const {facebookEnv, googleEnv} = config;
 

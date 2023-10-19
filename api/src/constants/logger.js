@@ -1,6 +1,7 @@
-const status = {
-    INFO: "info",
-    ERROR: "error"
-};
-
-const X_FORWARDED_FOR = "x-forwarded-for";
+module.exports = {
+    status : {
+        INFO: "info",
+        ERROR: "error"
+    },
+    X_FORWARDED_FOR: "x-forwarded-for"
+}
