@@ -104,7 +104,7 @@ You also need to ensure that `api/.env` contains valid information. It should ho
 | SMTP_AUTH_USER             | SMTP username                                            |
 | SMTP_AUTH_PASS             | SMTP password                                            |
 | MAIL_FROM                  | Mail address to sent mails from                          |
-| RESET_PASSWORD_URL         | Front URL to reset password                              |
+| FRONT_URL                  | Front URL                                                |
 
 
 
