@@ -89,7 +89,7 @@ module.exports = {
     getByEmail: async (email) =>
         db(tables.users).select().first().where(shortColumns.users.email, email),
     getByFbId: async (fbId) => db(tables.users).select().first().where(shortColumns.users.fbId, fbId),
-    getAllForSearch: async (id) =>
+    searchUsers: async (id, text) =>
         db
             .select(
                 fullColumns.users.userId,
@@ -113,5 +113,10 @@ module.exports = {
             })
             .leftJoin(tables.status, fullColumns.status.statusId, fullColumns.friends.statusId)
             .where(fullColumns.users.userId, "!=", id)
-            .orderBy(fullColumns.users.name),
+            .andWhere(function() {
+                this.where(fullColumns.users.name, "like", `%${text}%`)
+                    .orWhere(fullColumns.users.email, "like", `%${text}%`);
+            })
+            .orderBy(fullColumns.users.name)
+            .limit(10),
 };

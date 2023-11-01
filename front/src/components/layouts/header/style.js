@@ -9,7 +9,7 @@ export const useStyles = makeStyles(theme => ({
         gridTemplateColumns: "auto auto auto",
         position: "sticky",
         top: 0,
-        zIndex: 1
+        zIndex: 2
     },
     button: {
         padding: theme.spacing(1, 4),
