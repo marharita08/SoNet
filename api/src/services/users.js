@@ -99,8 +99,8 @@ const getOutgoingRequests = async (id) => {
     return await usersStorage.getOutgoingRequests(id);
 }
 
-const getAllForSearch = async (id) => {
-    return await usersStorage.getAllForSearch(id);
+const searchUsers = async (id, text) => {
+    return await usersStorage.searchUsers(id, text);
 }
 
 module.exports = {
@@ -111,7 +111,7 @@ module.exports = {
     getFriends,
     getOutgoingRequests,
     getIncomingRequests,
-    getAllForSearch,
+    searchUsers,
     update,
     delete: _delete
 }

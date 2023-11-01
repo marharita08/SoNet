@@ -30,5 +30,13 @@ export const useStyles = makeStyles(theme => ({
     option: {
         display: "flex",
         alignItems: "center"
+    },
+    searchCard: {
+        width: "100%",
+        position: "absolute",
+        zIndex: 1,
+        [theme.breakpoints.up("sm")]: {
+            width: "424px"
+        }
     }
 }));

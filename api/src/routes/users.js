@@ -130,8 +130,9 @@ router.get(
     "/:id/search",
     asyncHandler(async (req, res) => {
         const {id} = req.params;
-        res.send(await usersService.getAllForSearch(+id));
+        const {text} = req.query;
+        res.send(text ? await usersService.searchUsers(+id, text) : []);
     })
-);
+)
 
 module.exports = router;

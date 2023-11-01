@@ -29,6 +29,6 @@ export const getOutgoingRequests = async (id) => {
     return apiClient.get(`/users/${id}/outgoing-requests`);
 };
 
-export const getForSearch = async (id) => {
-    return apiClient.get(`/users/${id}/search`);
-};
+export const searchUsers = async (id, text) => {
+    return apiClient.get(`/users/${id}/search?text=${text}`);
+}
