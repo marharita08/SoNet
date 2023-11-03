@@ -13,6 +13,7 @@ const visibilitiesRoutes = require("./routes/visibilities");
 const authRoutes = require("./routes/auth");
 const friendsRoutes = require("./routes/friends");
 const passwordRoutes = require("./routes/password");
+const generatorRoutes = require("./routes/testDataGenerator");
 const logger = require("./middleware/logger");
 const errorHandler = require("./middleware/errorHandler");
 
@@ -40,6 +41,7 @@ app.use("/visibilities", visibilitiesRoutes);
 app.use("/auth", authRoutes);
 app.use("/friends", friendsRoutes);
 app.use("/password", passwordRoutes);
+app.use("/generate", generatorRoutes);
 
 app.use(errorHandler(logTable));
 

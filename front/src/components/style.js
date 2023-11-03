@@ -52,9 +52,13 @@ export const useStyles = makeStyles(theme => ({
     articleCard: {
         margin: theme.spacing(2, "auto", 0, "auto"),
         width: "100%",
-        [theme.breakpoints.up("sm")]: {
-            width: "500px"
+        [theme.breakpoints.up("md")]: {
+            width: "80%"
         }
+    },
+    articleImgContainer: {
+        display: "flex",
+        justifyContent: "center"
     },
     link: {
         textDecoration: "none",

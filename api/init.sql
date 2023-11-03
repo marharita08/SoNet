@@ -10,7 +10,7 @@ create table if not exists users(
  role          varchar(10) not null,
  email         varchar(255),
  password      varchar(500),
- phone         char(13),
+ phone         varchar(15),
  university_id int,
  avatar        varchar(255),
  avatar_path   varchar(255),

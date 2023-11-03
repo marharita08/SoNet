@@ -35,7 +35,7 @@ module.exports = {
             .where(fullColumns.articles.articleId, id),
     getAllNews: async (page, limit) =>
         articleFullData()
-            .orderBy(fullColumns.articles.articleId, "desc")
+            .orderBy(fullColumns.articles.createdAt, "desc")
             .limit(limit)
             .offset(page * limit - limit),
     getByIdAndUserId: async (id, userId) =>
@@ -60,30 +60,34 @@ module.exports = {
                     });
             }),
     getNewsByUserId: async (userId, page, limit) =>
-        articleFullData()
-            .join(tables.friends, function () {
-                this.on(fullColumns.users.userId, fullColumns.friends.fromUserId)
-                    .andOn(fullColumns.friends.toUserId, userId)
-                    .orOn(fullColumns.users.userId, fullColumns.friends.toUserId)
-                    .andOn(fullColumns.friends.fromUserId, userId);
-            })
-            .join(tables.status, function () {
-                this.on(fullColumns.status.statusId, fullColumns.friends.statusId).andOnVal(fullColumns.status.status, status.accepted);
-            })
-            .where(fullColumns.articleVisibilities.visibility, "in", [articleVisibilities.all, articleVisibilities.friends])
-            .unionAll(function () {
-                this.select(...fullDataColumns)
-                    .from(tables.articles)
-                    .join(tables.users, function () {
-                        this.on(fullColumns.users.userId, fullColumns.articles.userId).andOnVal(fullColumns.users.userId, userId);
+        db
+            .select()
+            .from({
+                main: articleFullData()
+                    .join(tables.friends, function () {
+                        this.on(fullColumns.users.userId, fullColumns.friends.fromUserId)
+                            .andOn(fullColumns.friends.toUserId, userId)
+                            .orOn(fullColumns.users.userId, fullColumns.friends.toUserId)
+                            .andOn(fullColumns.friends.fromUserId, userId);
                     })
-                    .join(
-                        tables.articleVisibilities,
-                        fullColumns.articles.visibilityId,
-                        fullColumns.articleVisibilities.visibilityId
-                    );
+                    .join(tables.status, function () {
+                        this.on(fullColumns.status.statusId, fullColumns.friends.statusId).andOnVal(fullColumns.status.status, status.accepted);
+                    })
+                    .where(fullColumns.articleVisibilities.visibility, "in", [articleVisibilities.all, articleVisibilities.friends])
+                    .unionAll(function () {
+                        this.select(...fullDataColumns)
+                            .from(tables.articles)
+                            .join(tables.users, function () {
+                                this.on(fullColumns.users.userId, fullColumns.articles.userId).andOnVal(fullColumns.users.userId, userId);
+                            })
+                            .join(
+                                tables.articleVisibilities,
+                                fullColumns.articles.visibilityId,
+                                fullColumns.articleVisibilities.visibilityId
+                            );
+                    })
             })
-            .orderBy(shortColumns.articles.articleId, "desc")
+            .orderByRaw(`to_date(${shortColumns.articles.createdAt}, 'DD.MM.YYYY HH24:MI:SS') desc`)
             .limit(limit)
             .offset(page * limit - limit),
     getImageByArticleId: async (id) =>
@@ -116,4 +120,6 @@ module.exports = {
                         this.select(fullColumns.articles.articleId).from(tables.articles).where(fullColumns.articles.userId, userId);
                     }),
             }),
+    getRandomArticleId: async () =>
+        db(tables.articles).select(shortColumns.articles.articleId).first().orderByRaw("random()").limit(1)
 };

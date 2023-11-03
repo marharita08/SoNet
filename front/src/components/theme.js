@@ -66,7 +66,13 @@ theme = createTheme(theme, {
         position: "sticky",
         bottom: theme.spacing(2),
         left: "calc(100% - (100%/6))"
-    }
+    },
+    articleImg: {
+        width: "100%",
+        [theme.breakpoints.up("sm")]: {
+            width: "500px"
+        }
+    },
 })
 
 export default theme;

@@ -119,4 +119,6 @@ module.exports = {
             })
             .orderBy(fullColumns.users.name)
             .limit(10),
+    getRandomUserId: async () =>
+        db(tables.users).select(shortColumns.users.userId).first().orderByRaw("random()").limit(1)
 };
