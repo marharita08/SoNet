@@ -6,18 +6,7 @@ const updateArticle = (articles, updatedArticle) => {
 }
 
 const addArticle = (articles, newArticle) => {
-    let newArticles = [...articles, newArticle];
-    newArticles.sort((a, b) => {
-        const aid = a.article_id, bid = b.article_id;
-        if (aid > bid) {
-            return -1;
-        }
-        if (aid < bid) {
-            return 1;
-        }
-        return 0;
-    });
-    return newArticles;
+    return [newArticle, ...articles];
 }
 
 const deleteArticle = (articles, id) => {
