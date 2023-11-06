@@ -2,12 +2,14 @@ const db = require("../../configs/db");
 const {tables, fullColumns, shortColumns, status, articleVisibilities} = require("../dbSchema");
 
 const createdAt = `to_char(${fullColumns.articles.createdAt} AT TIME ZONE 'UTC' AT TIME ZONE 'Europe/Kiev', 'DD.MM.YYYY HH24:MI:SS') as ${shortColumns.articles.createdAt}`;
+const createdAtTimestamp = `${fullColumns.articles.createdAt} as created_at_timestamp`;
 
 const fullDataColumns = [
     fullColumns.articles.articleId,
     fullColumns.articles.text,
     fullColumns.articles.image,
     db.raw(createdAt),
+    db.raw(createdAtTimestamp),
     fullColumns.articles.visibilityId,
     fullColumns.users.userId,
     fullColumns.users.name,
@@ -87,7 +89,7 @@ module.exports = {
                             );
                     })
             })
-            .orderByRaw(`to_date(${shortColumns.articles.createdAt}, 'DD.MM.YYYY HH24:MI:SS') desc`)
+            .orderBy(shortColumns.articles.createdAt, "desc")
             .limit(limit)
             .offset(page * limit - limit),
     getImageByArticleId: async (id) =>

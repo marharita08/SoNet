@@ -16,7 +16,8 @@ const tables = {
 const shortColumns = {
     articles: {
         articleId: "article_id",
-        createdAt: "created_at"
+        createdAt: "created_at",
+        createdAtTimestamp: "created_at_timestamp"
     },
     comments: {
         commentId: "comment_id",
