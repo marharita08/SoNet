@@ -2,7 +2,6 @@ import React, {useContext, useState} from "react";
 import {useMutation, useQuery} from "react-query";
 import PropTypes from "prop-types";
 import ErrorBoundary from "../../../components/ErrorBoundary";
-import ArticleComponent from "../../../components/layouts/article/ArticleComponent";
 import {deleteArticle, getComments, getLikes, getCommentsAmount, getLikesAmount} from "../../../api/articlesCrud";
 import authContext from "../../../context/authContext";
 import CommentContainer from "../comment/CommentContainer";
@@ -16,8 +15,12 @@ import commentsService from "../../../services/commentsService";
 import ArticleCardComponent from "../../../components/layouts/articleCard/ArticleCardComponent";
 import {refetchOff} from "../../../config/refetchOff";
 import {initComment as initCommentFn} from "../../../config/initValues";
+import ArticleHeader from "../../../components/layouts/article/ArticleHeader";
+import ArticleContent from "../../../components/layouts/article/ArticleContent";
+import {Divider} from "@mui/material";
+import ArticleActions from "../../../components/layouts/article/ArticleActions";
 
-const ArticleCardContainer = ({setArticleContext, article, articles, setArticles}) => {
+const ArticleCardContainer = ({setArticleContext, article, articles, setArticles, isTruncate}) => {
 
     let id = article.article_id;
 
@@ -183,24 +186,30 @@ const ArticleCardContainer = ({setArticleContext, article, articles, setArticles
             isCommentsExpanded={isCommentsExpanded}
             isAddOrEditCommentExpanded={isAddOrEditCommentExpanded}
             articleComponent={
-                <ArticleComponent
+            <>
+                <ArticleHeader
                     article={article}
-                    isCommentsExpanded={isCommentsExpanded}
-                    isAddOrEditCommentExpanded={isAddOrEditCommentExpanded}
-                    handleEdit={handleArticleEdit}
-                    handleCommentsExpand={handleCommentsExpand}
                     isCurrentUser={article.user_id === user_id}
                     isAdmin={isAdmin}
+                    handleEdit={handleArticleEdit}
                     handleDelete={handleArticleDelete}
+                />
+                <ArticleContent article={article} isTruncate={isTruncate}/>
+                <Divider/>
+                <ArticleActions
+                    isCommentsFetching={isCommentsFetching || isCommentsAmountFetching}
+                    isLikesFetching={isLikesFetching || isLikesAmountFetching || isIsLikedFetching}
+                    handleCommentsExpand={handleCommentsExpand}
+                    isAddOrEditCommentExpanded={isAddOrEditCommentExpanded}
+                    isCommentsExpanded={isCommentsExpanded}
                     handleAddComment={handleAddComment}
-                    isLiked={isLiked}
+                    handleLike={handleLike}
                     likesAmount={likesAmount}
                     commentsAmount={commentsAmount}
-                    handleLike={handleLike}
+                    isLiked={isLiked}
                     likedUsers={likedUsers}
-                    isLikesFetching={isLikesFetching || isLikesAmountFetching || isIsLikedFetching}
-                    isCommentsFetching={isCommentsFetching || isCommentsAmountFetching}
                 />
+            </>
             }
             addOrEditCommentComponent={
                 <AddOrEditCommentContainer
@@ -236,6 +245,11 @@ ArticleCardContainer.propTypes = {
     article: articlePropTypes.isRequired,
     articles: articlesPropTypes.isRequired,
     setArticles: PropTypes.func.isRequired,
+    isTruncate: PropTypes.bool
 };
+
+ArticleCardContainer.defaultProps = {
+    isTruncate: true
+}
 
 export default ArticleCardContainer;

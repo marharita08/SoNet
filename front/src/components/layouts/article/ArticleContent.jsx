@@ -5,8 +5,9 @@ import {articlePropTypes} from "../../../propTypes/articlePropTypes";
 import LinkToArticle from "../../atoms/links/LinkToArticle";
 import {useStyles} from "../../style";
 import {useTheme} from "@mui/material/styles";
+import PropTypes from "prop-types";
 
-const ArticleContent = ({article}) => {
+const ArticleContent = ({article, isTruncate}) => {
 
     const classes = useStyles();
     const theme = useTheme();
@@ -30,7 +31,7 @@ const ArticleContent = ({article}) => {
                         </div>
                     }
                     <CardContent>
-                        <Typography>
+                        <Typography className={isTruncate ? classes.truncateText : ""}>
                             {article.text}
                         </Typography>
                     </CardContent>
@@ -41,7 +42,8 @@ const ArticleContent = ({article}) => {
 };
 
 ArticleContent.propTypes = {
-    article: articlePropTypes
+    article: articlePropTypes,
+    isTruncate: PropTypes.bool.isRequired
 };
 
 export default ArticleContent;

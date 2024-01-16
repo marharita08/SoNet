@@ -52,9 +52,15 @@ export const useStyles = makeStyles(theme => ({
     articleCard: {
         margin: theme.spacing(2, "auto", 0, "auto"),
         width: "100%",
-        [theme.breakpoints.up("md")]: {
-            width: "80%"
+        [theme.breakpoints.up("sm")]: {
+            width: "500px"
         }
+    },
+    truncateText: {
+        display: "-webkit-box",
+        "-webkit-line-clamp": 5,
+        "-webkit-box-orient": "vertical",
+        overflow: "hidden"
     },
     articleImgContainer: {
         display: "flex",

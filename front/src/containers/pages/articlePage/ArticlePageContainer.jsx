@@ -36,6 +36,7 @@ const ArticlePageContainer = ({setArticleContext, articles, setArticles}) => {
                                 article={article}
                                 articles={articles}
                                 setArticles={setArticles}
+                                isTruncate={false}
                             />
                         </ErrorBoundary>
                     )
