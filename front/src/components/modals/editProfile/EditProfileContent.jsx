@@ -22,7 +22,8 @@ const EditProfileContent = ({
     visibilities,
     handleChange,
     deleteImage,
-    cropImage
+    cropImage,
+    countries
 }) => {
 
     const classes = useStyles();
@@ -48,6 +49,7 @@ const EditProfileContent = ({
             <EditProfileFields
                 universities={universities}
                 visibilities={visibilities}
+                countries={countries}
             />
         </DialogContent>
     )

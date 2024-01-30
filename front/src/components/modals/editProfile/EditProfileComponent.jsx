@@ -24,6 +24,7 @@ const EditProfileComponent = ({
     handleModalClose,
     user,
     isFetching,
+    countries
 }) => {
 
     return (
@@ -55,6 +56,7 @@ const EditProfileComponent = ({
                                 image={image}
                                 cropImage={handleCropImage}
                                 deleteImage={handleDeleteImage}
+                                countries={countries}
                             />
                             <SaveCancelDialogActions cancelOnClick={handleModalClose} isLoading={isLoading}/>
                         </Form>
