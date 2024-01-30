@@ -26,7 +26,9 @@ const EditProfileComponent = ({
     isFetching,
     countries,
     states,
-    onCountryChange
+    onCountryChange,
+    cities,
+    onStateChange
 }) => {
 
     return (
@@ -61,6 +63,8 @@ const EditProfileComponent = ({
                                 countries={countries}
                                 states={states}
                                 onCountryChange={onCountryChange}
+                                cities={cities}
+                                onStateChange={onStateChange}
                             />
                             <SaveCancelDialogActions cancelOnClick={handleModalClose} isLoading={isLoading}/>
                         </Form>

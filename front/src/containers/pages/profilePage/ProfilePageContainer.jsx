@@ -1,4 +1,4 @@
-import React, {useContext, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
 import {useMutation, useQuery} from "react-query";
 import ProfileComponent from "../../../components/layouts/profile/ProfileComponent";
@@ -16,6 +16,11 @@ import ProfilePageComponent from "../../../components/pages/profilePage/ProfileP
 import usersForSearchService from "../../../services/usersForSearchService";
 import requestsService from "../../../services/requestsService";
 import currentRequestService from "../../../services/currentRequestService";
+import {
+    GetCountries,
+    GetState,
+    GetCity
+} from "react-country-state-city";
 
 const ProfilePageContainer = () => {
     const {id: idStr} = useParams();
@@ -38,6 +43,37 @@ const ProfilePageContainer = () => {
     // friends request between currently authenticated user
     // and owner of currently open profile
     const [currentRequest, setCurrentRequest] = useState(null);
+
+    const [countries, setCountries] = useState([]);
+    const [states, setStates] = useState([]);
+    const [cities, setCities] = useState([]);
+    const [countryId, setCountryId] = useState();
+
+    const parseResults = (results) => {
+        return results.map(result => ({
+            label: result.name,
+            value: result.id
+        }))
+    }
+
+    useEffect(() => {
+        GetCountries().then(
+            (results) => setCountries(parseResults(results))
+        )
+    }, []);
+
+    const onCountryChange = (countryId) => {
+        setCountryId(countryId);
+        GetState(countryId).then(
+            (results) => setStates(parseResults(results))
+        )
+    }
+
+    const onStateChange = (stateId) => {
+        GetCity(countryId, stateId).then(
+            (results) => setCities(parseResults(results))
+        )
+    }
 
 
     const {isFetching: isUserFetching} = useQuery(
@@ -171,6 +207,11 @@ const ProfilePageContainer = () => {
                         setIsModalOpen={setIsEditProfileModalOpen}
                         user={user}
                         setUser={setUser}
+                        countries={countries}
+                        states={states}
+                        cities={cities}
+                        onCountryChange={onCountryChange}
+                        onStateChange={onStateChange}
                     />
                 }
                 searchUsersComponent={

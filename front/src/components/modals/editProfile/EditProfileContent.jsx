@@ -25,7 +25,9 @@ const EditProfileContent = ({
     cropImage,
     countries,
     states,
-    onCountryChange
+    onCountryChange,
+    cities,
+    onStateChange
 }) => {
 
     const classes = useStyles();
@@ -54,6 +56,8 @@ const EditProfileContent = ({
                 countries={countries}
                 states={states}
                 onCountryChange={onCountryChange}
+                cities={cities}
+                onStateChange={onStateChange}
             />
         </DialogContent>
     )

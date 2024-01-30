@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from "react";
+import React, {useContext, useState} from "react";
 import {useMutation, useQuery} from "react-query";
 import {serialize} from "object-to-formdata";
 import EditProfileComponent from "../../../components/modals/editProfile/EditProfileComponent";
@@ -9,13 +9,18 @@ import {EditProfileContainerPropTypes} from "./editProfileContainerPropTypes";
 import {refetchOff} from "../../../config/refetchOff";
 import imageService from "../../../services/imageService";
 import handleResponseContext from "../../../context/handleResponseContext";
-import {
-    GetCountries,
-    GetState,
-    GetCity
-} from "react-country-state-city";
 
-const EditProfileContainer = ({isModalOpen, setIsModalOpen, user, setUser}) => {
+const EditProfileContainer = ({
+    isModalOpen,
+    setIsModalOpen,
+    user,
+    setUser,
+    countries,
+    states,
+    cities,
+    onCountryChange,
+    onStateChange
+}) => {
 
     const {handleError, showErrorAlert} = useContext(handleResponseContext);
     const {isFetching: isUniversitiesFetching, data: universitiesData} = useQuery(
@@ -35,32 +40,6 @@ const EditProfileContainer = ({isModalOpen, setIsModalOpen, user, setUser}) => {
     const [image, setImage] = useState();
     const [croppedImage, setCroppedImage] = useState();
     const [cropper, setCropper] = useState();
-    const [countries, setCountries] = useState([]);
-    const [states, setStates] = useState([]);
-
-    useEffect(() => {
-        GetCountries().then((result) => {
-            setCountries(
-                result.map(
-                    (country) => ({
-                        label: country.name,
-                        value: country.id
-                    })
-                )
-            );
-        })
-    }, []);
-
-    const onCountryChange = (countryId) => {
-        GetState(countryId).then((result) => setStates(
-            result.map(
-                (state) => ({
-                    label: state.name,
-                    value: state.id
-                })
-            )
-        ))
-    }
 
     const {mutate, isLoading} = useMutation(
         updateUser, {
@@ -115,6 +94,8 @@ const EditProfileContainer = ({isModalOpen, setIsModalOpen, user, setUser}) => {
             countries={countries}
             states={states}
             onCountryChange={onCountryChange}
+            cities={cities}
+            onStateChange={onStateChange}
         />
     );
 };
