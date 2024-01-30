@@ -36,7 +36,36 @@ const ProfileFields = ({user, currentRequest, isAdmin, isCurrentUser}) => {
                 visibilityLabel={user?.phone_visibility.label}
                 isField={!!user?.phone}
             />
-
+            <ProfileFieldRow
+                name={"country"}
+                label={"Country"}
+                isAdmin={isAdmin}
+                isCurrentUser={isCurrentUser}
+                isFriends={currentRequest?.is_friends}
+                visibilityName={"country_visibility.label"}
+                visibilityLabel={user?.country_visibility.label}
+                isField={!!user?.country}
+            />
+            <ProfileFieldRow
+                name={"state"}
+                label={"State"}
+                isAdmin={isAdmin}
+                isCurrentUser={isCurrentUser}
+                isFriends={currentRequest?.is_friends}
+                visibilityName={"state_visibility.label"}
+                visibilityLabel={user?.state_visibility.label}
+                isField={!!user?.state}
+            />
+            <ProfileFieldRow
+                name={"city"}
+                label={"City"}
+                isAdmin={isAdmin}
+                isCurrentUser={isCurrentUser}
+                isFriends={currentRequest?.is_friends}
+                visibilityName={"city_visibility.label"}
+                visibilityLabel={user?.city_visibility.label}
+                isField={!!user?.city}
+            />
             <ProfileFieldRow
                 name={"university.label"}
                 label={"University"}
