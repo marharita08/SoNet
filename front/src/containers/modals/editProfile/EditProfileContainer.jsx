@@ -36,21 +36,31 @@ const EditProfileContainer = ({isModalOpen, setIsModalOpen, user, setUser}) => {
     const [croppedImage, setCroppedImage] = useState();
     const [cropper, setCropper] = useState();
     const [countries, setCountries] = useState([]);
+    const [states, setStates] = useState([]);
 
     useEffect(() => {
         GetCountries().then((result) => {
             setCountries(
                 result.map(
-                    (country) => (
-                        {
-                            label: country.name,
-                            value: country.id
-                        }
-                    )
+                    (country) => ({
+                        label: country.name,
+                        value: country.id
+                    })
                 )
             );
         })
     }, []);
+
+    const onCountryChange = (countryId) => {
+        GetState(countryId).then((result) => setStates(
+            result.map(
+                (state) => ({
+                    label: state.name,
+                    value: state.id
+                })
+            )
+        ))
+    }
 
     const {mutate, isLoading} = useMutation(
         updateUser, {
@@ -103,6 +113,8 @@ const EditProfileContainer = ({isModalOpen, setIsModalOpen, user, setUser}) => {
             handleModalClose={handleModalClose}
             isFetching={isUniversitiesFetching || isVisibilitiesFetching}
             countries={countries}
+            states={states}
+            onCountryChange={onCountryChange}
         />
     );
 };

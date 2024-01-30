@@ -23,7 +23,9 @@ const EditProfileContent = ({
     handleChange,
     deleteImage,
     cropImage,
-    countries
+    countries,
+    states,
+    onCountryChange
 }) => {
 
     const classes = useStyles();
@@ -50,6 +52,8 @@ const EditProfileContent = ({
                 universities={universities}
                 visibilities={visibilities}
                 countries={countries}
+                states={states}
+                onCountryChange={onCountryChange}
             />
         </DialogContent>
     )

@@ -5,7 +5,7 @@ import {useStyles} from "./style";
 import {visibilitiesPropTypes} from "../../../propTypes/visibilitiesPropTypes";
 import {universitiesPropTypes} from "../../../propTypes/universitiesPropTypes";
 
-const EditProfileFields = ({visibilities, universities, countries}) => {
+const EditProfileFields = ({visibilities, universities, countries, states, onCountryChange}) => {
 
     const classes = useStyles();
 
@@ -42,6 +42,15 @@ const EditProfileFields = ({visibilities, universities, countries}) => {
                 fieldComponent={FormikAutocomplete}
                 fieldOptions={countries}
                 visibilityName={"country_visibility"}
+                visibilities={visibilities}
+                onChange={onCountryChange}
+            />
+            <EditProfileFieldRow
+                fieldName={"state"}
+                fieldLabel={"State"}
+                fieldComponent={FormikAutocomplete}
+                fieldOptions={states}
+                visibilityName={"state_visibility"}
                 visibilities={visibilities}
             />
         </div>
