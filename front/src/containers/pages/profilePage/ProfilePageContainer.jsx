@@ -93,25 +93,6 @@ const ProfilePageContainer = () => {
         }
     );
 
-    const updateUserLocation = (locationId, locationArray, locationName) => {
-        if (user && user[locationId] && locationArray.length > 0) {
-            const location = locationArray.filter(c => c.id === user[locationId]);
-            setUser({...user, [locationName]: location.name});
-        }
-    }
-
-    useEffect(() => {
-        updateUserLocation("country_id", countries, "country");
-    }, [user, countries]);
-
-    useEffect(() => {
-        updateUserLocation("state_id", states, "state");
-    }, [user, states]);
-
-    useEffect(() => {
-        updateUserLocation("city_id", cities, "city");
-    }, [user, cities]);
-
     const handleEdit = () => {
         setIsEditProfileModalOpen(true);
     };

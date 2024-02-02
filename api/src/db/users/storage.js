@@ -19,7 +19,10 @@ module.exports = {
                 `${fullColumns.universities.name} as university_label`,
                 `ev.${shortColumns.fieldVisibilities.visibility} as ev_label`,
                 `pv.${shortColumns.fieldVisibilities.visibility} as pv_label`,
-                `uv.${shortColumns.fieldVisibilities.visibility} as uv_label`
+                `uv.${shortColumns.fieldVisibilities.visibility} as uv_label`,
+                `cv.${shortColumns.fieldVisibilities.visibility} as cv_label`,
+                `sv.${shortColumns.fieldVisibilities.visibility} as sv_label`,
+                `civ.${shortColumns.fieldVisibilities.visibility} as civ_label`
             )
             .from(tables.users)
             .join(tables.userSettings, fullColumns.users.userId, fullColumns.userSettings.userId)
@@ -37,6 +40,21 @@ module.exports = {
                 {uv: tables.fieldVisibilities},
                 shortColumns.userSettings.universityVisibilityId,
                 `uv.${shortColumns.fieldVisibilities.visibilityId}`
+            )
+            .join(
+                {cv: tables.fieldVisibilities},
+                shortColumns.userSettings.countryVisibility,
+                `cv.${shortColumns.fieldVisibilities.visibilityId}`
+            )
+            .join(
+                {sv: tables.fieldVisibilities},
+                shortColumns.userSettings.stateVisibility,
+                `sv.${shortColumns.fieldVisibilities.visibilityId}`
+            )
+            .join(
+                {civ: tables.fieldVisibilities},
+                shortColumns.userSettings.cityVisibility,
+                `civ.${shortColumns.fieldVisibilities.visibilityId}`
             )
             .leftOuterJoin(tables.universities, fullColumns.users.universityId, fullColumns.universities.universityId)
             .where(fullColumns.users.userId, id),

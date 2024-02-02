@@ -37,7 +37,7 @@ const ProfileFields = ({user, currentRequest, isAdmin, isCurrentUser}) => {
                 isField={!!user?.phone}
             />
             <ProfileFieldRow
-                name={"country"}
+                name={"country.label"}
                 label={"Country"}
                 isAdmin={isAdmin}
                 isCurrentUser={isCurrentUser}
@@ -47,7 +47,7 @@ const ProfileFields = ({user, currentRequest, isAdmin, isCurrentUser}) => {
                 isField={!!user?.country}
             />
             <ProfileFieldRow
-                name={"state"}
+                name={"state.label"}
                 label={"State"}
                 isAdmin={isAdmin}
                 isCurrentUser={isCurrentUser}
@@ -57,7 +57,7 @@ const ProfileFields = ({user, currentRequest, isAdmin, isCurrentUser}) => {
                 isField={!!user?.state}
             />
             <ProfileFieldRow
-                name={"city"}
+                name={"city.label"}
                 label={"City"}
                 isAdmin={isAdmin}
                 isCurrentUser={isCurrentUser}

@@ -58,7 +58,10 @@ const shortColumns = {
         userId: "user_id",
         emailVisibilityId: "email_visibility_id",
         phoneVisibilityId: "phone_visibility_id",
-        universityVisibilityId: "university_visibility_id"
+        universityVisibilityId: "university_visibility_id",
+        countryVisibility: "country_visibility_id",
+        stateVisibility: "state_visibility_id",
+        cityVisibility: "city_visibility_id"
     },
     universities: {
         universityId: "university_id",

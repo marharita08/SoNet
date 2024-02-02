@@ -58,25 +58,9 @@ router.put(
         }
     ),
     asyncHandler(async (req, res, next) => {
-        const {
-            email_visibility: {value: email_visibility_id},
-            phone_visibility: {value: phone_visibility_id},
-            university_visibility: {value: university_visibility_id},
-            university: {value: university_id},
-            ...rest
-        } = req.body;
         const fileData = req.file;
         const {id} = req.params;
-        const user = {
-            ...rest,
-            university_id
-        }
-        const settings = {
-            email_visibility_id,
-            phone_visibility_id,
-            university_visibility_id
-        }
-        res.send(await usersService.update(+id, user, settings, fileData, next));
+        res.send(await usersService.update(+id, req.body, fileData, next));
     })
 );
 

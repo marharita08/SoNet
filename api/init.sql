@@ -14,6 +14,12 @@ create table if not exists users(
  university_id int,
  avatar        varchar(255),
  avatar_path   varchar(255),
+ country_id    int,
+ state_id      int,
+ city_id       int,
+ country_name  varchar(255),
+ state_name    varchar(255),
+ city_name     varchar(255),
  foreign key (university_id) references universities (university_id)
 );
 
@@ -43,10 +49,16 @@ create table if not exists user_settings(
  email_visibility_id      int not null default 1,
  phone_visibility_id      int not null default 1,
  university_visibility_id int not null default 1,
+ country_visibility_id    int not null default 1,
+ state_visibility_id      int not null default 1,
+ city_visibility_id       int not null default 1,
  foreign key (user_id) references users (user_id) on delete cascade,
  foreign key (email_visibility_id) references field_visibilities (visibility_id),
  foreign key (phone_visibility_id) references field_visibilities (visibility_id),
- foreign key (university_visibility_id) references field_visibilities (visibility_id)
+ foreign key (university_visibility_id) references field_visibilities (visibility_id),
+ foreign key (country_visibility_id) references field_visibilities (visibility_id),
+ foreign key (state_visibility_id) references field_visibilities (visibility_id),
+ foreign key (city_visibility_id) references field_visibilities (visibility_id)
 );
 
 create table if not exists article_visibilities(
