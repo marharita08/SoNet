@@ -42,11 +42,7 @@ class UsersStorage extends BaseStorage {
       .leftOuterJoin("universities", "users.university_id", "universities.university_id")
       .where(`${this.table}.${this.primaryKey}`, id);
 
-  getAvatarPath = async (id) =>
-    this.db(this.table)
-      .select("avatar_path")
-      .first()
-      .where(this.primaryKey, id);
+  getAvatarPath = async (id) => super.getFieldById(id, "avatar_path");
 
   getFriends = async (id) =>
     this.db
@@ -87,17 +83,9 @@ class UsersStorage extends BaseStorage {
           .andOnVal("status.status", status.UNDER_CONSIDERATION);
       });
 
-  getByEmail = async (email) =>
-    this.db(this.table)
-      .select()
-      .first()
-      .where("email", email);
+  getByEmail = async (email) => super.getOneByField(email, "email");
 
-  getByFbId = async (fbId) =>
-    this.db(this.table)
-      .select()
-      .first()
-      .where("fbId", fbId);
+  getByFbId = async (fbId) => super.getOneByField(fbId, "fb_id")
 
   searchUsers = async (id, text) =>
     this.db
@@ -128,12 +116,7 @@ class UsersStorage extends BaseStorage {
       .orderBy("users.name")
       .limit(10);
 
-  getRandomUserId = async () =>
-    this.db(this.table)
-      .select("user_id")
-      .first()
-      .orderByRaw("random()")
-      .limit(1);
+  getRandomUserId = async () => super.getRandomId();
 }
 
 module.exports = new UsersStorage();

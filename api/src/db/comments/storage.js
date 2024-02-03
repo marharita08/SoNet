@@ -38,11 +38,7 @@ class CommentsStorage extends BaseStorage {
       .where("ch.article_id}", id)
       .orderBy("ch.path");
 
-  getAmountByArticleId = async (id) =>
-    this.db(this.table)
-      .countDistinct(this.primaryKey)
-      .first()
-      .where("article_id", id);
+  getAmountByArticleId = async (id) => super.getCountByField(id, "article_id");
 }
 
 module.exports = new CommentsStorage();

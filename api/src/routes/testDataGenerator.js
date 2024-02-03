@@ -25,7 +25,7 @@ router.get(
             for (let i = 0; i < users.length; i++) {
                 const {firstName, lastName, email, phone, password, image, university} = users[i];
                 let universityId = await universitiesStorage.getByName(university);
-                if (!universityId[0]) {
+                if (!universityId) {
                     universityId = await universitiesStorage.create({name: university});
                 }
                 const user = {

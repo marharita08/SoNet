@@ -106,11 +106,7 @@ class ArticleStorage extends BaseStorage {
       .offset(page * limit - limit);
   };
 
-  getImageByArticleId = async (id) =>
-    this.db(this.table)
-      .select("image")
-      .first()
-      .where(this.primaryKey, id);
+  getImageByArticleId = async (id) => super.getFieldById(id, "image")
 
   getCountOfAllNews = async () =>
     this.db(this.table)
@@ -147,12 +143,7 @@ class ArticleStorage extends BaseStorage {
       });
   };
 
-  getRandomArticleId = async () =>
-    this.db(this.table)
-      .select(this.primaryKey)
-      .first()
-      .orderByRaw("random()")
-      .limit(1);
+  getRandomArticleId = async () => super.getRandomId();
 }
 
 module.exports = new ArticleStorage();

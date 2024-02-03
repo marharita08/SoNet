@@ -15,18 +15,9 @@ class UniversitiesStorage extends BaseStorage {
       .from(this.table)
       .orderBy("name");
 
-  getByName = async (name) =>
-    this.db
-      .select()
-      .from(this.table)
-      .where("name", name);
+  getByName = async (name) => super.getOneByField(name, "name");
 
-  getRandomUniversityId = async () =>
-    db(this.table)
-      .select(this.primaryKey)
-      .first()
-      .orderByRaw("random()")
-      .limit(1);
+  getRandomUniversityId = async () => super.getRandomId();
 }
 
 module.exports = new UniversitiesStorage();

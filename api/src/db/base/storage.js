@@ -29,6 +29,31 @@ class BaseStorage {
     this.db(this.table)
       .delete()
       .where(this.primaryKey, id);
+
+  getOneByField = async (fieldValue, fieldName) =>
+    this.db(this.table)
+      .select()
+      .first()
+      .where(fieldName, fieldValue);
+
+  getFieldById = async (id, field) =>
+    this.db(this.table)
+      .select(field)
+      .first()
+      .where(this.primaryKey, id);
+
+  getCountByField = async (fieldValue, fieldName) =>
+    this.db(this.table)
+      .countDistinct(this.primaryKey)
+      .first()
+      .where(fieldName, fieldValue);
+
+  getRandomId = async () =>
+    this.db(this.table)
+      .select(this.primaryKey)
+      .first()
+      .orderByRaw("random()")
+      .limit(1);
 }
 
 module.exports = BaseStorage;
