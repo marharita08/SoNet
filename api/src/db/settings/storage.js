@@ -1,10 +1,10 @@
 const db = require("../../configs/db");
-const {tables, shortColumns} = require("../dbSchema");
+const BaseStorage = require("../base/storage");
 
-module.exports = {
-    update: async (id, settings) =>
-        db(tables.userSettings)
-            .update(settings)
-            .where(shortColumns.userSettings.userId, id),
-    create: async (settings) => db(tables.userSettings).insert(settings),
-};
+class SettingsStorage extends BaseStorage {
+  constructor() {
+    super("user_settings", "user_id", db);
+  }
+}
+
+module.exports = new SettingsStorage();
