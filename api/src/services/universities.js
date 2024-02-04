@@ -1,9 +1,10 @@
 const universitiesStorage = require("../db/universities/storage");
+const BaseService = require("./base");
 
-const getAll = async () => {
-    return await universitiesStorage.getAll();
+class UniversitiesService extends BaseService {
+    constructor() {
+        super(universitiesStorage);
+    }
 }
 
-module.exports = {
-    getAll
-}
+module.exports = new UniversitiesService();

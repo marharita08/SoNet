@@ -5,80 +5,65 @@ const settingsStorage = require("../db/settings/storage");
 const fileHelper = require("../utils/fileHelper");
 const {USER_NOT_FOUND} = require("../constants/messages");
 const {parseToProfile, parseToUserAndSettings} = require("../utils/usersParser");
+const BaseService = require("./base");
 
-const getProfile = async (id) => {
-    const dbResponse = await usersStorage.getProfileById(id);
+class UsersServices extends BaseService {
+
+  constructor() {
+    super(usersStorage);
+  }
+
+  getProfile = async (id) => {
+    const dbResponse = await this.storage.getProfileById(id);
     return parseToProfile(dbResponse[0]);
-};
+  };
 
-const getAll = async () => {
-    return await usersStorage.getAll();
-};
+  getByEmail = async (email) => {
+    return await this.storage.getByEmail(email);
+  };
 
-const getById = async (id) => {
-    return await usersStorage.getById(id);
-};
-
-const getByEmail = async (email) => {
-    return await usersStorage.getByEmail(email);
-};
-
-const getProfileById = async (id) => {
-    const profile = await getProfile(id);
+  getProfileById = async (id) => {
+    const profile = await this.getProfile(id);
     if (profile) {
-        return profile;
+      return profile;
     }
     throw new NotFoundException(USER_NOT_FOUND);
-};
+  };
 
-const update = async (id, userData, fileData, errorHandler) => {
+  update = async (id, userData, fileData, errorHandler) => {
     const {user, settings} = parseToUserAndSettings(userData);
     let avatarUrl;
     let avatarPath;
     if (fileData) {
-        const {avatar_path: oldAvatarPath} = await usersStorage.getAvatarPath(id);
-        avatarPath = fileData.path;
-        avatarUrl = config.appUrl + fileHelper.getUrlPath(fileData);
-        fileHelper.deleteFile(oldAvatarPath, errorHandler);
+      const {avatar_path: oldAvatarPath} = await this.storage.getAvatarPath(id);
+      avatarPath = fileData.path;
+      avatarUrl = config.appUrl + fileHelper.getUrlPath(fileData);
+      fileHelper.deleteFile(oldAvatarPath, errorHandler);
     }
-    await usersStorage.update(id, {
-        ...user,
-        avatar: avatarUrl,
-        avatar_path: avatarPath,
+    await super.update(id, {
+      ...user,
+      avatar: avatarUrl,
+      avatar_path: avatarPath,
     });
     await settingsStorage.update(id, settings);
-    return await getProfile(id);
-};
+    return await this.getProfile(id);
+  };
 
-const _delete = async (id) => {
-    return await usersStorage.delete(id);
-};
+  getFriends = async (id) => {
+    return await this.storage.getFriends(id);
+  };
 
-const getFriends = async (id) => {
-    return await usersStorage.getFriends(id);
-};
+  getIncomingRequests = async (id) => {
+    return await this.storage.getIncomingRequests(id);
+  };
 
-const getIncomingRequests = async (id) => {
-    return await usersStorage.getIncomingRequests(id);
-};
+  getOutgoingRequests = async (id) => {
+    return await this.storage.getOutgoingRequests(id);
+  };
 
-const getOutgoingRequests = async (id) => {
-    return await usersStorage.getOutgoingRequests(id);
-};
+  searchUsers = async (id, text) => {
+    return await this.storage.searchUsers(id, text);
+  };
+}
 
-const searchUsers = async (id, text) => {
-    return await usersStorage.searchUsers(id, text);
-};
-
-module.exports = {
-    getAll,
-    getById,
-    getByEmail,
-    getProfileById,
-    getFriends,
-    getOutgoingRequests,
-    getIncomingRequests,
-    searchUsers,
-    update,
-    delete: _delete
-};
+module.exports = new UsersServices();
