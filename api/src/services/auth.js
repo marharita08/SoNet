@@ -62,7 +62,7 @@ const loginWithFacebook = async (user) => {
 }
 
 const refresh = async (refreshToken) => {
-    const session = await sessionStorage.getByToken(refreshToken);
+    const session = await sessionStorage.getById(refreshToken);
     if (session) {
         const user = await userStorage.getById(session.user_id);
         const accessToken = createAccessToken(user);
@@ -79,7 +79,7 @@ const refresh = async (refreshToken) => {
 };
 
 const logout = async (refreshToken) => {
-    return await sessionStorage.deleteByToken(refreshToken);
+    return await sessionStorage.delete(refreshToken);
 };
 
 module.exports = {
