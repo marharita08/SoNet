@@ -6,47 +6,47 @@ const friendsService = require("../services/friends");
 const validation = require("../utils/validationRules");
 
 router.get(
-    "/request/:user_id",
-    authMiddleware,
-    asyncHandler(async (req, res) => {
-        const {user_id: userId} = req.params;
-        let {user_id: currentUserId} = req.auth;
-        res.send(await friendsService.getRequest(+userId, +currentUserId));
-    })
+  "/request/:user_id",
+  authMiddleware,
+  asyncHandler(async (req, res) => {
+    const {user_id: userId} = req.params;
+    let {user_id: currentUserId} = req.auth;
+    res.send(await friendsService.getRequest(+userId, +currentUserId));
+  })
 );
 
 router.post(
-    "/",
-    authMiddleware,
-    validationMiddleware({
-        from_user_id: validation.required,
-        to_user_id: validation.required,
-    }),
-    asyncHandler(async (req, res) => {
-        res.send(await friendsService.add(req.body));
-    })
+  "/",
+  authMiddleware,
+  validationMiddleware({
+    from_user_id: validation.required,
+    to_user_id: validation.required,
+  }),
+  asyncHandler(async (req, res) => {
+    res.send(await friendsService.add(req.body));
+  })
 );
 
 router.put(
-    "/:id",
-    authMiddleware,
-    validationMiddleware({
-        status_id: validation.required,
-    }),
-    asyncHandler(async (req, res) => {
-        const {status_id: statusID} = req.body;
-        const {id} = req.params;
-        res.send(await friendsService.update(+id, +statusID));
-    })
+  "/:id",
+  authMiddleware,
+  validationMiddleware({
+    status_id: validation.required,
+  }),
+  asyncHandler(async (req, res) => {
+    const {status_id: statusID} = req.body;
+    const {id} = req.params;
+    res.send(await friendsService.update(+id, +statusID));
+  })
 );
 
 router.delete(
-    "/:id",
-    authMiddleware,
-    asyncHandler(async (req, res) => {
-        const {id} = req.params;
-        res.send(await friendsService.delete(id));
-    })
+  "/:id",
+  authMiddleware,
+  asyncHandler(async (req, res) => {
+    const {id} = req.params;
+    res.send(await friendsService.delete(id));
+  })
 );
 
 module.exports = router;
