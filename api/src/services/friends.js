@@ -1,46 +1,47 @@
 const friendsStorage = require("../db/friends/storage");
+const BaseService = require("./base");
 
-const getRequest = async (userId, currentUserId) => {
-    const row = await friendsStorage.getByUsersId(userId, currentUserId);
-    if (row === undefined) {
-        return {is_not_friends: true};
+class FriendsService extends BaseService {
+
+  constructor() {
+    super(friendsStorage);
+  }
+
+  getRequest = async (userId, currentUserId) => {
+    const row = await this.storage.getByUsersId(userId, currentUserId);
+    if (!row) {
+      return {is_not_friends: true};
     }
     const {from_user_id: fromUserId, status_id: statusId} = row;
     if (statusId === 2) {
-        return {...row, is_friends: true};
+      return {...row, is_friends: true};
     }
     if (fromUserId === currentUserId) {
-        return {...row, is_outgoing_request: true};
+      return {...row, is_outgoing_request: true};
     }
     return {...row, is_incoming_request: true};
-}
+  };
 
-const add = async (request) => {
-    const id = await friendsStorage.create({
-        ...request,
-        status_id: 1,
+  add = async (request) => {
+    const id = await super.add({
+      ...request,
+      status_id: 1,
     });
-    return {request: await friendsStorage.getRequestById(id[0])};
-}
+    return {request: await this.storage.getRequestById(id)};
+  };
 
-const update = async (requestId, statusId) => {
-    await friendsStorage.update(
-        {
-            status_id: statusId,
-        },
-        requestId
+  update = async (requestId, statusId) => {
+    await super.update(
+      requestId,
+      {status_id: statusId}
     );
     return {id: requestId};
-}
+  };
 
-const _delete = async (id) => {
-    await friendsStorage.delete(id);
+  delete = async (id) => {
+    await super.delete(id);
     return {id};
+  };
 }
 
-module.exports = {
-    getRequest,
-    add,
-    update,
-    delete: _delete
-}
+module.exports = new FriendsService();
