@@ -9,10 +9,8 @@ const getVisibilities = (table) =>
     .from(table)
     .orderBy("visibility_id");
 
-const getForFiled = () => getVisibilities("field_visibilities");
+const getForFiled = async () => getVisibilities("field_visibilities");
 
-const getForArticle = () => getVisibilities("article_visibilities");
+const getForArticle = async () => getVisibilities("article_visibilities");
 
 module.exports = {getForFiled, getForArticle};
-
-
