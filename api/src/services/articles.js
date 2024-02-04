@@ -5,25 +5,8 @@ const NotFoundException = require("../errors/NotFoundException");
 const fileHelper = require("../utils/fileHelper");
 const Messages = require("../constants/messages");
 const {Roles} = require("../middleware/aclRules");
+const {parseArticles, parseArticle} = require("../utils/articlesParser");
 
-const parseArticle = (article) => {
-    const {visibility, visibility_id: visibilityId, ...rest} = article;
-    return {
-        ...rest,
-        visibility: {
-            value: visibilityId,
-            label: visibility,
-        }
-    };
-};
-
-const parseArticles = (articles) => {
-    const result = [];
-    Object.keys(articles).forEach((key) => {
-        result.push(parseArticle(articles[key]));
-    });
-    return result;
-};
 
 const getAllNews = async (userId, page, limit) => {
     const user = await usersStorage.getById(userId);

@@ -44,7 +44,6 @@ const parseToProfile = (userData) => {
 
         return result;
     }
-    return undefined;
 };
 
 const parseLocations = (location, name) => {
