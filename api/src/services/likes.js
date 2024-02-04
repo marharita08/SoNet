@@ -1,37 +1,34 @@
 const likesStorage = require("../db/likes/storage");
+const BaseService = require("./base");
 
-const getAll = async () => {
-    return await likesStorage.getAll();
-}
+class LikesService extends BaseService {
 
-const isLiked = async (articleId, userId) => {
-    return !!await likesStorage.getByArticleIdAndUserId(articleId, userId);
-}
+  constructor() {
+    super(likesStorage);
+  }
 
-const add = async (articleId, userId) => {
-    await likesStorage.create({
-        article_id: articleId,
-        user_id: userId,
+  isLiked = async (articleId, userId) => {
+    return !!(await this.storage.getByArticleIdAndUserId(articleId, userId));
+  };
+
+  add = async (articleId, userId) => {
+    await super.add({
+      article_id: articleId,
+      user_id: userId,
     });
+  };
+
+  delete = async (articleId, userId) => {
+    await this.storage.delete(articleId, userId);
+  };
+
+  getByArticleId = async (articleId) => {
+    return await this.storage.getByArticleId(articleId);
+  };
+
+  getAmountByArticleId = async (articleId) => {
+    return await this.storage.getAmountByArticleId(articleId);
+  };
 }
 
-const _delete = async (articleId, userId) => {
-    await likesStorage.delete(articleId, userId);
-}
-
-const getByArticleId = async (articleId) => {
-    return await likesStorage.getByArticleId(articleId);
-}
-
-const getAmountByArticleId = async (articleId) => {
-    return await likesStorage.getAmountByArticleId(articleId);
-}
-
-module.exports = {
-    getAll,
-    isLiked,
-    add,
-    delete: _delete,
-    getByArticleId,
-    getAmountByArticleId
-}
+module.exports = new LikesService();
