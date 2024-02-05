@@ -1,6 +1,7 @@
 import React from "react";
 import EditProfileFieldRow from "./EditProfileFieldRow";
 import FormikAutocomplete from "../../atoms/fields/FormikAutocomplete";
+import FormikDatePicker from "../../atoms/fields/FormikDatePicker";
 import {useStyles} from "./style";
 import {visibilitiesPropTypes} from "../../../propTypes/visibilitiesPropTypes";
 import {universitiesPropTypes} from "../../../propTypes/universitiesPropTypes";
@@ -25,7 +26,7 @@ const EditProfileFields = ({visibilities, universities, countries, states, onCou
       <EditProfileFieldRow
         fieldName={"birthday"}
         fieldLabel={"Birthday"}
-        fieldType={"date"}
+        fieldComponent={FormikDatePicker}
         visibilityName={"birthday_visibility"}
         visibilities={visibilities}
       />

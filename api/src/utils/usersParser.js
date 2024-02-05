@@ -52,6 +52,12 @@ const parseLocations = (location, name) => {
   };
 };
 
+const setNullIfEmptyString = (data, field) => {
+  if (data[field] === "") {
+    data[field] = null;
+  }
+}
+
 const parseToUserAndSettings = (userData) => {
   const {
     email_visibility: {value: email_visibility_id},
@@ -84,12 +90,9 @@ const parseToUserAndSettings = (userData) => {
     city_visibility_id,
     birthday_visibility_id
   };
-  if (user.phone === "") {
-    user.phone = null;
-  }
-  if (user.fb_id === "") {
-    user.fb_id = null;
-  }
+  setNullIfEmptyString(user, "phone");
+  setNullIfEmptyString(user, "fb_id");
+  setNullIfEmptyString(user, "birthday");
   return {user, settings};
 };
 

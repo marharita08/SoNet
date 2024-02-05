@@ -36,6 +36,7 @@ const ProfileFields = ({user, currentRequest, isAdmin, isCurrentUser}) => {
         isFriends={isFriends}
         visibilityName={"birthday_visibility.label"}
         visibilityLabel={user?.birthday_visibility.label}
+        isField={!!user?.birthday}
       />
       <ProfileFieldRow
         name={"phone"}

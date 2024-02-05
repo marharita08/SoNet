@@ -23,6 +23,9 @@ class UsersStorage extends BaseStorage {
       .select(
         `${this.table}.*`,
         "user_settings.*",
+        this.db.raw(
+          `to_char(${this.table}.birthday, 'DD.MM.YYYY') as birthday`
+        ),
         "universities.name as university_label",
         "ev.visibility as ev_label",
         "pv.visibility as pv_label",

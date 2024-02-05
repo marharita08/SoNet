@@ -19,7 +19,6 @@ class UsersServices extends BaseService {
   };
 
   getByEmail = async (email) => {
-    console.log("service getting by email...");
     return await this.storage.getByEmail(email);
   };
 
@@ -32,10 +31,7 @@ class UsersServices extends BaseService {
   };
 
   update = async (id, userData, fileData, errorHandler) => {
-    console.log("updating");
     const {user, settings} = parseToUserAndSettings(userData);
-    console.log(user);
-    console.log(settings);
     let avatarUrl;
     let avatarPath;
     if (fileData) {
@@ -50,9 +46,7 @@ class UsersServices extends BaseService {
       avatar_path: avatarPath,
     });
     await settingsStorage.update(id, settings);
-    const profile = await this.getProfile(id);
-    console.log(profile);
-    return profile;
+    return await this.getProfile(id);
   };
 
   getFriends = async (id) => {

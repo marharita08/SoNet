@@ -4,7 +4,7 @@ import TextField from "@material-ui/core/TextField";
 import {fieldToTextField} from "formik-mui";
 
 const FormikAutocomplete = (props) => {
-    const {form: {setTouched, setFieldValue}/*, onChange*/} = props;
+    const {form: {setTouched, setFieldValue}} = props;
     const {error, helperText, ...field} = fieldToTextField(props);
     const {name, label, onChange} = field;
 
