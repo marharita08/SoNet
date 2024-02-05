@@ -8,29 +8,29 @@ import {useTheme} from "@mui/material/styles";
 
 const ImageDialogActions = ({addImageOnClick, cropImageOnClick, deleteImageOnclick, isImage, isCropper}) => {
 
-    const theme = useTheme();
+  const theme = useTheme();
 
-    return (
-        <DialogActions sx={theme.dialogActions}>
-            <AddImageBtn onChange={addImageOnClick} isImage={isImage}/>
-            {
-                isCropper &&
-                <CropImageBtn onClick={cropImageOnClick}/>
-            }
-            {
-                isImage &&
-                <DeleteImageBtn onClick={deleteImageOnclick}/>
-            }
-        </DialogActions>
-    );
+  return (
+    <DialogActions sx={theme.dialogActions}>
+      <AddImageBtn onChange={addImageOnClick} isImage={isImage}/>
+      {
+        isCropper &&
+        <CropImageBtn onClick={cropImageOnClick}/>
+      }
+      {
+        isImage &&
+        <DeleteImageBtn onClick={deleteImageOnclick}/>
+      }
+    </DialogActions>
+  );
 };
 
 ImageDialogActions.propTypes = {
-    addImageOnClick: PropTypes.func.isRequired,
-    cropImageOnClick: PropTypes.func.isRequired,
-    deleteImageOnclick: PropTypes.func.isRequired,
-    isImage: PropTypes.bool.isRequired,
-    isCropper: PropTypes.bool.isRequired
+  addImageOnClick: PropTypes.func.isRequired,
+  cropImageOnClick: PropTypes.func.isRequired,
+  deleteImageOnclick: PropTypes.func.isRequired,
+  isImage: PropTypes.bool.isRequired,
+  isCropper: PropTypes.bool.isRequired
 };
 
 export default ImageDialogActions;

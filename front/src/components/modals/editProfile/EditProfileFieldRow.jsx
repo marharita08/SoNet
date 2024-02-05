@@ -7,62 +7,62 @@ import PropTypes from "prop-types";
 import {optionsPropTypes} from "../../../propTypes/optionsPropTypes";
 
 const EditProfileFieldRow = ({
-    fieldType,
-    fieldName,
-    fieldLabel,
-    fieldComponent,
-    fieldOptions,
-    visibilityName,
-    visibilities,
-    onChange
+  fieldType,
+  fieldName,
+  fieldLabel,
+  fieldComponent,
+  fieldOptions,
+  visibilityName,
+  visibilities,
+  onChange
 }) => {
 
-    const classes = useStyles();
+  const classes = useStyles();
 
-    return (
-        <div>
-            <div className={classes.field}>
-                <Field
-                    component={fieldComponent}
-                    type={fieldType}
-                    name={fieldName}
-                    label={fieldLabel}
-                    options={fieldOptions}
-                    onChange={onChange}
-                    fullWidth
-                />
-            </div>
-            <div className={classes.visibility}>
-                {
-                    visibilities &&
-                    <Field
-                        component={FormikAutocomplete}
-                        name={visibilityName}
-                        label={"Available to"}
-                        options={visibilities}
-                    />
-                }
-            </div>
-        </div>
-    );
+  return (
+    <div>
+      <div className={classes.field}>
+        <Field
+          component={fieldComponent}
+          type={fieldType}
+          name={fieldName}
+          label={fieldLabel}
+          options={fieldOptions}
+          onChange={onChange}
+          fullWidth
+        />
+      </div>
+      <div className={classes.visibility}>
+        {
+          visibilities &&
+          <Field
+            component={FormikAutocomplete}
+            name={visibilityName}
+            label={"Available to"}
+            options={visibilities}
+          />
+        }
+      </div>
+    </div>
+  );
 };
 
 EditProfileFieldRow.propTypes = {
-    fieldType: PropTypes.string,
-    fieldName: PropTypes.string.isRequired,
-    fieldLabel: PropTypes.string.isRequired,
-    fieldComponent: PropTypes.elementType,
-    fieldOptions: PropTypes.array,
-    visibilityName: PropTypes.string,
-    visibilities: optionsPropTypes
+  fieldType: PropTypes.string,
+  fieldName: PropTypes.string.isRequired,
+  fieldLabel: PropTypes.string.isRequired,
+  fieldComponent: PropTypes.elementType,
+  fieldOptions: PropTypes.array,
+  visibilityName: PropTypes.string,
+  visibilities: optionsPropTypes
 };
 
 EditProfileFieldRow.defaultProps = {
-    fieldType: "text",
-    visibilityName: undefined,
-    visibilities: undefined,
-    fieldComponent: TextField,
-    fieldOptions: undefined
+  fieldType: "text",
+  visibilityName: undefined,
+  visibilities: undefined,
+  fieldComponent: TextField,
+  fieldOptions: undefined
 };
 
 export default EditProfileFieldRow;

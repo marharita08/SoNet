@@ -7,25 +7,25 @@ import PropTypes from "prop-types";
 
 const SaveCancelDialogActions = ({cancelOnClick, isLoading, isAdd}) => {
 
-    const theme = useTheme();
+  const theme = useTheme();
 
-    return (
-        <DialogActions sx={theme.dialogActions}>
-            <CancelButton onClick={cancelOnClick}/>
-            <SubmitButton isLoading={isLoading} isAdd={isAdd}/>
-        </DialogActions>
-    );
+  return (
+    <DialogActions sx={theme.dialogActions}>
+      <CancelButton onClick={cancelOnClick}/>
+      <SubmitButton isLoading={isLoading} isAdd={isAdd}/>
+    </DialogActions>
+  );
 };
 
 SaveCancelDialogActions.propTypes = {
-    cancelOnClick: PropTypes.func.isRequired,
-    isLoading: PropTypes.bool,
-    isAdd: PropTypes.bool
+  cancelOnClick: PropTypes.func.isRequired,
+  isLoading: PropTypes.bool,
+  isAdd: PropTypes.bool
 };
 
 SaveCancelDialogActions.defaultProps = {
-    isLoading: false,
-    isAdd: false
+  isLoading: false,
+  isAdd: false
 };
 
 export default SaveCancelDialogActions;
