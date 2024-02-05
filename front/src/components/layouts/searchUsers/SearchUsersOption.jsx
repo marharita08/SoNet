@@ -7,26 +7,26 @@ import {useStyles} from "./style";
 
 const SearchUsersOption = ({user, deleteFromFriends, addToFriends, acceptRequest}) => {
 
-    const classes = useStyles();
+  const classes = useStyles();
 
-    return (
-        <div className={classes.option}>
-            <SearchUsersOptionUser user={user}/>
-            <SearchUsersOptionIconBtn
-                user={user}
-                addToFriends={addToFriends}
-                deleteFromFriends={deleteFromFriends}
-                acceptRequest={acceptRequest}
-            />
-        </div>
-    )
-}
+  return (
+    <div className={classes.option}>
+      <SearchUsersOptionUser user={user}/>
+      <SearchUsersOptionIconBtn
+        user={user}
+        addToFriends={addToFriends}
+        deleteFromFriends={deleteFromFriends}
+        acceptRequest={acceptRequest}
+      />
+    </div>
+  );
+};
 
 SearchUsersOption.propTypes = {
-    user: userForSearchPropTypes,
-    deleteFromFriends: PropTypes.func.isRequired,
-    addToFriends: PropTypes.func.isRequired,
-    acceptRequest: PropTypes.func.isRequired
-}
+  user: userForSearchPropTypes,
+  deleteFromFriends: PropTypes.func.isRequired,
+  addToFriends: PropTypes.func.isRequired,
+  acceptRequest: PropTypes.func.isRequired
+};
 
 export default SearchUsersOption;

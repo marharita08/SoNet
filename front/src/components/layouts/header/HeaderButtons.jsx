@@ -10,42 +10,42 @@ import LinkToAllArticles from "../../atoms/links/LinkToAllArticles";
 
 const HeaderButtons = ({isAdmin, handleAddArticle}) => {
 
-    const classes = useStyles();
+  const classes = useStyles();
 
-    return (
-        <div className={classes.buttonsContainer}>
-            <LinkToRoot
-                content={
-                    <HeaderButton
-                        text={"Home"}
-                        icon={<HomeIcon fontSize={"small"}/>}
-                        className={classes.homeButton}
-                    />
-                }
-            />
-            {
-                isAdmin &&
-                <LinkToAllArticles
-                    content={
-                        <HeaderButton
-                            text={"All articles"}
-                            icon={<DescriptionIcon fontSize={"small"}/>}
-                        />
-                    }
-                />
-            }
+  return (
+    <div className={classes.buttonsContainer}>
+      <LinkToRoot
+        content={
+          <HeaderButton
+            text={"Home"}
+            icon={<HomeIcon fontSize={"small"}/>}
+            className={classes.homeButton}
+          />
+        }
+      />
+      {
+        isAdmin &&
+        <LinkToAllArticles
+          content={
             <HeaderButton
-                text={"Add article"}
-                icon={<NoteAddIcon fontSize={"small"}/>}
-                onClick={handleAddArticle}
+              text={"All articles"}
+              icon={<DescriptionIcon fontSize={"small"}/>}
             />
-        </div>
-    );
+          }
+        />
+      }
+      <HeaderButton
+        text={"Add article"}
+        icon={<NoteAddIcon fontSize={"small"}/>}
+        onClick={handleAddArticle}
+      />
+    </div>
+  );
 };
 
 HeaderButtons.propTypes = {
-    isAdmin: PropTypes.bool.isRequired,
-    handleAddArticle: PropTypes.func.isRequired
+  isAdmin: PropTypes.bool.isRequired,
+  handleAddArticle: PropTypes.func.isRequired
 };
 
 export default HeaderButtons;

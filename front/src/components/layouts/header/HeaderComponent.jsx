@@ -8,34 +8,34 @@ import {userCardPropTypes} from "../../../propTypes/userPropTypes";
 
 const Header = ({handleAddArticle, user, authenticated, handleLogout, isAdmin}) => {
 
-    const classes = useStyles();
+  const classes = useStyles();
 
-    return (
-        <header className={classes.header}>
-            <HeaderLogo/>
-            {
-                authenticated &&
-                <>
-                    <HeaderButtons
-                        handleAddArticle={handleAddArticle}
-                        isAdmin={isAdmin}
-                    />
-                    <HeaderUser
-                        handleLogout={handleLogout}
-                        user={user}
-                    />
-                </>
-            }
-        </header>
-    );
+  return (
+    <header className={classes.header}>
+      <HeaderLogo/>
+      {
+        authenticated &&
+        <>
+          <HeaderButtons
+            handleAddArticle={handleAddArticle}
+            isAdmin={isAdmin}
+          />
+          <HeaderUser
+            handleLogout={handleLogout}
+            user={user}
+          />
+        </>
+      }
+    </header>
+  );
 };
 
 Header.propTypes = {
-    handleAddArticle: PropTypes.func,
-    user: userCardPropTypes,
-    authenticated: PropTypes.bool.isRequired,
-    handleLogout: PropTypes.func,
-    isAdmin: PropTypes.bool,
+  handleAddArticle: PropTypes.func,
+  user: userCardPropTypes,
+  authenticated: PropTypes.bool.isRequired,
+  handleLogout: PropTypes.func,
+  isAdmin: PropTypes.bool,
 };
 
 export default Header;

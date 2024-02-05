@@ -6,24 +6,24 @@ import {useTheme} from "@mui/material/styles";
 
 const CommentHeaderAvatar = ({comment}) => {
 
-    const theme = useTheme();
+  const theme = useTheme();
 
-    return (
-        <LinkToProfile
-            user_id={comment.user_id}
-            content={
-                <Avatar
-                    alt={comment.name}
-                    src={comment.avatar}
-                    sx={theme.avatarSizes.md}
-                />
-            }
+  return (
+    <LinkToProfile
+      user_id={comment.user_id}
+      content={
+        <Avatar
+          alt={comment.name}
+          src={comment.avatar}
+          sx={theme.avatarSizes.md}
         />
-    );
+      }
+    />
+  );
 };
 
 CommentHeaderAvatar.propTypes = {
-    comment: commentPropTypes
+  comment: commentPropTypes
 };
 
 export default CommentHeaderAvatar;

@@ -8,19 +8,9 @@ import EditProfileBtn from "./EditProfileBtn";
 import ProfileFields from "./ProfileFields";
 import {useStyles} from "./style";
 
-const ProfileComponent = ({
-  user,
-  handleEdit,
-  isAdmin,
-  isCurrentUser,
-  handleAddToFriends,
-  handleAccept,
-  handleDeleteFromFriends,
-  currentRequest,
-  isLoading,
-  requestFetching
-}) => {
+const ProfileComponent = ({user, actions, flags, currentRequest, loading}) => {
 
+  const {handleEdit, ...requestBtnActions} = actions;
   const classes = useStyles();
   const theme = useTheme();
 
@@ -40,26 +30,20 @@ const ProfileComponent = ({
                 sx={theme.avatarSizes.xl}
               />
               <ProfileFriendRequestBtn
-                handleAddToFriends={handleAddToFriends}
-                handleDeleteFromFriends={handleDeleteFromFriends}
-                handleAccept={handleAccept}
                 currentRequest={currentRequest}
-                isCurrentUser={isCurrentUser}
-                isLoading={isLoading}
-                requestFetching={requestFetching}
+                isCurrentUser={flags.isCurrentUser}
+                loading={loading}
+                actions={requestBtnActions}
               />
             </div>
             <div className={classes.fieldsContainer}>
               <ProfileFields
                 user={user}
-                currentRequest={currentRequest}
-                isAdmin={isAdmin}
-                isCurrentUser={isCurrentUser}
+                flags={{isFriends: currentRequest?.is_friends, ...flags}}
               />
               <EditProfileBtn
                 onClick={handleEdit}
-                isCurrentUser={isCurrentUser}
-                isAdmin={isAdmin}
+                flags={flags}
               />
             </div>
           </div>
@@ -72,10 +56,14 @@ const ProfileComponent = ({
 ProfileComponent.propTypes = ProfilePropTypes;
 
 ProfileComponent.defaultProps = {
-  isCurrentUser: false,
-  isAdmin: false,
-  isLoading: false,
-  requestFetching: false,
+  flags: {
+    isCurrentUser: false,
+    isAdmin: false
+  },
+  loading: {
+    isLoading: false,
+    requestFetching: false
+  }
 };
 
 export default ProfileComponent;

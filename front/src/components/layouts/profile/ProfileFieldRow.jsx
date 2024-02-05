@@ -4,17 +4,9 @@ import {TextField} from "formik-mui";
 import PropTypes from "prop-types";
 import {useStyles} from "./style";
 
-const ProfileFieldRow = ({
-  name,
-  label,
-  visibilityName,
-  visibilityLabel,
-  isAdmin,
-  isCurrentUser,
-  isFriends,
-  isField
-}) => {
+const ProfileFieldRow = ({name, label, visibilityName, visibilityLabel, flags}) => {
 
+  const {isAdmin, isCurrentUser, isFriends, isField} = flags;
   const classes = useStyles();
 
   return (
@@ -63,19 +55,23 @@ ProfileFieldRow.propTypes = {
   label: PropTypes.string.isRequired,
   visibilityName: PropTypes.string,
   visibilityLabel: PropTypes.string,
-  isAdmin: PropTypes.bool,
-  isCurrentUser: PropTypes.bool,
-  isFriends: PropTypes.bool,
-  isField: PropTypes.bool
+  flags: PropTypes.shape({
+    isFriends: PropTypes.bool,
+    isAdmin: PropTypes.bool,
+    isCurrentUser: PropTypes.bool,
+    isField: PropTypes.bool
+  }),
 };
 
 ProfileFieldRow.dafaultProps = {
   visibilityName: undefined,
   visibilityLabel: undefined,
-  isAdmin: false,
-  isCurrentUser: false,
-  isFriends: false,
-  isField: false
+  flags: {
+    isFriends: false,
+    isAdmin: false,
+    isCurrentUser: false,
+    isField: false,
+  }
 };
 
 export default ProfileFieldRow;

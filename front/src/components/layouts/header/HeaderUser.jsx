@@ -13,71 +13,71 @@ import LinkToRoot from "../../atoms/links/LinkToRoot";
 
 const HeaderUser = ({user, handleLogout}) => {
 
-    const classes = useStyles();
-    const theme = useTheme();
-    const [anchorEl, setAnchorEl] = useState(null);
+  const classes = useStyles();
+  const theme = useTheme();
+  const [anchorEl, setAnchorEl] = useState(null);
 
-    const handleMenu = (event) => {
-        event.preventDefault();
-        setAnchorEl(event.currentTarget);
-    };
+  const handleMenu = (event) => {
+    event.preventDefault();
+    setAnchorEl(event.currentTarget);
+  };
 
-    const handleMenuClose = () => {
-        setAnchorEl(null);
-    };
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
 
-    const logoutOnClick = () => {
-        handleMenuClose();
-        handleLogout();
-    };
+  const logoutOnClick = () => {
+    handleMenuClose();
+    handleLogout();
+  };
 
-    const menuItems = [
-        {
-            body:
-                <LinkToProfile
-                    user_id={user?.user_id}
-                    content={
-                        <MenuItemBody text={"Profile"} icon={<PersonIcon/>}/>
-                    }
-                />,
-            onClick: handleMenuClose
-        },
-        {
-            body:
-                <LinkToRoot
-                    content={
-                        <MenuItemBody text={"Logout"} icon={<LogoutIcon/>}/>
-                    }
-                />,
-            onClick: logoutOnClick
-        }
-    ];
+  const menuItems = [
+    {
+      body:
+        <LinkToProfile
+          user_id={user?.user_id}
+          content={
+            <MenuItemBody text={"Profile"} icon={<PersonIcon/>}/>
+          }
+        />,
+      onClick: handleMenuClose
+    },
+    {
+      body:
+        <LinkToRoot
+          content={
+            <MenuItemBody text={"Logout"} icon={<LogoutIcon/>}/>
+          }
+        />,
+      onClick: logoutOnClick
+    }
+  ];
 
-    return (
-        <div className={classes.currentUser}>
-            <button onClick={handleMenu} className={`${classes.button} ${classes.userButton}`}>
-                <Avatar
-                    src={user.avatar}
-                    className={classes.avatar}
-                    sx={theme.avatarSizes.md}
-                />
-                <span className={classes.username}>
+  return (
+    <div className={classes.currentUser}>
+      <button onClick={handleMenu} className={`${classes.button} ${classes.userButton}`}>
+        <Avatar
+          src={user.avatar}
+          className={classes.avatar}
+          sx={theme.avatarSizes.md}
+        />
+        <span className={classes.username}>
                             {user.name}
                         </span>
-            </button>
-            <SNMenu
-                id={"menu-header"}
-                menuItems={menuItems}
-                anchorEl={anchorEl}
-                onClose={handleMenuClose}
-            />
-        </div>
-    );
+      </button>
+      <SNMenu
+        id={"menu-header"}
+        menuItems={menuItems}
+        anchorEl={anchorEl}
+        onClose={handleMenuClose}
+      />
+    </div>
+  );
 };
 
 HeaderUser.propTypes = {
-    user: userCardPropTypes.isRequired,
-    handleLogout: PropTypes.func.isRequired
+  user: userCardPropTypes.isRequired,
+  handleLogout: PropTypes.func.isRequired
 };
 
 export default HeaderUser;

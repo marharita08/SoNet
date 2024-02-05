@@ -190,15 +190,16 @@ const ProfilePageContainer = () => {
         profileComponent={
           <ProfileComponent
             user={user}
-            handleEdit={handleEdit}
-            isCurrentUser={user?.user_id === currentUser.user_id}
-            handleAddToFriends={handleAddToFriends}
-            handleAccept={handleAccept}
-            handleDeleteFromFriends={handleDeleteFromFriends}
+            actions={{handleEdit, handleAddToFriends, handleAccept, handleDeleteFromFriends}}
+            flags={{
+              isCurrentUser: user?.user_id === currentUser.user_id,
+              isAdmin
+            }}
             currentRequest={currentRequest}
-            isLoading={isAcceptLoading || isAddLoading || isDeleteLoading}
-            isAdmin={isAdmin}
-            requestFetching={isRequestFetching}
+            loading={{
+              isLoading: isAcceptLoading || isAddLoading || isDeleteLoading,
+              isFetching: isRequestFetching
+            }}
           />
         }
         editProfileComponent={

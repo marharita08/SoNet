@@ -13,93 +13,93 @@ import CommentHeaderActions from "./CommentHeaderActions";
 import {useTheme} from "@mui/material/styles";
 
 const CommentComponent = ({
-    comment,
-    handleEdit,
-    handleDelete,
-    isAdmin,
-    isCurrentUser,
-    handleReply
+  comment,
+  handleEdit,
+  handleDelete,
+  isAdmin,
+  isCurrentUser,
+  handleReply
 }) => {
 
-    const theme = useTheme();
-    const [anchorEl, setAnchorEl] = useState(null);
+  const theme = useTheme();
+  const [anchorEl, setAnchorEl] = useState(null);
 
-    const handleMenu = (event) => {
-        event.preventDefault();
-        setAnchorEl(event.currentTarget);
-    };
+  const handleMenu = (event) => {
+    event.preventDefault();
+    setAnchorEl(event.currentTarget);
+  };
 
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
-    const editOnClick = (event) => {
-        event.preventDefault();
-        setAnchorEl(null);
-        handleEdit();
-    };
+  const editOnClick = (event) => {
+    event.preventDefault();
+    setAnchorEl(null);
+    handleEdit();
+  };
 
-    const deleteOnClick = (event) => {
-        event.preventDefault();
-        setAnchorEl(null);
-        handleDelete();
-    };
+  const deleteOnClick = (event) => {
+    event.preventDefault();
+    setAnchorEl(null);
+    handleDelete();
+  };
 
-    const menuItems = [
-        {
-            body: <MenuItemBody text={"Edit"} icon={<EditIcon/>}/>,
-            onClick: editOnClick
-        },
-        {
-            body: <MenuItemBody text={"Delete"} icon={<DeleteIcon/>}/>,
-            onClick: deleteOnClick
-        }
-    ];
+  const menuItems = [
+    {
+      body: <MenuItemBody text={"Edit"} icon={<EditIcon/>}/>,
+      onClick: editOnClick
+    },
+    {
+      body: <MenuItemBody text={"Delete"} icon={<DeleteIcon/>}/>,
+      onClick: deleteOnClick
+    }
+  ];
 
-    return (
-        <>
-            <Divider/>
-            <div style={{paddingLeft: (comment.level - 1) * 30}}>
-                <CardHeader
-                    avatar={
-                        <CommentHeaderAvatar comment={comment}/>
-                    }
-                    action={
-                        <CommentHeaderActions
-                            handleMenu={handleMenu}
-                            handleReply={handleReply}
-                            isMenu={isCurrentUser || isAdmin}
-                        />
-                    }
-                    title={
-                        <CommentHeaderTitle comment={comment}/>
-                    }
-                    subheader={moment(comment.commented_at).fromNow()}
-                    sx={theme.commentCardHeader}
-                />
-                <SNMenu
-                    id={"menu-comment"}
-                    menuItems={menuItems}
-                    anchorEl={anchorEl}
-                    onClose={handleClose}
-                />
-                <CardContent sx={theme.commentCardContent}>
-                    <Typography variant="body2">
-                        {comment.text}
-                    </Typography>
-                </CardContent>
-            </div>
-        </>
-    );
+  return (
+    <>
+      <Divider/>
+      <div style={{paddingLeft: (comment.level - 1) * 30}}>
+        <CardHeader
+          avatar={
+            <CommentHeaderAvatar comment={comment}/>
+          }
+          action={
+            <CommentHeaderActions
+              handleMenu={handleMenu}
+              handleReply={handleReply}
+              isMenu={isCurrentUser || isAdmin}
+            />
+          }
+          title={
+            <CommentHeaderTitle comment={comment}/>
+          }
+          subheader={moment(comment.commented_at).fromNow()}
+          sx={theme.commentCardHeader}
+        />
+        <SNMenu
+          id={"menu-comment"}
+          menuItems={menuItems}
+          anchorEl={anchorEl}
+          onClose={handleClose}
+        />
+        <CardContent sx={theme.commentCardContent}>
+          <Typography variant="body2">
+            {comment.text}
+          </Typography>
+        </CardContent>
+      </div>
+    </>
+  );
 };
 
 CommentComponent.propTypes = {
-    comment: commentPropTypes.isRequired,
-    handleEdit: PropTypes.func.isRequired,
-    handleDelete: PropTypes.func.isRequired,
-    isCurrentUser: PropTypes.bool.isRequired,
-    handleReply: PropTypes.func.isRequired,
-    isAdmin: PropTypes.bool.isRequired
+  comment: commentPropTypes.isRequired,
+  handleEdit: PropTypes.func.isRequired,
+  handleDelete: PropTypes.func.isRequired,
+  isCurrentUser: PropTypes.bool.isRequired,
+  handleReply: PropTypes.func.isRequired,
+  isAdmin: PropTypes.bool.isRequired
 };
 
 export default CommentComponent;

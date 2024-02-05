@@ -8,41 +8,41 @@ import CloseIcon from "@mui/icons-material/Close";
 
 const SearchField = ({isFetching, cleanSearch, ...props}) => {
 
-    const classes = useStyles();
+  const classes = useStyles();
 
-    return (
-        <Box className={classes.field}>
-            <ProgressOrComponent
-                isProgress={isFetching}
-                component={
-                    <SearchIcon className={classes.icon}/>
-                }
-            />
-            <TextField
-                {...props}
-                variant={"standard"}
-                label={"Search"}
-                InputProps={{
-                    endAdornment: (
-                        <InputAdornment position="end">
-                            <IconButton onClick={cleanSearch} edge="end">
-                                <CloseIcon fontSize={"small"}/>
-                            </IconButton>
-                        </InputAdornment>
-                    ),
-                }}
-            />
-        </Box>
-    );
+  return (
+    <Box className={classes.field}>
+      <ProgressOrComponent
+        isProgress={isFetching}
+        component={
+          <SearchIcon className={classes.icon}/>
+        }
+      />
+      <TextField
+        {...props}
+        variant={"standard"}
+        label={"Search"}
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position="end">
+              <IconButton onClick={cleanSearch} edge="end">
+                <CloseIcon fontSize={"small"}/>
+              </IconButton>
+            </InputAdornment>
+          ),
+        }}
+      />
+    </Box>
+  );
 };
 
 SearchField.propTypes = {
-    isFetching: PropTypes.bool,
-    cleanSearch: PropTypes.func.isRequired
+  isFetching: PropTypes.bool,
+  cleanSearch: PropTypes.func.isRequired
 };
 
 SearchField.defaultProps = {
-    isFetching: false
+  isFetching: false
 };
 
 export default SearchField;

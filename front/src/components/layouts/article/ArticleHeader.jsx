@@ -12,74 +12,74 @@ import LinkToProfile from "../../atoms/links/LinkToProfile";
 
 const ArticleHeader = ({article, isCurrentUser, isAdmin, handleEdit, handleDelete}) => {
 
-    const theme = useTheme();
-    const [menuAnchorEl, setMenuAnchorEl] = useState(null);
+  const theme = useTheme();
+  const [menuAnchorEl, setMenuAnchorEl] = useState(null);
 
-    const handleMenu = (event) => {
-        event.preventDefault();
-        setMenuAnchorEl(event.currentTarget);
-    };
+  const handleMenu = (event) => {
+    event.preventDefault();
+    setMenuAnchorEl(event.currentTarget);
+  };
 
-    const handleClose = () => {
-        setMenuAnchorEl(null);
-    };
+  const handleClose = () => {
+    setMenuAnchorEl(null);
+  };
 
-    const editOnClick = (event) => {
-        event.preventDefault();
-        setMenuAnchorEl(null);
-        handleEdit(article);
-    };
+  const editOnClick = (event) => {
+    event.preventDefault();
+    setMenuAnchorEl(null);
+    handleEdit(article);
+  };
 
-    const deleteOnClick = (event) => {
-        event.preventDefault();
-        setMenuAnchorEl(null);
-        handleDelete();
-    };
+  const deleteOnClick = (event) => {
+    event.preventDefault();
+    setMenuAnchorEl(null);
+    handleDelete();
+  };
 
-    const menuItems = [
-        {
-            body: <MenuItemBody text={"Edit"} icon={<EditIcon/>}/>,
-            onClick: editOnClick
-        },
-        {
-            body: <MenuItemBody text={"Delete"} icon={<DeleteIcon/>}/>,
-            onClick: deleteOnClick
+  const menuItems = [
+    {
+      body: <MenuItemBody text={"Edit"} icon={<EditIcon/>}/>,
+      onClick: editOnClick
+    },
+    {
+      body: <MenuItemBody text={"Delete"} icon={<DeleteIcon/>}/>,
+      onClick: deleteOnClick
+    }
+  ];
+
+  return (
+    <>
+      <CardHeader
+        avatar={
+          <LinkToProfile
+            user_id={article.user_id}
+            content={
+              <Avatar
+                src={article.avatar}
+                sx={theme.avatarSizes.lg}
+              />
+            }
+          />
         }
-    ];
-
-    return (
-        <>
-            <CardHeader
-                avatar={
-                    <LinkToProfile
-                        user_id={article.user_id}
-                        content={
-                            <Avatar
-                                src={article.avatar}
-                                sx={theme.avatarSizes.lg}
-                            />
-                        }
-                    />
-                }
-                action={(isCurrentUser || isAdmin) && <MoreVertIconBtn onClick={handleMenu}/>}
-                title={
-                    <LinkToProfile
-                        user_id={article.user_id}
-                        content={
-                            <CardUsername username={article.name}/>
-                        }
-                    />
-                }
-                subheader={article.created_at}
-            />
-            <SNMenu
-                id={"menu-article"}
-                menuItems={menuItems}
-                anchorEl={menuAnchorEl}
-                onClose={handleClose}
-            />
-        </>
-    );
+        action={(isCurrentUser || isAdmin) && <MoreVertIconBtn onClick={handleMenu}/>}
+        title={
+          <LinkToProfile
+            user_id={article.user_id}
+            content={
+              <CardUsername username={article.name}/>
+            }
+          />
+        }
+        subheader={article.created_at}
+      />
+      <SNMenu
+        id={"menu-article"}
+        menuItems={menuItems}
+        anchorEl={menuAnchorEl}
+        onClose={handleClose}
+      />
+    </>
+  );
 };
 
 ArticleHeader.propTypes = articleHeaderPropTypes;
