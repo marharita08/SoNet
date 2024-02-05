@@ -5,55 +5,41 @@ class BaseStorage {
     this.primaryKey = primaryKey;
   }
 
-  getAll = async () =>
-    this.db(this.table)
-      .select();
+  async getAll() {
+    return this.db(this.table).select();
+  }
 
-  getById = async (id) =>
-    this.db(this.table)
-      .select()
-      .first()
-      .where(this.primaryKey, id);
+  async getById(id) {
+    return this.db(this.table).select().first().where(this.primaryKey, id);
+  }
 
-  create = async (entity) =>
-    this.db(this.table)
-      .returning(this.primaryKey)
-      .insert(entity);
+  async create(entity) {
+    return this.db(this.table).returning(this.primaryKey).insert(entity);
+  }
 
-  update = async (id, entity) =>
-    this.db(this.table)
-      .update(entity)
-      .where(this.primaryKey, id);
+  async update(id, entity) {
+    return this.db(this.table).update(entity).where(this.primaryKey, id);
+  }
 
-  delete = async (id) =>
-    this.db(this.table)
-      .delete()
-      .where(this.primaryKey, id);
+  async delete(id) {
+    return this.db(this.table).delete().where(this.primaryKey, id);
+  }
 
-  getOneByField = async (fieldValue, fieldName) =>
-    this.db(this.table)
-      .select()
-      .first()
-      .where(fieldName, fieldValue);
+  async getOneByField(fieldValue, fieldName) {
+    return this.db(this.table).select().first().where(fieldName, fieldValue);
+  }
 
-  getFieldById = async (id, field) =>
-    this.db(this.table)
-      .select(field)
-      .first()
-      .where(this.primaryKey, id);
+  async getFieldById(id, field) {
+    return this.db(this.table).select(field).first().where(this.primaryKey, id);
+  }
 
-  getCountByField = async (fieldValue, fieldName) =>
-    this.db(this.table)
-      .countDistinct(this.primaryKey)
-      .first()
-      .where(fieldName, fieldValue);
+  async getCountByField(fieldValue, fieldName) {
+    return this.db(this.table).countDistinct(this.primaryKey).first().where(fieldName, fieldValue);
+  }
 
-  getRandomId = async () =>
-    this.db(this.table)
-      .select(this.primaryKey)
-      .first()
-      .orderByRaw("random()")
-      .limit(1);
+  async getRandomId() {
+    return this.db(this.table).select(this.primaryKey).first().orderByRaw("random()").limit(1);
+  }
 }
 
 module.exports = BaseStorage;

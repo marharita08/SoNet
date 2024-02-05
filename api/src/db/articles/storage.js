@@ -12,7 +12,7 @@ class ArticleStorage extends BaseStorage {
     super("articles", "article_id", db);
   }
 
-  getFullColumns = () => {
+  getFullColumns() {
     return [
       `${this.table}.${this.primaryKey}`,
       `${this.table}.text`,
@@ -27,39 +27,44 @@ class ArticleStorage extends BaseStorage {
       "users.avatar",
       "article_visibilities.visibility"
     ];
-  };
+  }
 
-  getArticleFullData = () =>
-    this.db()
+  getArticleFullData() {
+    return this.db()
       .select(...this.getFullColumns())
       .from(this.table)
       .join("users", `${this.table}.user_id`, "users.user_id")
       .join("article_visibilities", `${this.table}.visibility_id`, "article_visibilities.visibility_id");
+  }
 
-  getWholeArticleById = async (id) =>
-    this.getArticleFullData()
+  async getWholeArticleById(id) {
+    return this.getArticleFullData()
       .first()
       .where(`${this.table}.${this.primaryKey}`, id);
+  }
 
-  getAllNews = async (page, limit) =>
-    this.getArticleFullData()
+  async getAllNews(page, limit) {
+    return this.getArticleFullData()
       .orderBy(`${this.table}.created_at`, "desc")
       .limit(limit)
       .offset(page * limit - limit);
+  }
 
-  joinFriends = (th, userId) =>
+  joinFriends(th, userId) {
     th.on(`${this.table}.user_id`, "friends.from_user_id")
       .andOn("friends.to_user_id", userId)
       .orOn("users.user_id", "friends.to_user_id")
       .andOn("friends.from_user_id", userId);
+  }
 
-  joinAcceptedStatus = (th) =>
+  joinAcceptedStatus(th) {
     th.on("status.status_id", "friends.status_id")
       .andOnVal("status.status", "Accepted");
+  }
 
-  getByIdAndUserId = async (id, userId) => {
+  async getByIdAndUserId(id, userId) {
     const classThis = this;
-    this.getArticleFullData()
+    return this.getArticleFullData()
       .first()
       .leftJoin("friends", function () {
         classThis.joinFriends(this, userId);
@@ -76,9 +81,9 @@ class ArticleStorage extends BaseStorage {
               .andWhere("status.status_id", "is not", null);
           });
       });
-  };
+  }
 
-  getNewsByUserId = async (userId, page, limit) => {
+  async getNewsByUserId(userId, page, limit) {
     const classThis = this;
     return this.db
       .select()
@@ -104,18 +109,21 @@ class ArticleStorage extends BaseStorage {
       .orderBy("created_at", "desc")
       .limit(limit)
       .offset(page * limit - limit);
-  };
+  }
 
-  getImageByArticleId = async (id) => super.getFieldById(id, "image")
+  async getImageByArticleId(id) {
+    return await super.getFieldById(id, "image");
+  }
 
-  getCountOfAllNews = async () =>
-    this.db(this.table)
+  async getCountOfAllNews() {
+    return this.db(this.table)
       .count(this.primaryKey)
       .first();
+  }
 
-  getCountOfNewsByUserId = async (userId) => {
+  async getCountOfNewsByUserId(userId) {
     const classThis = this;
-    this.db
+    return this.db
       .count(this.primaryKey)
       .first()
       .from({
@@ -141,9 +149,11 @@ class ArticleStorage extends BaseStorage {
               .where(`${classThis.table}.user_id`, userId);
           }),
       });
-  };
+  }
 
-  getRandomArticleId = async () => super.getRandomId();
+  async getRandomArticleId() {
+    return await super.getRandomId();
+  }
 }
 
 module.exports = new ArticleStorage();

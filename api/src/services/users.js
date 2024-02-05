@@ -6,6 +6,7 @@ const fileHelper = require("../utils/fileHelper");
 const {USER_NOT_FOUND} = require("../constants/messages");
 const {parseToProfile, parseToUserAndSettings} = require("../utils/usersParser");
 const BaseService = require("./base");
+const {set} = require("express/lib/application");
 
 class UsersServices extends BaseService {
 
@@ -19,6 +20,7 @@ class UsersServices extends BaseService {
   };
 
   getByEmail = async (email) => {
+    console.log("service getting by email...");
     return await this.storage.getByEmail(email);
   };
 
@@ -31,7 +33,10 @@ class UsersServices extends BaseService {
   };
 
   update = async (id, userData, fileData, errorHandler) => {
+    console.log("updating");
     const {user, settings} = parseToUserAndSettings(userData);
+    console.log(user);
+    console.log(settings);
     let avatarUrl;
     let avatarPath;
     if (fileData) {
@@ -46,7 +51,9 @@ class UsersServices extends BaseService {
       avatar_path: avatarPath,
     });
     await settingsStorage.update(id, settings);
-    return await this.getProfile(id);
+    const profile = await this.getProfile(id);
+    console.log(profile);
+    return profile;
   };
 
   getFriends = async (id) => {

@@ -6,8 +6,8 @@ class CommentsStorage extends BaseStorage {
     super("comments", "comment_id", db);
   }
 
-  getFullData = () =>
-    this.db
+  getFullData() {
+    return this.db
       .select(
         `ch.${this.primaryKey}`,
         "ch.article_id",
@@ -27,18 +27,23 @@ class CommentsStorage extends BaseStorage {
       .leftOuterJoin({p: this.table}, "p.comment_id", "ch.parent_id")
       .leftOuterJoin({pu: "users"}, "pu.user_id", "p.user_id")
       .join({chu: "users"}, "chu.user_id", "ch.user_id");
+  }
 
-  getFullDataById = async (id) =>
-    this.getFullData()
+  async getFullDataById(id) {
+    return this.getFullData()
       .first()
       .where("ch.comment_id", id);
+  }
 
-  getFullDataByArticleId = async (id) =>
-    this.getFullData()
-      .where("ch.article_id}", id)
+  async getFullDataByArticleId(id) {
+    return this.getFullData()
+      .where("ch.article_id", id)
       .orderBy("ch.path");
+  }
 
-  getAmountByArticleId = async (id) => super.getCountByField(id, "article_id");
+  async getAmountByArticleId(id) {
+    return await super.getCountByField(id, "article_id");
+  }
 }
 
 module.exports = new CommentsStorage();

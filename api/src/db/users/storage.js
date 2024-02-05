@@ -18,8 +18,8 @@ class UsersStorage extends BaseStorage {
     super("users", "user_id", db);
   }
 
-  getProfileById = async (id) =>
-    this.db
+  async getProfileById(id) {
+    return this.db
       .select(
         `${this.table}.*`,
         "user_settings.*",
@@ -29,7 +29,8 @@ class UsersStorage extends BaseStorage {
         "uv.visibility as uv_label",
         "cv.visibility as cv_label",
         "sv.visibility as sv_label",
-        "civ.visibility as civ_label"
+        "civ.visibility as civ_label",
+        "bv.visibility as bv_label"
       )
       .from(this.table)
       .join("user_settings", `${this.table}.${this.primaryKey}`, "user_settings.user_id")
@@ -39,13 +40,17 @@ class UsersStorage extends BaseStorage {
       .join({cv: "field_visibilities"}, "country_visibility_id", "cv.visibility_id")
       .join({sv: "field_visibilities"}, "state_visibility_id", "sv.visibility_id")
       .join({civ: "field_visibilities"}, "city_visibility_id", "civ.visibility_id")
+      .join({bv: "field_visibilities"}, "birthday_visibility_id", "bv.visibility_id")
       .leftOuterJoin("universities", "users.university_id", "universities.university_id")
       .where(`${this.table}.${this.primaryKey}`, id);
+  }
 
-  getAvatarPath = async (id) => super.getFieldById(id, "avatar_path");
+  async getAvatarPath(id) {
+    return await super.getFieldById(id, "avatar_path");
+  }
 
-  getFriends = async (id) =>
-    this.db
+  async getFriends(id) {
+    return this.db
       .select(...friendsAndRequestsColumns)
       .from(this.table)
       .join("friends", function () {
@@ -56,9 +61,10 @@ class UsersStorage extends BaseStorage {
         this.on("status.status_id", "friends.status_id")
           .andOnVal("status.status", status.ACCEPTED);
       });
+  }
 
-  getIncomingRequests = async (id) =>
-    this.db
+  async getIncomingRequests(id) {
+    return this.db
       .select(...friendsAndRequestsColumns)
       .from(this.table)
       .join("friends", function () {
@@ -69,9 +75,10 @@ class UsersStorage extends BaseStorage {
         this.on("status.status_id", "friends.status_id")
           .andOnVal("status.status", status.UNDER_CONSIDERATION);
       });
+  }
 
-  getOutgoingRequests = async (id) =>
-    this.db
+  async getOutgoingRequests(id) {
+    return this.db
       .select(...friendsAndRequestsColumns)
       .from(this.table)
       .join("friends", function () {
@@ -82,13 +89,18 @@ class UsersStorage extends BaseStorage {
         this.on("status.status_id", "friends.status_id")
           .andOnVal("status.status", status.UNDER_CONSIDERATION);
       });
+  }
 
-  getByEmail = async (email) => super.getOneByField(email, "email");
+  async getByEmail(email) {
+    return await super.getOneByField(email, "email");
+  }
 
-  getByFbId = async (fbId) => super.getOneByField(fbId, "fb_id")
+  async getByFbId(fbId) {
+    return await super.getOneByField(fbId, "fb_id");
+  }
 
-  searchUsers = async (id, text) =>
-    this.db
+  async searchUsers(id, text) {
+    return this.db
       .select(
         "users.user_id",
         "users.name",
@@ -115,8 +127,11 @@ class UsersStorage extends BaseStorage {
       })
       .orderBy("users.name")
       .limit(10);
+  }
 
-  getRandomUserId = async () => super.getRandomId();
+  async getRandomUserId() {
+    return await super.getRandomId();
+  }
 }
 
 module.exports = new UsersStorage();

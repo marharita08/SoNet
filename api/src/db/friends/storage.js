@@ -6,8 +6,8 @@ class FriendsStorage extends BaseStorage {
     super("friends", "request_id", db);
   }
 
-  getByUsersId = (userID, currentUserID) =>
-    this.db(this.table)
+  getByUsersId(userID, currentUserID) {
+    return this.db(this.table)
       .select()
       .first()
       .where(function () {
@@ -18,9 +18,10 @@ class FriendsStorage extends BaseStorage {
         this.where("to_user_id", userID)
           .andWhere("from_user_id", currentUserID);
       });
+  }
 
-  getRequestById = (id) =>
-    this.db
+  getRequestById(id) {
+    return this.db
       .select(this.primaryKey, "user_id", "name", "avatar")
       .first()
       .from("users")
@@ -28,6 +29,7 @@ class FriendsStorage extends BaseStorage {
         this.on("user_id", "to_user_id")
           .andOn(id, "request_id");
       });
+  }
 }
 
 module.exports = new FriendsStorage();

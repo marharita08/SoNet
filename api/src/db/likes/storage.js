@@ -6,26 +6,31 @@ class LikesStorage extends BaseStorage {
     super("article_likes", "*", db);
   }
 
-  delete = async (articleID, userID) =>
-    this.db(this.table)
+  async delete(articleID, userID) {
+    return this.db(this.table)
       .delete()
       .where("article_id", articleID)
       .andWhere("user_id", userID);
+  }
 
-  getByArticleId = async (id) =>
-    this.db(this.table)
+  async getByArticleId(id) {
+    return this.db(this.table)
       .select("users.user_id", "avatar")
       .join("users", "users.user_id", `${this.table}.user_id`)
       .where("article_id", id);
+  }
 
-  getByArticleIdAndUserId = async (articleId, userId) =>
-    this.db(this.table)
+  async getByArticleIdAndUserId(articleId, userId) {
+    return this.db(this.table)
       .select()
       .first()
       .where("article_id", articleId)
       .andWhere("user_id", userId);
+  }
 
-  getAmountByArticleId = async (id) => super.getCountByField(id, "article_id");
+  async getAmountByArticleId(id) {
+    return await super.getCountByField(id, "article_id");
+  }
 }
 
 module.exports = new LikesStorage();
