@@ -8,30 +8,30 @@ import {refetchOff} from "../../../config/refetchOff";
 
 const OutgoingRequestsContainer = ({id, deleteRequest, outgoingRequests, setOutgoingRequests}) => {
 
-    const {isFetching} = useQuery(
-        "outgoing-requests",
-        () => getOutgoingRequests(id),
-        {
-            onSuccess: (data) => setOutgoingRequests(data?.data),
-            ...refetchOff
-        }
-    );
+  const {isFetching} = useQuery(
+    "outgoing-requests",
+    () => getOutgoingRequests(id),
+    {
+      onSuccess: (data) => setOutgoingRequests(data?.data),
+      ...refetchOff
+    }
+  );
 
-    return (
-        <UserCards
-            heading={"Outgoing Requests"}
-            users={outgoingRequests}
-            deleteRequest={deleteRequest}
-            isFetching={isFetching}
-        />
-    );
+  return (
+    <UserCards
+      heading={"Outgoing Requests"}
+      users={outgoingRequests}
+      deleteRequest={deleteRequest}
+      isFetching={isFetching}
+    />
+  );
 };
 
 OutgoingRequestsContainer.propTypes = {
-    id: PropTypes.number.isRequired,
-    deleteRequest: PropTypes.func.isRequired,
-    outgoingRequests: requestsPropTypes,
-    setOutgoingRequests: PropTypes.func.isRequired,
+  id: PropTypes.number.isRequired,
+  deleteRequest: PropTypes.func.isRequired,
+  outgoingRequests: requestsPropTypes,
+  setOutgoingRequests: PropTypes.func.isRequired,
 };
 
 export default OutgoingRequestsContainer;

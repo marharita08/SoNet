@@ -13,44 +13,44 @@ import {refetchOff} from "../../../config/refetchOff";
 
 const ArticlePageContainer = ({setArticleContext, articles, setArticles}) => {
 
-    let {id} = useParams();
-    const {user: {user_id}} = useContext(authContext);
+  let {id} = useParams();
+  const {user: {user_id}} = useContext(authContext);
 
-    const {isFetching} = useQuery(
-        `article ${id}-${user_id}`,
-        () => getArticle(id),
-        {
-            onSuccess: (data) => setArticles(data?.data),
-            ...refetchOff
+  const {isFetching} = useQuery(
+    `article ${id}-${user_id}`,
+    () => getArticle(id),
+    {
+      onSuccess: (data) => setArticles(data?.data),
+      ...refetchOff
+    }
+  );
+
+  return (
+    <>
+      <ArticlePageComponent
+        articleComponent={
+          articles?.map((article) =>
+            <ErrorBoundary key={article.article_id}>
+              <ArticleCardContainer
+                setArticleContext={setArticleContext}
+                article={article}
+                articles={articles}
+                setArticles={setArticles}
+                isTruncate={false}
+              />
+            </ErrorBoundary>
+          )
         }
-    );
-
-    return (
-        <>
-            <ArticlePageComponent
-                articleComponent={
-                    articles?.map((article) =>
-                        <ErrorBoundary key={article.article_id}>
-                            <ArticleCardContainer
-                                setArticleContext={setArticleContext}
-                                article={article}
-                                articles={articles}
-                                setArticles={setArticles}
-                                isTruncate={false}
-                            />
-                        </ErrorBoundary>
-                    )
-                }
-                isLoading={isFetching}
-            />
-        </>
-    );
+        isLoading={isFetching}
+      />
+    </>
+  );
 };
 
 ArticlePageContainer.propTypes = {
-    setArticleContext: PropTypes.func.isRequired,
-    articles: articlesPropTypes,
-    setArticles: PropTypes.func.isRequired,
+  setArticleContext: PropTypes.func.isRequired,
+  articles: articlesPropTypes,
+  setArticles: PropTypes.func.isRequired,
 };
 
 export default ArticlePageContainer;

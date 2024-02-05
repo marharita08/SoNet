@@ -8,33 +8,33 @@ import {refetchOff} from "../../../config/refetchOff";
 
 const IncomingRequestsContainer = ({id, acceptRequest, declineRequest, incomingRequests, setIncomingRequests}) => {
 
-    const {isFetching} = useQuery(
-        "incoming-requests",
-        () => getIncomingRequests(id),
-        {
-            onSuccess: (data) => setIncomingRequests(data?.data),
-            ...refetchOff
-        }
-    );
+  const {isFetching} = useQuery(
+    "incoming-requests",
+    () => getIncomingRequests(id),
+    {
+      onSuccess: (data) => setIncomingRequests(data?.data),
+      ...refetchOff
+    }
+  );
 
-    return (
-        <UserCards
-            heading={"Incoming Requests"}
-            acceptRequest={acceptRequest}
-            declineRequest={declineRequest}
-            users={incomingRequests}
-            isMenu={true}
-            isFetching={isFetching}
-        />
-    );
+  return (
+    <UserCards
+      heading={"Incoming Requests"}
+      acceptRequest={acceptRequest}
+      declineRequest={declineRequest}
+      users={incomingRequests}
+      isMenu={true}
+      isFetching={isFetching}
+    />
+  );
 };
 
 IncomingRequestsContainer.propTypes = {
-    id: PropTypes.number.isRequired,
-    acceptRequest: PropTypes.func.isRequired,
-    declineRequest: PropTypes.func.isRequired,
-    incomingRequests: requestsPropTypes,
-    setIncomingRequests: PropTypes.func.isRequired,
+  id: PropTypes.number.isRequired,
+  acceptRequest: PropTypes.func.isRequired,
+  declineRequest: PropTypes.func.isRequired,
+  incomingRequests: requestsPropTypes,
+  setIncomingRequests: PropTypes.func.isRequired,
 };
 
 export default IncomingRequestsContainer;

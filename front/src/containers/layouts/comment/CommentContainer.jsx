@@ -9,57 +9,57 @@ import handleResponseContext from "../../../context/handleResponseContext";
 import {initCommentForReply} from "../../../config/initValues";
 
 const CommentContainer = ({
-    comment,
-    setComment,
-    setIsCommentAdd,
-    setIsExpanded,
-    onCommentDelete,
+  comment,
+  setComment,
+  setIsCommentAdd,
+  setIsExpanded,
+  onCommentDelete,
 }) => {
 
-    const {user: {user_id}, isAdmin} = useContext(authContext);
-    const {handleError} = useContext(handleResponseContext);
+  const {user: {user_id}, isAdmin} = useContext(authContext);
+  const {handleError} = useContext(handleResponseContext);
 
-    const {mutate} = useMutation(deleteComment, {
-        onSuccess: () => {
-            onCommentDelete(comment.comment_id);
-        },
-        onError: handleError
-    });
+  const {mutate} = useMutation(deleteComment, {
+    onSuccess: () => {
+      onCommentDelete(comment.comment_id);
+    },
+    onError: handleError
+  });
 
-    const handleDelete = () => {
-        mutate(comment.comment_id);
-    };
+  const handleDelete = () => {
+    mutate(comment.comment_id);
+  };
 
-    const handleEdit = () => {
-        setComment(comment);
-        setIsCommentAdd(false);
-        setIsExpanded(true);
-    };
+  const handleEdit = () => {
+    setComment(comment);
+    setIsCommentAdd(false);
+    setIsExpanded(true);
+  };
 
-    const handleReply = () => {
-        setComment(initCommentForReply(comment, user_id));
-        setIsExpanded(true);
-        setIsCommentAdd(true);
-    };
+  const handleReply = () => {
+    setComment(initCommentForReply(comment, user_id));
+    setIsExpanded(true);
+    setIsCommentAdd(true);
+  };
 
-    return (
-        <CommentComponent
-            comment={comment}
-            isCurrentUser={comment.user_id === user_id}
-            isAdmin={isAdmin}
-            handleDelete={handleDelete}
-            handleEdit={handleEdit}
-            handleReply={handleReply}
-        />
-    );
+  return (
+    <CommentComponent
+      comment={comment}
+      isCurrentUser={comment.user_id === user_id}
+      isAdmin={isAdmin}
+      handleDelete={handleDelete}
+      handleEdit={handleEdit}
+      handleReply={handleReply}
+    />
+  );
 };
 
 CommentContainer.propTypes = {
-    comment: commentPropTypes,
-    setComment: PropTypes.func.isRequired,
-    setIsCommentAdd: PropTypes.func.isRequired,
-    setIsExpanded: PropTypes.func.isRequired,
-    onCommentDelete: PropTypes.func.isRequired
+  comment: commentPropTypes,
+  setComment: PropTypes.func.isRequired,
+  setIsCommentAdd: PropTypes.func.isRequired,
+  setIsExpanded: PropTypes.func.isRequired,
+  onCommentDelete: PropTypes.func.isRequired
 };
 
 export default CommentContainer;

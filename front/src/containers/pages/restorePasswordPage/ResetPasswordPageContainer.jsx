@@ -6,27 +6,28 @@ import ResetPasswordPageComponent from "../../../components/pages/resetPasswordP
 
 const ResetPasswordPageContainer = () => {
 
-    const {handleError, handleSuccess} = useContext(handleResponseContext);
-    const initialValues = {email: ''};
-    const {mutate, isLoading} = useMutation(
-        resetPassword,
-        {
-            onError: handleError,
-            onSuccess: handleSuccess
-        }
-    );
+  const {handleError, handleSuccess} = useContext(handleResponseContext);
+  const initialValues = {email: ""};
 
-    const onFormSubmit = (data) => {
-        mutate(data);
+  const {mutate, isLoading} = useMutation(
+    resetPassword,
+    {
+      onError: handleError,
+      onSuccess: handleSuccess
     }
+  );
 
-    return (
-        <ResetPasswordPageComponent
-            onFormSubmit={onFormSubmit}
-            initialValues={initialValues}
-            isLoading={isLoading}
-        />
-    )
-}
+  const onFormSubmit = (data) => {
+    mutate(data);
+  };
+
+  return (
+    <ResetPasswordPageComponent
+      onFormSubmit={onFormSubmit}
+      initialValues={initialValues}
+      isLoading={isLoading}
+    />
+  );
+};
 
 export default ResetPasswordPageContainer;
