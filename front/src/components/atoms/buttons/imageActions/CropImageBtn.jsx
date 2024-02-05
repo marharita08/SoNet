@@ -6,24 +6,24 @@ import {useStyles} from "./imageButtonsStyle";
 
 const CropImageBtn = ({onClick}) => {
 
-    const classes = useStyles();
+  const classes = useStyles();
 
-    return (
-        <span>
-            <Button
-                variant={"outlined"}
-                onClick={onClick}
-                startIcon={<ContentCutIcon/>}
-                className={classes.button}
-            >
-                <span className={classes.buttonText}>Crop image</span>
-            </Button>
-        </span>
-    );
+  return (
+    <span>
+      <Button
+        variant={"outlined"}
+        onClick={onClick}
+        startIcon={<ContentCutIcon/>}
+        className={classes.button}
+      >
+        <span className={classes.buttonText}>Crop image</span>
+      </Button>
+    </span>
+  );
 };
 
 CropImageBtn.propTypes = {
-    onClick: PropTypes.func.isRequired
+  onClick: PropTypes.func.isRequired
 };
 
 export default CropImageBtn;

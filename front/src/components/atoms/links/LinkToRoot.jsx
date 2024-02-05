@@ -4,18 +4,18 @@ import SNLink from "./SNLink";
 
 const LinkToRoot = ({content, className}) => {
 
-    return (
-        <SNLink
-            to={"/"}
-            className={className}
-            content={content}
-        />
-    )
-}
+  return (
+    <SNLink
+      to={"/"}
+      className={className}
+      content={content}
+    />
+  );
+};
 
 LinkToRoot.propTypes = {
-    content: PropTypes.any.isRequired,
-    className: PropTypes.string
-}
+  content: PropTypes.any.isRequired,
+  className: PropTypes.string
+};
 
 export default LinkToRoot;

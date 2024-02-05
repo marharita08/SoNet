@@ -5,17 +5,17 @@ import PropTypes from "prop-types";
 
 const SNDialogTitle = ({title}) => {
 
-    const classes = useStyles();
+  const classes = useStyles();
 
-    return (
-        <DialogTitle className={classes.heading}>
-            {title}
-        </DialogTitle>
-    )
-}
+  return (
+    <DialogTitle className={classes.heading}>
+      {title}
+    </DialogTitle>
+  );
+};
 
 SNDialogTitle.propTypes = {
-    title: PropTypes.string.isRequired
-}
+  title: PropTypes.string.isRequired
+};
 
 export default SNDialogTitle;

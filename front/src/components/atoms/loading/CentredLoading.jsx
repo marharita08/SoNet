@@ -5,21 +5,21 @@ import PropTypes from "prop-types";
 
 const CentredLoading = ({isLoading}) => {
 
-    const classes = useStyles();
+  const classes = useStyles();
 
-    return (
-        <div className={classes.container}>
-            <SNLoading isLoading={isLoading}/>
-        </div>
-    )
-}
+  return (
+    <div className={classes.container}>
+      <SNLoading isLoading={isLoading}/>
+    </div>
+  );
+};
 
 CentredLoading.propTypes = {
-    isLoading: PropTypes.bool
-}
+  isLoading: PropTypes.bool
+};
 
 CentredLoading.defaultProps = {
-    isLoading: false
-}
+  isLoading: false
+};
 
 export default CentredLoading;

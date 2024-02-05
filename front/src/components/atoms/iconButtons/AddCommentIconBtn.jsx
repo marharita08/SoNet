@@ -6,19 +6,19 @@ import {IconButton} from "@mui/material";
 import PropTypes from "prop-types";
 
 const AddCommentIconBtn = ({onClick, expand}) => {
-    return (
-        <IconButton onClick={onClick}>
-            <AddCommentIcon/>
-            <ExpandMore expand={expand}>
-                <ExpandMoreIcon/>
-            </ExpandMore>
-        </IconButton>
-    );
+  return (
+    <IconButton onClick={onClick}>
+      <AddCommentIcon/>
+      <ExpandMore expand={expand}>
+        <ExpandMoreIcon/>
+      </ExpandMore>
+    </IconButton>
+  );
 };
 
 AddCommentIconBtn.propTypes = {
-    onClick: PropTypes.func.isRequired,
-    expand: PropTypes.bool.isRequired
+  onClick: PropTypes.func.isRequired,
+  expand: PropTypes.bool.isRequired
 };
 
 export default AddCommentIconBtn;

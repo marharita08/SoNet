@@ -6,24 +6,24 @@ import {useStyles} from "./imageButtonsStyle";
 
 const DeleteImageBtn = ({onClick}) => {
 
-    const classes = useStyles();
+  const classes = useStyles();
 
-    return (
-        <span>
-            <Button
-                variant={"outlined"}
-                onClick={onClick}
-                startIcon={<DeleteIcon/>}
-                className={classes.button}
-            >
-                <span className={classes.buttonText}>Delete image</span>
-            </Button>
-        </span>
-    );
+  return (
+    <span>
+      <Button
+        variant={"outlined"}
+        onClick={onClick}
+        startIcon={<DeleteIcon/>}
+        className={classes.button}
+      >
+        <span className={classes.buttonText}>Delete image</span>
+      </Button>
+    </span>
+  );
 };
 
 DeleteImageBtn.propTypes = {
-    onClick: PropTypes.func.isRequired
+  onClick: PropTypes.func.isRequired
 };
 
 export default DeleteImageBtn;
