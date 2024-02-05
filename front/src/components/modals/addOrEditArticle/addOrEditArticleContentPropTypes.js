@@ -1,9 +1,9 @@
 import PropTypes from "prop-types";
-import {visibilitiesPropTypes} from "../../../propTypes/visibilitiesPropTypes";
+import {optionsPropTypes} from "../../../propTypes/optionsPropTypes";
 import {articleAddEditPropTypes} from "../../../propTypes/articlePropTypes";
 
 export const addOrEditArticleContentPropTypes = {
-    visibilities: visibilitiesPropTypes,
+    visibilities: optionsPropTypes,
     article: articleAddEditPropTypes,
     handleAddImage: PropTypes.func.isRequired,
     image: PropTypes.string,

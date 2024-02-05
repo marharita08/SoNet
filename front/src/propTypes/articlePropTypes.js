@@ -1,9 +1,9 @@
 import PropTypes from "prop-types";
-import {visibilityPropTypes} from "./visibilitiesPropTypes";
+import {optionPropTypes} from "./optionsPropTypes";
 
 export const articleAddEditPropTypes = PropTypes.shape({
     text: PropTypes.string.isRequired,
-    visibility: visibilityPropTypes,
+    visibility: optionPropTypes,
 });
 
 export const articlePropTypes = PropTypes.shape({
