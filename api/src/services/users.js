@@ -6,7 +6,6 @@ const fileHelper = require("../utils/fileHelper");
 const {USER_NOT_FOUND} = require("../constants/messages");
 const {parseToProfile, parseToUserAndSettings} = require("../utils/usersParser");
 const BaseService = require("./base");
-const {set} = require("express/lib/application");
 
 class UsersServices extends BaseService {
 

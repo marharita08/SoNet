@@ -7,41 +7,41 @@ class FriendsService extends BaseService {
     super(friendsStorage);
   }
 
-  getRequest = async (userId, currentUserId) => {
+  async getRequest(userId, currentUserId) {
     const row = await this.storage.getByUsersId(userId, currentUserId);
     if (!row) {
-      return {is_not_friends: true};
+      return { is_not_friends: true };
     }
-    const {from_user_id: fromUserId, status_id: statusId} = row;
+    const { from_user_id: fromUserId, status_id: statusId } = row;
     if (statusId === 2) {
-      return {...row, is_friends: true};
+      return { ...row, is_friends: true };
     }
     if (fromUserId === currentUserId) {
-      return {...row, is_outgoing_request: true};
+      return { ...row, is_outgoing_request: true };
     }
-    return {...row, is_incoming_request: true};
-  };
+    return { ...row, is_incoming_request: true };
+  }
 
-  add = async (request) => {
+  async add(request) {
     const id = await super.add({
       ...request,
       status_id: 1,
     });
-    return {request: await this.storage.getRequestById(id)};
-  };
+    return { request: await this.storage.getRequestById(id) };
+  }
 
-  update = async (requestId, statusId) => {
+  async update(requestId, statusId) {
     await super.update(
       requestId,
-      {status_id: statusId}
+      { status_id: statusId }
     );
-    return {id: requestId};
-  };
+    return { id: requestId };
+  }
 
-  delete = async (id) => {
+  async delete(id) {
     await super.delete(id);
-    return {id};
-  };
+    return { id };
+  }
 }
 
 module.exports = new FriendsService();

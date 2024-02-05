@@ -10,36 +10,36 @@ class CommentsService extends BaseService {
     super(commentsStorage);
   }
 
-  getById = async (commentId) => {
+  async getById(commentId) {
     const comment = await super.getById(commentId);
     if (comment) {
       return comment;
     }
     throw new NotFoundException(Messages.COMMENT_NOT_FOUND);
-  };
+  }
 
-  add = async (comment) => {
+  async add(comment) {
     let id;
     await db.transaction(async () => {
       id = await super.add(comment);
       const path = !!comment.path ? id : `${comment.path}.${id}`;
-      await super.update(id, {path});
+      await super.update(id, { path });
     });
-    return {comment: await this.storage.getFullDataById(id)};
-  };
+    return { comment: await this.storage.getFullDataById(id) };
+  }
 
-  update = async (commentId, text) => {
-    await super.update(commentId, {text});
-    return {comment: {comment_id: commentId, text}};
-  };
+  async update(commentId, text) {
+    await super.update(commentId, { text });
+    return { comment: { comment_id: commentId, text } };
+  }
 
-  getByArticleId = async (articleId) => {
+  async getByArticleId(articleId) {
     return await this.storage.getFullDataByArticleId(articleId);
-  };
+  }
 
-  getAmountByArticleId = async (articleId) => {
+  async getAmountByArticleId(articleId) {
     return await this.storage.getAmountByArticleId(articleId);
-  };
+  }
 }
 
 module.exports = new CommentsService();

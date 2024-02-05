@@ -81,7 +81,7 @@ router.post(
       ...rest
     } = req.body;
     const fileData = req.file;
-    return res.send(await articlesService.add({visibility_id: visibilityId, ...rest}, fileData));
+    return res.send(await articlesService.add({visibility_id: visibilityId, ...rest, fileData}));
   })
 );
 
@@ -107,9 +107,10 @@ router.put(
       text,
       visibility: {value: visibilityId},
     } = req.body;
-    const {id: articleId} = req.params;
+    const {id} = req.params;
+    const articleId = +id;
     const fileData = req.file;
-    res.send(articlesService.update(+articleId, text, visibilityId, fileData, next));
+    res.send(articlesService.update(articleId, {text, visibilityId, fileData, next}));
   })
 );
 
@@ -126,8 +127,9 @@ router.delete(
     },
   ]),
   asyncHandler(async (req, res, next) => {
-    const {id: articleId} = req.params;
-    await articlesService.delete(+articleId, next);
+    const {id} = req.params;
+    const articleId = +id;
+    await articlesService.delete({articleId, next});
     res.sendStatus(204);
   })
 );

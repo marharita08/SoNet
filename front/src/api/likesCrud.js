@@ -5,7 +5,7 @@ export const insertLike = async (like) => {
 };
 
 export const deleteLike = async (article_id) => {
-    return apiClient.delete(`/likes/article/${article_id}`);
+    return apiClient.delete(`/likes/${article_id}`);
 };
 
 export const getIsLiked = async (articleId) => {

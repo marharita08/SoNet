@@ -32,18 +32,18 @@ router.post(
   asyncHandler(async (req, res) => {
     const {article_id: articleId} = req.body;
     const {user_id: userId} = req.auth;
-    await likesService.add(articleId, userId);
+    await likesService.add({articleId, userId});
     res.sendStatus(204);
   })
 );
 
 router.delete(
-  "/article/:article_id",
+  "/:article_id",
   authMiddleware,
   asyncHandler(async (req, res) => {
     const {article_id: articleId} = req.params;
     const {user_id: userId} = req.auth;
-    await likesService.delete(articleId, userId);
+    await likesService.delete({articleId, userId});
     res.sendStatus(204);
   })
 );

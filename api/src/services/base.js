@@ -2,11 +2,26 @@ class BaseService {
   constructor(storage) {
     this.storage = storage;
   }
-  getAll = async () => this.storage.getAll();
-  getById = async (id) => this.storage.getById(id);
-  add = async (entity) => (this.storage.create(entity))[0];
-  update = async (id, entity) => this.storage.update(id, entity);
-  delete = async (id) => this.storage.delete(id);
+
+  async getAll() {
+    return this.storage.getAll();
+  }
+
+  async getById(id) {
+    return this.storage.getById(id);
+  }
+
+  async add(entity) {
+    return (await this.storage.create(entity))[0];
+  }
+
+  async update(id, entity) {
+    return this.storage.update(id, entity);
+  }
+
+  async delete(id) {
+    return this.storage.delete(id);
+  }
 }
 
 module.exports = BaseService;

@@ -14,31 +14,31 @@ class ArticlesService extends BaseService {
     super(articlesStorage);
   }
 
-  getAllNews = async (userId, page, limit) => {
+  async getAllNews(userId, page, limit) {
     const user = await usersStorage.getById(userId);
     if (user.role !== Roles.ADMIN) {
       throw new ForbiddenException();
     }
     return parseArticles(await this.storage.getAllNews(page, limit));
-  };
+  }
 
-  getAllNewsAmount = async (userId) => {
+  async getAllNewsAmount(userId) {
     const user = await usersStorage.getById(userId);
     if (user.role !== Roles.ADMIN) {
       throw new ForbiddenException();
     }
     return await this.storage.getCountOfAllNews();
-  };
+  }
 
-  getNewsByUserId = async (userId, page, limit) => {
+  async getNewsByUserId(userId, page, limit) {
     return parseArticles(await this.storage.getNewsByUserId(userId, page, limit));
-  };
+  }
 
-  getNewsAmountByUserId = async (userId) => {
+  async getNewsAmountByUserId(userId) {
     return await this.storage.getCountOfNewsByUserId(userId);
-  };
+  }
 
-  getWholeArticleById = async (articleId, userId) => {
+  async getWholeArticleById(articleId, userId) {
     const user = await usersStorage.getById(userId);
     let dbResponse;
     if (user.role === Roles.ADMIN) {
@@ -50,9 +50,9 @@ class ArticlesService extends BaseService {
       return [parseArticle(dbResponse)];
     }
     throw new NotFoundException(Messages.ARTICLE_NOT_FOUND);
-  };
+  }
 
-  add = async (article, fileData) => {
+  async add({fileData, ...article}) {
     let path = null;
     if (fileData) {
       path = fileHelper.getUrlPath(fileData);
@@ -62,14 +62,14 @@ class ArticlesService extends BaseService {
       image: path,
     });
     return parseArticle(await this.storage.getWholeArticleById(id));
-  };
+  }
 
-  update = async (articleId, text, visibilityId, fileData, errorHandler) => {
+  async update(articleId, {text, visibilityId, fileData, next}) {
     let path = null;
     if (fileData) {
-      const {image: oldFile} = await this.storage.getImageByArticleId(articleId);
+      const { image: oldFile } = await this.storage.getImageByArticleId(articleId);
       path = fileHelper.getUrlPath(fileData);
-      fileHelper.deleteFile(oldFile, errorHandler);
+      fileHelper.deleteFile(oldFile, next);
     }
     await super.update(articleId, {
       text,
@@ -77,13 +77,13 @@ class ArticlesService extends BaseService {
       image: path,
     });
     return parseArticle(await this.storage.getWholeArticleById(articleId));
-  };
+  }
 
-  delete = async (articleId, errorHandler) => {
-    const {image} = await this.storage.getImageByArticleId(articleId);
-    fileHelper.deleteFile(image, errorHandler);
+  async delete({articleId, next}) {
+    const { image } = await this.storage.getImageByArticleId(articleId);
+    fileHelper.deleteFile(image, next);
     return await super.delete(articleId);
-  };
+  }
 }
 
 module.exports = new ArticlesService();

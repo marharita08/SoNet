@@ -6,11 +6,11 @@ class LikesStorage extends BaseStorage {
     super("article_likes", "*", db);
   }
 
-  async delete(articleID, userID) {
+  async delete({articleId, userId}) {
     return this.db(this.table)
       .delete()
-      .where("article_id", articleID)
-      .andWhere("user_id", userID);
+      .where("article_id", articleId)
+      .andWhere("user_id", userId);
   }
 
   async getByArticleId(id) {

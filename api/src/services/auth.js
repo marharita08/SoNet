@@ -10,82 +10,82 @@ const createAccessToken = require("../utils/createAccessToken");
 const {Roles} = require("../middleware/aclRules");
 
 const createTokens = async (user) => {
-    let accessToken;
-    let refreshToken;
-    if (user) {
-        accessToken = createAccessToken(user);
-        refreshToken = uuidv4();
-        await sessionStorage.create({
-            user_id: user.user_id,
-            token: refreshToken,
-        });
-    }
+  let accessToken;
+  let refreshToken;
+  if (user) {
+    accessToken = createAccessToken(user);
+    refreshToken = uuidv4();
+    await sessionStorage.create({
+      user_id: user.user_id,
+      token: refreshToken,
+    });
+  }
 
-    if (accessToken) {
-        return {
-            user,
-            accessToken,
-            refreshToken,
-            success: true,
-        };
-    }
-    throw new UnauthorizedException();
+  if (accessToken) {
+    return {
+      user,
+      accessToken,
+      refreshToken,
+      success: true,
+    };
+  }
+  throw new UnauthorizedException();
 };
 
 const loginOrSignUp = async (email, password) => {
-    let user = await userStorage.getByEmail(email);
-    const hashedPassword = passwordHasher(password, config.salt);
+  let user = await userStorage.getByEmail(email);
+  const hashedPassword = passwordHasher(password, config.salt);
 
-    if (!user) {
-        const name = email.split("@")[0];
-        user = {
-            name,
-            email,
-            password: hashedPassword,
-            role: Roles.USER,
-        };
-        const id = await userStorage.create(user);
-        await settingsStorage.create({user_id: id[0]});
-        user = await userStorage.getByEmail(email);
-    } else if (user.password !== hashedPassword) {
-        throw new UnauthorizedException(Messages.WRONG_PASSWORD);
-    }
-    return createTokens(user);
+  if (!user) {
+    const name = email.split("@")[0];
+    user = {
+      name,
+      email,
+      password: hashedPassword,
+      role: Roles.USER,
+    };
+    const id = await userStorage.create(user);
+    await settingsStorage.create({user_id: id[0]});
+    user = await userStorage.getByEmail(email);
+  } else if (user.password !== hashedPassword) {
+    throw new UnauthorizedException(Messages.WRONG_PASSWORD);
+  }
+  return createTokens(user);
 };
 
 const loginWithGoogle = async (user) => {
-    return createTokens(user);
-}
+  return createTokens(user);
+};
 
 const loginWithFacebook = async (user) => {
-    return createTokens(user);
-}
+  return createTokens(user);
+};
 
 const refresh = async (refreshToken) => {
-    const session = await sessionStorage.getById(refreshToken);
-    if (session) {
-        const user = await userStorage.getById(session.user_id);
-        const accessToken = createAccessToken(user);
+  const session = await sessionStorage.getById(refreshToken);
+  if (session) {
+    const user = await userStorage.getById(session.user_id);
+    const accessToken = createAccessToken(user);
 
-        if (accessToken) {
-            return {
-                accessToken,
-                refreshToken: session.token,
-                success: true,
-            };
-        }
+    if (accessToken) {
+      return {
+        accessToken,
+        refreshToken: session.token,
+        success: true,
+      };
     }
-    throw new UnauthorizedException();
+  }
+  throw new UnauthorizedException();
 };
 
 const logout = async (refreshToken) => {
-    return await sessionStorage.delete(refreshToken);
+  return await sessionStorage.delete(refreshToken);
 };
 
 module.exports = {
-    loginOrSignUp,
-    loginWithGoogle,
-    loginWithFacebook,
-    refresh,
-    logout
+  loginOrSignUp,
+  loginWithGoogle,
+  loginWithFacebook,
+  refresh,
+  logout
 };
