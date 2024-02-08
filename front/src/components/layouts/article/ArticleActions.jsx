@@ -1,26 +1,17 @@
 import React from "react";
+import {CardActions} from "@mui/material";
+
 import ProgressOrComponent from "../../atoms/progressOrComponent/ProgressOrComponent";
 import CommentsIconBtn from "../../atoms/iconButtons/CommentsIconBtn";
 import AddCommentIconBtn from "../../atoms/iconButtons/AddCommentIconBtn";
 import LikeIconBtn from "../../atoms/iconButtons/LikeIconBtn";
 import AvatarPopover from "./AvatarPopover";
-import {CardActions} from "@mui/material";
 import {articleActionsPropTypes, articleActionsDefaultProps} from "./articleActionsPropTypes";
 
-const ArticleActions = ({
-  isCommentsFetching,
-  isLikesFetching,
-  handleCommentsExpand,
-  handleAddComment,
-  handleLike,
-  isCommentsExpanded,
-  isAddOrEditCommentExpanded,
-  isLiked,
-  commentsAmount,
-  likesAmount,
-  likedUsers
-}) => {
+const ArticleActions = ({commentsAmount, likesAmount, likedUsers, actions, flags}) => {
 
+  const {handleCommentsExpand, handleAddComment, handleLike} = actions;
+  const {isCommentsFetching, isLikesFetching, isCommentsExpanded, isAddOrEditCommentExpanded, isLiked} = flags;
   const [popoverAnchorEl, setPopoverAnchorEl] = React.useState(null);
 
   const handlePopoverOpen = (event) => {
@@ -52,7 +43,8 @@ const ArticleActions = ({
             onMouseEnter={handlePopoverOpen}
             onMouseLeave={handlePopoverClose}
             isLiked={isLiked}
-            likes={likesAmount}/>
+            likes={likesAmount}
+          />
         }
       />
       {

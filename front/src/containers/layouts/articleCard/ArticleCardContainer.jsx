@@ -198,17 +198,15 @@ const ArticleCardContainer = ({setArticleContext, article, articles, setArticles
           <ArticleContent article={article} isTruncate={isTruncate}/>
           <Divider/>
           <ArticleActions
-            isCommentsFetching={isCommentsFetching || isCommentsAmountFetching}
-            isLikesFetching={isLikesFetching || isLikesAmountFetching || isIsLikedFetching}
-            handleCommentsExpand={handleCommentsExpand}
-            isAddOrEditCommentExpanded={isAddOrEditCommentExpanded}
-            isCommentsExpanded={isCommentsExpanded}
-            handleAddComment={handleAddComment}
-            handleLike={handleLike}
             likesAmount={likesAmount}
             commentsAmount={commentsAmount}
-            isLiked={isLiked}
             likedUsers={likedUsers}
+            actions={{handleCommentsExpand, handleAddComment, handleLike}}
+            flags={{
+              isAddOrEditCommentExpanded, isCommentsExpanded, isLiked,
+              isCommentsFetching: isCommentsFetching || isCommentsAmountFetching,
+              isLikesFetching: isLikesFetching || isLikesAmountFetching || isIsLikedFetching
+            }}
           />
         </>
       }
@@ -217,10 +215,8 @@ const ArticleCardContainer = ({setArticleContext, article, articles, setArticles
           comment={currentComment}
           isCommentAdd={isCommentAdd}
           actions={{
-            onCommentAdd,
-            onCommentUpdate,
-            setCurrentInitComment,
-            setCommentsExpanded,
+            onCommentAdd, onCommentUpdate,
+            setCurrentInitComment, setCommentsExpanded,
             handleCancel: handleCommentCancel
           }}
         />
