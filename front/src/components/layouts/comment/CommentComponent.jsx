@@ -4,23 +4,19 @@ import {CardContent, CardHeader, Divider, Typography} from "@mui/material";
 import PropTypes from "prop-types";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import {useTheme} from "@mui/material/styles";
+
 import SNMenu from "../../atoms/menu/SNMenu";
 import MenuItemBody from "../../atoms/menu/MenuItemBody";
 import {commentPropTypes} from "../../../propTypes/commentPropTypes";
 import CommentHeaderTitle from "./CommentHeaderTitle";
 import CommentHeaderAvatar from "./CommentHeaderAvatar";
 import CommentHeaderActions from "./CommentHeaderActions";
-import {useTheme} from "@mui/material/styles";
 
-const CommentComponent = ({
-  comment,
-  handleEdit,
-  handleDelete,
-  isAdmin,
-  isCurrentUser,
-  handleReply
-}) => {
+const CommentComponent = ({comment, actions, flags}) => {
 
+  const {handleEdit, handleDelete, handleReply} = actions;
+  const {isAdmin, isCurrentUser} = flags;
   const theme = useTheme();
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -95,11 +91,15 @@ const CommentComponent = ({
 
 CommentComponent.propTypes = {
   comment: commentPropTypes.isRequired,
-  handleEdit: PropTypes.func.isRequired,
-  handleDelete: PropTypes.func.isRequired,
-  isCurrentUser: PropTypes.bool.isRequired,
-  handleReply: PropTypes.func.isRequired,
-  isAdmin: PropTypes.bool.isRequired
+  actions: PropTypes.shape({
+    handleEdit: PropTypes.func.isRequired,
+    handleDelete: PropTypes.func.isRequired,
+    handleReply: PropTypes.func.isRequired,
+  }),
+  flags: PropTypes.shape({
+    isCurrentUser: PropTypes.bool.isRequired,
+    isAdmin: PropTypes.bool.isRequired
+  })
 };
 
 export default CommentComponent;

@@ -226,10 +226,11 @@ const ArticleCardContainer = ({setArticleContext, article, articles, setArticles
           <ErrorBoundary key={comment.comment_id}>
             <CommentContainer
               comment={comment}
-              setComment={setCurrentComment}
-              setIsCommentAdd={setIsCommentAdd}
-              setIsExpanded={setIsAddOrEditCommentExpanded}
-              onCommentDelete={onCommentDelete}
+              actions={{
+                setIsCommentAdd, onCommentDelete,
+                setIsExpanded: setIsAddOrEditCommentExpanded,
+                setComment: setCurrentComment
+              }}
             />
           </ErrorBoundary>
         )
