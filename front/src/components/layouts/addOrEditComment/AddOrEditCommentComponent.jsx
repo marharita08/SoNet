@@ -3,15 +3,18 @@ import {Avatar, Divider} from "@mui/material";
 import * as Yup from "yup";
 import {Formik, Form, Field} from "formik";
 import PropTypes from "prop-types";
-import SNTextarea from "../../atoms/fields/SNTextarea";
 import {useTheme} from "@mui/material/styles";
+
+import SNTextarea from "../../atoms/fields/SNTextarea";
 import SubmitButton from "../../atoms/buttons/SubmitButton";
 import CancelButton from "../../atoms/buttons/CancelButton";
 import {useStyles} from "../../style";
 import {commentAddPropTypes} from "../../../propTypes/commentPropTypes";
 
-const AddOrEditCommentComponent = ({user, comment, onSubmit, isLoading, isCommentAdd, handleCancel}) => {
+const AddOrEditCommentComponent = ({user, comment, flags, actions}) => {
 
+  const {isLoading, isCommentAdd} = flags;
+  const {onSubmit,  handleCancel} = actions;
   const theme = useTheme();
   const classes = useStyles();
 
@@ -75,14 +78,20 @@ AddOrEditCommentComponent.propTypes = {
     avatar: PropTypes.string
   }).isRequired,
   comment: commentAddPropTypes.isRequired,
-  onSubmit: PropTypes.func.isRequired,
-  isLoading: PropTypes.bool,
-  isCommentAdd: PropTypes.bool.isRequired,
-  handleCancel: PropTypes.func.isRequired
+  actions: PropTypes.shape({
+    onSubmit: PropTypes.func.isRequired,
+    handleCancel: PropTypes.func.isRequired
+  }),
+  flags: {
+    isLoading: PropTypes.bool,
+    isCommentAdd: PropTypes.bool.isRequired,
+  }
 };
 
 AddOrEditCommentComponent.defaultProps = {
-  isLoading: false
+  flags: {
+    isLoading: false
+  }
 };
 
 export default AddOrEditCommentComponent;

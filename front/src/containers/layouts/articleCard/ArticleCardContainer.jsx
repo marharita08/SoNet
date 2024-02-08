@@ -1,13 +1,15 @@
 import React, {useContext, useState} from "react";
 import {useMutation, useQuery} from "react-query";
 import PropTypes from "prop-types";
+import {useNavigate, useLocation} from "react-router-dom";
+import {Divider} from "@mui/material";
+
 import ErrorBoundary from "../../../components/ErrorBoundary";
 import {deleteArticle, getComments, getLikes, getCommentsAmount, getLikesAmount} from "../../../api/articlesCrud";
 import authContext from "../../../context/authContext";
 import CommentContainer from "../comment/CommentContainer";
 import AddOrEditCommentContainer from "../addOrEditComment/AddOrEditCommentContainer";
 import {deleteLike, getIsLiked, insertLike} from "../../../api/likesCrud";
-import {useNavigate, useLocation} from "react-router-dom";
 import {articlePropTypes, articlesPropTypes} from "../../../propTypes/articlePropTypes";
 import articlesService from "../../../services/articlesService";
 import handleResponseContext from "../../../context/handleResponseContext";
@@ -17,7 +19,6 @@ import {refetchOff} from "../../../config/refetchOff";
 import {initComment as initCommentFn} from "../../../config/initValues";
 import ArticleHeader from "../../../components/layouts/article/ArticleHeader";
 import ArticleContent from "../../../components/layouts/article/ArticleContent";
-import {Divider} from "@mui/material";
 import ArticleActions from "../../../components/layouts/article/ArticleActions";
 
 const ArticleCardContainer = ({setArticleContext, article, articles, setArticles, isTruncate}) => {
@@ -215,12 +216,13 @@ const ArticleCardContainer = ({setArticleContext, article, articles, setArticles
         <AddOrEditCommentContainer
           comment={currentComment}
           isCommentAdd={isCommentAdd}
-          handleCancel={handleCommentCancel}
-          onCommentAdd={onCommentAdd}
-          onCommentUpdate={onCommentUpdate}
-          setCurrentInitComment={setCurrentInitComment}
-          handleError={handleError}
-          setCommentsExpanded={setIsCommentsExpanded}
+          actions={{
+            onCommentAdd,
+            onCommentUpdate,
+            setCurrentInitComment,
+            setCommentsExpanded,
+            handleCancel: handleCommentCancel
+          }}
         />
       }
       commentsComponent={
