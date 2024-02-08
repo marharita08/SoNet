@@ -1,17 +1,13 @@
 import React from "react";
-import ErrorBoundary from "../../ErrorBoundary";
 import {Card, Collapse} from "@mui/material";
-import {useStyles} from "../../style";
 import PropTypes from "prop-types";
 
-const ArticleCardComponent = ({
-  articleComponent,
-  addOrEditCommentComponent,
-  commentsComponent,
-  isAddOrEditCommentExpanded,
-  isCommentsExpanded
-}) => {
+import ErrorBoundary from "../../ErrorBoundary";
+import {useStyles} from "../../style";
 
+const ArticleCardComponent = ({articleComponent, addOrEditCommentComponent, commentsComponent, flags}) => {
+
+  const {isAddOrEditCommentExpanded, isCommentsExpanded} = flags;
   const classes = useStyles();
 
   return (
@@ -35,8 +31,10 @@ ArticleCardComponent.propTypes = {
   articleComponent: PropTypes.node.isRequired,
   addOrEditCommentComponent: PropTypes.node.isRequired,
   commentsComponent: PropTypes.node.isRequired,
-  isAddOrEditCommentExpanded: PropTypes.bool.isRequired,
-  isCommentsExpanded: PropTypes.bool.isRequired
+  flags: PropTypes.shape({
+    isAddOrEditCommentExpanded: PropTypes.bool.isRequired,
+    isCommentsExpanded: PropTypes.bool.isRequired
+  })
 };
 
 export default ArticleCardComponent;

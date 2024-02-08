@@ -184,8 +184,7 @@ const ArticleCardContainer = ({setArticleContext, article, articles, setArticles
 
   return (
     <ArticleCardComponent
-      isCommentsExpanded={isCommentsExpanded}
-      isAddOrEditCommentExpanded={isAddOrEditCommentExpanded}
+      flags={{isCommentsExpanded, isAddOrEditCommentExpanded}}
       articleComponent={
         <>
           <ArticleHeader
