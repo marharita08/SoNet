@@ -11,12 +11,7 @@ import {refetchOff} from "../../../config/refetchOff";
 import imageService from "../../../services/imageService";
 import handleResponseContext from "../../../context/handleResponseContext";
 
-const EditProfileContainer = ({
-  isModalOpen,
-  user,
-  locations,
-  actions
-}) => {
+const EditProfileContainer = ({isModalOpen, user, locations, actions}) => {
 
   const {setIsModalOpen, setUser, ...componentActions} = actions;
   const {handleError, showErrorAlert} = useContext(handleResponseContext);

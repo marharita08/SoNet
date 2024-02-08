@@ -2,6 +2,7 @@ import React, {useContext} from "react";
 import {useParams} from "react-router-dom";
 import {useQuery} from "react-query";
 import PropTypes from "prop-types";
+
 import ErrorBoundary from "../../../components/ErrorBoundary";
 import ArticleCardContainer from "../../layouts/articleCard/ArticleCardContainer";
 import {getArticle} from "../../../api/articlesCrud";

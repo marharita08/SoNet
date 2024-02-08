@@ -1,6 +1,7 @@
 import React, {useContext} from "react";
 import {useMutation} from "react-query";
 import PropTypes from "prop-types";
+
 import AuthPageComponent from "../../../components/pages/authPage/AuthPageComponent";
 import {googleAuth, facebookAuth, authCrud} from "../../../api/authCrud";
 import handleResponseContext from "../../../context/handleResponseContext";
@@ -46,14 +47,9 @@ const AuthPageContainer = ({setAuthContext}) => {
 
   return (
     <AuthPageComponent
-      onGoogleSuccess={onGoogleSuccess}
-      onGoogleFailure={onGoogleFailure}
-      onFormSubmit={onFormSubmit}
+      actions={{onGoogleSuccess, onGoogleFailure, onFormSubmit, onFacebookResponse}}
       initialUser={initialUser}
-      onFacebookResponse={onFacebookResponse}
-      isAuthLoading={isAuthLoading}
-      isGoogleLoading={isGoogleLoading}
-      isFacebookLoading={isFacebookLoading}
+      flags={{isAuthLoading, isGoogleLoading, isFacebookLoading}}
     />
   );
 };

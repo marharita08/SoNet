@@ -3,9 +3,10 @@ import * as Yup from "yup";
 import {Field, Form, Formik} from "formik";
 import {TextField} from "formik-mui";
 import {Button, Card, CardHeader, Typography} from "@mui/material";
-import ProgressOrComponent from "../../atoms/progressOrComponent/ProgressOrComponent";
 import SendIcon from "@mui/icons-material/Send";
 import PropTypes from "prop-types";
+
+import ProgressOrComponent from "../../atoms/progressOrComponent/ProgressOrComponent";
 import {useStyles} from "../../style";
 
 const ResetPasswordPageComponent = ({onFormSubmit, initialValues, isLoading}) => {

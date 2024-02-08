@@ -1,6 +1,7 @@
 import React from "react";
-import CentredLoading from "../../atoms/loading/CentredLoading";
 import PropTypes from "prop-types";
+
+import CentredLoading from "../../atoms/loading/CentredLoading";
 
 const ArticlePageComponent = ({isLoading, articleComponent}) => {
   return (

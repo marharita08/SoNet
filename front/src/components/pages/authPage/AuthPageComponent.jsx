@@ -1,23 +1,17 @@
 import React from "react";
 import {Card, CardHeader} from "@mui/material";
 import PropTypes from "prop-types";
+
 import LoginWithFacebookBtn from "../../atoms/buttons/loginWith/LoginWithFacebookBtn";
 import LoginWithGoogleBtn from "../../atoms/buttons/loginWith/LoginWithGoogleBtn";
 import {useStyles} from "../../style";
 import LoginForm from "./LoginForm";
 import {userAuthPropTypes} from "../../../propTypes/userPropTypes";
 
-const AuthPageComponent = ({
-  onGoogleSuccess,
-  onGoogleFailure,
-  onFormSubmit,
-  initialUser,
-  onFacebookResponse,
-  isGoogleLoading,
-  isFacebookLoading,
-  isAuthLoading
-}) => {
+const AuthPageComponent = ({actions, initialUser, flags}) => {
 
+  const {onGoogleSuccess, onGoogleFailure, onFormSubmit, onFacebookResponse} = actions;
+  const {isGoogleLoading, isFacebookLoading, isAuthLoading} = flags;
   const classes = useStyles();
 
   return (
@@ -44,14 +38,18 @@ const AuthPageComponent = ({
 };
 
 AuthPageComponent.propTypes = {
-  onGoogleSuccess: PropTypes.func.isRequired,
-  onGoogleFailure: PropTypes.func.isRequired,
-  onFormSubmit: PropTypes.func.isRequired,
-  onFacebookResponse: PropTypes.func.isRequired,
+  actions: PropTypes.shape({
+    onGoogleSuccess: PropTypes.func.isRequired,
+    onGoogleFailure: PropTypes.func.isRequired,
+    onFormSubmit: PropTypes.func.isRequired,
+    onFacebookResponse: PropTypes.func.isRequired,
+  }).isRequired,
+  flags: PropTypes.shape({
+    isGoogleLoading: PropTypes.bool,
+    isFacebookLoading: PropTypes.bool,
+    isAuthLoading: PropTypes.bool
+  }),
   initialUser: userAuthPropTypes.isRequired,
-  isGoogleLoading: PropTypes.bool,
-  isFacebookLoading: PropTypes.bool,
-  isAuthLoading: PropTypes.bool
 };
 
 AuthPageComponent.defaultProps = {

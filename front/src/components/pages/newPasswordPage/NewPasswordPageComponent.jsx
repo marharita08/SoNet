@@ -3,10 +3,11 @@ import {useStyles} from "../../style";
 import * as Yup from "yup";
 import {Button, Card, CardHeader, Typography} from "@mui/material";
 import {Field, Form, Formik} from "formik";
-import ProgressOrComponent from "../../atoms/progressOrComponent/ProgressOrComponent";
 import SaveIcon from "@mui/icons-material/Save";
-import PasswordField from "../../atoms/fields/PasswordField";
 import PropTypes from "prop-types";
+
+import ProgressOrComponent from "../../atoms/progressOrComponent/ProgressOrComponent";
+import PasswordField from "../../atoms/fields/PasswordField";
 
 const NewPasswordPageComponent = ({onFormSubmit, initialValues, isLoading}) => {
 

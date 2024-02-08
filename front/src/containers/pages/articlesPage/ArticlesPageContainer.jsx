@@ -1,6 +1,7 @@
 import React, {useContext, useEffect, useState} from "react";
 import {useQuery} from "react-query";
 import PropTypes from "prop-types";
+
 import ArticleCardContainer from "../../layouts/articleCard/ArticleCardContainer";
 import ErrorBoundary from "../../../components/ErrorBoundary";
 import authContext from "../../../context/authContext";
@@ -75,10 +76,7 @@ const ArticlesPageContainer = ({setArticleContext, param, articles, setArticles}
             <NavigateFabContainer/>
           </>
         }
-        isArticlesFetching={isArticlesFetching}
-        isCountFetching={isCountFetching}
-        isLoading={isLoading}
-        isLoadMoreVisible={amount > articles.length}
+        flags={{isArticlesFetching, isCountFetching, isLoading, isLoadMoreVisible: amount > articles.length}}
         handleLoadMore={handleLoadMore}
       />
     </>

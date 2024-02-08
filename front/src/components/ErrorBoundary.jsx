@@ -1,4 +1,5 @@
 import React from "react";
+
 import SNAlert from "./atoms/alert/SNAlert";
 
 export default class ErrorBoundary extends React.Component {

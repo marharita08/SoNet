@@ -5,11 +5,12 @@ import {Button} from "@mui/material";
 import LoginIcon from "@mui/icons-material/Login";
 import * as Yup from "yup";
 import PropTypes from "prop-types";
+import {Link} from "react-router-dom";
+
 import {userAuthPropTypes} from "../../../propTypes/userPropTypes";
 import ProgressOrComponent from "../../atoms/progressOrComponent/ProgressOrComponent";
 import {useStyles} from "../../style";
 import PasswordField from "../../atoms/fields/PasswordField";
-import {Link} from "react-router-dom";
 
 const LoginForm = ({onFormSubmit, initialUser, isLoading}) => {
 

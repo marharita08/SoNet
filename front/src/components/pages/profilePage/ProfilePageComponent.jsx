@@ -1,7 +1,8 @@
 import React from "react";
+import PropTypes from "prop-types";
+
 import SNLoading from "../../atoms/loading/SNLoading";
 import ErrorBoundary from "../../ErrorBoundary";
-import PropTypes from "prop-types";
 
 const ProfilePageComponent = ({
   profileComponent,
