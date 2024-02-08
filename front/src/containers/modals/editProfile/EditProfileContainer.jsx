@@ -1,6 +1,7 @@
 import React, {useContext, useState} from "react";
 import {useMutation, useQuery} from "react-query";
 import {serialize} from "object-to-formdata";
+
 import EditProfileComponent from "../../../components/modals/editProfile/EditProfileComponent";
 import {getUniversities} from "../../../api/universitiesCrud";
 import {getFieldVisibilities} from "../../../api/visibilitiesCrud";
@@ -12,16 +13,12 @@ import handleResponseContext from "../../../context/handleResponseContext";
 
 const EditProfileContainer = ({
   isModalOpen,
-  setIsModalOpen,
   user,
-  setUser,
-  countries,
-  states,
-  cities,
-  onCountryChange,
-  onStateChange
+  locations,
+  actions
 }) => {
 
+  const {setIsModalOpen, setUser, ...componentActions} = actions;
   const {handleError, showErrorAlert} = useContext(handleResponseContext);
   const {isFetching: isUniversitiesFetching, data: universitiesData} = useQuery(
     "universities",
@@ -80,22 +77,14 @@ const EditProfileContainer = ({
       user={user}
       universities={universities}
       visibilities={visibilities}
-      handleDeleteImage={handleDeleteImage}
-      handleCropImage={handleCropImage}
       croppedImage={croppedImage}
       image={image}
-      isLoading={isLoading}
-      onFormSubmit={onFormSubmit}
-      setCropper={setCropper}
-      handleAddImage={handleAddImage}
-      isModalOpen={isModalOpen}
-      handleModalClose={handleModalClose}
-      isFetching={isUniversitiesFetching || isVisibilitiesFetching}
-      countries={countries}
-      states={states}
-      onCountryChange={onCountryChange}
-      cities={cities}
-      onStateChange={onStateChange}
+      locations={locations}
+      actions={{
+        handleDeleteImage, handleCropImage, onFormSubmit, setCropper,
+        handleAddImage, handleModalClose, ...componentActions
+      }}
+      flags={{isLoading, isModalOpen, isFetching: isUniversitiesFetching || isVisibilitiesFetching}}
     />
   );
 };

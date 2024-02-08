@@ -1,34 +1,19 @@
 import React from "react";
 import {Avatar, DialogContent} from "@mui/material";
+import {useTheme} from "@mui/material/styles";
+import PropTypes from "prop-types";
+
 import SNCropper from "../../atoms/cropper/SNCropper";
 import ImageDialogActions from "../dialogActions/ImageDialogActions";
 import {useStyles} from "./style";
-import {useTheme} from "@mui/material/styles";
-import PropTypes from "prop-types";
 import {userProfilePropTypes} from "../../../propTypes/userPropTypes";
 import {optionsPropTypes} from "../../../propTypes/optionsPropTypes";
 import EditProfileFields from "./EditProfileFields";
 import CentredLoading from "../../atoms/loading/CentredLoading";
 
-const EditProfileContent = ({
-  isLoading,
-  user,
-  image,
-  croppedImage,
-  setCropper,
-  setFieldValue,
-  universities,
-  visibilities,
-  handleChange,
-  deleteImage,
-  cropImage,
-  countries,
-  states,
-  onCountryChange,
-  cities,
-  onStateChange
-}) => {
+const EditProfileContent = ({isLoading, user, image, croppedImage, universities, visibilities, locations, actions}) => {
 
+  const {setCropper, setFieldValue, handleChange, deleteImage, cropImage, onCountryChange, onStateChange} = actions;
   const classes = useStyles();
   const theme = useTheme();
   const isCropper = !!image;
@@ -43,20 +28,19 @@ const EditProfileContent = ({
       />
       <SNCropper image={image} setCropper={setCropper} isVisible={isCropper}/>
       <ImageDialogActions
-        isCropper={isCropper}
-        isImage={!!(croppedImage || image)}
-        cropImageOnClick={() => cropImage(setFieldValue)}
-        deleteImageOnclick={() => deleteImage(setFieldValue)}
-        addImageOnClick={handleChange}
+        flags={{isCropper, isImage:!!(croppedImage || image)}}
+        actions={{
+          addImageOnClick: handleChange,
+          cropImageOnClick: () => cropImage(setFieldValue),
+          deleteImageOnclick: () => deleteImage(setFieldValue)
+        }}
       />
       <EditProfileFields
         universities={universities}
         visibilities={visibilities}
-        countries={countries}
-        states={states}
         onCountryChange={onCountryChange}
-        cities={cities}
         onStateChange={onStateChange}
+        locations={locations}
       />
     </DialogContent>
   );
@@ -67,13 +51,22 @@ EditProfileContent.propTypes = {
   user: userProfilePropTypes.isRequired,
   image: PropTypes.string,
   croppedImage: PropTypes.string,
-  setCropper: PropTypes.func.isRequired,
-  setFieldValue: PropTypes.func.isRequired,
   universities: optionsPropTypes,
   visibilities: optionsPropTypes,
-  handleChange: PropTypes.func.isRequired,
-  deleteImage: PropTypes.func.isRequired,
-  cropImage: PropTypes.func.isRequired
+  locations: PropTypes.shape({
+    countries: optionsPropTypes,
+    states: optionsPropTypes,
+    cities: optionsPropTypes,
+  }),
+  actions: PropTypes.shape({
+    setCropper: PropTypes.func.isRequired,
+    setFieldValue: PropTypes.func.isRequired,
+    handleChange: PropTypes.func.isRequired,
+    deleteImage: PropTypes.func.isRequired,
+    cropImage: PropTypes.func.isRequired,
+    onCountryChange: PropTypes.func.isRequired,
+    onStateChange: PropTypes.func.isRequired
+  })
 };
 
 export default EditProfileContent;

@@ -1,6 +1,7 @@
 import {Form, Formik} from "formik";
 import {Dialog} from "@mui/material";
 import React from "react";
+
 import {EditProfilePropTypes} from "./editProfilePropTypes";
 import {schema} from "./editProfileSchema";
 import SaveCancelDialogActions from "../dialogActions/SaveCancelDialogActions";
@@ -9,27 +10,11 @@ import SNDialogTitle from "../../atoms/dialogTitle/SNDialogTitle";
 import EditProfileContent from "./EditProfileContent";
 import ErrorBoundary from "../../ErrorBoundary";
 
-const EditProfileComponent = ({
-  universities,
-  visibilities,
-  onFormSubmit,
-  isLoading,
-  image,
-  croppedImage,
-  handleDeleteImage,
-  handleCropImage,
-  handleAddImage,
-  setCropper,
-  isModalOpen,
-  handleModalClose,
-  user,
-  isFetching,
-  countries,
-  states,
-  onCountryChange,
-  cities,
-  onStateChange
-}) => {
+const EditProfileComponent = ({universities, visibilities, image, croppedImage, user, locations, actions, flags}) => {
+
+  const {onFormSubmit,  handleModalClose, ...contentActions} = actions;
+  const {handleDeleteImage, handleCropImage, handleAddImage, ...rest} = contentActions;
+  const {isLoading, isModalOpen, isFetching} = flags;
 
   return (
     <ErrorBoundary>
@@ -49,24 +34,21 @@ const EditProfileComponent = ({
               <CloseIconBtn onClick={handleModalClose}/>
               <SNDialogTitle title={"Edit profile"}/>
               <EditProfileContent
-                handleChange={handleAddImage}
-                setFieldValue={setFieldValue}
-                setCropper={setCropper}
+                actions={{
+                  setFieldValue, ...rest,
+                  handleChange: handleAddImage,
+                  cropImage: handleCropImage,
+                  deleteImage: handleDeleteImage
+                }}
                 visibilities={visibilities}
                 isLoading={isFetching}
                 user={user}
                 universities={universities}
                 croppedImage={croppedImage}
                 image={image}
-                cropImage={handleCropImage}
-                deleteImage={handleDeleteImage}
-                countries={countries}
-                states={states}
-                onCountryChange={onCountryChange}
-                cities={cities}
-                onStateChange={onStateChange}
+                locations={locations}
               />
-              <SaveCancelDialogActions cancelOnClick={handleModalClose} isLoading={isLoading}/>
+              <SaveCancelDialogActions cancelOnClick={handleModalClose} flags={{isLoading}}/>
             </Form>
           }
         </Formik>

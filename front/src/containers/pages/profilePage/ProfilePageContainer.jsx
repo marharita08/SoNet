@@ -202,14 +202,9 @@ const ProfilePageContainer = () => {
         editProfileComponent={
           <EditProfileContainer
             isModalOpen={isEditProfileModalOpen}
-            setIsModalOpen={setIsEditProfileModalOpen}
             user={user}
-            setUser={setUser}
-            countries={countries}
-            states={states}
-            cities={cities}
-            onCountryChange={onCountryChange}
-            onStateChange={onStateChange}
+            locations={{countries, states, cities}}
+            actions={{setUser, onCountryChange, onStateChange, setIsModalOpen: setIsEditProfileModalOpen}}
           />
         }
         searchUsersComponent={
