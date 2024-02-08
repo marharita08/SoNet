@@ -2,11 +2,12 @@ import React, {useContext, useState} from "react";
 import {useMutation, useQuery} from "react-query";
 import PropTypes from "prop-types";
 import {serialize} from "object-to-formdata";
+import {useNavigate, useLocation} from "react-router-dom";
+
 import AddOrEditArticleComponent from "../../../components/modals/addOrEditArticle/AddOrEditArticleComponent";
 import {getArticleVisibilities} from "../../../api/visibilitiesCrud";
 import {insertArticle, updateArticle} from "../../../api/articlesCrud";
 import articleContext from "../../../context/articleContext";
-import {useNavigate, useLocation} from "react-router-dom";
 import {articlesPropTypes} from "../../../propTypes/articlePropTypes";
 import imageService from "../../../services/imageService";
 import articlesService from "../../../services/articlesService";
@@ -92,18 +93,11 @@ const AddOrEditArticleContainer = ({setArticleContext, articles, setArticles}) =
   return (
     <AddOrEditArticleComponent
       visibilities={visibilities}
-      handleFormSubmit={handleFormSubmit}
-      handleModalClose={handleModalClose}
-      isLoading={isUpdateLoading || isInsertLoading}
       article={article}
-      isAdd={isAdd}
       image={image}
-      setCropper={setCropper}
-      handleDeleteImage={handleDeleteImage}
       croppedImage={croppedImage}
-      handleCropImage={handleCropImage}
-      handleAddImage={handleAddImage}
-      isVisibilitiesFetching={isVisibilitiesFetching}
+      actions={{handleFormSubmit, handleModalClose, setCropper, handleDeleteImage, handleCropImage, handleAddImage}}
+      flags={{isAdd, isVisibilitiesFetching, isLoading: isUpdateLoading || isInsertLoading}}
     />
   );
 };

@@ -5,13 +5,16 @@ import {articleAddEditPropTypes} from "../../../propTypes/articlePropTypes";
 export const addOrEditArticleContentPropTypes = {
   visibilities: optionsPropTypes,
   article: articleAddEditPropTypes,
-  handleAddImage: PropTypes.func.isRequired,
   image: PropTypes.string,
-  setCropper: PropTypes.func.isRequired,
-  handleCropImage: PropTypes.func.isRequired,
   croppedImage: PropTypes.object,
-  handleDeleteImage: PropTypes.func.isRequired,
   isVisibilitiesFetching: PropTypes.bool,
+  actions: {
+    handleAddImage: PropTypes.func.isRequired,
+    setCropper: PropTypes.func.isRequired,
+    handleCropImage: PropTypes.func.isRequired,
+    handleDeleteImage: PropTypes.func.isRequired,
+    setFieldValue: PropTypes.func.isRequired
+  }
 };
 
 export const addOrEditArticleContentDefaultProps = {

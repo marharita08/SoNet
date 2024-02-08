@@ -2,6 +2,7 @@ import React from "react";
 import {Button} from "@mui/material";
 import SaveIcon from "@mui/icons-material/Save";
 import PropTypes from "prop-types";
+
 import ProgressOrComponent from "../progressOrComponent/ProgressOrComponent";
 
 const SubmitButton = ({isLoading, isAdd}) => {

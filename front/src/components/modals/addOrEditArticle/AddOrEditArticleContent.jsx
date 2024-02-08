@@ -1,32 +1,22 @@
 import React from "react";
+import {DialogContent} from "@mui/material";
+import {Field} from "formik";
+
 import SNCropper from "../../atoms/cropper/SNCropper";
 import env from "../../../config/envConfig";
 import ImageDialogActions from "../dialogActions/ImageDialogActions";
-import {Field} from "formik";
 import SNTextarea from "../../atoms/fields/SNTextarea";
 import ProgressOrComponent from "../../atoms/progressOrComponent/ProgressOrComponent";
 import FormikAutocomplete from "../../atoms/fields/FormikAutocomplete";
-import {DialogContent} from "@mui/material";
 import {useStyles} from "../../style";
 import {
   addOrEditArticleContentPropTypes,
   addOrEditArticleContentDefaultProps
 } from "./addOrEditArticleContentPropTypes";
-import PropTypes from "prop-types";
 
-const AddOrEditArticleContent = ({
-  image,
-  article,
-  setCropper,
-  croppedImage,
-  handleCropImage,
-  handleDeleteImage,
-  handleAddImage,
-  isVisibilitiesFetching,
-  visibilities,
-  setFieldValue
-}) => {
+const AddOrEditArticleContent = ({image, article, croppedImage, isVisibilitiesFetching, visibilities, actions}) => {
 
+  const {setCropper, handleCropImage, handleDeleteImage, handleAddImage, setFieldValue} = actions
   const classes = useStyles();
 
   const isCropper = !!((image || article?.image) && !croppedImage);
@@ -44,11 +34,12 @@ const AddOrEditArticleContent = ({
         <img src={croppedImage} alt={"image"} className={classes.addArticleImg}/>
       }
       <ImageDialogActions
-        isCropper={isCropper}
-        isImage={isImage}
-        cropImageOnClick={() => handleCropImage(setFieldValue)}
-        deleteImageOnclick={() => handleDeleteImage(setFieldValue)}
-        addImageOnClick={handleAddImage}
+        flags={{isImage, isCropper}}
+        actions={{
+          addImageOnClick: handleAddImage,
+          cropImageOnClick: () => handleCropImage(setFieldValue),
+          deleteImageOnclick: () => handleDeleteImage(setFieldValue)
+        }}
       />
       <div className={classes.addArticleField}>
         <Field label={"Article text"} name={"text"} type={"text"} component={SNTextarea}/>
@@ -70,10 +61,7 @@ const AddOrEditArticleContent = ({
   );
 };
 
-AddOrEditArticleContent.propTypes = {
-  ...addOrEditArticleContentPropTypes,
-  setFieldValue: PropTypes.func.isRequired
-};
+AddOrEditArticleContent.propTypes = addOrEditArticleContentPropTypes;
 AddOrEditArticleContent.defaultProps = addOrEditArticleContentDefaultProps;
 
 export default AddOrEditArticleContent;
