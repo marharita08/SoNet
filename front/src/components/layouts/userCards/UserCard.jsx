@@ -3,9 +3,10 @@ import {Avatar, Card, CardHeader} from "@mui/material";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import React, {useState} from "react";
+import {useTheme} from "@mui/material/styles";
+
 import MenuItemBody from "../../atoms/menu/MenuItemBody";
 import SNMenu from "../../atoms/menu/SNMenu";
-import {useTheme} from "@mui/material/styles";
 import MoreVertIconBtn from "../../atoms/iconButtons/MoreVertIconBtn";
 import CloseIconBtn from "../../atoms/iconButtons/CloseIconBtn";
 import CardUsername from "../../atoms/cardUsername/CardUsername";

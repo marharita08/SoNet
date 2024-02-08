@@ -221,26 +221,22 @@ const ProfilePageContainer = () => {
         friendsComponent={
           <FriendsContainer
             id={id}
-            deleteRequest={deleteFromFriends}
             friends={friends}
-            setFriends={setFriends}
+            actions={{deleteRequest, setFriends}}
           />
         }
         incomingRequestsComponent={
           <IncomingRequestsContainer
             id={id}
-            acceptRequest={acceptRequest}
-            declineRequest={declineRequest}
             incomingRequests={incomingRequests}
-            setIncomingRequests={setIncomingRequests}
+            actions={{acceptRequest, declineRequest, setIncomingRequests}}
           />
         }
         outgoingRequestsComponent={
           <OutgoingRequestsContainer
             id={id}
-            deleteRequest={deleteFromFriends}
             outgoingRequests={outgoingRequests}
-            setOutgoingRequests={setOutgoingRequests}
+            actions={{deleteRequest:deleteFromFriends, setOutgoingRequests}}
           />
         }
       />
