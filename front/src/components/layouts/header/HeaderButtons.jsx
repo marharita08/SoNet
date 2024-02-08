@@ -1,9 +1,10 @@
 import React from "react";
-import HeaderButton from "../../atoms/buttons/HeaderButton";
 import HomeIcon from "@mui/icons-material/Home";
 import DescriptionIcon from "@mui/icons-material/Description";
 import NoteAddIcon from "@mui/icons-material/NoteAdd";
 import PropTypes from "prop-types";
+
+import HeaderButton from "../../atoms/buttons/HeaderButton";
 import {useStyles} from "./style";
 import LinkToRoot from "../../atoms/links/LinkToRoot";
 import LinkToAllArticles from "../../atoms/links/LinkToAllArticles";

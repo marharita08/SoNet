@@ -1,16 +1,14 @@
 import React, {useContext} from "react";
 import {useMutation} from "react-query";
+import PropTypes from "prop-types";
+
 import authContext from "../../../context/authContext";
 import ErrorBoundary from "../../../components/ErrorBoundary";
 import Header from "../../../components/layouts/header/HeaderComponent";
 import {apiLogout} from "../../../api/authCrud";
-import PropTypes from "prop-types";
 import {initArticle} from "../../../config/initValues";
 
-const HeaderContainer = ({
-  setArticleContext,
-  unsetAuthContext
-}) => {
+const HeaderContainer = ({setArticleContext, unsetAuthContext}) => {
   const {authenticated, user, refreshToken, isAdmin} = useContext(authContext);
 
   let handleAddArticle;
@@ -32,11 +30,9 @@ const HeaderContainer = ({
   return (
     <ErrorBoundary>
       <Header
-        handleAddArticle={handleAddArticle}
         user={user}
-        authenticated={authenticated}
-        handleLogout={handleLogout}
-        isAdmin={isAdmin}
+        actions={{handleAddArticle, handleLogout}}
+        flags={{authenticated, isAdmin}}
       />
     </ErrorBoundary>
   );

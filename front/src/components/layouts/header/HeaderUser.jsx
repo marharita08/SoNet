@@ -1,10 +1,11 @@
 import React, {useState} from "react";
 import {Avatar} from "@mui/material";
-import SNMenu from "../../atoms/menu/SNMenu";
 import {useTheme} from "@mui/material/styles";
 import PersonIcon from "@mui/icons-material/Person";
 import LogoutIcon from "@mui/icons-material/Logout";
 import PropTypes from "prop-types";
+
+import SNMenu from "../../atoms/menu/SNMenu";
 import {userCardPropTypes} from "../../../propTypes/userPropTypes";
 import {useStyles} from "./style";
 import LinkToProfile from "../../atoms/links/LinkToProfile";
@@ -62,8 +63,8 @@ const HeaderUser = ({user, handleLogout}) => {
           sx={theme.avatarSizes.md}
         />
         <span className={classes.username}>
-                            {user.name}
-                        </span>
+          {user.name}
+        </span>
       </button>
       <SNMenu
         id={"menu-header"}

@@ -1,13 +1,16 @@
 import React from "react";
 import PropTypes from "prop-types";
+
 import HeaderButtons from "./HeaderButtons";
 import HeaderUser from "./HeaderUser";
 import HeaderLogo from "./HeaderLogo";
 import {useStyles} from "./style";
 import {userCardPropTypes} from "../../../propTypes/userPropTypes";
 
-const Header = ({handleAddArticle, user, authenticated, handleLogout, isAdmin}) => {
+const Header = ({ user, actions, flags}) => {
 
+  const {handleAddArticle, handleLogout} = actions;
+  const {authenticated, isAdmin} = flags;
   const classes = useStyles();
 
   return (
@@ -31,11 +34,15 @@ const Header = ({handleAddArticle, user, authenticated, handleLogout, isAdmin}) 
 };
 
 Header.propTypes = {
-  handleAddArticle: PropTypes.func,
   user: userCardPropTypes,
-  authenticated: PropTypes.bool.isRequired,
-  handleLogout: PropTypes.func,
-  isAdmin: PropTypes.bool,
+  actions: PropTypes.shape({
+    handleAddArticle: PropTypes.func,
+    handleLogout: PropTypes.func,
+  }),
+  flags: PropTypes.shape({
+    authenticated: PropTypes.bool.isRequired,
+    isAdmin: PropTypes.bool,
+  })
 };
 
 export default Header;

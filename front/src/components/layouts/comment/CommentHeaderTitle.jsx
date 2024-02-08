@@ -1,4 +1,5 @@
 import React from "react";
+
 import {commentPropTypes} from "../../../propTypes/commentPropTypes";
 import {useStyles} from "../../style";
 import LinkToProfile from "../../atoms/links/LinkToProfile";
