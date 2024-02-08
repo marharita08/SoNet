@@ -1,10 +1,14 @@
 import React from "react";
+import PropTypes from "prop-types";
+
 import AddFriendIconBtn from "../../atoms/iconButtons/AddFriendIconBtn";
 import RemoveFriendIconBtn from "../../atoms/iconButtons/RemoveFriendIconBtn";
-import PropTypes from "prop-types";
 import {userForSearchPropTypes} from "../../../propTypes/userPropTypes";
 
-const SearchUsersOptionIconBtn = ({user, deleteFromFriends, addToFriends, acceptRequest}) => {
+const SearchUsersOptionIconBtn = ({user, actions}) => {
+
+  const {deleteFromFriends, addToFriends, acceptRequest} = actions;
+
   return (
     <>
       {
@@ -26,9 +30,11 @@ const SearchUsersOptionIconBtn = ({user, deleteFromFriends, addToFriends, accept
 
 SearchUsersOptionIconBtn.propTypes = {
   user: userForSearchPropTypes,
-  deleteFromFriends: PropTypes.func.isRequired,
-  addToFriends: PropTypes.func.isRequired,
-  acceptRequest: PropTypes.func.isRequired
+  actions: PropTypes.shape({
+    deleteFromFriends: PropTypes.func.isRequired,
+    addToFriends: PropTypes.func.isRequired,
+    acceptRequest: PropTypes.func.isRequired
+  })
 };
 
 export default SearchUsersOptionIconBtn;

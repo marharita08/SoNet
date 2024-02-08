@@ -1,7 +1,8 @@
 import React from "react";
-import LinkToProfile from "../../atoms/links/LinkToProfile";
 import {Avatar} from "@mui/material";
 import {useTheme} from "@mui/material/styles";
+
+import LinkToProfile from "../../atoms/links/LinkToProfile";
 import {userForSearchPropTypes} from "../../../propTypes/userPropTypes";
 import {useStyles} from "./style";
 

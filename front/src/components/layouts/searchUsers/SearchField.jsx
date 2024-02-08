@@ -1,10 +1,11 @@
 import React from "react";
 import {Box, IconButton, InputAdornment, TextField} from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-import ProgressOrComponent from "../../atoms/progressOrComponent/ProgressOrComponent";
 import PropTypes from "prop-types";
-import {useStyles} from "./style";
 import CloseIcon from "@mui/icons-material/Close";
+
+import ProgressOrComponent from "../../atoms/progressOrComponent/ProgressOrComponent";
+import {useStyles} from "./style";
 
 const SearchField = ({isFetching, cleanSearch, ...props}) => {
 

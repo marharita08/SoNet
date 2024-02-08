@@ -2,6 +2,7 @@ import React from "react";
 import {Button} from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import PropTypes from "prop-types";
+
 import {useStyles} from "./style";
 
 const EditProfileBtn = ({onClick, flags}) => {

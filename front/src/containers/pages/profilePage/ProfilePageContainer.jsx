@@ -1,6 +1,8 @@
 import React, {useContext, useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
 import {useMutation, useQuery} from "react-query";
+import {GetCountries, GetState, GetCity} from "react-country-state-city";
+
 import ProfileComponent from "../../../components/layouts/profile/ProfileComponent";
 import EditProfileContainer from "../../modals/editProfile/EditProfileContainer";
 import {getUser} from "../../../api/usersCrud";
@@ -16,11 +18,6 @@ import ProfilePageComponent from "../../../components/pages/profilePage/ProfileP
 import usersForSearchService from "../../../services/usersForSearchService";
 import requestsService from "../../../services/requestsService";
 import currentRequestService from "../../../services/currentRequestService";
-import {
-  GetCountries,
-  GetState,
-  GetCity
-} from "react-country-state-city";
 
 const ProfilePageContainer = () => {
   const {id: idStr} = useParams();
@@ -217,11 +214,8 @@ const ProfilePageContainer = () => {
         }
         searchUsersComponent={
           <SearchUsersContainer
-            acceptRequest={acceptRequest}
-            addToFriends={addToFriends}
-            deleteFromFriends={deleteFromFriends}
+            actions={{acceptRequest, addToFriends, deleteFromFriends, setUsersForSearch}}
             usersForSearch={usersForSearch}
-            setUsersForSearch={setUsersForSearch}
           />
         }
         friendsComponent={

@@ -1,22 +1,23 @@
 import React from "react";
+import PropTypes from "prop-types";
+
 import SearchUsersOptionUser from "./SearchUsersOptionUser";
 import SearchUsersOptionIconBtn from "./SearchUsersOptionIconBtn";
-import PropTypes from "prop-types";
 import {userForSearchPropTypes} from "../../../propTypes/userPropTypes";
 import {useStyles} from "./style";
 
-const SearchUsersOption = ({user, deleteFromFriends, addToFriends, acceptRequest}) => {
+const SearchUsersOption = ({user, actions}) => {
 
   const classes = useStyles();
 
   return (
     <div className={classes.option}>
-      <SearchUsersOptionUser user={user}/>
+      <SearchUsersOptionUser
+        user={user}
+      />
       <SearchUsersOptionIconBtn
         user={user}
-        addToFriends={addToFriends}
-        deleteFromFriends={deleteFromFriends}
-        acceptRequest={acceptRequest}
+        actions={actions}
       />
     </div>
   );
@@ -24,9 +25,11 @@ const SearchUsersOption = ({user, deleteFromFriends, addToFriends, acceptRequest
 
 SearchUsersOption.propTypes = {
   user: userForSearchPropTypes,
-  deleteFromFriends: PropTypes.func.isRequired,
-  addToFriends: PropTypes.func.isRequired,
-  acceptRequest: PropTypes.func.isRequired
+  actions: PropTypes.shape({
+    deleteFromFriends: PropTypes.func.isRequired,
+    addToFriends: PropTypes.func.isRequired,
+    acceptRequest: PropTypes.func.isRequired
+  })
 };
 
 export default SearchUsersOption;
