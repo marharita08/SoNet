@@ -190,10 +190,11 @@ const ArticleCardContainer = ({setArticleContext, article, articles, setArticles
         <>
           <ArticleHeader
             article={article}
-            isCurrentUser={article.user_id === user_id}
-            isAdmin={isAdmin}
-            handleEdit={handleArticleEdit}
-            handleDelete={handleArticleDelete}
+            actions={{
+              handleEdit: handleArticleEdit,
+              handleDelete: handleArticleDelete
+            }}
+            flags={{isAdmin, isCurrentUser: article.user_id === user_id}}
           />
           <ArticleContent article={article} isTruncate={isTruncate}/>
           <Divider/>

@@ -1,11 +1,12 @@
 import React from "react";
 import {CardContent, CardMedia, Typography} from "@mui/material";
+import {useTheme} from "@mui/material/styles";
+import PropTypes from "prop-types";
+
 import env from "../../../config/envConfig";
 import {articlePropTypes} from "../../../propTypes/articlePropTypes";
 import LinkToArticle from "../../atoms/links/LinkToArticle";
 import {useStyles} from "../../style";
-import {useTheme} from "@mui/material/styles";
-import PropTypes from "prop-types";
 
 const ArticleContent = ({article, isTruncate}) => {
 

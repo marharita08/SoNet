@@ -1,17 +1,20 @@
 import React, {useState} from "react";
 import {Avatar, CardHeader} from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import {useTheme} from "@mui/material/styles";
+
 import MoreVertIconBtn from "../../atoms/iconButtons/MoreVertIconBtn";
 import CardUsername from "../../atoms/cardUsername/CardUsername";
 import SNMenu from "../../atoms/menu/SNMenu";
 import MenuItemBody from "../../atoms/menu/MenuItemBody";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
-import {useTheme} from "@mui/material/styles";
 import {articleHeaderPropTypes} from "./articleHeaderPropTypes";
 import LinkToProfile from "../../atoms/links/LinkToProfile";
 
-const ArticleHeader = ({article, isCurrentUser, isAdmin, handleEdit, handleDelete}) => {
+const ArticleHeader = ({article, actions, flags}) => {
 
+  const {handleEdit, handleDelete} = actions;
+  const {isCurrentUser, isAdmin} = flags;
   const theme = useTheme();
   const [menuAnchorEl, setMenuAnchorEl] = useState(null);
 
