@@ -14,7 +14,7 @@ const SaveCancelDialogActions = ({cancelOnClick, flags}) => {
   return (
     <DialogActions sx={theme.dialogActions}>
       <CancelButton onClick={cancelOnClick}/>
-      <SubmitButton {{...flags}}/>
+      <SubmitButton {...flags}/>
     </DialogActions>
   );
 };

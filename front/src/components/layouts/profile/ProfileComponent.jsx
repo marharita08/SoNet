@@ -3,6 +3,7 @@ import {Formik, Form} from "formik";
 import {Avatar} from "@mui/material";
 import {ProfilePropTypes} from "./profilePropTypes";
 import {useTheme} from "@mui/material/styles";
+
 import ProfileFriendRequestBtn from "./ProfileFriendRequestBtn";
 import EditProfileBtn from "./EditProfileBtn";
 import ProfileFields from "./ProfileFields";

@@ -10,13 +10,13 @@ export let ProfilePropTypes = {
     handleAccept: PropTypes.func.isRequired,
     handleDeleteFromFriends: PropTypes.func.isRequired,
   }),
-  flags: {
+  flags: PropTypes.shape({
     isCurrentUser: PropTypes.bool,
     isAdmin: PropTypes.bool,
-  },
-  loading: {
+  }),
+  loading: PropTypes.shape({
     isLoading: PropTypes.bool,
     requestFetching: PropTypes.bool,
-  },
+  }),
   currentRequest: currentRequestPropTypes,
 };

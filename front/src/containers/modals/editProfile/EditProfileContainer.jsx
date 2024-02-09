@@ -10,9 +10,12 @@ import {EditProfileContainerPropTypes} from "./editProfileContainerPropTypes";
 import {refetchOff} from "../../../config/refetchOff";
 import imageService from "../../../services/imageService";
 import handleResponseContext from "../../../context/handleResponseContext";
+import {parseStringToDate} from "../../../services/dateParser";
 
 const EditProfileContainer = ({isModalOpen, user, locations, actions}) => {
 
+  const {birthday, ...restUser} = user;
+  const parsedBirthday = parseStringToDate(birthday);
   const {setIsModalOpen, setUser, ...componentActions} = actions;
   const {handleError, showErrorAlert} = useContext(handleResponseContext);
   const {isFetching: isUniversitiesFetching, data: universitiesData} = useQuery(
@@ -69,7 +72,7 @@ const EditProfileContainer = ({isModalOpen, user, locations, actions}) => {
 
   return (
     <EditProfileComponent
-      user={user}
+      user={{...restUser, birthday: parsedBirthday}}
       universities={universities}
       visibilities={visibilities}
       croppedImage={croppedImage}
