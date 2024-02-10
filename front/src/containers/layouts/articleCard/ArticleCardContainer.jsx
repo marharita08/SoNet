@@ -216,7 +216,7 @@ const ArticleCardContainer = ({setArticleContext, article, articles, setArticles
           isCommentAdd={isCommentAdd}
           actions={{
             onCommentAdd, onCommentUpdate,
-            setCurrentInitComment, setIsCommentsExpanded,
+            setCurrentInitComment, setCommentsExpanded: setIsCommentsExpanded,
             handleCancel: handleCommentCancel
           }}
         />

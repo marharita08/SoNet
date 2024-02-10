@@ -1,10 +1,10 @@
-const db = require("../configs/db");
 const {status, X_FORWARDED_FOR} = require("../constants/logger");
+const storage = require("../db/logger/storage");
 
-const logger = (logTable) => async (req, res, next) => {
+const logger = async (req, res, next) => {
   const {method, originalUrl: url} = req;
   const ip = req.headers[X_FORWARDED_FOR] || req.connection.remoteAddress;
-  await db(logTable).insert({
+  await storage.create({
     ip,
     status: status.INFO,
     method,

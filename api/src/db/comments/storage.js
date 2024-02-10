@@ -19,7 +19,7 @@ class CommentsStorage extends BaseStorage {
         db.raw("ch.commented_at as commented_at"),
         "chu.name",
         "chu.avatar",
-        "pu.users.name as to",
+        "pu.name as to",
         "p.user_id as p_user_id",
         "p.text as parent_text"
       )

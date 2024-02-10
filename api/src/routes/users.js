@@ -57,10 +57,10 @@ router.put(
       },
     }
   ),
-  asyncHandler(async (req, res, next) => {
+  asyncHandler(async (req, res) => {
     const fileData = req.file;
     const {id} = req.params;
-    res.send(await usersService.update(+id, req.body, fileData, next));
+    res.send(await usersService.update(+id, {userData:req.body, fileData}));
   })
 );
 

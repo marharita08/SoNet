@@ -21,7 +21,7 @@ class CommentsService extends BaseService {
   async add(comment) {
     let id;
     await db.transaction(async () => {
-      id = await super.add(comment);
+      id = (await super.add(comment)).comment_id;
       const path = !!comment.path ? id : `${comment.path}.${id}`;
       await super.update(id, { path });
     });

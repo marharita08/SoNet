@@ -34,7 +34,7 @@ class BaseStorage {
   }
 
   async getCountByField(fieldValue, fieldName) {
-    return this.db(this.table).countDistinct(this.primaryKey).first().where(fieldName, fieldValue);
+    return this.db(this.table).count(this.primaryKey).first().where(fieldName, fieldValue);
   }
 
   async getRandomId() {

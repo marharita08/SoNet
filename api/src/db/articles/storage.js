@@ -130,6 +130,7 @@ class ArticleStorage extends BaseStorage {
         main: db
           .select(`${this.table}.${this.primaryKey}`)
           .from(this.table)
+          .join("users", `${this.table}.user_id`, "users.user_id")
           .join("friends", function () {
             classThis.joinFriends(this, userId);
           })

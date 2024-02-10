@@ -64,6 +64,18 @@ create table if not exists user_settings(
  foreign key (birthday_visibility_id) references field_visibilities (visibility_id),
 );
 
+create table if not exists interests(
+ interst_id serial primary key,
+ inerest    varchar(255) not null
+);
+
+create table if not exists users_interests(
+ user_id     int,
+ interest_id int,
+ foreign key (user_id) references users (user_id) on delete cascade,
+ foreign key (interest_id) references interests (interest_id) on delete cascade,
+);
+
 create table if not exists article_visibilities(
  visibility_id serial primary key,
  visibility   varchar(10) not null
@@ -129,8 +141,8 @@ create table if not exists logger(
  type        varchar(30),
  status      varchar(6) not null,
  status_code smallint,
- method      varchar(7) not null,
- url         varchar(100) not null,
+ method      varchar(7),
+ url         varchar(100),
  message     text,
  stack       text
 );

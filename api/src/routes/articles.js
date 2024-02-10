@@ -102,7 +102,7 @@ router.put(
     text: validation.required,
     visibility: validation.required,
   }),
-  asyncHandler(async (req, res, next) => {
+  asyncHandler(async (req, res) => {
     const {
       text,
       visibility: {value: visibilityId},
@@ -110,7 +110,7 @@ router.put(
     const {id} = req.params;
     const articleId = +id;
     const fileData = req.file;
-    res.send(articlesService.update(articleId, {text, visibilityId, fileData, next}));
+    res.send(articlesService.update(articleId, {text, visibilityId, fileData}));
   })
 );
 
@@ -126,10 +126,9 @@ router.delete(
       isOwn: (resource, userId) => resource.user_id === userId,
     },
   ]),
-  asyncHandler(async (req, res, next) => {
+  asyncHandler(async (req, res) => {
     const {id} = req.params;
-    const articleId = +id;
-    await articlesService.delete({articleId, next});
+    await articlesService.delete(+id);
     res.sendStatus(204);
   })
 );

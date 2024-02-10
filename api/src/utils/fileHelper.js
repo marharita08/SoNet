@@ -1,10 +1,13 @@
 const fs = require("fs");
+const storage = require("../db/logger/storage");
+const {status} = require("../constants/logger");
 
-const deleteFile = (path, errorHandler) => {
+const deleteFile = (path) => {
   if (path) {
-    fs.unlink(`public${path}`, (err) => {
+    fs.unlink(`public${path}`, async (err) => {
       if (err) {
-        errorHandler(err);
+        const {message, stack} = err;
+        await storage.create({message, stack, status: status.ERROR});
       }
     });
   }

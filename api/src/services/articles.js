@@ -57,19 +57,19 @@ class ArticlesService extends BaseService {
     if (fileData) {
       path = fileHelper.getUrlPath(fileData);
     }
-    const id = await super.add({
+    const {article_id} = await super.add({
       ...article,
       image: path,
     });
-    return parseArticle(await this.storage.getWholeArticleById(id));
+    return parseArticle(await this.storage.getWholeArticleById(article_id));
   }
 
-  async update(articleId, {text, visibilityId, fileData, next}) {
+  async update(articleId, {text, visibilityId, fileData}) {
     let path = null;
     if (fileData) {
-      const { image: oldFile } = await this.storage.getImageByArticleId(articleId);
+      const {image: oldFile} = await this.storage.getImageByArticleId(articleId);
       path = fileHelper.getUrlPath(fileData);
-      fileHelper.deleteFile(oldFile, next);
+      fileHelper.deleteFile(oldFile);
     }
     await super.update(articleId, {
       text,
@@ -79,9 +79,9 @@ class ArticlesService extends BaseService {
     return parseArticle(await this.storage.getWholeArticleById(articleId));
   }
 
-  async delete({articleId, next}) {
-    const { image } = await this.storage.getImageByArticleId(articleId);
-    fileHelper.deleteFile(image, next);
+  async delete(articleId) {
+    const {image} = await this.storage.getImageByArticleId(articleId);
+    fileHelper.deleteFile(image);
     return await super.delete(articleId);
   }
 }

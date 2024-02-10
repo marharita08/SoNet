@@ -30,7 +30,7 @@ class UsersServices extends BaseService {
     throw new NotFoundException(USER_NOT_FOUND);
   };
 
-  update = async (id, userData, fileData, errorHandler) => {
+  update = async (id, {userData, fileData}) => {
     const {user, settings} = parseToUserAndSettings(userData);
     let avatarUrl;
     let avatarPath;
@@ -38,7 +38,7 @@ class UsersServices extends BaseService {
       const {avatar_path: oldAvatarPath} = await this.storage.getAvatarPath(id);
       avatarPath = fileData.path;
       avatarUrl = config.appUrl + fileHelper.getUrlPath(fileData);
-      fileHelper.deleteFile(oldAvatarPath, errorHandler);
+      fileHelper.deleteFile(oldAvatarPath);
     }
     await super.update(id, {
       ...user,
