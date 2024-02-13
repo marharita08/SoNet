@@ -10,10 +10,17 @@ create table if not exists users(
  role          varchar(10) not null,
  email         varchar(255),
  password      varchar(500),
- phone         char(13),
+ phone         varchar(15),
  university_id int,
  avatar        varchar(255),
  avatar_path   varchar(255),
+ country_id    int,
+ state_id      int,
+ city_id       int,
+ country_name  varchar(255),
+ state_name    varchar(255),
+ city_name     varchar(255),
+ birthday      timestamp,
  foreign key (university_id) references universities (university_id)
 );
 
@@ -43,10 +50,30 @@ create table if not exists user_settings(
  email_visibility_id      int not null default 1,
  phone_visibility_id      int not null default 1,
  university_visibility_id int not null default 1,
+ country_visibility_id    int not null default 1,
+ state_visibility_id      int not null default 1,
+ city_visibility_id       int not null default 1,
+ birthday_visibility_id   int not null default 1,
  foreign key (user_id) references users (user_id) on delete cascade,
  foreign key (email_visibility_id) references field_visibilities (visibility_id),
  foreign key (phone_visibility_id) references field_visibilities (visibility_id),
- foreign key (university_visibility_id) references field_visibilities (visibility_id)
+ foreign key (university_visibility_id) references field_visibilities (visibility_id),
+ foreign key (country_visibility_id) references field_visibilities (visibility_id),
+ foreign key (state_visibility_id) references field_visibilities (visibility_id),
+ foreign key (city_visibility_id) references field_visibilities (visibility_id),
+ foreign key (birthday_visibility_id) references field_visibilities (visibility_id),
+);
+
+create table if not exists interests(
+ interst_id serial primary key,
+ inerest    varchar(255) not null
+);
+
+create table if not exists users_interests(
+ user_id     int,
+ interest_id int,
+ foreign key (user_id) references users (user_id) on delete cascade,
+ foreign key (interest_id) references interests (interest_id) on delete cascade,
 );
 
 create table if not exists article_visibilities(
@@ -114,8 +141,8 @@ create table if not exists logger(
  type        varchar(30),
  status      varchar(6) not null,
  status_code smallint,
- method      varchar(7) not null,
- url         varchar(100) not null,
+ method      varchar(7),
+ url         varchar(100),
  message     text,
  stack       text
 );

@@ -1,46 +1,49 @@
 const db = require("../../configs/db");
-const {tables, shortColumns} = require("../dbSchema");
-const {users, comments} = shortColumns;
+const BaseStorage = require("../base/storage");
 
-function commentFullData() {
-    return db
-        .select(
-            `ch.${comments.commentId}`,
-            `ch.${comments.articleId}`,
-            `ch.${comments.userId}`,
-            `ch.${comments.text}`,
-            `ch.${comments.parentId}`,
-            `ch.${comments.path}`,
-            `ch.${comments.level}`,
-            db.raw(
-                `ch.${comments.commentedAt} as ${comments.commentedAt}`
-            ),
-            `chu.${users.name}`,
-            `chu.${users.avatar}`,
-            `pu.${users.name} as to`,
-            `p.${users.userId} as p_user_id`,
-            `p.${comments.text} as parent_text`
-        )
-        .from({ch: tables.comments})
-        .leftOuterJoin({p: tables.comments}, `p.${comments.commentId}`, `ch.${comments.parentId}`)
-        .leftOuterJoin({pu: tables.users}, `pu.${users.userId}`, `p.${users.userId}`)
-        .join({chu: tables.users}, `chu.${users.userId}`, `ch.${users.userId}`)
+class CommentsStorage extends BaseStorage {
+  constructor() {
+    super("comments", "comment_id", db);
+  }
+
+  getFullData() {
+    return this.db
+      .select(
+        `ch.${this.primaryKey}`,
+        "ch.article_id",
+        "ch.user_id",
+        "ch.text",
+        "ch.parent_id",
+        "ch.path",
+        "ch.level",
+        db.raw("ch.commented_at as commented_at"),
+        "chu.name",
+        "chu.avatar",
+        "pu.name as to",
+        "p.user_id as p_user_id",
+        "p.text as parent_text"
+      )
+      .from({ch: this.table})
+      .leftOuterJoin({p: this.table}, "p.comment_id", "ch.parent_id")
+      .leftOuterJoin({pu: "users"}, "pu.user_id", "p.user_id")
+      .join({chu: "users"}, "chu.user_id", "ch.user_id");
+  }
+
+  async getFullDataById(id) {
+    return this.getFullData()
+      .first()
+      .where("ch.comment_id", id);
+  }
+
+  async getFullDataByArticleId(id) {
+    return this.getFullData()
+      .where("ch.article_id", id)
+      .orderBy("ch.path");
+  }
+
+  async getAmountByArticleId(id) {
+    return await super.getCountByField(id, "article_id");
+  }
 }
 
-module.exports = {
-    getAll: async () => db.select().from(tables.comments).orderBy(comments.commentId),
-    getById: async (id) => db.select().first().from(tables.comments).where(comments.commentId, id),
-    create: async (comment) => db(tables.comments).returning(comments.commentId).insert(comment),
-    update: async (id, comment) => db(tables.comments).update(comment).where(comments.commentId, id),
-    delete: async (id) => db(tables.comments).delete().where(comments.commentId, id),
-    getFullDataById: async (id) =>
-        commentFullData()
-            .first()
-            .where(`ch.${comments.commentId}`, id),
-    getFullDataByArticleId: async (id) =>
-        commentFullData()
-            .where(`ch.${shortColumns.articles.articleId}`, id)
-            .orderBy(`ch.${comments.path}`),
-    getAmountByArticleId: async (id) =>
-        db(tables.comments).countDistinct(comments.commentId).first().where(shortColumns.articles.articleId, id),
-};
+module.exports = new CommentsStorage();

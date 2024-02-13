@@ -1,9 +1,9 @@
 import {createContext} from "react";
 
 const authContext = createContext(
-    {
-        authenticated: false
-    }
+  {
+    authenticated: false
+  }
 );
 
 export default authContext;

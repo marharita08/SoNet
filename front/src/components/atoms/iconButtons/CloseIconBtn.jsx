@@ -6,17 +6,17 @@ import {useStyles} from "../../style";
 
 const CloseIconBtn = ({onClick}) => {
 
-    const classes = useStyles();
+  const classes = useStyles();
 
-    return (
-        <IconButton className={classes.closeButton} onClick={onClick}>
-            <CloseIcon/>
-        </IconButton>
-    )
-}
+  return (
+    <IconButton className={classes.closeButton} onClick={onClick}>
+      <CloseIcon/>
+    </IconButton>
+  );
+};
 
 CloseIconBtn.propTypes = {
-    onClick: PropTypes.func.isRequired
-}
+  onClick: PropTypes.func.isRequired
+};
 
 export default CloseIconBtn;

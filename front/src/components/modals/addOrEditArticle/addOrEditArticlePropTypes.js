@@ -1,17 +1,30 @@
 import PropTypes from "prop-types";
-import {addOrEditArticleContentPropTypes, addOrEditArticleContentDefaultProps} from "./addOrEditArticleContentPropTypes";
+import {
+  addOrEditArticleContentPropTypes,
+  addOrEditArticleContentDefaultProps
+} from "./addOrEditArticleContentPropTypes";
+
+const {actions, isVisibilitiesFetching, ...rest} = addOrEditArticleContentPropTypes;
+const {setFieldValue, ...restActions} = actions
+const {isVisibilitiesFetching: _, ...restDefaults} = addOrEditArticleContentDefaultProps;
 
 export const addOrEditArticlePropTypes = {
-    ...addOrEditArticleContentPropTypes,
-    isAdd: PropTypes.bool.isRequired,
+  actions: PropTypes.shape({
+    ...restActions,
     handleModalClose: PropTypes.func.isRequired,
     handleFormSubmit: PropTypes.func.isRequired,
+  }),
+  flags: PropTypes.shape({
+    isVisibilitiesFetching,
+    isAdd: PropTypes.bool,
     isLoading: PropTypes.bool,
-    errorMessage: PropTypes.string,
+  }),
+  errorMessage: PropTypes.string,
+  ...rest,
 };
 
 export const addOrEditArticleDefaultProps = {
-    ...addOrEditArticleContentDefaultProps,
-    isLoading: false,
-    errorMessage: undefined
+  ...restDefaults,
+  isLoading: false,
+  errorMessage: undefined
 };

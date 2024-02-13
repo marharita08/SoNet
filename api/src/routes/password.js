@@ -5,24 +5,24 @@ const passwordService = require("../services/password");
 const validation = require("../utils/validationRules");
 
 router.post("/reset",
-    validationMiddleware({
-        email: validation.email,
-    }),
-    asyncHandler(async (req, res) => {
-        const {email} = req.body;
-        res.send(await passwordService.resetPassword(email));
-    })
+  validationMiddleware({
+    email: validation.email,
+  }),
+  asyncHandler(async (req, res) => {
+    const {email} = req.body;
+    res.send(await passwordService.resetPassword(email));
+  })
 );
 
 router.post("/save",
-    validationMiddleware({
-        token: validation.required,
-        password: validation.password,
-    }),
-    asyncHandler(async (req, res) => {
-        const {token, password} = req.body;
-        res.send(await passwordService.saveNewPassword(token, password));
-    })
+  validationMiddleware({
+    token: validation.required,
+    password: validation.password,
+  }),
+  asyncHandler(async (req, res) => {
+    const {token, password} = req.body;
+    res.send(await passwordService.saveNewPassword(token, password));
+  })
 );
 
 module.exports = router;

@@ -1,37 +1,41 @@
 import React from "react";
 import {useQuery} from "react-query";
-import {getFriends} from "../../../api/usersCrud";
 import PropTypes from "prop-types";
+
+import {getFriends} from "../../../api/usersCrud";
 import {requestsPropTypes} from "../../../propTypes/requestPropTypes";
 import UserCards from "../../../components/layouts/userCards/UserCards";
 import {refetchOff} from "../../../config/refetchOff";
 
-const FriendsContainer = ({id, deleteRequest, friends, setFriends}) => {
+const FriendsContainer = ({id, friends, actions}) => {
 
-    const {isFetching} = useQuery(
-        "friends",
-        () => getFriends(id),
-        {
-            onSuccess: (data) => setFriends(data?.data),
-            ...refetchOff
-        }
-    );
+  const {setFriends, ...cardActions} = actions
+  const {isFetching} = useQuery(
+    "friends",
+    () => getFriends(id),
+    {
+      onSuccess: (data) => setFriends(data?.data),
+      ...refetchOff
+    }
+  );
 
-    return (
-        <UserCards
-            heading={"Friends"}
-            deleteRequest={deleteRequest}
-            isFetching={isFetching}
-            users={friends}
-        />
-    );
+  return (
+    <UserCards
+      heading={"Friends"}
+      isFetching={isFetching}
+      users={friends}
+      {...cardActions}
+    />
+  );
 };
 
 FriendsContainer.propTypes = {
-    id: PropTypes.number.isRequired,
+  id: PropTypes.number.isRequired,
+  friends: requestsPropTypes,
+  actions: PropTypes.shape({
     deleteRequest: PropTypes.func.isRequired,
-    friends: requestsPropTypes,
     setFriends: PropTypes.func.isRequired,
+  })
 };
 
 export default FriendsContainer;

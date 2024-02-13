@@ -1,4 +1,4 @@
 module.exports = {
-    GOOGLE: "googleToken",
-    FACEBOOK: "facebookToken"
-}
+  GOOGLE: "googleToken",
+  FACEBOOK: "facebookToken"
+};

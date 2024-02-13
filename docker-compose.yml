@@ -77,4 +77,4 @@ services:
       REACT_APP_API_URL: ${API_URL}
       REACT_APP_GOOGLE_API_CLIENT_ID: ${GOOGLE_API_CLIENT_ID}
       REACT_APP_FACEBOOK_API_CLIENT_ID: ${FACEBOOK_API_CLIENT_ID}
-    command: "npm start"
+    command: "npm run start:dev"

@@ -1,13 +1,28 @@
 const db = require("../../configs/db");
-const {tables, shortColumns} = require("../dbSchema");
+const BaseStorage = require("../base/storage");
 
-module.exports = {
-    getAll: () =>
-        db
-            .select(
-                `${shortColumns.universities.universityId} as value`,
-                `${shortColumns.universities.name} as label`
-            )
-            .from(tables.universities)
-            .orderBy(shortColumns.universities.name),
-};
+class UniversitiesStorage extends BaseStorage {
+  constructor() {
+    super("universities", "university_id", db);
+  }
+
+  async getAll() {
+    return this.db
+      .select(
+        `${this.primaryKey} as value`,
+        "name as label"
+      )
+      .from(this.table)
+      .orderBy("name");
+  }
+
+  async getByName(name) {
+    return await super.getOneByField(name, "name");
+  }
+
+  async getRandomUniversityId() {
+    return await super.getRandomId();
+  }
+}
+
+module.exports = new UniversitiesStorage();

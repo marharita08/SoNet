@@ -1,34 +1,34 @@
 import apiClient from "../config/axios";
 
 export const getUser = async (id) => {
-    return apiClient.get(`/users/${id}`);
+  return apiClient.get(`/users/${id}`);
 };
 
 export const getUsers = async () => {
-    return apiClient.get("/users");
+  return apiClient.get("/users");
 };
 
 export const updateUser = async (formData) => {
-    return apiClient.put(`/users/${formData.get("user_id")}`, formData, {
-        headers: {
-            "Content-Type": "multipart/form-data",
-            "File-Destination": "avatar",
-        },
-    });
+  return apiClient.put(`/users/${formData.get("user_id")}`, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+      "File-Destination": "avatar",
+    },
+  });
 };
 
 export const getFriends = async (id) => {
-    return apiClient.get(`/users/${id}/friends`);
+  return apiClient.get(`/users/${id}/friends`);
 };
 
 export const getIncomingRequests = async (id) => {
-    return apiClient.get(`/users/${id}/incoming-requests`);
+  return apiClient.get(`/users/${id}/incoming-requests`);
 };
 
 export const getOutgoingRequests = async (id) => {
-    return apiClient.get(`/users/${id}/outgoing-requests`);
+  return apiClient.get(`/users/${id}/outgoing-requests`);
 };
 
 export const searchUsers = async (id, text) => {
-    return apiClient.get(`/users/${id}/search?text=${text}`);
-}
+  return apiClient.get(`/users/${id}/search?text=${text}`);
+};

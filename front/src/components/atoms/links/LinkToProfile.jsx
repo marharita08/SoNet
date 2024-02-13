@@ -4,19 +4,19 @@ import SNLink from "./SNLink";
 
 const LinkToProfile = ({user_id, content, className}) => {
 
-    return (
-        <SNLink
-            to={`/profile/${user_id}`}
-            className={className}
-            content={content}
-        />
-    )
-}
+  return (
+    <SNLink
+      to={`/profile/${user_id}`}
+      className={className}
+      content={content}
+    />
+  );
+};
 
 LinkToProfile.propTypes = {
-    user_id: PropTypes.number.isRequired,
-    content: PropTypes.any.isRequired,
-    className: PropTypes.string
-}
+  user_id: PropTypes.number.isRequired,
+  content: PropTypes.any.isRequired,
+  className: PropTypes.string
+};
 
 export default LinkToProfile;

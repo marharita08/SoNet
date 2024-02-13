@@ -7,45 +7,45 @@ import {useStyles} from "../../style";
 
 const AvatarPopover = ({anchorEl, onClose, users}) => {
 
-    const theme = useTheme();
-    const classes = useStyles();
+  const theme = useTheme();
+  const classes = useStyles();
 
-    return (
-        <Popover
-            id="mouse-over-popover"
-            sx={{
-                pointerEvents: "none",
-            }}
-            open={!!anchorEl}
-            anchorEl={anchorEl}
-            anchorOrigin={{
-                vertical: "top",
-                horizontal: "center",
-            }}
-            transformOrigin={{
-                vertical: "bottom",
-                horizontal: "center",
-            }}
-            onClose={onClose}
-            disableRestoreFocus
-        >
-            <AvatarGroup max={4} className={classes.margin}>
-                {users?.map((user) =>
-                    <Avatar
-                        key={user.user_id}
-                        src={user.avatar}
-                        sx={theme.avatarSizes.sm}
-                    />
-                )}
-            </AvatarGroup>
-        </Popover>
-    );
+  return (
+    <Popover
+      id="mouse-over-popover"
+      sx={{
+        pointerEvents: "none",
+      }}
+      open={!!anchorEl}
+      anchorEl={anchorEl}
+      anchorOrigin={{
+        vertical: "top",
+        horizontal: "center",
+      }}
+      transformOrigin={{
+        vertical: "bottom",
+        horizontal: "center",
+      }}
+      onClose={onClose}
+      disableRestoreFocus
+    >
+      <AvatarGroup max={4} className={classes.margin}>
+        {users?.map((user) =>
+          <Avatar
+            key={user.user_id}
+            src={user.avatar}
+            sx={theme.avatarSizes.sm}
+          />
+        )}
+      </AvatarGroup>
+    </Popover>
+  );
 };
 
 AvatarPopover.propTypes = {
-    anchorEl: PropTypes.object,
-    onClose: PropTypes.func.isRequired,
-    users: usersPopoverPropTypes
+  anchorEl: PropTypes.object,
+  onClose: PropTypes.func.isRequired,
+  users: usersPopoverPropTypes
 };
 
 export default AvatarPopover;

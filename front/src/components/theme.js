@@ -1,72 +1,78 @@
 import {createTheme} from "@mui/material/styles";
 
 let theme = createTheme({
-    typography: {
-        subtitle1: {
-            fontWeight: "bold"
-        }
+  typography: {
+    subtitle1: {
+      fontWeight: "bold"
+    }
+  },
+  dialogActions: {
+    justifyContent: "center"
+  },
+  spacing: 5,
+  palette: {
+    primary: {
+      main: "#001a4d"
     },
-    dialogActions: {
-        justifyContent: "center"
+    secondary: {
+      main: "#00ffff"
     },
-    spacing: 5,
-    palette: {
-        primary: {
-            main: "#001a4d"
-        },
-        secondary: {
-            main: "#00ffff"
-        },
-        background: {
-            default: "#f2f2f2"
-        },
-        facebook: {
-            main: "#395697",
-            dark: "#003366",
-            contrastText: "#FFF"
-        },
-        google: {
-            main: "#FFF",
-            dark: "#f2f2f2",
-            darker: "#E8E8E8",
-            contrastText: "#000"
-        }
+    background: {
+      default: "#f2f2f2"
     },
-    avatarSizes: {
-        sm: {
-            width: 30,
-            height: 30,
-        },
-        md: {
-            width: 40,
-            height: 40,
-        },
-        lg: {
-            width: 60,
-            height: 60
-        },
-        xl: {
-            width: 120,
-            height: 120
-        }
+    facebook: {
+      main: "#395697",
+      dark: "#003366",
+      contrastText: "#FFF"
     },
+    google: {
+      main: "#FFF",
+      dark: "#f2f2f2",
+      darker: "#E8E8E8",
+      contrastText: "#000"
+    }
+  },
+  avatarSizes: {
+    sm: {
+      width: 30,
+      height: 30,
+    },
+    md: {
+      width: 40,
+      height: 40,
+    },
+    lg: {
+      width: 60,
+      height: 60
+    },
+    xl: {
+      width: 120,
+      height: 120
+    }
+  },
 });
 
 theme = createTheme(theme, {
-    commentCardHeader: {
-        padding: theme.spacing(2, 2, 1)
-    },
-    commentCardContent: {
-        padding: theme.spacing(1, 2, 2),
-        "&:last-child": {
-            paddingBottom: theme.spacing(3)
-        }
-    },
-    navigateFab: {
-        position: "sticky",
-        bottom: theme.spacing(2),
-        left: "calc(100% - (100%/6))"
+  commentCardHeader: {
+    padding: theme.spacing(2, 2, 1)
+  },
+  commentCardContent: {
+    padding: theme.spacing(1, 2, 2),
+    "&:last-child": {
+      paddingBottom: theme.spacing(3)
     }
-})
+  },
+  navigateFab: {
+    position: "sticky",
+    bottom: theme.spacing(2),
+    left: "calc(100% - (100%/6))"
+  },
+  articleImg: {
+    width: "100%",
+    [theme.breakpoints.up("sm")]: {
+      width: "500px"
+    }
+  },
+});
 
 export default theme;

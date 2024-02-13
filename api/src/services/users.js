@@ -4,114 +4,66 @@ const config = require("../configs/config");
 const settingsStorage = require("../db/settings/storage");
 const fileHelper = require("../utils/fileHelper");
 const {USER_NOT_FOUND} = require("../constants/messages");
+const {parseToProfile, parseToUserAndSettings} = require("../utils/usersParser");
+const BaseService = require("./base");
 
-const getProfile = async (id) => {
-    const dbResponse = await usersStorage.getProfileById(id);
-    if (dbResponse[0]) {
-        const {
-            email_visibility_id, ev_label,
-            phone_visibility_id, pv_label,
-            university_id, university_label,
-            university_visibility_id, uv_label,
-            ...rest
-        } = dbResponse[0];
-        const result = {
-            ...rest,
-            email_visibility: {
-                value: email_visibility_id,
-                label: ev_label,
-            },
-            phone_visibility: {
-                value: phone_visibility_id,
-                label: pv_label,
-            },
-            university: {
-                value: university_id,
-                label: university_label,
-            },
-            university_visibility: {
-                value: university_visibility_id,
-                label: uv_label,
-            },
-        };
-        if (result.university.value == null) {
-            result.university = null;
-        }
-        return result;
-    }
-    return undefined;
-};
+class UsersServices extends BaseService {
 
-const getAll = async () => {
-    return await usersStorage.getAll();
-}
+  constructor() {
+    super(usersStorage);
+  }
 
-const getById = async (id) => {
-    return await usersStorage.getById(id);
-}
+  getProfile = async (id) => {
+    const dbResponse = await this.storage.getProfileById(id);
+    return parseToProfile(dbResponse[0]);
+  };
 
-const getByEmail = async (email) => {
-    return await usersStorage.getByEmail(email)
-}
+  getByEmail = async (email) => {
+    return await this.storage.getByEmail(email);
+  };
 
-const getProfileById = async (id) => {
-    const profile = await getProfile(id);
+  getProfileById = async (id) => {
+    const profile = await this.getProfile(id);
     if (profile) {
-        return profile;
+      return profile;
     }
     throw new NotFoundException(USER_NOT_FOUND);
-}
+  };
 
-const update = async (id, user, settings, fileData, errorHandler) => {
-    if (user.phone === "") {
-        user.phone = null;
-    }
+  update = async (id, {userData, fileData}) => {
+    const {user, settings} = parseToUserAndSettings(userData);
     let avatarUrl;
     let avatarPath;
     if (fileData) {
-        const {avatar_path: oldAvatarPath} = await usersStorage.getAvatarPath(id);
-        avatarPath = fileData.path;
-        avatarUrl = config.appUrl + fileHelper.getUrlPath(fileData);
-        fileHelper.deleteFile(oldAvatarPath, errorHandler);
+      const {avatar_path: oldAvatarPath} = await this.storage.getAvatarPath(id);
+      avatarPath = fileData.path;
+      avatarUrl = config.appUrl + fileHelper.getUrlPath(fileData);
+      fileHelper.deleteFile(oldAvatarPath);
     }
-    await usersStorage.update(id, {
-        ...user,
-        avatar: avatarUrl,
-        avatar_path: avatarPath,
+    await super.update(id, {
+      ...user,
+      avatar: avatarUrl,
+      avatar_path: avatarPath,
     });
     await settingsStorage.update(id, settings);
-    return await getProfile(id);
+    return await this.getProfile(id);
+  };
+
+  getFriends = async (id) => {
+    return await this.storage.getFriends(id);
+  };
+
+  getIncomingRequests = async (id) => {
+    return await this.storage.getIncomingRequests(id);
+  };
+
+  getOutgoingRequests = async (id) => {
+    return await this.storage.getOutgoingRequests(id);
+  };
+
+  searchUsers = async (id, text) => {
+    return await this.storage.searchUsers(id, text);
+  };
 }
 
-const _delete = async (id) => {
-    return await usersStorage.delete(id);
-}
-
-const getFriends = async (id) => {
-    return await usersStorage.getFriends(id);
-}
-
-const getIncomingRequests = async (id) => {
-    return await usersStorage.getIncomingRequests(id);
-}
-
-const getOutgoingRequests = async (id) => {
-    return await usersStorage.getOutgoingRequests(id);
-}
-
-const searchUsers = async (id, text) => {
-    return await usersStorage.searchUsers(id, text);
-}
-
-module.exports = {
-    getAll,
-    getById,
-    getByEmail,
-    getProfileById,
-    getFriends,
-    getOutgoingRequests,
-    getIncomingRequests,
-    searchUsers,
-    update,
-    delete: _delete
-}
+module.exports = new UsersServices();

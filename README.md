@@ -72,7 +72,7 @@ To install the required libraries, simply execute the following files depending 
   - `install_api.cmd` or `install_api.sh`
   - `install_front.cmd` or `install_front.sh`
 
-Before running the application, you need to set environment variables. Open and update `.env` in root folder. It should hold the following properties:
+Before running the application, you need to set environment variables. Create `.env` in root folder and copy variables from `.env.example`. It should hold the following properties:
 
 | Key                    | Value                                                |    
 |------------------------|------------------------------------------------------|
@@ -92,7 +92,7 @@ Before running the application, you need to set environment variables. Open and 
 | GOOGLE_API_CLIENT_ID   | Google client ID, required for login with Google     |
 | FACEBOOK_API_CLIENT_ID | Facebook client ID, required for login with Facebook |
 
-You also need to ensure that `api/.env` contains valid information. It should hold the following properties:
+You also need to create `api/.env` and copy variables from `.env.example.` It should hold the following properties:
 
 | Key                        | Value                                                    |    
 |----------------------------|----------------------------------------------------------|

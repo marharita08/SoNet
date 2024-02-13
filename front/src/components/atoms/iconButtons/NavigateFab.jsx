@@ -6,17 +6,17 @@ import {useTheme} from "@mui/material/styles";
 
 const NavigateFab = ({onClick}) => {
 
-    const theme = useTheme();
+  const theme = useTheme();
 
-    return (
-        <Fab onClick={onClick} sx={theme.navigateFab}>
-            <NavigationIcon/>
-        </Fab>
-    );
+  return (
+    <Fab onClick={onClick} sx={theme.navigateFab}>
+      <NavigationIcon/>
+    </Fab>
+  );
 };
 
 NavigateFab.propTypes = {
-    onClick: PropTypes.func.isRequired
-}
+  onClick: PropTypes.func.isRequired
+};
 
 export default NavigateFab;

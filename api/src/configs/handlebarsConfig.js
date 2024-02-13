@@ -1,7 +1,7 @@
-const handlebars = require('express-handlebars');
+const handlebars = require("express-handlebars");
 
 module.exports = handlebars.create({
-    extname: '.handlebars',
-    layoutsDir: 'views/',
-    defaultLayout: false,
+  extname: ".handlebars",
+  layoutsDir: "views/",
+  defaultLayout: false,
 });

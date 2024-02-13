@@ -1,31 +1,30 @@
 import React from "react";
-import CancelButton from "../../atoms/buttons/CancelButton";
-import SubmitButton from "../../atoms/buttons/SubmitButton";
 import {DialogActions} from "@mui/material";
 import {useTheme} from "@mui/material/styles";
 import PropTypes from "prop-types";
 
-const SaveCancelDialogActions = ({cancelOnClick, isLoading, isAdd}) => {
+import CancelButton from "../../atoms/buttons/CancelButton";
+import SubmitButton from "../../atoms/buttons/SubmitButton";
 
-    const theme = useTheme();
 
-    return (
-        <DialogActions sx={theme.dialogActions}>
-            <CancelButton onClick={cancelOnClick}/>
-            <SubmitButton isLoading={isLoading} isAdd={isAdd}/>
-        </DialogActions>
-    );
+const SaveCancelDialogActions = ({cancelOnClick, flags}) => {
+
+  const theme = useTheme();
+
+  return (
+    <DialogActions sx={theme.dialogActions}>
+      <CancelButton onClick={cancelOnClick}/>
+      <SubmitButton {...flags}/>
+    </DialogActions>
+  );
 };
 
 SaveCancelDialogActions.propTypes = {
-    cancelOnClick: PropTypes.func.isRequired,
-    isLoading: PropTypes.bool,
+  cancelOnClick: PropTypes.func.isRequired,
+  flags: PropTypes.shape({
+    isLoading: PropTypes.bool.isRequired,
     isAdd: PropTypes.bool
-};
-
-SaveCancelDialogActions.defaultProps = {
-    isLoading: false,
-    isAdd: false
+  }).isRequired
 };
 
 export default SaveCancelDialogActions;

@@ -1,4 +1,4 @@
 export const refetchOff = {
-    refetchInterval: false,
-    refetchOnWindowFocus: false
-}
+  refetchInterval: false,
+  refetchOnWindowFocus: false
+};

@@ -1,9 +1,10 @@
 const db = require('../../configs/db');
-const {tables, shortColumns} = require("../dbSchema");
-const {session} = shortColumns;
+const BaseStorage = require("../base/storage");
 
-module.exports = {
-  create: (session) => db(tables.session).insert(session),
-  getByToken: (token) => db(tables.session).select().first().where(session.token, token),
-  deleteByToken: (token) => db(tables.session).where(session.token, token).delete(),
-};
+class SessionStorage extends BaseStorage {
+  constructor() {
+    super("session", "token", db);
+  }
+}
+
+module.exports = new SessionStorage();

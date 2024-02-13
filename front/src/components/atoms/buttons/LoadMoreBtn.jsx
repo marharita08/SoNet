@@ -7,34 +7,34 @@ import {useStyles} from "../../style";
 
 const LoadMoreBtn = ({handleLoadMore, isLoading}) => {
 
-    const classes = useStyles();
+  const classes = useStyles();
 
-    return (
-        <div className={classes.loadMoreBtn}>
-            <Button
-                onClick={handleLoadMore}
-                startIcon={
-                    <ProgressOrComponent
-                        isProgress={isLoading}
-                        component={<ExpandMoreIcon/>}
-                    />
-                }
-                variant={"outlined"}
-                disabled={isLoading}
-            >
-                Load more
-            </Button>
-        </div>
-    );
+  return (
+    <div className={classes.loadMoreBtn}>
+      <Button
+        onClick={handleLoadMore}
+        startIcon={
+          <ProgressOrComponent
+            isProgress={isLoading}
+            component={<ExpandMoreIcon/>}
+          />
+        }
+        variant={"outlined"}
+        disabled={isLoading}
+      >
+        Load more
+      </Button>
+    </div>
+  );
 };
 
 LoadMoreBtn.propTypes = {
-    handleLoadMore: PropTypes.func.isRequired,
-    isLoading: PropTypes.bool
+  handleLoadMore: PropTypes.func.isRequired,
+  isLoading: PropTypes.bool
 };
 
 LoadMoreBtn.defaultProps = {
-    isLoading: false
+  isLoading: false
 };
 
 export default LoadMoreBtn;

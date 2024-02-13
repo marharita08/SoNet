@@ -2,61 +2,44 @@ const commentsStorage = require("../db/comments/storage");
 const NotFoundException = require("../errors/NotFoundException");
 const db = require("../configs/db");
 const Messages = require("../constants/messages");
+const BaseService = require("./base");
 
-const getAll = async () => {
-    return await commentsStorage.getAll();
-};
+class CommentsService extends BaseService {
 
-const getById = async (commentId) => {
-    const comment = await commentsStorage.getById(commentId);
+  constructor() {
+    super(commentsStorage);
+  }
+
+  async getById(commentId) {
+    const comment = await super.getById(commentId);
     if (comment) {
-        return comment;
+      return comment;
     }
     throw new NotFoundException(Messages.COMMENT_NOT_FOUND);
-};
+  }
 
-const add = async (comment) => {
+  async add(comment) {
     let id;
     await db.transaction(async () => {
-        id = await commentsStorage.create(comment);
-        let path;
-        if (comment.path === "") {
-            path = id[0];
-        } else {
-            path = `${comment.path}.${id[0]}`;
-        }
-        await commentsStorage.update(id[0], {
-            path,
-        });
+      id = (await super.add(comment)).comment_id;
+      const path = !!comment.path ? id : `${comment.path}.${id}`;
+      await super.update(id, { path });
     });
-    return {comment: await commentsStorage.getFullDataById(id[0])};
-};
+    return { comment: await this.storage.getFullDataById(id) };
+  }
 
-const update = async (commentId, text) => {
-    await commentsStorage.update(commentId, {
-        text,
-    });
-    return {comment: {comment_id: commentId, text}};
-};
+  async update(commentId, text) {
+    await super.update(commentId, { text });
+    return { comment: { comment_id: commentId, text } };
+  }
 
-const _delete = async (commentId) => {
-    return await commentsStorage.delete(commentId);
-};
+  async getByArticleId(articleId) {
+    return await this.storage.getFullDataByArticleId(articleId);
+  }
 
-const getByArticleId = async (articleId) => {
-    return await commentsStorage.getFullDataByArticleId(articleId);
-};
+  async getAmountByArticleId(articleId) {
+    return await this.storage.getAmountByArticleId(articleId);
+  }
+}
 
-const getAmountByArticleId = async (articleId) => {
-    return await commentsStorage.getAmountByArticleId(articleId);
-};
-
-module.exports = {
-    getAll,
-    getById,
-    add,
-    update,
-    delete: _delete,
-    getByArticleId,
-    getAmountByArticleId
-};
+module.exports = new CommentsService();

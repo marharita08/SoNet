@@ -16,69 +16,69 @@ const {salt} = config;
 const subject = "Reset password for SoNet";
 
 const resetPassword = async (email) => {
-    const user = await usersStorage.getByEmail(email);
+  const user = await usersStorage.getByEmail(email);
 
-    if (!user) {
-        throw new NotFoundException(Messages.USER_NOT_FOUND);
-    }
+  if (!user) {
+    throw new NotFoundException(Messages.USER_NOT_FOUND);
+  }
 
-    const token = uuidv4();
+  const token = uuidv4();
 
-    await passwordStorage.create({
-        user_id: user.user_id,
-        token
-    });
-    const resetLink = `${frontUrls.RESET_PASSWORD}${token}`;
+  await passwordStorage.create({
+    user_id: user.user_id,
+    token
+  });
+  const resetLink = `${frontUrls.RESET_PASSWORD}${token}`;
 
-    const htmlContent = await hbs.render(views.RESET_PASSWORD, {
-        link: resetLink,
-        user: user.name,
-        home: frontUrls.HOME
-    });
+  const htmlContent = await hbs.render(views.RESET_PASSWORD, {
+    link: resetLink,
+    user: user.name,
+    home: frontUrls.HOME
+  });
 
-    const mailOptions = {
-        ...commonMailOptions,
-        to: email,
-        subject,
-        html: htmlContent,
-    };
+  const mailOptions = {
+    ...commonMailOptions,
+    to: email,
+    subject,
+    html: htmlContent,
+  };
 
-    await transporter.sendMail(mailOptions);
-    return {message: Messages.CHECK_MAILBOX};
-}
+  await transporter.sendMail(mailOptions);
+  return {message: Messages.CHECK_MAILBOX};
+};
 
 const saveNewPassword = async (token, password) => {
-    const reset_password_token = await passwordStorage.getByToken(token);
+  const resetPasswordToken = await passwordStorage.getById(token);
 
-    if (!reset_password_token) {
-        throw new NotFoundException(Messages.TOKEN_NOT_FOUND);
-    }
-    if (new Date() > new Date(reset_password_token.expires_on)) {
-        throw new ForbiddenException(Messages.EXPIRED_TOKEN);
-    }
+  if (!resetPasswordToken) {
+    throw new NotFoundException(Messages.TOKEN_NOT_FOUND);
+  }
+  if (new Date() > new Date(resetPasswordToken.expires_on)) {
+    throw new ForbiddenException(Messages.EXPIRED_TOKEN);
+  }
 
-    const user = await usersStorage.getById(reset_password_token.user_id);
-    const hashedPassword = passwordHasher(password, salt);
-    await usersStorage.update(reset_password_token.user_id, {password: hashedPassword});
-    await passwordStorage.delete(token);
+  const user = await usersStorage.getById(resetPasswordToken.user_id);
+  const hashedPassword = passwordHasher(password, salt);
+  await usersStorage.update(resetPasswordToken.user_id, {password: hashedPassword});
+  await passwordStorage.delete(token);
 
-    const htmlContent = await hbs.render(views.PASSWORD_CHANGED, {
-        user: user.name,
-        home: frontUrls.HOME
-    });
+  const htmlContent = await hbs.render(views.PASSWORD_CHANGED, {
+    user: user.name,
+    home: frontUrls.HOME
+  });
 
-    const mailOptions = {
-        ...commonMailOptions,
-        to: user.email,
-        subject,
-        html: htmlContent
-    };
+  const mailOptions = {
+    ...commonMailOptions,
+    to: user.email,
+    subject,
+    html: htmlContent
+  };
 
-    await transporter.sendMail(mailOptions);
-    return {message: Messages.PASSWORD_CHANGED};
-}
+  await transporter.sendMail(mailOptions);
+  return {message: Messages.PASSWORD_CHANGED};
+};
 
 module.exports = {
-    resetPassword,
-    saveNewPassword
-}
+  resetPassword,
+  saveNewPassword
+};

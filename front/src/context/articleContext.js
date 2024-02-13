@@ -1,9 +1,9 @@
 import {createContext} from "react";
 
 const articleContext = createContext(
-    {
-        isModalOpen: false
-    }
+  {
+    isModalOpen: false
+  }
 );
 
 export default articleContext;

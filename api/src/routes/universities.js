@@ -4,11 +4,11 @@ const authMiddleware = require("../middleware/authMiddleware");
 const universitiesService = require("../services/universities");
 
 router.get(
-    "/",
-    authMiddleware,
-    asyncHandler(async (req, res) => {
-        res.send(await universitiesService.getAll());
-    })
+  "/",
+  authMiddleware,
+  asyncHandler(async (req, res) => {
+    res.send(await universitiesService.getAll());
+  })
 );
 
 module.exports = router;

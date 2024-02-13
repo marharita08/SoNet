@@ -1,29 +1,32 @@
 import PropTypes from "prop-types";
-import {visibilitiesPropTypes} from "../../../propTypes/visibilitiesPropTypes";
+import {optionsPropTypes} from "../../../propTypes/optionsPropTypes";
 import {articleAddEditPropTypes} from "../../../propTypes/articlePropTypes";
 
 export const addOrEditArticleContentPropTypes = {
-    visibilities: visibilitiesPropTypes,
-    article: articleAddEditPropTypes,
+  visibilities: optionsPropTypes,
+  article: articleAddEditPropTypes,
+  image: PropTypes.string,
+  croppedImage: PropTypes.string,
+  isVisibilitiesFetching: PropTypes.bool,
+  actions: PropTypes.shape({
     handleAddImage: PropTypes.func.isRequired,
-    image: PropTypes.string,
     setCropper: PropTypes.func.isRequired,
     handleCropImage: PropTypes.func.isRequired,
-    croppedImage: PropTypes.object,
     handleDeleteImage: PropTypes.func.isRequired,
-    isVisibilitiesFetching: PropTypes.bool,
-}
+    setFieldValue: PropTypes.func.isRequired
+  })
+};
 
 export const addOrEditArticleContentDefaultProps = {
-    visibilities: [],
-    article: {
-        text: "",
-        visibility: {
-            value: 1,
-            label: "All"
-        }
-    },
-    image: undefined,
-    croppedImage: undefined,
-    isVisibilitiesFetching: false
-}
+  visibilities: [],
+  article: {
+    text: "",
+    visibility: {
+      value: 1,
+      label: "All"
+    }
+  },
+  image: undefined,
+  croppedImage: undefined,
+  isVisibilitiesFetching: false
+};

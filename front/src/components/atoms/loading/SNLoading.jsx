@@ -5,24 +5,24 @@ import {useTheme} from "@mui/material/styles";
 
 const SNLoading = ({isLoading}) => {
 
-    const theme = useTheme();
+  const theme = useTheme();
 
-    return (
-        <>
-            {
-                isLoading &&
-                <ReactLoading type={"balls"} color={theme.palette.primary.main}/>
-            }
-        </>
-    );
+  return (
+    <>
+      {
+        isLoading &&
+        <ReactLoading type={"balls"} color={theme.palette.primary.main}/>
+      }
+    </>
+  );
 };
 
 SNLoading.propTypes = {
-    isLoading: PropTypes.bool,
+  isLoading: PropTypes.bool,
 };
 
 SNLoading.defaultProps = {
-    isLoading: false,
+  isLoading: false,
 };
 
 export default SNLoading;
