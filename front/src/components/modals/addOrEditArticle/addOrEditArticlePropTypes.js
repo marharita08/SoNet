@@ -16,7 +16,7 @@ export const addOrEditArticlePropTypes = {
   }),
   flags: PropTypes.shape({
     isVisibilitiesFetching,
-    isAdd: PropTypes.bool.isRequired,
+    isAdd: PropTypes.bool,
     isLoading: PropTypes.bool,
   }),
   errorMessage: PropTypes.string,

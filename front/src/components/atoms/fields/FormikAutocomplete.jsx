@@ -6,7 +6,7 @@ import {fieldToTextField} from "formik-mui";
 const FormikAutocomplete = (props) => {
   const {form: {setTouched, setFieldValue}} = props;
   const {error, helperText, ...field} = fieldToTextField(props);
-  const {name, label, onChange} = field;
+  const {name, label, setValue} = field;
 
   return (
     <Autocomplete
@@ -17,8 +17,8 @@ const FormikAutocomplete = (props) => {
       isOptionEqualToValue={(option, value) => option.value === value.value}
       onChange={(_, value) => {
         setFieldValue(name, value);
-        if (onChange) {
-          onChange(value.value);
+        if (setValue) {
+          setValue(value.value);
         }
       }}
       onBlur={() => setTouched({[name]: true})}

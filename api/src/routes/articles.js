@@ -110,7 +110,7 @@ router.put(
     const {id} = req.params;
     const articleId = +id;
     const fileData = req.file;
-    res.send(articlesService.update(articleId, {text, visibilityId, fileData}));
+    res.send(await articlesService.update(articleId, {text, visibilityId, fileData}));
   })
 );
 

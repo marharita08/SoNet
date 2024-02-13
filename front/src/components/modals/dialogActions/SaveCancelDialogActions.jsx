@@ -23,7 +23,7 @@ SaveCancelDialogActions.propTypes = {
   cancelOnClick: PropTypes.func.isRequired,
   flags: PropTypes.shape({
     isLoading: PropTypes.bool.isRequired,
-    isAdd: PropTypes.bool.isRequired
+    isAdd: PropTypes.bool
   }).isRequired
 };
 

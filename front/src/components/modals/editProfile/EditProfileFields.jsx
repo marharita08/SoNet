@@ -44,7 +44,7 @@ const EditProfileFields = ({visibilities, universities, locations, onCountryChan
         fieldOptions={countries}
         visibilityName={"country_visibility"}
         visibilities={visibilities}
-        onChange={onCountryChange}
+        setValue={onCountryChange}
       />
       <EditProfileFieldRow
         fieldName={"state"}
@@ -53,7 +53,7 @@ const EditProfileFields = ({visibilities, universities, locations, onCountryChan
         fieldOptions={states}
         visibilityName={"state_visibility"}
         visibilities={visibilities}
-        onChange={onStateChange}
+        setValue={onStateChange}
       />
       <EditProfileFieldRow
         fieldName={"city"}
