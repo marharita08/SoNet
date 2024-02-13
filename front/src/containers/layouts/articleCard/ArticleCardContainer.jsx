@@ -125,17 +125,26 @@ const ArticleCardContainer = ({setArticleContext, article, articles, setArticles
 
   // update state of current component
 
+  const refreshCurrentComment = () => {
+    setIsCommentAdd(true);
+    setCurrentComment(initComment);
+  };
+
+  const onCommentAddOrUpdate = () => {
+    setIsAddOrEditCommentExpanded(false);
+    setIsCommentsExpanded(true);
+    refreshCurrentComment();
+  }
+
   const onCommentAdd = (comment) => {
+    onCommentAddOrUpdate();
     setComments(commentsService.addComment(comments, comment));
     setCommentsAmount(commentsAmount + 1);
   };
 
   const onCommentUpdate = (comment) => {
+    onCommentAddOrUpdate();
     setComments(commentsService.updateComment(comments, comment));
-  };
-
-  const setCurrentInitComment = () => {
-    setCurrentComment(initComment);
   };
 
   const onCommentDelete = (id) => {
@@ -178,8 +187,7 @@ const ArticleCardContainer = ({setArticleContext, article, articles, setArticles
   };
 
   const handleCommentCancel = () => {
-    setCurrentComment(initComment);
-    setIsCommentAdd(true);
+    refreshCurrentComment();
   };
 
   return (
@@ -214,11 +222,7 @@ const ArticleCardContainer = ({setArticleContext, article, articles, setArticles
         <AddOrEditCommentContainer
           comment={currentComment}
           isCommentAdd={isCommentAdd}
-          actions={{
-            onCommentAdd, onCommentUpdate,
-            setCurrentInitComment, setCommentsExpanded: setIsCommentsExpanded,
-            handleCancel: handleCommentCancel
-          }}
+          actions={{onCommentAdd, onCommentUpdate, handleCancel: handleCommentCancel}}
         />
       }
       commentsComponent={

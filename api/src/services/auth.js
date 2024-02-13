@@ -45,7 +45,7 @@ const loginOrSignUp = async (email, password) => {
       role: Roles.USER,
     };
     const id = await userStorage.create(user);
-    await settingsStorage.create({user_id: id[0]});
+    await settingsStorage.create(id[0]);
     user = await userStorage.getByEmail(email);
   } else if (user.password !== hashedPassword) {
     throw new UnauthorizedException(Messages.WRONG_PASSWORD);

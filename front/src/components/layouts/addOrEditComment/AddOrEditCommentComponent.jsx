@@ -82,10 +82,10 @@ AddOrEditCommentComponent.propTypes = {
     onSubmit: PropTypes.func.isRequired,
     handleCancel: PropTypes.func.isRequired
   }),
-  flags: {
+  flags: PropTypes.shape({
     isLoading: PropTypes.bool,
     isCommentAdd: PropTypes.bool.isRequired,
-  }
+  })
 };
 
 AddOrEditCommentComponent.defaultProps = {

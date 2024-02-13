@@ -26,7 +26,7 @@ export const userProfilePropTypes = PropTypes.shape({
   country: optionPropTypes,
   state: optionPropTypes,
   city: optionPropTypes,
-  birthday: PropTypes.string|PropTypes.number,
+  birthday: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.object]),
   country_visibility: optionPropTypes,
   state_visibility: optionPropTypes,
   city_visibility: optionPropTypes,

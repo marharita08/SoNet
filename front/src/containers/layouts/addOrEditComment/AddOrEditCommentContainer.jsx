@@ -10,7 +10,7 @@ import handleResponseContext from "../../../context/handleResponseContext";
 
 const AddOrEditCommentContainer = ({comment, isCommentAdd, actions}) => {
 
-  const {handleCancel, onCommentAdd, onCommentUpdate, setCurrentInitComment, setCommentsExpanded} = actions;
+  const {handleCancel, onCommentAdd, onCommentUpdate} = actions;
   const {user} = useContext(authContext);
   const {handleError} = useContext(handleResponseContext);
 
@@ -19,8 +19,6 @@ const AddOrEditCommentContainer = ({comment, isCommentAdd, actions}) => {
     onSuccess: (data) => {
       const {data: {comment: addedComment}} = data;
       onCommentAdd(addedComment);
-      setCurrentInitComment();
-      setCommentsExpanded(true);
     },
     onError: handleError
   });
@@ -29,8 +27,6 @@ const AddOrEditCommentContainer = ({comment, isCommentAdd, actions}) => {
     onSuccess: (data) => {
       const {data: {comment: updatedComment}} = data;
       onCommentUpdate(updatedComment);
-      setCurrentInitComment();
-      setCommentsExpanded(true);
     },
     onError: handleError
   });

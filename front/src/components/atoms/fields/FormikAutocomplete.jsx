@@ -13,12 +13,12 @@ const FormikAutocomplete = (props) => {
       {...props}
       {...field}
       options={props.options || []}
-      getOptionLabel={option => option.label}
+      getOptionLabel={option => option.label || ""}
       isOptionEqualToValue={(option, value) => option.value === value.value}
       onChange={(_, value) => {
         setFieldValue(name, value);
         if (setValue) {
-          setValue(value.value);
+          setValue(value?.value || "");
         }
       }}
       onBlur={() => setTouched({[name]: true})}
