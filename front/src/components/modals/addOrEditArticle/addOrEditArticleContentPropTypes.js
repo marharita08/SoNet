@@ -6,15 +6,15 @@ export const addOrEditArticleContentPropTypes = {
   visibilities: optionsPropTypes,
   article: articleAddEditPropTypes,
   image: PropTypes.string,
-  croppedImage: PropTypes.object,
+  croppedImage: PropTypes.string,
   isVisibilitiesFetching: PropTypes.bool,
-  actions: {
+  actions: PropTypes.shape({
     handleAddImage: PropTypes.func.isRequired,
     setCropper: PropTypes.func.isRequired,
     handleCropImage: PropTypes.func.isRequired,
     handleDeleteImage: PropTypes.func.isRequired,
     setFieldValue: PropTypes.func.isRequired
-  }
+  })
 };
 
 export const addOrEditArticleContentDefaultProps = {

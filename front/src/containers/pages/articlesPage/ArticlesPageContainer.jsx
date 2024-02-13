@@ -23,11 +23,11 @@ const ArticlesPageContainer = ({setArticleContext, param, articles, setArticles}
   let getCountFunc;
 
   if (param === "news") {
-    getFunc = getNews(page, limit);
-    getCountFunc = getCountOfNews();
+    getFunc = getNews;
+    getCountFunc = getCountOfNews;
   } else if (param === "all") {
-    getFunc = getAllNews(page, limit);
-    getCountFunc = getCountOfAllNews();
+    getFunc = getAllNews;
+    getCountFunc = getCountOfAllNews;
   }
 
   useEffect(() => {
@@ -36,16 +36,18 @@ const ArticlesPageContainer = ({setArticleContext, param, articles, setArticles}
 
   const {isFetching: isArticlesFetching, isLoading} = useQuery(
     `articles ${param} ${user_id} ${page}`,
-    () => getFunc,
+    () => getFunc(page, limit),
     {
-      onSuccess: (data) => setArticles([...articles, ...data?.data]),
+      onSuccess: (data) => {
+        setArticles([...articles, ...data?.data])
+      },
       ...refetchOff
     }
   );
 
   const {isFetching: isCountFetching} = useQuery(
     `articles amount ${param} ${user_id}`,
-    () => getCountFunc,
+    getCountFunc,
     {
       onSuccess: (data) => setAmount(data?.data.count),
       ...refetchOff

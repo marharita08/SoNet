@@ -106,7 +106,7 @@ class ArticleStorage extends BaseStorage {
               .join("article_visibilities", `${classThis.table}.visibility_id`, "article_visibilities.visibility_id");
           })
       })
-      .orderBy("created_at", "desc")
+      .orderBy("created_at_timestamp", "desc")
       .limit(limit)
       .offset(page * limit - limit);
   }
