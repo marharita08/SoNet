@@ -1,4 +1,5 @@
 const usersStorage = require("../db/users/storage");
+const userInterestsService = require("./userInterests");
 const NotFoundException = require("../errors/NotFoundException");
 const config = require("../configs/config");
 const settingsStorage = require("../db/settings/storage");
@@ -15,7 +16,8 @@ class UsersServices extends BaseService {
 
   getProfile = async (id) => {
     const dbResponse = await this.storage.getProfileById(id);
-    return parseToProfile(dbResponse[0]);
+    const interests = await userInterestsService.getByUserId(id);
+    return {...parseToProfile(dbResponse[0]), interests};
   };
 
   getByEmail = async (email) => {
@@ -31,7 +33,7 @@ class UsersServices extends BaseService {
   };
 
   update = async (id, {userData, fileData}) => {
-    const {user, settings} = parseToUserAndSettings(userData);
+    const {user: {interests, ...user}, settings} = parseToUserAndSettings(userData);
     let avatarUrl;
     let avatarPath;
     if (fileData) {
@@ -46,6 +48,7 @@ class UsersServices extends BaseService {
       avatar_path: avatarPath,
     });
     await settingsStorage.update(id, settings);
+    await userInterestsService.updateByUserId(id, interests.map(i => +i));
     return await this.getProfile(id);
   };
 

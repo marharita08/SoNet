@@ -38,7 +38,7 @@ const AddOrEditArticleContent = ({image, article, croppedImage, isVisibilitiesFe
         actions={{
           addImageOnClick: handleAddImage,
           cropImageOnClick: () => handleCropImage(setFieldValue),
-          deleteImageOnclick: () => handleDeleteImage(setFieldValue)
+          deleteImageOnClick: () => handleDeleteImage(setFieldValue)
         }}
       />
       <div className={classes.addArticleField}>

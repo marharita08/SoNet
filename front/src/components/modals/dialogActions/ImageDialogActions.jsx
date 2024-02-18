@@ -10,7 +10,7 @@ import DeleteImageBtn from "../../atoms/buttons/imageActions/DeleteImageBtn";
 
 const ImageDialogActions = ({actions, flags}) => {
 
-  const {addImageOnClick, cropImageOnClick, deleteImageOnclick} = actions;
+  const {addImageOnClick, cropImageOnClick, deleteImageOnClick} = actions;
   const {isImage, isCropper} = flags;
   const theme = useTheme();
 
@@ -23,7 +23,7 @@ const ImageDialogActions = ({actions, flags}) => {
       }
       {
         isImage &&
-        <DeleteImageBtn onClick={deleteImageOnclick}/>
+        <DeleteImageBtn onClick={deleteImageOnClick}/>
       }
     </DialogActions>
   );
@@ -33,7 +33,7 @@ ImageDialogActions.propTypes = {
   actions: PropTypes.shape({
     addImageOnClick: PropTypes.func.isRequired,
     cropImageOnClick: PropTypes.func.isRequired,
-    deleteImageOnclick: PropTypes.func.isRequired,
+    deleteImageOnClick: PropTypes.func.isRequired,
   }).isRequired,
   flags: PropTypes.shape({
     isImage: PropTypes.bool.isRequired,

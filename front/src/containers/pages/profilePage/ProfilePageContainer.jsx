@@ -77,7 +77,12 @@ const ProfilePageContainer = () => {
     `user ${id}`,
     () => getUser(id),
     {
-      onSuccess: (data) => setUser(data.data),
+      onSuccess: (data) => {
+        setUser(data.data);
+        const {country_id, state_id} = data.data;
+        country_id && onCountryChange(country_id);
+        state_id && onStateChange(state_id);
+      },
       ...refetchOff
     }
   );

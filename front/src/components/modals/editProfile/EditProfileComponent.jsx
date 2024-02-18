@@ -2,7 +2,7 @@ import {Form, Formik} from "formik";
 import {Dialog} from "@mui/material";
 import React from "react";
 
-import {EditProfilePropTypes} from "./editProfilePropTypes";
+import {EditProfilePropTypes} from "./propTypes/editProfilePropTypes";
 import {schema} from "./editProfileSchema";
 import SaveCancelDialogActions from "../dialogActions/SaveCancelDialogActions";
 import CloseIconBtn from "../../atoms/iconButtons/CloseIconBtn";
@@ -10,11 +10,11 @@ import SNDialogTitle from "../../atoms/dialogTitle/SNDialogTitle";
 import EditProfileContent from "./EditProfileContent";
 import ErrorBoundary from "../../ErrorBoundary";
 
-const EditProfileComponent = ({universities, visibilities, image, croppedImage, user, locations, actions, flags}) => {
+const EditProfileComponent = ({data, actions, flags}) => {
 
   const {onFormSubmit,  handleModalClose, ...contentActions} = actions;
-  const {handleDeleteImage, handleCropImage, handleAddImage, ...rest} = contentActions;
   const {isLoading, isModalOpen, isFetching} = flags;
+  const {user} = data;
 
   return (
     <ErrorBoundary>
@@ -34,19 +34,9 @@ const EditProfileComponent = ({universities, visibilities, image, croppedImage, 
               <CloseIconBtn onClick={handleModalClose}/>
               <SNDialogTitle title={"Edit profile"}/>
               <EditProfileContent
-                actions={{
-                  setFieldValue, ...rest,
-                  handleChange: handleAddImage,
-                  cropImage: handleCropImage,
-                  deleteImage: handleDeleteImage
-                }}
-                visibilities={visibilities}
+                actions={{setFieldValue, ...contentActions}}
                 isLoading={isFetching}
-                user={user}
-                universities={universities}
-                croppedImage={croppedImage}
-                image={image}
-                locations={locations}
+                data={data}
               />
               <SaveCancelDialogActions cancelOnClick={handleModalClose} flags={{isLoading}}/>
             </Form>

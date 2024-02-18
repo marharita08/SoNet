@@ -14,7 +14,7 @@ const EditProfileFieldRow = ({
   fieldOptions,
   visibilityName,
   visibilities,
-  onChange
+  setValue
 }) => {
 
   const classes = useStyles();
@@ -28,7 +28,7 @@ const EditProfileFieldRow = ({
           name={fieldName}
           label={fieldLabel}
           options={fieldOptions}
-          onChange={onChange}
+          setValue={setValue}
           fullWidth
         />
       </div>

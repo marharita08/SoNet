@@ -1,18 +1,8 @@
 import PropTypes from "prop-types";
-import {userProfilePropTypes} from "../../../propTypes/userPropTypes";
-import {optionsPropTypes} from "../../../propTypes/optionsPropTypes";
+import {editProfileDataPropTypes} from "./editProfileDataPropTypes";
 
 export let EditProfilePropTypes = {
-  user: userProfilePropTypes,
-  universities: optionsPropTypes,
-  visibilities: optionsPropTypes,
-  image: PropTypes.string,
-  croppedImage: PropTypes.object,
-  locations: PropTypes.shape({
-    countries: optionsPropTypes,
-    states: optionsPropTypes,
-    cities: optionsPropTypes,
-  }),
+  data: editProfileDataPropTypes,
   flags: PropTypes.shape({
     isLoading: PropTypes.bool.isRequired,
     isModalOpen: PropTypes.bool.isRequired,
@@ -26,6 +16,7 @@ export let EditProfilePropTypes = {
     setCropper: PropTypes.func.isRequired,
     handleModalClose: PropTypes.func.isRequired,
     onCountryChange: PropTypes.func.isRequired,
-    onStateChange: PropTypes.func.isRequired
+    onStateChange: PropTypes.func.isRequired,
+    onInterestChange: PropTypes.func.isRequired
   }).isRequired
 };
