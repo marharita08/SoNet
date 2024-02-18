@@ -65,15 +65,15 @@ create table if not exists user_settings(
 );
 
 create table if not exists interests(
- interst_id serial primary key,
- inerest    varchar(255) not null
+ interest_id serial primary key,
+ interest    varchar(255) not null
 );
 
 create table if not exists users_interests(
  user_id     int,
  interest_id int,
  foreign key (user_id) references users (user_id) on delete cascade,
- foreign key (interest_id) references interests (interest_id) on delete cascade,
+ foreign key (interest_id) references interests (interest_id) on delete cascade
 );
 
 create table if not exists article_visibilities(
@@ -133,6 +133,18 @@ insert into universities (name)
 values ('Sumy State University'),
        ('Sumy State Pedagogical University'),
        ('Kyiv Polytechnic Institute');
+
+insert into interests  (interest)
+values ('Charity'),
+       ('Volunteering'),
+       ('Music'),
+       ('Movies'),
+       ('Art'),
+       ('Travel'),
+       ('Cooking'),
+       ('Self development'),
+       ('Sport'),
+       ('Psychology');
 
 create table if not exists logger(
  id          serial primary key,

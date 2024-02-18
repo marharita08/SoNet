@@ -6,6 +6,7 @@ import EditProfileComponent from "../../../components/modals/editProfile/EditPro
 import {getUniversities} from "../../../api/universitiesCrud";
 import {getFieldVisibilities} from "../../../api/visibilitiesCrud";
 import {updateUser} from "../../../api/usersCrud";
+import {getInterests} from "../../../api/interestsCrud";
 import {EditProfileContainerPropTypes} from "./editProfileContainerPropTypes";
 import {refetchOff} from "../../../config/refetchOff";
 import imageService from "../../../services/imageService";
@@ -19,18 +20,18 @@ const EditProfileContainer = ({isModalOpen, user, locations, actions}) => {
   const {setIsModalOpen, setUser, ...componentActions} = actions;
   const {handleError, showErrorAlert} = useContext(handleResponseContext);
   const {isFetching: isUniversitiesFetching, data: universitiesData} = useQuery(
-    "universities",
-    () => getUniversities(),
-    {...refetchOff}
+    "universities", getUniversities, {...refetchOff}
   );
   const {isFetching: isVisibilitiesFetching, data: visibilitiesData} = useQuery(
-    "visibilities",
-    () => getFieldVisibilities(),
-    {...refetchOff}
+    "visibilities", getFieldVisibilities, {...refetchOff}
   );
+  const {isFetching: isInterestsFetching, data: interestsData} = useQuery(
+    "interests", getInterests, {...refetchOff}
+  )
 
   let universities = universitiesData?.data;
   let visibilities = visibilitiesData?.data;
+  let interests = interestsData?.data;
 
   const [image, setImage] = useState();
   const [croppedImage, setCroppedImage] = useState();
@@ -70,19 +71,32 @@ const EditProfileContainer = ({isModalOpen, user, locations, actions}) => {
     setImage(null);
   };
 
+  const onInterestChange = (e, interests, setFieldValue) => {
+    const interest = +e.target.value;
+    const getUpdatedInterests = () => {
+      if (interests.includes(interest)) {
+        return interests.filter((i) => i !== interest);
+      } else {
+        return [...interests, interest];
+      }
+    }
+    setFieldValue("interests", getUpdatedInterests());
+  }
+
   return (
     <EditProfileComponent
-      user={{...restUser, birthday: parsedBirthday}}
-      universities={universities}
-      visibilities={visibilities}
-      croppedImage={croppedImage}
-      image={image}
-      locations={locations}
+      data={{
+        user: {...restUser, birthday: parsedBirthday},
+        universities, visibilities, interests, croppedImage, image, locations
+      }}
       actions={{
         handleDeleteImage, handleCropImage, onFormSubmit, setCropper,
-        handleAddImage, handleModalClose, ...componentActions
+        handleAddImage, handleModalClose, onInterestChange, ...componentActions
       }}
-      flags={{isLoading, isModalOpen, isFetching: isUniversitiesFetching || isVisibilitiesFetching}}
+      flags={{
+        isLoading, isModalOpen,
+        isFetching: isUniversitiesFetching || isVisibilitiesFetching || isInterestsFetching
+      }}
     />
   );
 };

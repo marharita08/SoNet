@@ -1,14 +1,16 @@
 import React from "react";
+import PropTypes from "prop-types";
+
 import EditProfileFieldRow from "./EditProfileFieldRow";
 import FormikAutocomplete from "../../atoms/fields/FormikAutocomplete";
 import FormikDatePicker from "../../atoms/fields/FormikDatePicker";
 import {useStyles} from "./style";
 import {optionsPropTypes} from "../../../propTypes/optionsPropTypes";
-import PropTypes from "prop-types";
 
-const EditProfileFields = ({visibilities, universities, locations, onCountryChange,  onStateChange}) => {
+const EditProfileFields = ({visibilities, universities, locations, actions}) => {
 
   const {countries, states, cities} = locations;
+  const {onCountryChange,  onStateChange} = actions;
   const classes = useStyles();
 
   return (
@@ -83,8 +85,10 @@ EditProfileFields.propTypes = {
     states: optionsPropTypes,
     cities: optionsPropTypes,
   }),
-  onCountryChange: PropTypes.func.isRequired,
-  onStateChange: PropTypes.func.isRequired
+  actions: PropTypes.shape({
+    onCountryChange: PropTypes.func.isRequired,
+    onStateChange: PropTypes.func.isRequired
+  })
 };
 
 export default EditProfileFields;
