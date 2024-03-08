@@ -72,6 +72,7 @@ create table if not exists interests(
 create table if not exists users_interests(
  user_id     int,
  interest_id int,
+ unique(user_id, interest_id),
  foreign key (user_id) references users (user_id) on delete cascade,
  foreign key (interest_id) references interests (interest_id) on delete cascade
 );

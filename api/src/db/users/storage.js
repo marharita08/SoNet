@@ -10,7 +10,8 @@ const friendsAndRequestsColumns = [
   "request_id",
   "user_id",
   "name",
-  "avatar"
+  "avatar",
+  "city_name"
 ];
 
 class UsersStorage extends BaseStorage {
@@ -134,6 +135,44 @@ class UsersStorage extends BaseStorage {
 
   async getRandomUserId() {
     return await super.getRandomId();
+  }
+
+  async getRecommendedUsers(ids){
+    return this.db(this.table)
+      .select("user_id", "name", "avatar", "city_name")
+      .whereIn("user_id", ids);
+  }
+
+  getRecommendationsColumns() {
+    return [
+      this.db.raw("COALESCE(user_id, 0) AS user_id"),
+      this.db.raw("COALESCE(country_id, 0) AS country_id"),
+      this.db.raw("COALESCE(state_id, 0) AS state_id"),
+      this.db.raw("COALESCE(city_id, 0) AS city_id"),
+      this.db.raw("COALESCE(university_id, 0) AS university_id"),
+      this.db.raw("COALESCE(extract(year from birthday)::integer, 0) as birth_year")
+    ];
+  }
+
+  async getByIdForRecommendations(id) {
+    return this.db(this.table)
+      .select(...this.getRecommendationsColumns())
+      .where("user_id", id)
+      .first();
+  }
+
+  async getNotFriendsForRecommendations(id) {
+    return this.db(this.table)
+      .select(...this.getRecommendationsColumns())
+      .whereNotIn(this.primaryKey, function () {
+        this.select("user_id")
+          .from("users")
+          .join("friends", function () {
+            this.on("user_id", "from_user_id").andOn("to_user_id", db.raw("?", [id]))
+              .orOn("user_id", "to_user_id").andOn("from_user_id", db.raw("?", [id]));
+          })
+      })
+      .andWhere("user_id", "!=", id);
   }
 }
 

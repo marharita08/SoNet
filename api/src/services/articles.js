@@ -69,7 +69,7 @@ class ArticlesService extends BaseService {
     if (fileData) {
       const {image: oldFile} = await this.storage.getImageByArticleId(articleId);
       path = fileHelper.getUrlPath(fileData);
-      fileHelper.deleteFile(oldFile);
+      fileHelper.deletePublicFile(oldFile);
     }
     await super.update(articleId, {
       text,
@@ -81,7 +81,7 @@ class ArticlesService extends BaseService {
 
   async delete(articleId) {
     const {image} = await this.storage.getImageByArticleId(articleId);
-    fileHelper.deleteFile(image);
+    fileHelper.deletePublicFile(image);
     return await super.delete(articleId);
   }
 }

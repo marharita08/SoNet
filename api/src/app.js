@@ -15,6 +15,7 @@ const friendsRoutes = require("./routes/friends");
 const passwordRoutes = require("./routes/password");
 const generatorRoutes = require("./routes/testDataGenerator");
 const interestsRoutes = require("./routes/interests");
+const recommendationRoutes = require("./routes/recommendations");
 const logger = require("./middleware/logger");
 const errorHandler = require("./middleware/errorHandler");
 
@@ -43,9 +44,11 @@ app.use("/friends", friendsRoutes);
 app.use("/password", passwordRoutes);
 app.use("/generate", generatorRoutes);
 app.use("/interests", interestsRoutes);
+app.use("/recommendations", recommendationRoutes);
 
 app.use(errorHandler);
 
 app.listen(containerPort, () => {
     console.log(`Example app listening at http://localhost:${hostPort}`);
+
 });
