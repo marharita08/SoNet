@@ -11,6 +11,7 @@ const ProfilePageComponent = ({
   friendsComponent,
   incomingRequestsComponent,
   outgoingRequestsComponent,
+  recommendationsComponent,
   isLoading,
   isCurrentUser,
 }) => {
@@ -37,6 +38,9 @@ const ProfilePageComponent = ({
           </ErrorBoundary>
           <ErrorBoundary>
             {outgoingRequestsComponent}
+          </ErrorBoundary>
+          <ErrorBoundary>
+            {recommendationsComponent}
           </ErrorBoundary>
         </>
       }

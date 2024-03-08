@@ -18,6 +18,7 @@ import ProfilePageComponent from "../../../components/pages/profilePage/ProfileP
 import usersForSearchService from "../../../services/usersForSearchService";
 import requestsService from "../../../services/requestsService";
 import currentRequestService from "../../../services/currentRequestService";
+import RecommendationsContainer from "../../layouts/recommendations/RecommendationsContainer";
 
 const ProfilePageContainer = () => {
   const {id: idStr} = useParams();
@@ -237,6 +238,11 @@ const ProfilePageContainer = () => {
             id={id}
             outgoingRequests={outgoingRequests}
             actions={{deleteRequest: deleteFromFriends, setOutgoingRequests}}
+          />
+        }
+        recommendationsComponent={
+          <RecommendationsContainer
+            id={id}
           />
         }
       />
