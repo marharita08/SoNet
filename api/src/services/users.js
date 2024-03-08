@@ -82,23 +82,24 @@ class UsersServices extends BaseService {
     return await this.storage.getRecommendedUsers(ids);
   }
 
-  async parseUserForRecommendations(user) {
+  async parseUserForRecommendations(user, allInterests) {
     const interests = await userInterestsService.getByUserId(user.user_id);
-    const allInterests = await interestsService.getAll();
     user.interests = allInterests.map((interest) => +interests.includes(interest.interest_id));
     return user;
   }
 
   async getByIdForRecommendations(id) {
     const user = await this.storage.getByIdForRecommendations(id);
-    return await this.parseUserForRecommendations(user);
+    const allInterests = await interestsService.getAll();
+    return await this.parseUserForRecommendations(user, allInterests);
   }
 
   async getNotFriendsForRecommendations(id) {
     const users = await this.storage.getNotFriendsForRecommendations(id);
+    const allInterests = await interestsService.getAll();
     return await Promise.all(
       users.map(async (user) => {
-        return await this.parseUserForRecommendations(user);
+        return await this.parseUserForRecommendations(user, allInterests);
       })
     );
   }

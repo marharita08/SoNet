@@ -1,7 +1,8 @@
-from sklearn.metrics import jaccard_score
-import sys
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_http_methods
 import json
-import datetime
+from sklearn.metrics import jaccard_score
 
 
 def get_user_features(user, user_fields, interests_indexes):
@@ -32,13 +33,10 @@ def get_user_fields(user, users):
     return user_fields
 
 
-def make_recommendations():
-    times = {'start': datetime.datetime.now(), 'count_similarities': 0, 'sort_similarities': 0, 'write_results': 0,
-             'finish': 0}
-
-    json_obj = open(sys.argv[1], encoding='utf-8')
-    data = json.load(json_obj)
-
+@csrf_exempt
+@require_http_methods(["POST"])
+def jaccard_recommendations(request):
+    data = json.loads(request.body)
     user = data['user']
     users = data['users']
 
@@ -48,30 +46,11 @@ def make_recommendations():
     user_features = get_user_features(user, user_fields, interests_indexes)
     users_features = [get_user_features(u, user_fields, interests_indexes) for u in users]
 
-    times['count_similarities'] = datetime.datetime.now()
     similarities = []
     for i, uf in enumerate(users_features):
         jaccard_distance = jaccard_score(user_features, uf, average='micro')
         similarities.append((users[i]['user_id'], jaccard_distance))
 
-    times['sort_similarities'] = datetime.datetime.now()
     similarities.sort(key=lambda x: x[1], reverse=True)
     recommended_users = [u for u, s in similarities[:10]]
-    json_object_result = json.dumps(recommended_users)
-
-    times['write_results'] = datetime.datetime.now()
-    with open(sys.argv[2], "w") as outfile:
-        outfile.write(json_object_result)
-    times['finish'] = datetime.datetime.now()
-
-    for name, time in times.items():
-        with open("tmp/rs/times.txt", 'a') as outfile:
-            outfile.write(f"{name}: {time} \n")
-
-    print("OK")
-
-
-if __name__ == "__main__":
-    make_recommendations()
-
-sys.stdout.flush()
+    return JsonResponse(recommended_users, safe=False)

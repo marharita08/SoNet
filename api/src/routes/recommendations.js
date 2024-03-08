@@ -5,7 +5,7 @@ const service = require("../services/recommendations");
 router.get("/:id",
   asyncHandler(async (req, res) => {
     const {id} = req.params;
-    return res.send(await service.getJaccardRecommendations(id));
+    return res.send(await service.getRecommendations(id));
   })
 );
 
