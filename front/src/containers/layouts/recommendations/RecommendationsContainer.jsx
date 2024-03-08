@@ -1,12 +1,12 @@
-import React, {useState} from "react";
+import React from "react";
 import {useQuery} from "react-query";
 import {refetchOff} from "../../../config/refetchOff";
 import {getRecommendations} from "../../../api/recommendationsCrud";
 import UserCards from "../../../components/layouts/userCards/UserCards";
 
-const RecommendationsContainer = ({id}) => {
+const RecommendationsContainer = ({id, recommendations, actions}) => {
 
-  const [recommendations, setRecommendations] = useState();
+  const {setRecommendations, addToFriends, handleHideRecommendation} = actions;
   const {isFetching} = useQuery(
     "recommendations",
     () => getRecommendations(id),
@@ -16,12 +16,19 @@ const RecommendationsContainer = ({id}) => {
     }
   );
 
+  const addRequest = (user_id) => {
+    addToFriends(id, user_id);
+  }
 
   return (
     <UserCards
       heading={"Recommendations"}
       isFetching={isFetching}
       users={recommendations}
+      addRequest={addRequest}
+      hideRecommendation={handleHideRecommendation}
+      isRecommendation={true}
+      isMenu={true}
     />
   )
 }
