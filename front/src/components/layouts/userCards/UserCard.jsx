@@ -14,8 +14,9 @@ import {userCardPropTypes} from "../../../propTypes/userPropTypes";
 import LinkToProfile from "../../atoms/links/LinkToProfile";
 import {useStyles} from "./style";
 
-const UserCard = ({user, deleteRequest, isMenu, acceptRequest, declineRequest}) => {
+const UserCard = ({user, isMenu, isRecommendation, actions}) => {
 
+  const {deleteRequest, acceptRequest, declineRequest, addRequest, hideRecommendation} = actions;
   const theme = useTheme();
   const classes = useStyles();
 
@@ -43,6 +44,18 @@ const UserCard = ({user, deleteRequest, isMenu, acceptRequest, declineRequest}) 
     declineRequest(user.request_id);
   };
 
+  const addOnClick = (event) => {
+    event.preventDefault();
+    setAnchorEl(null);
+    addRequest(user.user_id);
+  }
+
+  const hideOnClick = (event) => {
+    event.preventDefault();
+    setAnchorEl(null);
+    hideRecommendation(user.user_id)
+  }
+
   const handleClose = (event) => {
     event.preventDefault();
     deleteRequest(user.request_id);
@@ -58,6 +71,17 @@ const UserCard = ({user, deleteRequest, isMenu, acceptRequest, declineRequest}) 
       onClick: declineOnClick
     }
   ];
+
+  const recommendationMenuItems = [
+    {
+      body:<MenuItemBody text={"Add to friends"} icon={<PersonAddIcon/>}/>,
+      onClick: addOnClick
+    },
+    {
+      body: <MenuItemBody text={"Hide"} icon={<PersonRemoveIcon/>}/>,
+      onClick: hideOnClick
+    }
+  ]
 
   return (
     <LinkToProfile
@@ -79,11 +103,12 @@ const UserCard = ({user, deleteRequest, isMenu, acceptRequest, declineRequest}) 
             title={
               <CardUsername username={user.name}/>
             }
+            subheader={user.city_name}
           />
           {
             isMenu &&
             <SNMenu
-              menuItems={menuItems}
+              menuItems={isRecommendation ? recommendationMenuItems : menuItems}
               id={"request-menu"}
               anchorEl={anchorEl}
               onClose={handleMenuClose}
@@ -97,14 +122,20 @@ const UserCard = ({user, deleteRequest, isMenu, acceptRequest, declineRequest}) 
 
 UserCard.propTypes = {
   user: userCardPropTypes,
-  deleteRequest: PropTypes.func,
   isMenu: PropTypes.bool,
-  acceptRequest: PropTypes.func,
-  declineRequest: PropTypes.func,
+  isRecommendation: PropTypes.bool,
+  actions: PropTypes.shape({
+    deleteRequest: PropTypes.func,
+    acceptRequest: PropTypes.func,
+    declineRequest: PropTypes.func,
+    addRequest: PropTypes.func,
+    hideRecommendation: PropTypes.func
+  })
 };
 
 UserCard.defaultProps = {
   isMenu: false,
+  isRecommendation: false
 };
 
 export default UserCard;

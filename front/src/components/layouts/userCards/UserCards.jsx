@@ -7,7 +7,7 @@ import UserCard from "./UserCard";
 import {usersCardPropTypes} from "../../../propTypes/userPropTypes";
 import {useStyles} from "./style";
 
-const UserCards = ({users, heading, isMenu, isFetching, ...actions}) => {
+const UserCards = ({users, heading, isMenu, isFetching, isRecommendation, ...actions}) => {
 
   const classes = useStyles();
 
@@ -23,9 +23,10 @@ const UserCards = ({users, heading, isMenu, isFetching, ...actions}) => {
           (user) =>
             <ErrorBoundary key={user.user_id}>
               <UserCard
-                {...actions}
+                actions={actions}
                 user={user}
                 isMenu={isMenu}
+                isRecommendation={isRecommendation}
               />
             </ErrorBoundary>
         )
@@ -37,11 +38,14 @@ const UserCards = ({users, heading, isMenu, isFetching, ...actions}) => {
 UserCards.propTypes = {
   users: usersCardPropTypes,
   heading: PropTypes.string.isRequired,
+  isRecommendation: PropTypes.bool,
   isMenu: PropTypes.bool,
   isFetching: PropTypes.bool,
   deleteRequest: PropTypes.func,
   acceptRequest: PropTypes.func,
   declineRequest: PropTypes.func,
+  addRequest: PropTypes.func,
+  hideRecommendation: PropTypes.func
 };
 
 export default UserCards;

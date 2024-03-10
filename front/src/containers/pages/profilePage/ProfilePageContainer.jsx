@@ -18,6 +18,8 @@ import ProfilePageComponent from "../../../components/pages/profilePage/ProfileP
 import usersForSearchService from "../../../services/usersForSearchService";
 import requestsService from "../../../services/requestsService";
 import currentRequestService from "../../../services/currentRequestService";
+import RecommendationsContainer from "../../layouts/recommendations/RecommendationsContainer";
+import recommendationsService from "../../../services/recommendationsService";
 
 const ProfilePageContainer = () => {
   const {id: idStr} = useParams();
@@ -35,6 +37,7 @@ const ProfilePageContainer = () => {
   const [incomingRequests, setIncomingRequests] = useState([]);
   const [outgoingRequests, setOutgoingRequests] = useState([]);
   const [usersForSearch, setUsersForSearch] = useState([]);
+  const [recommendations, setRecommendations] = useState([]);
   // owner of currently open profile
   const [user, setUser] = useState();
   // friends request between currently authenticated user
@@ -105,6 +108,7 @@ const ProfilePageContainer = () => {
       if (id !== currentUser.user_id) {
         setCurrentRequest(currentRequestService.addRequest(request));
       } else {
+        setRecommendations(recommendationsService.deleteUser(recommendations, request.user_id));
         setOutgoingRequests(requestsService.addRequest(outgoingRequests, request));
         setUsersForSearch(usersForSearchService.addRequest(usersForSearch, request));
       }
@@ -184,6 +188,10 @@ const ProfilePageContainer = () => {
     deleteFromFriends(currentRequest.request_id);
   };
 
+  const handleHideRecommendation = (id) => {
+    setRecommendations(recommendationsService.deleteUser(recommendations, id))
+  }
+
   return (
     <div key={id}>
       <ProfilePageComponent
@@ -237,6 +245,13 @@ const ProfilePageContainer = () => {
             id={id}
             outgoingRequests={outgoingRequests}
             actions={{deleteRequest: deleteFromFriends, setOutgoingRequests}}
+          />
+        }
+        recommendationsComponent={
+          <RecommendationsContainer
+            id={id}
+            recommendations={recommendations}
+            actions={{setRecommendations, addToFriends, handleHideRecommendation}}
           />
         }
       />

@@ -7,6 +7,7 @@ const fileHelper = require("../utils/fileHelper");
 const {USER_NOT_FOUND} = require("../constants/messages");
 const {parseToProfile, parseToUserAndSettings} = require("../utils/usersParser");
 const BaseService = require("./base");
+const interestsService = require("./interests");
 
 class UsersServices extends BaseService {
 
@@ -14,17 +15,26 @@ class UsersServices extends BaseService {
     super(usersStorage);
   }
 
-  getProfile = async (id) => {
+  async getUserWithInterests(user) {
+    const interests = await userInterestsService.getByUserId(user.user_id);
+    return {...user, interests};
+  }
+
+  async getById(id) {
+    const user = await super.getById(id);
+    return await this.getUserWithInterests(user);
+  }
+
+  async getProfile(id) {
     const dbResponse = await this.storage.getProfileById(id);
-    const interests = await userInterestsService.getByUserId(id);
-    return {...parseToProfile(dbResponse[0]), interests};
+    return await this.getUserWithInterests(parseToProfile(dbResponse[0]));
   };
 
-  getByEmail = async (email) => {
+  async getByEmail(email) {
     return await this.storage.getByEmail(email);
   };
 
-  getProfileById = async (id) => {
+  async getProfileById(id) {
     const profile = await this.getProfile(id);
     if (profile) {
       return profile;
@@ -32,7 +42,7 @@ class UsersServices extends BaseService {
     throw new NotFoundException(USER_NOT_FOUND);
   };
 
-  update = async (id, {userData, fileData}) => {
+  async update(id, {userData, fileData}) {
     const {user: {interests, ...user}, settings} = parseToUserAndSettings(userData);
     let avatarUrl;
     let avatarPath;
@@ -40,7 +50,7 @@ class UsersServices extends BaseService {
       const {avatar_path: oldAvatarPath} = await this.storage.getAvatarPath(id);
       avatarPath = fileData.path;
       avatarUrl = config.appUrl + fileHelper.getUrlPath(fileData);
-      fileHelper.deleteFile(oldAvatarPath);
+      fileHelper.deletePublicFile(oldAvatarPath);
     }
     await super.update(id, {
       ...user,
@@ -48,25 +58,51 @@ class UsersServices extends BaseService {
       avatar_path: avatarPath,
     });
     await settingsStorage.update(id, settings);
-    await userInterestsService.updateByUserId(id, interests.map(i => +i));
+    interests && await userInterestsService.updateByUserId(id, interests.map(i => +i));
     return await this.getProfile(id);
   };
 
-  getFriends = async (id) => {
+  async getFriends(id) {
     return await this.storage.getFriends(id);
   };
 
-  getIncomingRequests = async (id) => {
+  async getIncomingRequests(id) {
     return await this.storage.getIncomingRequests(id);
   };
 
-  getOutgoingRequests = async (id) => {
+  async getOutgoingRequests(id) {
     return await this.storage.getOutgoingRequests(id);
   };
 
-  searchUsers = async (id, text) => {
+  async searchUsers(id, text) {
     return await this.storage.searchUsers(id, text);
   };
+
+  async getRecommendedUsers(ids) {
+    return await this.storage.getRecommendedUsers(ids);
+  }
+
+  async parseUserForRecommendations(user, allInterests) {
+    const interests = await userInterestsService.getByUserId(user.user_id);
+    user.interests = allInterests.map((interest) => +interests.includes(interest.interest_id));
+    return user;
+  }
+
+  async getByIdForRecommendations(id) {
+    const user = await this.storage.getByIdForRecommendations(id);
+    const allInterests = await interestsService.getAll();
+    return await this.parseUserForRecommendations(user, allInterests);
+  }
+
+  async getNotFriendsForRecommendations(id) {
+    const users = await this.storage.getNotFriendsForRecommendations(id);
+    const allInterests = await interestsService.getAll();
+    return await Promise.all(
+      users.map(async (user) => {
+        return await this.parseUserForRecommendations(user, allInterests);
+      })
+    );
+  }
 }
 
 module.exports = new UsersServices();

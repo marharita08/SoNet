@@ -23,5 +23,6 @@ module.exports = {
     pass: process.env.SMTP_AUTH_PASS,
   },
   mailFrom: process.env.MAIL_FROM,
-  frontUrl: process.env.FRONT_URL
+  frontUrl: process.env.FRONT_URL,
+  recommendationSystemUrl: process.env.RECOMMENDATION_SYSTEM_URL
 };

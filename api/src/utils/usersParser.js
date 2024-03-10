@@ -53,7 +53,7 @@ const parseLocations = (location, name) => {
 };
 
 const setNullIfEmptyString = (data, field) => {
-  if (data[field] === "") {
+  if (!data[field]) {
     data[field] = null;
   }
 }
@@ -93,6 +93,7 @@ const parseToUserAndSettings = (userData) => {
   setNullIfEmptyString(user, "phone");
   setNullIfEmptyString(user, "fb_id");
   setNullIfEmptyString(user, "birthday");
+  setNullIfEmptyString(user, "university_id");
   return {user, settings};
 };
 

@@ -4,13 +4,17 @@ const {status} = require("../constants/logger");
 
 const deleteFile = (path) => {
   if (path) {
-    fs.unlink(`public${path}`, async (err) => {
+    fs.unlink(path, async (err) => {
       if (err) {
         const {message, stack} = err;
         await storage.create({message, stack, status: status.ERROR});
       }
     });
   }
+}
+
+const deletePublicFile = (path) => {
+  deleteFile(`public${path}`);
 };
 
 const getUrlPath = (fileData) => {
@@ -19,6 +23,7 @@ const getUrlPath = (fileData) => {
 };
 
 module.exports = {
+  deletePublicFile,
   deleteFile,
   getUrlPath
 };
