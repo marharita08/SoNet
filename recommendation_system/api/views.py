@@ -5,6 +5,10 @@ import json
 from sklearn.metrics import jaccard_score
 
 
+def hello(request):
+    return JsonResponse({"message": "hello"})
+
+
 def get_user_features(user, user_fields, interests_indexes):
     return [user[field] for field in user_fields] + [user['interests'][i] for i in interests_indexes]
 
