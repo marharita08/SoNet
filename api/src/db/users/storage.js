@@ -174,6 +174,20 @@ class UsersStorage extends BaseStorage {
       })
       .andWhere("user_id", "!=", id);
   }
+
+  async getNotFriendsIds(id) {
+    return this.db(this.table)
+      .select("user_id")
+      .whereNotIn(this.primaryKey, function () {
+        this.select("user_id")
+          .from("users")
+          .join("friends", function () {
+            this.on("user_id", "from_user_id").andOn("to_user_id", db.raw("?", [id]))
+              .orOn("user_id", "to_user_id").andOn("from_user_id", db.raw("?", [id]));
+          })
+      })
+      .andWhere("user_id", "!=", id);
+  }
 }
 
 module.exports = new UsersStorage();

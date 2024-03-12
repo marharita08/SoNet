@@ -43,7 +43,7 @@ def jaccard_score_for_sets(set1, set2):
 
 @csrf_exempt
 @require_http_methods(["POST"])
-def jaccard_recommendations(request):
+def jaccard_content(request):
     data = json.loads(request.body)
     user = data['user']
     users = data['users']
@@ -61,6 +61,26 @@ def jaccard_recommendations(request):
         s1 = jaccard_score(user_features, uf, average='micro')
         s2 = jaccard_score_for_sets(user_interests, u_interests)
         similarities.append((users[i]['user_id'], s1 + s2))
+
+    similarities.sort(key=lambda x: x[1], reverse=True)
+    recommended_users = [u for u, s in similarities[:10]]
+    return JsonResponse(recommended_users, safe=False)
+
+
+@csrf_exempt
+@require_http_methods(["POST"])
+def jaccard_collaborative(request):
+    data = json.loads(request.body)
+    user_likes = data['userLikes']
+    users_likes = data['usersLikes']
+
+    user_likes_set = set([l['article_id'] for l in user_likes])
+    users_likes_sets = [set([l['article_id'] for l in u['likes']]) for u in users_likes]
+
+    similarities = []
+    for i, uls in enumerate(users_likes_sets):
+        similarity = jaccard_score_for_sets(user_likes_set, uls)
+        similarities.append((users_likes[i]['user_id'], similarity))
 
     similarities.sort(key=lambda x: x[1], reverse=True)
     recommended_users = [u for u, s in similarities[:10]]

@@ -29,6 +29,10 @@ class LikesService extends BaseService {
   async getAmountByArticleId(articleId) {
     return await this.storage.getAmountByArticleId(articleId);
   }
+
+  async getByUserId(id) {
+    return await this.storage.getByUserId(id);
+  }
 }
 
 module.exports = new LikesService();

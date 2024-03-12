@@ -31,6 +31,12 @@ class LikesStorage extends BaseStorage {
   async getAmountByArticleId(id) {
     return await super.getCountByField(id, "article_id");
   }
+
+  async getByUserId(id) {
+    return this.db(this.table)
+      .select("article_id")
+      .where("user_id", id)
+  }
 }
 
 module.exports = new LikesStorage();

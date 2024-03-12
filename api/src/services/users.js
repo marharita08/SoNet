@@ -95,6 +95,10 @@ class UsersServices extends BaseService {
       })
     );
   }
+
+  async getNotFriendsIds(id) {
+    return await this.storage.getNotFriendsIds(id);
+  }
 }
 
 module.exports = new UsersServices();
