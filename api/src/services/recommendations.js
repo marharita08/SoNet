@@ -1,5 +1,6 @@
 const usersService = require("./users");
 const likesService = require("./likes");
+const friendsService = require("./friends");
 const axios = require("axios");
 const config = require("../configs/config");
 
@@ -32,4 +33,21 @@ module.exports = {
 
     return await usersService.getRecommendedUsers(response.data);
   },
+  jaccardTopology: async (id) => {
+    const userFriends = await friendsService.getFriendsIds(id);
+    const usersIds = await usersService.getNotFriendsIds(id);
+    const usersFriends = await Promise.all(
+      usersIds.map(async (user) => {
+        const friends = await friendsService.getFriendsIds(user.user_id);
+        return {...user, friends}
+      })
+    );
+
+    const response = await axios.post(
+      config.recommendationSystemUrl + "friends/",
+      {userFriends, usersFriends}
+    );
+
+    return await usersService.getRecommendedUsers(response.data);
+  }
 };

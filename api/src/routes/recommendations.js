@@ -16,4 +16,11 @@ router.get("/likes/:id",
   })
 );
 
+router.get("/friends/:id",
+  asyncHandler(async (req, res) => {
+    const {id} = req.params;
+    return res.send(await service.jaccardTopology(id));
+  })
+);
+
 module.exports = router;

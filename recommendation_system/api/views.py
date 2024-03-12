@@ -85,3 +85,22 @@ def jaccard_collaborative(request):
     similarities.sort(key=lambda x: x[1], reverse=True)
     recommended_users = [u for u, s in similarities[:10]]
     return JsonResponse(recommended_users, safe=False)
+
+@csrf_exempt
+@require_http_methods(["POST"])
+def jaccard_topology(request):
+    data = json.loads(request.body)
+    user_friends = data['userFriends']
+    users_friends = data['usersFriends']
+
+    user_friends_set = set([l['user_id'] for l in user_friends])
+    users_friends_sets = [set([l['user_id'] for l in u['friends']]) for u in users_friends]
+
+    similarities = []
+    for i, uls in enumerate(users_friends_sets):
+        similarity = jaccard_score_for_sets(user_friends_set, uls)
+        similarities.append((users_friends[i]['user_id'], similarity))
+
+    similarities.sort(key=lambda x: x[1], reverse=True)
+    recommended_users = [u for u, s in similarities[:10]]
+    return JsonResponse(recommended_users, safe=False)
