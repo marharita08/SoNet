@@ -9,8 +9,8 @@ def hello(request):
     return JsonResponse({"message": "hello"})
 
 
-def get_user_features(user, user_fields, interests_indexes):
-    return [user[field] for field in user_fields] + [user['interests'][i] for i in interests_indexes]
+def get_user_features(user, user_fields):
+    return [user[field] for field in user_fields]
 
 
 def append_field(user, field, user_fields):
@@ -36,6 +36,10 @@ def get_user_fields(user, users):
     append_field(user, 'university_id', user_fields)
     return user_fields
 
+def jaccard_score_for_sets(set1, set2):
+    intersection = set1.intersection(set2)
+    union = set1.union(set2)
+    return len(intersection) / len(union)
 
 @csrf_exempt
 @require_http_methods(["POST"])
@@ -45,15 +49,18 @@ def jaccard_recommendations(request):
     users = data['users']
 
     user_fields = get_user_fields(user, users)
-    interests_indexes = [index for index, value in enumerate(user['interests']) if value == 1]
 
-    user_features = get_user_features(user, user_fields, interests_indexes)
-    users_features = [get_user_features(u, user_fields, interests_indexes) for u in users]
+    user_features = get_user_features(user, user_fields)
+    users_features = [get_user_features(u, user_fields) for u in users]
+
+    user_interests = set(user['interests'])
 
     similarities = []
     for i, uf in enumerate(users_features):
-        jaccard_distance = jaccard_score(user_features, uf, average='micro')
-        similarities.append((users[i]['user_id'], jaccard_distance))
+        u_interests = set(users[i]['interests'])
+        s1 = jaccard_score(user_features, uf, average='micro')
+        s2 = jaccard_score_for_sets(user_interests, u_interests)
+        similarities.append((users[i]['user_id'], s1 + s2))
 
     similarities.sort(key=lambda x: x[1], reverse=True)
     recommended_users = [u for u, s in similarities[:10]]
