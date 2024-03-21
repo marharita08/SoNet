@@ -39,17 +39,6 @@ services:
       - ${ADMINER_HOST_PORT}:${ADMINER_CONTAINER_PORT}
     depends_on:
       - db
-  rs:
-    build:
-      context: recommendation_system
-      dockerfile: Dockerfile
-    container_name: network-rs
-    working_dir: /rs
-    volumes:
-      - ./recommendation_system/:/rs/
-    ports:
-      - ${RECOMMENDATION_SYSTEM_HOST_PORT}:${RECOMMENDATION_SYSTEM_CONTAINER_PORT}
-    command: 'bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"'
   api:
     image: node:12
     container_name: network-api

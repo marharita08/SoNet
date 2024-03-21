@@ -35,10 +35,12 @@ class FriendsStorage extends BaseStorage {
     return this.db(this.table)
       .select("to_user_id as user_id")
       .where("from_user_id", id)
+      .andWhere("status_id", 2)
       .union(function () {
         this.select("from_user_id as user_id")
           .from("friends")
           .where("to_user_id", id)
+          .andWhere("status_id", 2)
       })
   }
 }

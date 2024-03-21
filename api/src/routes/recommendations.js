@@ -23,4 +23,19 @@ router.get("/friends/:id",
   })
 );
 
+router.get("/adamic-adar/:id",
+  asyncHandler(async (req, res) => {
+    const {id} = req.params;
+    return res.send(await service.adamicAdar(id));
+  })
+);
+
+router.get("/general/:id",
+  asyncHandler(async (req, res) => {
+    const {id} = req.params;
+    return res.send(await service.general(id));
+  })
+);
+
+
 module.exports = router;

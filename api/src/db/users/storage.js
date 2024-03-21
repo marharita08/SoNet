@@ -137,9 +137,15 @@ class UsersStorage extends BaseStorage {
     return await super.getRandomId();
   }
 
-  async getRecommendedUsers(ids){
+  async getRecommendedUsers(ids) {
     return this.db(this.table)
       .select("user_id", "name", "avatar", "city_name")
+      .whereIn("user_id", ids);
+  }
+
+  async getUsersByIds(ids) {
+    return this.db(this.table)
+      .select()
       .whereIn("user_id", ids);
   }
 
@@ -170,7 +176,7 @@ class UsersStorage extends BaseStorage {
           .join("friends", function () {
             this.on("user_id", "from_user_id").andOn("to_user_id", db.raw("?", [id]))
               .orOn("user_id", "to_user_id").andOn("from_user_id", db.raw("?", [id]));
-          })
+          });
       })
       .andWhere("user_id", "!=", id);
   }
@@ -184,9 +190,102 @@ class UsersStorage extends BaseStorage {
           .join("friends", function () {
             this.on("user_id", "from_user_id").andOn("to_user_id", db.raw("?", [id]))
               .orOn("user_id", "to_user_id").andOn("from_user_id", db.raw("?", [id]));
-          })
+          });
       })
       .andWhere("user_id", "!=", id);
+  }
+
+  async getForTopologyFiltering(id) {
+    return this.db.with("user_requests", (qb) => {
+      qb.select("from_user_id as user_id", "status_id")
+        .from("friends")
+        .where("to_user_id", id)
+        .union((qb) => {
+          qb.select("to_user_id as user_id", "status_id")
+            .from("friends")
+            .where("from_user_id", id);
+        });
+    }).select("from_user_id as user_id")
+      .from("friends")
+      .whereNotIn("from_user_id", (qb) => {
+        qb.select("user_id").from("user_requests");
+      })
+      .and.whereIn("to_user_id", (qb) => {
+        qb.select("user_id").from("user_requests").where("status_id", 2);
+      })
+      .andWhere("status_id", 2)
+      .union((qb) => {
+        qb.select("to_user_id as user_id")
+          .from("friends")
+          .whereNotIn("to_user_id", (qb) => {
+            qb.select("user_id").from("user_requests");
+          })
+          .and.whereIn("from_user_id", (qb) => {
+            qb.select("user_id").from("user_requests").where("status_id", 2);
+          })
+          .andWhere("status_id", 2);
+      });
+  }
+
+  async getForCollaborativeFiltering(id) {
+    return this.db(this.table)
+      .select("user_id")
+      .whereNotIn(this.primaryKey, function () {
+        this.select("user_id")
+          .from("users")
+          .join("friends", function () {
+            this.on("user_id", "from_user_id").andOn("to_user_id", db.raw("?", [id]))
+              .orOn("user_id", "to_user_id").andOn("from_user_id", db.raw("?", [id]));
+          });
+      })
+      .andWhere("user_id", "!=", id)
+      .and.whereIn("user_id", function () {
+        this.select("user_id")
+          .from("article_likes")
+          .whereIn("article_id", function () {
+            this.select("article_id")
+              .from("article_likes")
+              .where("user_id", id)
+              .andWhere("date", ">=", db.raw("CURRENT_DATE - INTERVAL '60 days'"));
+          })
+          .andWhere("date", ">=", db.raw("CURRENT_DATE - INTERVAL '60 days'"));
+      });
+  }
+
+  async getForContentFiltering(user) {
+    const year = user.birthday ? user.birthday.getFullYear() : 0;
+    return this.db(this.table)
+      .select(...this.getRecommendationsColumns())
+      .whereNotIn(this.primaryKey, function () {
+        this.select("user_id")
+          .from("users")
+          .join("friends", function () {
+            this.on("user_id", "from_user_id").andOn("to_user_id", db.raw("?", [user.user_id]))
+              .orOn("user_id", "to_user_id").andOn("from_user_id", db.raw("?", [user.user_id]));
+          });
+      })
+      .andWhere("user_id", "!=", user.user_id)
+      .andWhere(function () {
+        this.where("country_id", "is not", null).andWhere("country_id", user.country_id)
+          .orWhere("state_id", "is not", null).andWhere("state_id", user.state_id)
+          .orWhere("city_id", "is not", null).andWhere("city_id", user.city_id)
+          .orWhere("university_id", "is not", null).andWhere("university_id", user.university_id)
+          .orWhere("birthday", "is not", null)
+          .andWhere(db.raw("extract(year from birthday)"), "<", year + 5)
+          .andWhere(db.raw("extract(year from birthday)"), ">", year - 5)
+          .orWhereIn("user_id", function () {
+            this.select("user_id")
+              .from("users_interests")
+              .whereIn("interest_id", function () {
+                this.select("interest_id").where("user_id", user.user_id);
+              });
+          });
+      });
+  }
+
+  async getAllUsersIds() {
+    return this.db(this.table)
+      .select("user_id");
   }
 }
 

@@ -7,7 +7,6 @@ const fileHelper = require("../utils/fileHelper");
 const {USER_NOT_FOUND} = require("../constants/messages");
 const {parseToProfile, parseToUserAndSettings} = require("../utils/usersParser");
 const BaseService = require("./base");
-const interestsService = require("./interests");
 
 class UsersServices extends BaseService {
 
@@ -98,6 +97,31 @@ class UsersServices extends BaseService {
 
   async getNotFriendsIds(id) {
     return await this.storage.getNotFriendsIds(id);
+  }
+
+  async getAllUsersIds() {
+    return await this.storage.getAllUsersIds();
+  }
+
+  async getUsersByIds(ids) {
+    const users = await this.storage.getUsersByIds(ids);
+    return await Promise.all(
+      users.map(async (user) => {
+        return await this.getUserWithInterests(user);
+      })
+    );
+  }
+
+  async getForContentFiltering(user) {
+    return await this.storage.getForContentFiltering(user);
+  }
+
+  async getForCollaborativeFiltering(id) {
+    return await this.storage.getForCollaborativeFiltering(id);
+  }
+
+  async getForTopologyFiltering(id){
+    return await this.storage.getForTopologyFiltering(id);
   }
 }
 
