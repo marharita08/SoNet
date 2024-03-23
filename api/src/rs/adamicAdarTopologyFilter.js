@@ -1,25 +1,15 @@
-const {adamicAdarIndex} = require("../utils/adamicAdar");
-const usersService = require("../services/users");
-const friendsService = require("../services/friends");
+const {adamicAdarIndex} = require("./adamicAdarIndex");
 
-module.exports = async (id) => {
-  const users = await usersService.getForTopologyFiltering(id);
-  const allUsersIds = [...users, ...await friendsService.getFriendsIds(id), {user_id: id}];
-  const graph = {};
+module.exports = async (data) => {
 
-  for (const user of allUsersIds) {
-    const friendsArray = [];
-    const friends = await friendsService.getFriendsIds(user.user_id);
-    friends.forEach((f) => friendsArray.push(f.user_id));
-    graph[user.user_id] = friendsArray;
+  if (!data) {
+    return [];
   }
 
-  const similarities = [];
+  const {graph, users, id} = data;
 
-  users.forEach((u) => {
-    const score = adamicAdarIndex(graph, id, u.user_id);
-    similarities.push({user_id: u.user_id, score});
-  });
-
-  return similarities;
+  return users.map(u => {
+    const score = adamicAdarIndex(graph, id, u);
+    return {user_id: u, score}
+  })
 }

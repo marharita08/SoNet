@@ -1,41 +1,16 @@
-const {jaccardSimilaritySet} = require("../utils/jaccard");
-const likesService = require("../services/likes");
-const usersService = require("../services/users");
+const {jaccardSimilaritySet} = require("./jaccardIndex");
 
-module.exports = async (id) => {
-  const userLikes = await likesService.getByUserId(id);
-  if (userLikes.length === 0) {
-    return [];
-  }
-  const usersIds = await usersService.getForCollaborativeFiltering(id);
-  //const usersIds = await usersService.getNotFriendsIds(id);
-  if (usersIds.length === 0) {
+module.exports = async (data) => {
+
+  if (!data) {
     return [];
   }
 
-  const usersLikes = await Promise.all(
-    usersIds.map(async (user) => {
-      const likes = await likesService.getByUserId(user.user_id);
-      return {...user, likes}
-    })
-  );
+  const {userLikes, usersLikes} = data;
 
-  const userLikesSet = new Set();
-  const usersLikesSets = [];
-
-  userLikes.forEach((l) => userLikesSet.add(l.article_id));
-  usersLikes.forEach((ul) => {
-    const likes = new Set();
-    ul.likes.forEach((l) => likes.add(l.article_id));
-    usersLikesSets.push(likes);
+  return usersLikes.map((ul) => {
+    const score = jaccardSimilaritySet(userLikes, ul.likes);
+    return {user_id: ul.user_id, score};
   });
 
-  const similarities = [];
-
-  usersLikesSets.forEach((ul, i) => {
-    const score = jaccardSimilaritySet(userLikesSet, ul);
-    similarities.push({user_id: usersLikes[i].user_id, score});
-  });
-
-  return similarities;
-}
+};

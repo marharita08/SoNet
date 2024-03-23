@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const asyncHandler = require("../middleware/asyncHandler");
-const service = require("../services/recommendations");
+const service = require("../services/recommendations/recommendations");
 
 router.get("/profile/:id",
   asyncHandler(async (req, res) => {
