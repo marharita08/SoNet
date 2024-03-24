@@ -1,6 +1,6 @@
 const {adamicAdarIndex} = require("./adamicAdarIndex");
 
-module.exports = async (data) => {
+module.exports = (data) => {
 
   if (!data) {
     return [];

@@ -1,6 +1,6 @@
 const {jaccardSimilaritySet} = require("./jaccardIndex");
 
-module.exports = async (data) => {
+module.exports = (data) => {
 
   if (!data) {
     return [];

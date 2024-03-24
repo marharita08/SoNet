@@ -1,4 +1,4 @@
-const {jaccardSimilaritySet} = require("./jaccardIndex");
+const cosineSimilarity = require("./cosineSimilarity");
 
 module.exports = (data) => {
 
@@ -8,8 +8,8 @@ module.exports = (data) => {
 
   const {userLikes, usersLikes} = data;
 
-  return usersLikes.map((ul) => {
-    const score = jaccardSimilaritySet(userLikes, ul.likes);
+  return usersLikes.map(ul => {
+    const score = cosineSimilarity(userLikes, ul.likes);
     return {user_id: ul.user_id, score};
   });
 

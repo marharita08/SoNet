@@ -3,11 +3,13 @@ const jaccardContentFilter = require("../../rs/jaccardContentFilter");
 const jaccardCollaborativeFilter = require("../../rs/jaccardCollaborativeFilter");
 const jaccardTopologyFilter = require("../../rs/jaccardTopologyFilter");
 const adamicAdarTopologyFilter = require("../../rs/adamicAdarTopologyFilter");
+const cosineCollaborativeFilter = require("../../rs/cosineCollaborativeFilter");
 const generalFilter = require("../../rs/generalFilter");
 const getDataForJaccardCollaborative = require("./getDataForJaccardCollaborative");
 const getDataForJaccardTopology = require("./getDataForJaccardTopology");
 const getDataForJaccardContent = require("./getDataForJaccardContent");
 const getDataForAdamicAdarTopology = require("./getDataForAdamicAdar");
+const getDataForCosineCollaborative = require("./getDataForCosineCollaborative");
 const getRecommendedIds = require("../../rs/getRecommendedIds");
 
 const getRecommendedBySimilarities = async (similarities) => {
@@ -17,22 +19,27 @@ const getRecommendedBySimilarities = async (similarities) => {
 
 const performJaccardCollaborative = async (id) => {
   const data = await getDataForJaccardCollaborative(id);
-  return await jaccardCollaborativeFilter(data);
+  return jaccardCollaborativeFilter(data);
 }
 
 const performJaccardTopology = async (id) => {
   const data = await getDataForJaccardTopology(id);
-  return await jaccardTopologyFilter(data);
+  return jaccardTopologyFilter(data);
 }
 
 const performJaccardContent = async (id) => {
   const data = await getDataForJaccardContent(id);
-  return await jaccardContentFilter(data);
+  return jaccardContentFilter(data);
 }
 
 const performAdamicAdarTopology = async (id) => {
   const data = await getDataForAdamicAdarTopology(id);
-  return await adamicAdarTopologyFilter(data);
+  return adamicAdarTopologyFilter(data);
+}
+
+const performCosineCollaborative = async (id) => {
+  const data = await getDataForCosineCollaborative(id);
+  return cosineCollaborativeFilter(data);
 }
 
 const performFiltering = async (id, fn, name) => {
@@ -61,6 +68,10 @@ module.exports = {
 
   adamicAdar: async (id) => {
     return await performFiltering(id, performAdamicAdarTopology, "Adamic-Adar topology");
+  },
+
+  cosineCollaborative: async (id) => {
+    return await performFiltering(id, performCosineCollaborative, "Cosine collaborative");
   },
 
   general: async (id) => {

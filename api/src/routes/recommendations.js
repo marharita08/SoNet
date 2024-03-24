@@ -30,6 +30,13 @@ router.get("/adamic-adar/:id",
   })
 );
 
+router.get("/cosine/:id",
+  asyncHandler(async (req, res) => {
+    const {id} = req.params;
+    return res.send(await service.cosineCollaborative(id));
+  })
+);
+
 router.get("/general/:id",
   asyncHandler(async (req, res) => {
     const {id} = req.params;
