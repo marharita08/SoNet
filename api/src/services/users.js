@@ -113,7 +113,12 @@ class UsersServices extends BaseService {
   }
 
   async getForContentFiltering(user) {
-    return await this.storage.getForContentFiltering(user);
+    const users = await this.storage.getForContentFiltering(user);
+    return await Promise.all(
+      users.map(async (user) => {
+        return await this.getUserWithInterests(user);
+      })
+    );
   }
 
   async getForCollaborativeFiltering(id) {

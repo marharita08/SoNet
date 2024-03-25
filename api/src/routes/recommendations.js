@@ -2,21 +2,21 @@ const router = require("express").Router();
 const asyncHandler = require("../middleware/asyncHandler");
 const service = require("../services/recommendations/recommendations");
 
-router.get("/profile/:id",
+router.get("/jaccard-content/:id",
   asyncHandler(async (req, res) => {
     const {id} = req.params;
     return res.send(await service.jaccardContent(id));
   })
 );
 
-router.get("/likes/:id",
+router.get("/jaccard-collaborative/:id",
   asyncHandler(async (req, res) => {
     const {id} = req.params;
     return res.send(await service.jaccardCollaborative(id));
   })
 );
 
-router.get("/friends/:id",
+router.get("/jaccard-topology/:id",
   asyncHandler(async (req, res) => {
     const {id} = req.params;
     return res.send(await service.jaccardTopology(id));
@@ -30,7 +30,14 @@ router.get("/adamic-adar/:id",
   })
 );
 
-router.get("/cosine/:id",
+router.get("/cosine-content/:id",
+  asyncHandler(async (req, res) => {
+    const {id} = req.params;
+    return res.send(await service.cosineContent(id));
+  })
+);
+
+router.get("/cosine-collaborative/:id",
   asyncHandler(async (req, res) => {
     const {id} = req.params;
     return res.send(await service.cosineCollaborative(id));

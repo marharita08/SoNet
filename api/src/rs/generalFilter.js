@@ -3,7 +3,7 @@ module.exports = (results) => {
   const userScores = {};
 
   mergedResults.forEach(obj => {
-    const { user_id, score } = obj;
+    const {user_id, score} = obj;
     userScores[user_id] = (userScores[user_id] || 0) + score;
   });
 
@@ -11,4 +11,4 @@ module.exports = (results) => {
     user_id,
     score: userScores[user_id]
   }));
-}
+};
