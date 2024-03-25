@@ -6,9 +6,19 @@ const performContentFilter = require("./performContentFilter");
 const getRecommendedIds = require("../../rs/getRecommendedIds");
 
 const getRecommendedBySimilarities = async (similarities) => {
-  const recommendedIds = getRecommendedIds(similarities);
-  return await usersService.getRecommendedUsers(recommendedIds);
+  const {recommendedIds, reasons} = getRecommendedIds(similarities);
+  const recommendedUsers = await usersService.getRecommendedUsers(recommendedIds);
+  return recommendedUsers.map(u => ({...u, reason: reasons[u.user_id]}));
 };
+
+const performGeneralFilter = async (id) => {
+  const results = await Promise.all([
+    performContentFilter.jaccard(id),
+    performCollaborativeFilter.jaccard(id),
+    performTopology.jaccard(id)
+  ]);
+  return generalFilter(results);
+}
 
 const performFiltering = async (id, fn, name) => {
   const start = new Date();
@@ -47,18 +57,6 @@ module.exports = {
   },
 
   general: async (id) => {
-    const start = new Date();
-    console.log(`General filter starting ${start.toISOString()}`);
-    const results = await Promise.all([
-      performContentFilter.jaccard(id),
-      performCollaborativeFilter.jaccard(id),
-      performTopology.jaccard(id)
-    ]);
-    const similarities = generalFilter(results);
-    const recommendedUsers = await getRecommendedBySimilarities(similarities);
-    const end = new Date();
-    console.log(`General filter finishing ${end.toISOString()}`);
-    console.log(`Finished in ${((end.getTime() - start.getTime()) / 1000)} seconds`);
-    return recommendedUsers;
+    return await performFiltering(id, performGeneralFilter, "General");
   }
 };
