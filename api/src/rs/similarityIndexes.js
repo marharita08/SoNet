@@ -24,6 +24,13 @@ module.exports = {
     return dotProduct / (norm1 * norm2);
   },
 
+  cosineSalton: (s1, s2) => {
+    const intersection = new Set([...s1].filter(x => s2.has(x)));
+    const denominator = Math.sqrt(s1.size * s2.size);
+
+    return denominator === 0 ? 0 : intersection.size / denominator;
+  },
+
   jaccardVector: (v1, v2) => {
     if (v1.length !== v2.length) {
       throw new Error("Vectors length mismatch");

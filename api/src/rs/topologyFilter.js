@@ -4,8 +4,8 @@ const similarityIndexes = require("./similarityIndexes");
 const source = "topology";
 
 module.exports = {
-  jaccard: (userFriends, usersFriends) => {
-    return baseFilter(userFriends, usersFriends, "friends", similarityIndexes.jaccardSet, source);
+  jaccard: (userFeatures, usersFeatures) => {
+    return baseFilter(userFeatures, usersFeatures, similarityIndexes.jaccardSet, source);
   },
   adamicAdar: (graph, users, id) => {
     return users.map(u => {

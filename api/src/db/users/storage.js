@@ -214,6 +214,7 @@ class UsersStorage extends BaseStorage {
         qb.select("user_id").from("user_requests").where("status_id", 2);
       })
       .andWhere("status_id", 2)
+      .andWhere("from_user_id", "!=", id)
       .union((qb) => {
         qb.select("to_user_id as user_id")
           .from("friends")
@@ -223,6 +224,7 @@ class UsersStorage extends BaseStorage {
           .and.whereIn("from_user_id", (qb) => {
             qb.select("user_id").from("user_requests").where("status_id", 2);
           })
+          .andWhere("from_user_id", "!=", id)
           .andWhere("status_id", 2);
       });
   }
@@ -246,9 +248,9 @@ class UsersStorage extends BaseStorage {
             this.select("article_id")
               .from("article_likes")
               .where("user_id", id)
-              .andWhere("date", ">=", db.raw("CURRENT_DATE - INTERVAL '60 days'"));
+              .andWhere("date", ">=", db.raw("CURRENT_DATE - INTERVAL '90 days'"));
           })
-          .andWhere("date", ">=", db.raw("CURRENT_DATE - INTERVAL '60 days'"));
+          .andWhere("date", ">=", db.raw("CURRENT_DATE - INTERVAL '90 days'"));
       });
   }
 

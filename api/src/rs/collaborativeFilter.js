@@ -2,13 +2,12 @@ const baseFilter = require("./baseFilter");
 const similarityIndexes = require("./similarityIndexes");
 
 const source = "collaborative";
-const field = "likes";
 
 module.exports = {
-  cosine: (userLikes, usersLikes) => {
-    return baseFilter(userLikes, usersLikes, field, similarityIndexes.cosine, source);
+  cosine: (userFeatures, usersFeatures) => {
+    return baseFilter(userFeatures, usersFeatures, similarityIndexes.cosineSalton, source);
   },
-  jaccard: (userLikes, usersLikes) => {
-    return baseFilter(userLikes, usersLikes, field, similarityIndexes.jaccardSet, source);
+  jaccard: (userFeatures, usersFeatures) => {
+    return baseFilter(userFeatures, usersFeatures, similarityIndexes.jaccardSet, source);
   }
 }

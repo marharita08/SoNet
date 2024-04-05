@@ -32,11 +32,23 @@ class LikesStorage extends BaseStorage {
     return await super.getCountByField(id, "article_id");
   }
 
+  async countCommonLikes(id1, id2){
+    return this.db(this.table)
+      .count()
+      .first()
+      .where("user_id", id1)
+      .and.whereIn("article_id", (qb) => {
+        qb.select("article_id").from("article_likes").where("user_id", id2)
+          .andWhere("date", ">=", db.raw("CURRENT_DATE - INTERVAL '90 days'"));
+      })
+      .andWhere("date", ">=", db.raw("CURRENT_DATE - INTERVAL '90 days'"));
+  }
+
   async getByUserId(id) {
     return this.db(this.table)
       .select("article_id")
       .where("user_id", id)
-      .andWhere("date", ">=", db.raw("CURRENT_DATE - INTERVAL '60 days'"));
+      .andWhere("date", ">=", db.raw("CURRENT_DATE - INTERVAL '90 days'"));
   }
 }
 

@@ -1,7 +1,7 @@
-module.exports = (user, users, field, similarityFn, source) => {
+module.exports = (userFeatures, usersFeatures, similarityFn, source) => {
 
-  return users.map(u => {
-    const score = similarityFn(user, u[field]);
+  return usersFeatures.map(u => {
+    const score = similarityFn(userFeatures, u.features);
     return {user_id: u.user_id, score, source};
   });
 

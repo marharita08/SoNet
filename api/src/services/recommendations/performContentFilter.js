@@ -38,43 +38,41 @@ const getCommonData = async (id) => {
   const user = await usersService.getByIdForRecommendations(id);
   const users = await usersService.getForContentFiltering(await usersService.getById(id));
   const userFields = getUserFields(user, users);
-  return {user, users, userFields};
+  if (userFields.length === 0 && user.interests.length === 0) {
+    return null;
+  }
+  const userFeatures = getUserFeatures(user, userFields);
+  const userInterests = new Set(user.interests);
+
+  const usersFeaturesAndInterests = users.map(u => ({
+    user_id: u.user_id,
+    interests: new Set(u.interests),
+    features: getUserFeatures(u, userFields)
+  }));
+
+  return {userFeatures, userInterests, usersFeaturesAndInterests};
 };
 
 module.exports = {
   jaccard: async (id) => {
-    const {user, users, userFields} = await getCommonData(id);
+    const data = await getCommonData(id);
 
-    if (userFields.length === 0 && user.interests.length === 0) {
+    if (!data) {
       return [];
     }
 
-    const userFeatures = getUserFeatures(user, userFields);
-    const userInterests = new Set(user.interests);
-
-    const usersFeaturesAndInterests = users.map(u => ({
-      user_id: u.user_id,
-      interests: new Set(u.interests),
-      features: getUserFeatures(u, userFields)
-    }));
+    const {userFeatures, userInterests, usersFeaturesAndInterests} = data;
 
     return contentFilter.jaccard(userFeatures, userInterests, usersFeaturesAndInterests);
   },
   cosine: async (id) => {
-    const {user, users, userFields} = await getCommonData(id);
+    const data = await getCommonData(id);
 
-    if (userFields.length === 0 && user.interests.length === 0) {
+    if (!data) {
       return [];
     }
 
-    const userFeatures = Array(userFields.length + user.interests.length).fill(1);
-
-    const usersFeatures = users.map(u => {
-      const features = userFields.map(f => +u[f] === user[f]);
-      const interests = user.interests.map(i => +u.interests.includes(i));
-      return {user_id: u.user_id, features: [...features, ...interests]};
-    });
-
-    return contentFilter.cosine(userFeatures, usersFeatures);
+    const {userFeatures, userInterests, usersFeaturesAndInterests} = data;
+    return contentFilter.cosine(userFeatures, userInterests, usersFeaturesAndInterests);
   }
 };

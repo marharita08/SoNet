@@ -2,6 +2,10 @@ const friendsService = require("../friends");
 const usersService = require("../users");
 const topologyFilter = require("../../rs/topologyFilter");
 
+const getUsers = async (id) => {
+  return (await usersService.getForTopologyFiltering(id)).filter(u => +u.user_id !== +id);
+}
+
 module.exports = {
   jaccard: async (id) => {
     const userFriends = await friendsService.getFriendsIds(id);
@@ -9,7 +13,7 @@ module.exports = {
       return [];
     }
 
-    const usersIds = await usersService.getForTopologyFiltering(id);
+    const usersIds = await getUsers(id);
     if (usersIds.length === 0) {
       return [];
     }
@@ -20,14 +24,14 @@ module.exports = {
       usersIds.map(async (user) => {
         const friends = await friendsService.getFriendsIds(user.user_id);
         const friendsSet = new Set(friends.map(f => f.user_id));
-        return {...user, friends: friendsSet}
+        return {...user, features: friendsSet}
       })
     );
 
     return topologyFilter.jaccard(userFriendsSet, usersFriends);
   },
   adamicAdar: async (id) => {
-    const users = await usersService.getForTopologyFiltering(id);
+    const users = await getUsers(id);
 
     if (users.length === 0) {
       return [];
