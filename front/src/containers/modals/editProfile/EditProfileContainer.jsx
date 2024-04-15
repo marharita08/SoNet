@@ -1,5 +1,5 @@
 import React, {useContext, useState} from "react";
-import {useMutation, useQuery} from "react-query";
+import {useMutation} from "react-query";
 import {serialize} from "object-to-formdata";
 
 import EditProfileComponent from "../../../components/modals/editProfile/EditProfileComponent";
@@ -8,10 +8,10 @@ import {getFieldVisibilities} from "../../../api/visibilitiesCrud";
 import {updateUser} from "../../../api/usersCrud";
 import {getInterests} from "../../../api/interestsCrud";
 import {EditProfileContainerPropTypes} from "./editProfileContainerPropTypes";
-import {refetchOff} from "../../../config/refetchOff";
 import imageService from "../../../services/imageService";
 import handleResponseContext from "../../../context/handleResponseContext";
 import {parseStringToDate} from "../../../services/dateParser";
+import {useQueryWrapper} from "../../../hooks/useQueryWrapper";
 
 const EditProfileContainer = ({isModalOpen, user, locations, actions}) => {
 
@@ -19,19 +19,10 @@ const EditProfileContainer = ({isModalOpen, user, locations, actions}) => {
   const parsedBirthday = parseStringToDate(birthday);
   const {setIsModalOpen, setUser, ...componentActions} = actions;
   const {handleError, showErrorAlert} = useContext(handleResponseContext);
-  const {isFetching: isUniversitiesFetching, data: universitiesData} = useQuery(
-    "universities", getUniversities, {...refetchOff}
-  );
-  const {isFetching: isVisibilitiesFetching, data: visibilitiesData} = useQuery(
-    "visibilities", getFieldVisibilities, {...refetchOff}
-  );
-  const {isFetching: isInterestsFetching, data: interestsData} = useQuery(
-    "interests", getInterests, {...refetchOff}
-  )
 
-  let universities = universitiesData?.data;
-  let visibilities = visibilitiesData?.data;
-  let interests = interestsData?.data;
+  let {isFetching: isInterestsFetching, data: interests} = useQueryWrapper("interests", getInterests);
+  let {isFetching:isUniversitiesFetching, data:universities} = useQueryWrapper("universities", getUniversities);
+  let {isFetching: isVisibilitiesFetching, data: visibilities} = useQueryWrapper("visibilities", getFieldVisibilities);
 
   const [image, setImage] = useState();
   const [croppedImage, setCroppedImage] = useState();
