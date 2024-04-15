@@ -47,7 +47,8 @@ router.get("/cosine-collaborative/:id",
 router.get("/general/:id",
   asyncHandler(async (req, res) => {
     const {id} = req.params;
-    return res.send(await service.general(id));
+    const {country} = req.query;
+    return res.send(await service.general(id, country));
   })
 );
 

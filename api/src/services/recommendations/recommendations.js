@@ -11,19 +11,22 @@ const getRecommendedBySimilarities = async (similarities) => {
   return recommendedUsers.map(u => ({...u, reason: reasons[u.user_id]}));
 };
 
-const performGeneralFilter = async (id) => {
+const performGeneralFilter = async (id, country) => {
   const results = await Promise.all([
-    performContentFilter.jaccard(id),
+    performContentFilter.jaccard(id, country),
     performCollaborativeFilter.jaccard(id),
     performTopology.jaccard(id)
   ]);
   return generalFilter(results);
 }
 
-const performFiltering = async (id, fn, name) => {
+const performFiltering = async (id, fn, name, country) => {
   const start = new Date();
   console.log(`${name} filter starting ${start.toISOString()}`);
-  const similarities = await fn(id);
+  const similarities = await fn(id, country);
+  if (similarities.length === 0) {
+    return [];
+  }
   const recommendedUsers = await getRecommendedBySimilarities(similarities);
   const end = new Date();
   console.log(`${name} filter finishing ${end.toISOString()}`);
@@ -56,7 +59,7 @@ module.exports = {
     return await performFiltering(id, performCollaborativeFilter.cosine, "Cosine collaborative");
   },
 
-  general: async (id) => {
-    return await performFiltering(id, performGeneralFilter, "General");
+  general: async (id, country) => {
+    return await performFiltering(id, performGeneralFilter, "General", country);
   }
 };

@@ -34,12 +34,18 @@ const getUserFeatures = (user, userFields) => {
   return userFields.map(field => user[field]);
 };
 
-const getCommonData = async (id) => {
+const runFilter = async (id, country, filterFn) => {
   const user = await usersService.getByIdForRecommendations(id);
-  const users = await usersService.getForContentFiltering(await usersService.getById(id));
+  const fullUser = await usersService.getById(id);
+  if (!user.country_id && country !== 'undefined') {
+    user.country_id = +country;
+    fullUser.country_id = +country;
+  }
+  const users = await usersService.getForContentFiltering(fullUser);
+
   const userFields = getUserFields(user, users);
   if (userFields.length === 0 && user.interests.length === 0) {
-    return null;
+    return [];
   }
   const userFeatures = getUserFeatures(user, userFields);
   const userInterests = new Set(user.interests);
@@ -50,29 +56,14 @@ const getCommonData = async (id) => {
     features: getUserFeatures(u, userFields)
   }));
 
-  return {userFeatures, userInterests, usersFeaturesAndInterests};
+  return filterFn(userFeatures, userInterests, usersFeaturesAndInterests);
 };
 
 module.exports = {
-  jaccard: async (id) => {
-    const data = await getCommonData(id);
-
-    if (!data) {
-      return [];
-    }
-
-    const {userFeatures, userInterests, usersFeaturesAndInterests} = data;
-
-    return contentFilter.jaccard(userFeatures, userInterests, usersFeaturesAndInterests);
+  jaccard: async (id, country) => {
+    return runFilter(id, country, contentFilter.jaccard);
   },
-  cosine: async (id) => {
-    const data = await getCommonData(id);
-
-    if (!data) {
-      return [];
-    }
-
-    const {userFeatures, userInterests, usersFeaturesAndInterests} = data;
-    return contentFilter.cosine(userFeatures, userInterests, usersFeaturesAndInterests);
+  cosine: async (id, country) => {
+    return runFilter(id, country, contentFilter.cosine);
   }
 };
