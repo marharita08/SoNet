@@ -37,7 +37,7 @@ const getUserFeatures = (user, userFields) => {
 const runFilter = async (id, country, filterFn) => {
   const user = await usersService.getByIdForRecommendations(id);
   const fullUser = await usersService.getById(id);
-  if (!user.country_id && country !== 'undefined') {
+  if (!user.country_id && country && country !== 'undefined') {
     user.country_id = +country;
     fullUser.country_id = +country;
   }
@@ -55,7 +55,6 @@ const runFilter = async (id, country, filterFn) => {
     interests: new Set(u.interests),
     features: getUserFeatures(u, userFields)
   }));
-
   return filterFn(userFeatures, userInterests, usersFeaturesAndInterests);
 };
 

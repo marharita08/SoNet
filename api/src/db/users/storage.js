@@ -289,6 +289,21 @@ class UsersStorage extends BaseStorage {
     return this.db(this.table)
       .select("user_id");
   }
+
+  async getRandomRecommendedUsers(id, recommendationsLength) {
+    return this.db(this.table)
+      .select("user_id", "name", "avatar", "city_name")
+      .whereNotIn(this.primaryKey, function () {
+        this.select("user_id")
+          .from("users")
+          .join("friends", function () {
+            this.on("user_id", "from_user_id").andOn("to_user_id", db.raw("?", [id]))
+              .orOn("user_id", "to_user_id").andOn("from_user_id", db.raw("?", [id]));
+          });
+      })
+      .orderBy(this.db.raw("random()"))
+      .limit(recommendationsLength);
+  }
 }
 
 module.exports = new UsersStorage();

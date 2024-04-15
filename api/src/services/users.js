@@ -128,6 +128,10 @@ class UsersServices extends BaseService {
   async getForTopologyFiltering(id){
     return await this.storage.getForTopologyFiltering(id);
   }
+
+  async getRandomRecommendedUsers(id, recommendationsLength) {
+    return await this.storage.getRandomRecommendedUsers(id, recommendationsLength);
+  }
 }
 
 module.exports = new UsersServices();

@@ -5,10 +5,18 @@ const performTopology = require("./performTopology");
 const performContentFilter = require("./performContentFilter");
 const getRecommendedIds = require("../../rs/getRecommendedIds");
 
-const getRecommendedBySimilarities = async (similarities) => {
-  const {recommendedIds, reasons} = getRecommendedIds(similarities);
-  const recommendedUsers = await usersService.getRecommendedUsers(recommendedIds);
-  return recommendedUsers.map(u => ({...u, reason: reasons[u.user_id]}));
+const recommendationsLength = 10;
+
+const getRecommendedBySimilarities = async (similarities, id) => {
+  const {recommendedIds, reasons} = getRecommendedIds(similarities, recommendationsLength);
+  let recommendedUsers = await usersService.getRecommendedUsers(recommendedIds);
+  recommendedUsers = recommendedUsers.map(u => ({...u, reason: reasons[u.user_id]}));
+  while (recommendedUsers.length < recommendationsLength) {
+    let randomRecommended = await usersService.getRandomRecommendedUsers(id, recommendationsLength - recommendedUsers.length);
+    randomRecommended = randomRecommended.filter(u => !recommendedUsers.some(uu => u.user_id === uu.user_id));
+    recommendedUsers = [...recommendedUsers, ...randomRecommended];
+  }
+  return recommendedUsers;
 };
 
 const performGeneralFilter = async (id, country) => {
@@ -25,9 +33,9 @@ const performFiltering = async (id, fn, name, country) => {
   console.log(`${name} filter starting ${start.toISOString()}`);
   const similarities = await fn(id, country);
   if (similarities.length === 0) {
-    return [];
+    return await usersService.getRandomRecommendedUsers(id, recommendationsLength);
   }
-  const recommendedUsers = await getRecommendedBySimilarities(similarities);
+  const recommendedUsers = await getRecommendedBySimilarities(similarities, id);
   const end = new Date();
   console.log(`${name} filter finishing ${end.toISOString()}`);
   console.log(`Finished in ${((end.getTime() - start.getTime()) / 1000)} seconds`);

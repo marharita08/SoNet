@@ -1,13 +1,13 @@
 const getReasonMessage = require("./getReasonMessage");
 
-module.exports = (similarities) => {
+module.exports = (similarities, recommendationsLength) => {
   if (similarities.length === 0) {
     return [];
   }
   similarities.sort((a, b) => b.score - a.score);
   const recommendedIds = [];
   const sources = {};
-  const end = similarities.length < 10 ? similarities.length : 10;
+  const end = similarities.length < recommendationsLength ? similarities.length : recommendationsLength;
   for (let i = 0; i < end; i++) {
     recommendedIds.push(similarities[i].user_id);
     sources[similarities[i].user_id] = similarities[i].source;
