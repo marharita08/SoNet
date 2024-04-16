@@ -58,6 +58,9 @@ const ProfilePageContainer = () => {
       }
     }
   );
+
+  const isCurrentUser = (user?.user_id === currentUser.user_id) && !isUserFetching;
+
   const {isFetching: isRequestFetching} = useQueryWrapper(
     `request ${id}`,
     () => getRequest(id),
@@ -163,16 +166,13 @@ const ProfilePageContainer = () => {
   return (
     <div key={id}>
       <ProfilePageComponent
-        isCurrentUser={user?.user_id === currentUser.user_id}
+        isCurrentUser={isCurrentUser}
         isLoading={isUserFetching}
         profileComponent={
           <ProfileComponent
             user={user}
             actions={{handleEdit, handleAddToFriends, handleAccept, handleDeleteFromFriends}}
-            flags={{
-              isCurrentUser: user?.user_id === currentUser.user_id,
-              isAdmin
-            }}
+            flags={{isCurrentUser, isAdmin}}
             currentRequest={currentRequest}
             loading={{
               isLoading: isAcceptLoading || isAddLoading || isDeleteLoading,
