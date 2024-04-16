@@ -31,6 +31,8 @@ export const userProfilePropTypes = PropTypes.shape({
   state_visibility: optionPropTypes,
   city_visibility: optionPropTypes,
   birthday_visibility: optionPropTypes,
+  interests: PropTypes.arrayOf(PropTypes.number),
+  interest_names: PropTypes.arrayOf(PropTypes.string)
 });
 
 export const userCardPropTypes = PropTypes.shape({

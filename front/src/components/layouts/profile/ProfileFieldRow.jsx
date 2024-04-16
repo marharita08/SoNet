@@ -31,15 +31,13 @@ const ProfileFieldRow = ({content, label, visibility, flags}) => {
 };
 
 ProfileFieldRow.propTypes = {
-  //name: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
-  //visibilityName: PropTypes.string,
-  //visibilityLabel: PropTypes.string,
+  content: PropTypes.string,
+  visibility: PropTypes.string,
   flags: PropTypes.shape({
     isFriends: PropTypes.bool,
     isAdmin: PropTypes.bool,
-    isCurrentUser: PropTypes.bool,
-    //isField: PropTypes.bool
+    isCurrentUser: PropTypes.bool
   }),
 };
 
@@ -49,8 +47,7 @@ ProfileFieldRow.dafaultProps = {
   flags: {
     isFriends: false,
     isAdmin: false,
-    isCurrentUser: false,
-    //isField: false,
+    isCurrentUser: false
   }
 };
 

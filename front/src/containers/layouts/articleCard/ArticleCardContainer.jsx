@@ -5,107 +5,45 @@ import {useNavigate, useLocation} from "react-router-dom";
 import {Divider} from "@mui/material";
 
 import ErrorBoundary from "../../../components/ErrorBoundary";
-import {deleteArticle, getComments, getLikes, getCommentsAmount, getLikesAmount} from "../../../api/articlesCrud";
+import {deleteArticle} from "../../../api/articlesCrud";
 import authContext from "../../../context/authContext";
 import CommentContainer from "../comment/CommentContainer";
 import AddOrEditCommentContainer from "../addOrEditComment/AddOrEditCommentContainer";
-import {deleteLike, getIsLiked, insertLike} from "../../../api/likesCrud";
 import {articlePropTypes, articlesPropTypes} from "../../../propTypes/articlePropTypes";
 import articlesService from "../../../services/articlesService";
 import handleResponseContext from "../../../context/handleResponseContext";
-import commentsService from "../../../services/commentsService";
 import ArticleCardComponent from "../../../components/layouts/articleCard/ArticleCardComponent";
 import {initComment as initCommentFn} from "../../../config/initValues";
 import ArticleHeader from "../../../components/layouts/article/ArticleHeader";
 import ArticleContent from "../../../components/layouts/article/ArticleContent";
 import ArticleActions from "../../../components/layouts/article/ArticleActions";
-import {useQueryWrapper} from "../../../hooks/useQueryWrapper";
+import {useComments} from "./useComments";
+import {useLikes} from "./useLikes";
 
 const ArticleCardContainer = ({setArticleContext, article, articles, setArticles, isTruncate}) => {
 
   let id = article.article_id;
 
-  const {user: {user_id, avatar}, isAdmin} = useContext(authContext);
+  const {user, isAdmin} = useContext(authContext);
+  const {user_id} = user;
   const {handleError} = useContext(handleResponseContext);
 
   const initComment = initCommentFn(id, user_id);
+
+  const {isCommentsExpanded, comments, commentsAmount, toggleComments, addComment,
+    updateComment, deleteComment, isCommentsFetching} = useComments(id);
+
+  const {likedUsers, likesAmount, isLiked, like, isLikesFetching} = useLikes(id, user, handleError);
 
   // for add comment layout
   const [currentComment, setCurrentComment] = useState(initComment);
   const [isCommentAdd, setIsCommentAdd] = useState(true);
   const [isAddOrEditCommentExpanded, setIsAddOrEditCommentExpanded] = useState(false);
 
-  // for comments layout
-  const [isCommentsExpanded, setIsCommentsExpanded] = useState(false);
-  const [comments, setComments] = useState([]);
-
-  // for article layout
-  const [likedUsers, setLikedUsers] = useState([]);
-  const [isLiked, setIsLiked] = useState(false);
-  const [commentsAmount, setCommentsAmount] = useState(0);
-  const [likesAmount, setLikesAmount] = useState(0);
-
   const navigate = useNavigate();
   const location = useLocation();
 
-
-  // load data from back
-
-  const {isFetching: isCommentsFetching} = useQueryWrapper(
-    `comments ${id}`,
-    () => getComments(id), {
-      onSuccess: (data) => setComments(data?.data)
-    }
-  );
-
-  const {isFetching: isLikesFetching} = useQueryWrapper(
-    `users ${id}`,
-    () => getLikes(id), {
-      onSuccess: (data) => setLikedUsers(data?.data)
-    }
-  );
-
-  const {isFetching: isIsLikedFetching} = useQueryWrapper(
-    `is liked ${id}-${user_id}`,
-    () => getIsLiked(id), {
-      onSuccess: (data) => setIsLiked(data?.data)
-    }
-  );
-
-  const {isFetching: isCommentsAmountFetching} = useQueryWrapper(
-    `comments amount ${id}`,
-    () => getCommentsAmount(id), {
-      onSuccess: (data) => setCommentsAmount(+data?.data.count)
-    }
-  );
-
-  const {isFetching: isLikesAmountFetching} = useQueryWrapper(
-    `likes amount ${id}`,
-    () => getLikesAmount(id), {
-      onSuccess: (data) => setLikesAmount(+data?.data.count)
-    }
-  );
-
-
   // update data on back
-
-  const {mutate: addLikeMutate} = useMutation(insertLike, {
-    onSuccess: () => {
-      setLikedUsers([...likedUsers, {user_id, avatar}]);
-      setLikesAmount(likesAmount + 1);
-      setIsLiked(true);
-    },
-    onError: handleError
-  });
-
-  const {mutate: deleteLikeMutate} = useMutation(deleteLike, {
-    onSuccess: () => {
-      setLikedUsers(likedUsers.filter(((obj) => obj.user_id !== user_id)));
-      setLikesAmount(likesAmount - 1);
-      setIsLiked(false);
-    },
-    onError: handleError
-  });
 
   const {mutate} = useMutation(deleteArticle, {
     onSuccess: () => {
@@ -127,41 +65,33 @@ const ArticleCardContainer = ({setArticleContext, article, articles, setArticles
 
   const onCommentAddOrUpdate = () => {
     setIsAddOrEditCommentExpanded(false);
-    setIsCommentsExpanded(true);
     refreshCurrentComment();
   }
 
   const onCommentAdd = (comment) => {
     onCommentAddOrUpdate();
-    setComments(commentsService.addComment(comments, comment));
-    setCommentsAmount(commentsAmount + 1);
+    addComment(comment);
   };
 
   const onCommentUpdate = (comment) => {
     onCommentAddOrUpdate();
-    setComments(commentsService.updateComment(comments, comment));
+    updateComment(comment)
   };
 
   const onCommentDelete = (id) => {
-    setComments(commentsService.deleteComment(comments, id));
-    setCommentsAmount(commentsAmount - 1);
+    deleteComment(id);
   };
-
 
   // handle click events
 
   const handleLike = (event) => {
     event.preventDefault();
-    if (!isLiked) {
-      addLikeMutate({article_id: article.article_id});
-    } else {
-      deleteLikeMutate(article.article_id);
-    }
+    like();
   };
 
   const handleCommentsExpand = (event) => {
     event.preventDefault();
-    setIsCommentsExpanded(!isCommentsExpanded);
+    toggleComments();
   };
 
   const handleAddComment = (event) => {
@@ -205,11 +135,7 @@ const ArticleCardContainer = ({setArticleContext, article, articles, setArticles
             commentsAmount={commentsAmount}
             likedUsers={likedUsers}
             actions={{handleCommentsExpand, handleAddComment, handleLike}}
-            flags={{
-              isAddOrEditCommentExpanded, isCommentsExpanded, isLiked,
-              isCommentsFetching: isCommentsFetching || isCommentsAmountFetching,
-              isLikesFetching: isLikesFetching || isLikesAmountFetching || isIsLikedFetching
-            }}
+            flags={{isAddOrEditCommentExpanded, isCommentsExpanded, isLiked, isCommentsFetching, isLikesFetching}}
           />
         </>
       }
