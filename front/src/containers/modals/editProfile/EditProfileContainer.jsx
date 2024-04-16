@@ -1,4 +1,4 @@
-import React, {useContext, useState} from "react";
+import React, {useContext} from "react";
 import {useMutation} from "react-query";
 import {serialize} from "object-to-formdata";
 
@@ -8,14 +8,14 @@ import {getFieldVisibilities} from "../../../api/visibilitiesCrud";
 import {updateUser} from "../../../api/usersCrud";
 import {getInterests} from "../../../api/interestsCrud";
 import {EditProfileContainerPropTypes} from "./editProfileContainerPropTypes";
-import imageService from "../../../services/imageService";
 import handleResponseContext from "../../../context/handleResponseContext";
 import {parseStringToDate} from "../../../services/dateParser";
 import {useQueryWrapper} from "../../../hooks/useQueryWrapper";
+import {useCropper} from "../../../hooks/useCropper";
 
 const EditProfileContainer = ({isModalOpen, user, locations, actions}) => {
 
-  const {birthday, ...restUser} = user;
+  const {birthday, interest_names, ...restUser} = user;
   const parsedBirthday = parseStringToDate(birthday);
   const {setIsModalOpen, setUser, ...componentActions} = actions;
   const {handleError, showErrorAlert} = useContext(handleResponseContext);
@@ -24,9 +24,7 @@ const EditProfileContainer = ({isModalOpen, user, locations, actions}) => {
   let {isFetching: isUniversitiesFetching, data:universities} = useQueryWrapper("universities", getUniversities);
   let {isFetching: isVisibilitiesFetching, data: visibilities} = useQueryWrapper("visibilities", getFieldVisibilities);
 
-  const [image, setImage] = useState();
-  const [croppedImage, setCroppedImage] = useState();
-  const [cropper, setCropper] = useState();
+  const {image, croppedImage, setCropper, addImage, cropImage, deleteImage} = useCropper();
 
   const {mutate, isLoading} = useMutation(
     updateUser, {
@@ -45,21 +43,21 @@ const EditProfileContainer = ({isModalOpen, user, locations, actions}) => {
 
   const handleAddImage = e => {
     e.preventDefault();
-    imageService.addImage(e.target.files[0], setImage, showErrorAlert);
+    addImage(e.target.files[0], (err) => showErrorAlert(err));
   };
 
   const handleCropImage = (setFieldValue) => {
-    imageService.cropImage(cropper, setCroppedImage, setImage, setFieldValue);
+    cropImage((result) => setFieldValue("file", result));
   };
 
   const handleDeleteImage = (setFieldValue) => {
-    imageService.deleteImage(setImage, setCroppedImage, setFieldValue);
+    setFieldValue("file", undefined);
+    deleteImage();
   };
 
   const handleModalClose = () => {
     setIsModalOpen(false);
-    setCroppedImage(null);
-    setImage(null);
+    deleteImage();
   };
 
   const onInterestChange = (e, interests, setFieldValue) => {

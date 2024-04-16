@@ -18,7 +18,7 @@ router.get(
 
 router.get(
   "/:id",
-  authMiddleware,
+  //authMiddleware,
   asyncHandler(async (req, res) => {
     const {id} = req.params;
     res.send(await usersService.getProfileById(+id));

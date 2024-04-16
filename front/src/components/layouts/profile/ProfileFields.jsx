@@ -8,82 +8,56 @@ const ProfileFields = ({user, flags}) => {
   return (
     <>
       <ProfileFieldRow
-        name={"name"}
         label={"Name"}
-        flags={{
-          isField: !!user?.name,
-          ...flags
-        }}
+        content={user?.name}
+        flags={flags}
       />
       <ProfileFieldRow
-        name={"email"}
         label={"Email"}
-        visibilityName={"email_visibility.label"}
-        visibilityLabel={user?.email_visibility.label}
-        flags={{
-          isField: !!user?.email,
-          ...flags
-        }}
+        content={user?.email}
+        visibility={user?.email_visibility.label}
+        flags={flags}
       />
       <ProfileFieldRow
-        name={"birthday"}
         label={"Birthday"}
-        visibilityName={"birthday_visibility.label"}
-        visibilityLabel={user?.birthday_visibility.label}
-        flags={{
-          isField: !!user?.birthday,
-          ...flags
-        }}
+        visibility={user?.birthday_visibility.label}
+        content={user?.birthday}
+        flags={flags}
       />
       <ProfileFieldRow
-        name={"phone"}
         label={"Phone"}
-        visibilityName={"phone_visibility.label"}
-        visibilityLabel={user?.phone_visibility.label}
-        flags={{
-          isField: !!user?.phone,
-          ...flags
-        }}
+        visibility={user?.phone_visibility.label}
+        content={user?.phone}
+        flags={flags}
       />
       <ProfileFieldRow
-        name={"country.label"}
         label={"Country"}
-        visibilityName={"country_visibility.label"}
-        visibilityLabel={user?.country_visibility.label}
-        flags={{
-          isField: !!user?.country,
-          ...flags
-        }}
+        visibility={user?.country_visibility.label}
+        content={user?.country?.label}
+        flags={flags}
       />
       <ProfileFieldRow
-        name={"state.label"}
         label={"State"}
-        visibilityName={"state_visibility.label"}
-        visibilityLabel={user?.state_visibility.label}
-        flags={{
-          isField: !!user?.state,
-          ...flags
-        }}
+        visibility={user?.state_visibility.label}
+        content={user?.state?.label}
+        flags={flags}
       />
       <ProfileFieldRow
-        name={"city.label"}
         label={"City"}
-        visibilityName={"city_visibility.label"}
-        visibilityLabel={user?.city_visibility.label}
-        flags={{
-          isField: !!user?.city,
-          ...flags
-        }}
+        visibility={user?.city_visibility.label}
+        content={user?.city?.label}
+        flags={flags}
       />
       <ProfileFieldRow
-        name={"university.label"}
         label={"University"}
-        visibilityName={"university_visibility.label"}
-        visibilityLabel={user?.university_visibility.label}
-        flags={{
-          isField: !!user?.university,
-          ...flags
-        }}
+        visibility={user?.university_visibility.label}
+        content={user?.university?.label}
+        flags={flags}
+      />
+      <ProfileFieldRow
+        label={"Interests"}
+        content={user?.interest_names.join(", ")}
+        flags={flags}
       />
     </>
   );

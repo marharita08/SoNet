@@ -26,7 +26,9 @@ class UsersServices extends BaseService {
 
   async getProfile(id) {
     const dbResponse = await this.storage.getProfileById(id);
-    return await this.getUserWithInterests(parseToProfile(dbResponse[0]));
+    const user = await this.getUserWithInterests(parseToProfile(dbResponse[0]));
+    const interest_names = await userInterestsService.getNamesByUserId(id);
+    return {...user, interest_names};
   };
 
   async getByEmail(email) {

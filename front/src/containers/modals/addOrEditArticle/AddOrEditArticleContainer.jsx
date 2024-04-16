@@ -1,4 +1,4 @@
-import React, {useContext, useState} from "react";
+import React, {useContext} from "react";
 import {useMutation} from "react-query";
 import PropTypes from "prop-types";
 import {serialize} from "object-to-formdata";
@@ -9,10 +9,10 @@ import {getArticleVisibilities} from "../../../api/visibilitiesCrud";
 import {insertArticle, updateArticle} from "../../../api/articlesCrud";
 import articleContext from "../../../context/articleContext";
 import {articlesPropTypes} from "../../../propTypes/articlePropTypes";
-import imageService from "../../../services/imageService";
 import articlesService from "../../../services/articlesService";
 import handleResponseContext from "../../../context/handleResponseContext";
 import {useQueryWrapper} from "../../../hooks/useQueryWrapper";
+import {useCropper} from "../../../hooks/useCropper";
 
 const AddOrEditArticleContainer = ({setArticleContext, articles, setArticles}) => {
 
@@ -24,9 +24,7 @@ const AddOrEditArticleContainer = ({setArticleContext, articles, setArticles}) =
   const articleState = useContext(articleContext);
   const {article, isAdd} = articleState;
 
-  const [image, setImage] = useState();
-  const [croppedImage, setCroppedImage] = useState();
-  const [cropper, setCropper] = useState();
+  const {image, croppedImage, setCropper, addImage, cropImage, deleteImage} = useCropper();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -67,22 +65,22 @@ const AddOrEditArticleContainer = ({setArticleContext, articles, setArticles}) =
     setArticleContext({
       openModal: false,
     });
-    setCroppedImage(null);
-    setImage(null);
+    deleteImage();
   };
 
   const handleAddImage = e => {
     e.preventDefault();
-    imageService.addImage(e.target.files[0], setImage, showErrorAlert);
+    addImage(e.target.files[0], (err) => showErrorAlert(err));
   };
 
   const handleCropImage = (setFieldValue) => {
-    imageService.cropImage(cropper, setCroppedImage, setImage, setFieldValue);
+    cropImage((result) => setFieldValue("file", result));
   };
 
   const handleDeleteImage = (setFieldValue) => {
     article.image = null;
-    imageService.deleteImage(setImage, setCroppedImage, setFieldValue);
+    setFieldValue("file", undefined);
+    deleteImage();
   };
 
   return (

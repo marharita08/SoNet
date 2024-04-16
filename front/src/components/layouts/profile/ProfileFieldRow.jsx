@@ -1,49 +1,29 @@
 import React from "react";
-import {Field} from "formik";
-import {TextField} from "formik-mui";
 import PropTypes from "prop-types";
 import {useStyles} from "./style";
 
-const ProfileFieldRow = ({name, label, visibilityName, visibilityLabel, flags}) => {
+const ProfileFieldRow = ({content, label, visibility, flags}) => {
 
-  const {isAdmin, isCurrentUser, isFriends, isField} = flags;
+  const {isAdmin, isCurrentUser, isFriends} = flags;
   const classes = useStyles();
+  const isField = !!content;
+  const isVisible = isField && (isAdmin || isCurrentUser || !visibility || visibility === "All" ||
+    isFriends && visibility === "Friends");
 
   return (
     <>
       {
-        isField && (isAdmin || isCurrentUser || !visibilityName || visibilityLabel === "All" ||
-          isFriends && visibilityLabel === "Friends") &&
-        <div>
-          <div
-            className={
-              `${classes.field} ${(isAdmin || isCurrentUser ? classes.notFullWidth : classes.fullWidth)}`
-            }
-          >
-            <Field
-              component={TextField}
-              type={"text"}
-              name={name}
-              disabled
-              label={label}
-              fullWidth
-            />
-          </div>
-          {
-            (isAdmin || isCurrentUser) &&
-            <div className={classes.visibility}>
-              {
-                visibilityName &&
-                <Field
-                  component={TextField}
-                  disabled
-                  name={visibilityName}
-                  label={"Available to"}
-                  fullWidth
-                />
-              }
+        isVisible &&
+        <div className={classes.fieldWrapper}>
+          <div className={classes.field}>
+            <div className={classes.label}>
+              {label}
             </div>
-          }
+            <div className={classes.content}>
+              {content}
+            </div>
+          </div>
+          <hr/>
         </div>
       }
     </>
@@ -51,26 +31,26 @@ const ProfileFieldRow = ({name, label, visibilityName, visibilityLabel, flags}) 
 };
 
 ProfileFieldRow.propTypes = {
-  name: PropTypes.string.isRequired,
+  //name: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
-  visibilityName: PropTypes.string,
-  visibilityLabel: PropTypes.string,
+  //visibilityName: PropTypes.string,
+  //visibilityLabel: PropTypes.string,
   flags: PropTypes.shape({
     isFriends: PropTypes.bool,
     isAdmin: PropTypes.bool,
     isCurrentUser: PropTypes.bool,
-    isField: PropTypes.bool
+    //isField: PropTypes.bool
   }),
 };
 
 ProfileFieldRow.dafaultProps = {
-  visibilityName: undefined,
+  visibility: undefined,
   visibilityLabel: undefined,
   flags: {
     isFriends: false,
     isAdmin: false,
     isCurrentUser: false,
-    isField: false,
+    //isField: false,
   }
 };
 

@@ -1,5 +1,6 @@
 const storage = require("../db/users_interests/storage");
 const BaseService = require("./base");
+const interestsService = require("./interests");
 
 class UserInterestsService extends BaseService {
   constructor() {
@@ -9,6 +10,11 @@ class UserInterestsService extends BaseService {
   async getByUserId (userId) {
     const interests = await this.storage.getByUserId(userId);
     return interests.map((interest) => interest.interest_id);
+  }
+
+  async getNamesByUserId (userId) {
+    const interests = await this.getByUserId(userId);
+    return await Promise.all(interests.map(async i => (await interestsService.getById(i)).interest));
   }
 
   async updateByUserId (userId, newInterests){
