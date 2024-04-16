@@ -1,12 +1,11 @@
 import React, {useContext, useState} from "react";
 import SearchUsersComponent from "../../../components/layouts/searchUsers/SearchUsersComponent";
-import {useQuery} from "react-query";
 import PropTypes from "prop-types";
 
 import {searchUsers} from "../../../api/usersCrud";
 import authContext from "../../../context/authContext";
 import {usersForSearchPropTypes} from "../../../propTypes/userPropTypes";
-import {refetchOff} from "../../../config/refetchOff";
+import {useQueryWrapper} from "../../../hooks/useQueryWrapper";
 
 const SearchUsersContainer = ({usersForSearch, actions}) => {
 
@@ -14,11 +13,10 @@ const SearchUsersContainer = ({usersForSearch, actions}) => {
   const {user: {user_id}} = useContext(authContext);
   const [searchText, setSearchText] = useState("");
 
-  const {isFetching} = useQuery(
+  const {isFetching} = useQueryWrapper(
     ["users", searchText],
     () => searchUsers(user_id, searchText), {
-      onSuccess: (data) => setUsersForSearch(data?.data),
-      ...refetchOff
+      onSuccess: (data) => setUsersForSearch(data?.data)
     }
   );
 

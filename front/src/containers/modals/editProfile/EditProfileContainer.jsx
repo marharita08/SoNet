@@ -21,7 +21,7 @@ const EditProfileContainer = ({isModalOpen, user, locations, actions}) => {
   const {handleError, showErrorAlert} = useContext(handleResponseContext);
 
   let {isFetching: isInterestsFetching, data: interests} = useQueryWrapper("interests", getInterests);
-  let {isFetching:isUniversitiesFetching, data:universities} = useQueryWrapper("universities", getUniversities);
+  let {isFetching: isUniversitiesFetching, data:universities} = useQueryWrapper("universities", getUniversities);
   let {isFetching: isVisibilitiesFetching, data: visibilities} = useQueryWrapper("visibilities", getFieldVisibilities);
 
   const [image, setImage] = useState();

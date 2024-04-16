@@ -1,10 +1,10 @@
 import {useQuery} from "react-query";
 
-export const useQueryWrapper = (queryKey, getFunction) => {
+export const useQueryWrapper = (queryKey, queryFn, options) => {
 
-  const {isFetching, data} = useQuery(
-    queryKey, getFunction, {refetchInterval: false, refetchOnWindowFocus: false}
+  const {isFetching, isLoading, data} = useQuery(
+    queryKey, queryFn, {refetchInterval: false, refetchOnWindowFocus: false, ...options}
   );
 
-  return {isFetching, data: data?.data};
+  return {isFetching, isLoading, data: data?.data};
 };

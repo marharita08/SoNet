@@ -1,6 +1,6 @@
 import React, {useContext, useState} from "react";
 import {useParams} from "react-router-dom";
-import {useMutation, useQuery} from "react-query";
+import {useMutation} from "react-query";
 
 import ProfileComponent from "../../../components/layouts/profile/ProfileComponent";
 import EditProfileContainer from "../../modals/editProfile/EditProfileContainer";
@@ -11,7 +11,6 @@ import FriendsContainer from "../../layouts/friends/FriendsContainer";
 import IncomingRequestsContainer from "../../layouts/incomingRequests/IncomingRequestsContainer";
 import {updateRequest, deleteRequest, getRequest, insertRequest} from "../../../api/friendsCrud";
 import SearchUsersContainer from "../../layouts/searchUsers/SearchUsersContainer";
-import {refetchOff} from "../../../config/refetchOff";
 import handleResponseContext from "../../../context/handleResponseContext";
 import ProfilePageComponent from "../../../components/pages/profilePage/ProfilePageComponent";
 import usersForSearchService from "../../../services/usersForSearchService";
@@ -20,6 +19,7 @@ import currentRequestService from "../../../services/currentRequestService";
 import RecommendationsContainer from "../../layouts/recommendations/RecommendationsContainer";
 import recommendationsService from "../../../services/recommendationsService";
 import {useLocations} from "./useLocations";
+import {useQueryWrapper} from "../../../hooks/useQueryWrapper";
 
 const ProfilePageContainer = () => {
   const {id: idStr} = useParams();
@@ -46,7 +46,7 @@ const ProfilePageContainer = () => {
 
   const {locations, onStateChange, onCountryChange} = useLocations();
 
-  const {isFetching: isUserFetching} = useQuery(
+  const {isFetching: isUserFetching} = useQueryWrapper(
     `user ${id}`,
     () => getUser(id),
     {
@@ -55,16 +55,14 @@ const ProfilePageContainer = () => {
         const {country_id, state_id} = data.data;
         country_id && onCountryChange(country_id);
         state_id && onStateChange(state_id);
-      },
-      ...refetchOff
+      }
     }
   );
-  const {isFetching: isRequestFetching} = useQuery(
+  const {isFetching: isRequestFetching} = useQueryWrapper(
     `request ${id}`,
     () => getRequest(id),
     {
-      onSuccess: (data) => setCurrentRequest(data?.data),
-      ...refetchOff
+      onSuccess: (data) => setCurrentRequest(data?.data)
     }
   );
 

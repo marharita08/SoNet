@@ -1,5 +1,5 @@
 import React, {useContext, useState} from "react";
-import {useMutation, useQuery} from "react-query";
+import {useMutation} from "react-query";
 import PropTypes from "prop-types";
 import {useNavigate, useLocation} from "react-router-dom";
 import {Divider} from "@mui/material";
@@ -15,11 +15,11 @@ import articlesService from "../../../services/articlesService";
 import handleResponseContext from "../../../context/handleResponseContext";
 import commentsService from "../../../services/commentsService";
 import ArticleCardComponent from "../../../components/layouts/articleCard/ArticleCardComponent";
-import {refetchOff} from "../../../config/refetchOff";
 import {initComment as initCommentFn} from "../../../config/initValues";
 import ArticleHeader from "../../../components/layouts/article/ArticleHeader";
 import ArticleContent from "../../../components/layouts/article/ArticleContent";
 import ArticleActions from "../../../components/layouts/article/ArticleActions";
+import {useQueryWrapper} from "../../../hooks/useQueryWrapper";
 
 const ArticleCardContainer = ({setArticleContext, article, articles, setArticles, isTruncate}) => {
 
@@ -51,43 +51,38 @@ const ArticleCardContainer = ({setArticleContext, article, articles, setArticles
 
   // load data from back
 
-  const {isFetching: isCommentsFetching} = useQuery(
+  const {isFetching: isCommentsFetching} = useQueryWrapper(
     `comments ${id}`,
     () => getComments(id), {
-      onSuccess: (data) => setComments(data?.data),
-      ...refetchOff
+      onSuccess: (data) => setComments(data?.data)
     }
   );
 
-  const {isFetching: isLikesFetching} = useQuery(
+  const {isFetching: isLikesFetching} = useQueryWrapper(
     `users ${id}`,
     () => getLikes(id), {
-      onSuccess: (data) => setLikedUsers(data?.data),
-      ...refetchOff
+      onSuccess: (data) => setLikedUsers(data?.data)
     }
   );
 
-  const {isFetching: isIsLikedFetching} = useQuery(
+  const {isFetching: isIsLikedFetching} = useQueryWrapper(
     `is liked ${id}-${user_id}`,
     () => getIsLiked(id), {
-      onSuccess: (data) => setIsLiked(data?.data),
-      ...refetchOff
+      onSuccess: (data) => setIsLiked(data?.data)
     }
   );
 
-  const {isFetching: isCommentsAmountFetching} = useQuery(
+  const {isFetching: isCommentsAmountFetching} = useQueryWrapper(
     `comments amount ${id}`,
     () => getCommentsAmount(id), {
-      onSuccess: (data) => setCommentsAmount(+data?.data.count),
-      ...refetchOff
+      onSuccess: (data) => setCommentsAmount(+data?.data.count)
     }
   );
 
-  const {isFetching: isLikesAmountFetching} = useQuery(
+  const {isFetching: isLikesAmountFetching} = useQueryWrapper(
     `likes amount ${id}`,
     () => getLikesAmount(id), {
-      onSuccess: (data) => setLikesAmount(+data?.data.count),
-      ...refetchOff
+      onSuccess: (data) => setLikesAmount(+data?.data.count)
     }
   );
 

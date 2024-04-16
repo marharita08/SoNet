@@ -1,21 +1,19 @@
 import React from "react";
-import {useQuery} from "react-query";
 import PropTypes from "prop-types";
 
 import {getIncomingRequests} from "../../../api/usersCrud";
 import UserCards from "../../../components/layouts/userCards/UserCards";
 import {requestsPropTypes} from "../../../propTypes/requestPropTypes";
-import {refetchOff} from "../../../config/refetchOff";
+import {useQueryWrapper} from "../../../hooks/useQueryWrapper";
 
 const IncomingRequestsContainer = ({id,  incomingRequests, actions}) => {
 
   const {setIncomingRequests, ...cardActions} = actions
-  const {isFetching} = useQuery(
+  const {isFetching} = useQueryWrapper(
     "incoming-requests",
     () => getIncomingRequests(id),
     {
-      onSuccess: (data) => setIncomingRequests(data?.data),
-      ...refetchOff
+      onSuccess: (data) => setIncomingRequests(data?.data)
     }
   );
 

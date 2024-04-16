@@ -1,5 +1,5 @@
 import React, {useContext, useState} from "react";
-import {useMutation, useQuery} from "react-query";
+import {useMutation} from "react-query";
 import PropTypes from "prop-types";
 import {serialize} from "object-to-formdata";
 import {useNavigate, useLocation} from "react-router-dom";
@@ -11,20 +11,15 @@ import articleContext from "../../../context/articleContext";
 import {articlesPropTypes} from "../../../propTypes/articlePropTypes";
 import imageService from "../../../services/imageService";
 import articlesService from "../../../services/articlesService";
-import {refetchOff} from "../../../config/refetchOff";
 import handleResponseContext from "../../../context/handleResponseContext";
+import {useQueryWrapper} from "../../../hooks/useQueryWrapper";
 
 const AddOrEditArticleContainer = ({setArticleContext, articles, setArticles}) => {
 
   const {handleError, showErrorAlert} = useContext(handleResponseContext);
-  const {data, isFetching: isVisibilitiesFetching} = useQuery(
-    "visibilities",
-    () => getArticleVisibilities(),
-    {
-      ...refetchOff
-    }
+  const {data: visibilities, isFetching: isVisibilitiesFetching} = useQueryWrapper(
+    "visibilities", getArticleVisibilities,
   );
-  const visibilities = data?.data;
 
   const articleState = useContext(articleContext);
   const {article, isAdd} = articleState;
