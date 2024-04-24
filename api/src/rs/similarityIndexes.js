@@ -31,14 +31,14 @@ module.exports = {
     return denominator === 0 ? 0 : intersection.size / denominator;
   },
 
-  jaccardVector: (v1, v2) => {
+  jaccardVector: (v1, v2, specialValue = 0) => {
     if (v1.length !== v2.length) {
       throw new Error("Vectors length mismatch");
     }
     let equals = 0;
     let notEquals = 0;
     for (let i = 0; i < v1.length; i++) {
-      if (v1[i] === v2[i]) {
+      if (v1[i] !== specialValue && v2[i] !== specialValue && v1[i] === v2[i]) {
         equals++;
       } else {
         notEquals++;

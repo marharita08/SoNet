@@ -1,5 +1,5 @@
 const usersService = require("../users");
-const generalFilter = require("../../rs/generalFilter");
+const generalFilter = require("../../rs/hybridFilter");
 const performCollaborativeFilter = require("./performCollaborativeFilter");
 const performTopology = require("./performTopology");
 const performContentFilter = require("./performContentFilter");
@@ -25,7 +25,8 @@ const performGeneralFilter = async (id, country) => {
     performCollaborativeFilter.jaccard(id),
     performTopology.jaccard(id)
   ]);
-  return generalFilter(results);
+  const weights = [1, 1, 1];
+  return generalFilter(results, weights);
 }
 
 const performFiltering = async (id, fn, name, country) => {
