@@ -42,6 +42,10 @@ class FriendsService extends BaseService {
     await super.delete(id);
     return { id };
   }
+
+  async getFriendsIds(id) {
+    return await this.storage.getFriendsIds(id);
+  }
 }
 
 module.exports = new FriendsService();

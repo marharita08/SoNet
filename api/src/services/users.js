@@ -7,7 +7,6 @@ const fileHelper = require("../utils/fileHelper");
 const {USER_NOT_FOUND} = require("../constants/messages");
 const {parseToProfile, parseToUserAndSettings} = require("../utils/usersParser");
 const BaseService = require("./base");
-const interestsService = require("./interests");
 
 class UsersServices extends BaseService {
 
@@ -27,7 +26,9 @@ class UsersServices extends BaseService {
 
   async getProfile(id) {
     const dbResponse = await this.storage.getProfileById(id);
-    return await this.getUserWithInterests(parseToProfile(dbResponse[0]));
+    const user = await this.getUserWithInterests(parseToProfile(dbResponse[0]));
+    const interest_names = await userInterestsService.getNamesByUserId(id);
+    return {...user, interest_names};
   };
 
   async getByEmail(email) {
@@ -87,13 +88,38 @@ class UsersServices extends BaseService {
     return await this.getUserWithInterests(user);
   }
 
-  async getNotFriendsForRecommendations(id) {
-    const users = await this.storage.getNotFriendsForRecommendations(id);
+  async getAllUsersIds() {
+    return await this.storage.getAllUsersIds();
+  }
+
+  async getUsersByIds(ids) {
+    const users = await this.storage.getUsersByIds(ids);
     return await Promise.all(
       users.map(async (user) => {
         return await this.getUserWithInterests(user);
       })
     );
+  }
+
+  async getForContentFiltering(user) {
+    const users = await this.storage.getForContentFiltering(user);
+    return await Promise.all(
+      users.map(async (user) => {
+        return await this.getUserWithInterests(user);
+      })
+    );
+  }
+
+  async getForCollaborativeFiltering(id) {
+    return await this.storage.getForCollaborativeFiltering(id);
+  }
+
+  async getForTopologyFiltering(id){
+    return await this.storage.getForTopologyFiltering(id);
+  }
+
+  async getRandomRecommendedUsers(id, recommendationsLength) {
+    return await this.storage.getRandomRecommendedUsers(id, recommendationsLength);
   }
 }
 

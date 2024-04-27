@@ -31,13 +31,16 @@ export const userProfilePropTypes = PropTypes.shape({
   state_visibility: optionPropTypes,
   city_visibility: optionPropTypes,
   birthday_visibility: optionPropTypes,
+  interests: PropTypes.arrayOf(PropTypes.number),
+  interest_names: PropTypes.arrayOf(PropTypes.string)
 });
 
 export const userCardPropTypes = PropTypes.shape({
   user_id: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
   avatar: PropTypes.string,
-  city_name: PropTypes.string
+  city_name: PropTypes.string,
+  reason: PropTypes.string
 });
 
 export const usersCardPropTypes = PropTypes.arrayOf(userCardPropTypes);

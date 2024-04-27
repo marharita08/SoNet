@@ -1,6 +1,5 @@
 import React, {useContext} from "react";
 import {useParams} from "react-router-dom";
-import {useQuery} from "react-query";
 import PropTypes from "prop-types";
 
 import ErrorBoundary from "../../../components/ErrorBoundary";
@@ -9,7 +8,7 @@ import {getArticle} from "../../../api/articlesCrud";
 import authContext from "../../../context/authContext";
 import {articlesPropTypes} from "../../../propTypes/articlePropTypes";
 import ArticlePageComponent from "../../../components/pages/articlePage/ArticlePageComponent";
-import {refetchOff} from "../../../config/refetchOff";
+import {useQueryWrapper} from "../../../hooks/useQueryWrapper";
 
 
 const ArticlePageContainer = ({setArticleContext, articles, setArticles}) => {
@@ -17,12 +16,11 @@ const ArticlePageContainer = ({setArticleContext, articles, setArticles}) => {
   let {id} = useParams();
   const {user: {user_id}} = useContext(authContext);
 
-  const {isFetching} = useQuery(
+  const {isFetching} = useQueryWrapper(
     `article ${id}-${user_id}`,
     () => getArticle(id),
     {
-      onSuccess: (data) => setArticles(data?.data),
-      ...refetchOff
+      onSuccess: (data) => setArticles(data?.data)
     }
   );
 

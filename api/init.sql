@@ -61,7 +61,7 @@ create table if not exists user_settings(
  foreign key (country_visibility_id) references field_visibilities (visibility_id),
  foreign key (state_visibility_id) references field_visibilities (visibility_id),
  foreign key (city_visibility_id) references field_visibilities (visibility_id),
- foreign key (birthday_visibility_id) references field_visibilities (visibility_id),
+ foreign key (birthday_visibility_id) references field_visibilities (visibility_id)
 );
 
 create table if not exists interests(
@@ -96,6 +96,7 @@ create table if not exists articles(
 create table if not exists article_likes(
  article_id int not null,
  user_id    int not null,
+ date       timestamp not null default now(), 
  unique(article_id, user_id),
  foreign key (user_id) references users (user_id) on delete cascade,
  foreign key (article_id) references articles (article_id) on delete cascade

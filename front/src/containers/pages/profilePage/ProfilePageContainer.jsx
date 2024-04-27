@@ -1,7 +1,6 @@
-import React, {useContext, useEffect, useState} from "react";
+import React, {useContext, useState} from "react";
 import {useParams} from "react-router-dom";
-import {useMutation, useQuery} from "react-query";
-import {GetCountries, GetState, GetCity} from "react-country-state-city";
+import {useMutation} from "react-query";
 
 import ProfileComponent from "../../../components/layouts/profile/ProfileComponent";
 import EditProfileContainer from "../../modals/editProfile/EditProfileContainer";
@@ -12,7 +11,6 @@ import FriendsContainer from "../../layouts/friends/FriendsContainer";
 import IncomingRequestsContainer from "../../layouts/incomingRequests/IncomingRequestsContainer";
 import {updateRequest, deleteRequest, getRequest, insertRequest} from "../../../api/friendsCrud";
 import SearchUsersContainer from "../../layouts/searchUsers/SearchUsersContainer";
-import {refetchOff} from "../../../config/refetchOff";
 import handleResponseContext from "../../../context/handleResponseContext";
 import ProfilePageComponent from "../../../components/pages/profilePage/ProfilePageComponent";
 import usersForSearchService from "../../../services/usersForSearchService";
@@ -20,6 +18,8 @@ import requestsService from "../../../services/requestsService";
 import currentRequestService from "../../../services/currentRequestService";
 import RecommendationsContainer from "../../layouts/recommendations/RecommendationsContainer";
 import recommendationsService from "../../../services/recommendationsService";
+import {useLocations} from "./useLocations";
+import {useQueryWrapper} from "../../../hooks/useQueryWrapper";
 
 const ProfilePageContainer = () => {
   const {id: idStr} = useParams();
@@ -44,39 +44,9 @@ const ProfilePageContainer = () => {
   // and owner of currently open profile
   const [currentRequest, setCurrentRequest] = useState(null);
 
-  const [countries, setCountries] = useState([]);
-  const [states, setStates] = useState([]);
-  const [cities, setCities] = useState([]);
-  const [countryId, setCountryId] = useState();
+  const {locations, onStateChange, onCountryChange} = useLocations();
 
-  const parseResults = (results) => {
-    return results.map(result => ({
-      label: result.name,
-      value: result.id
-    }));
-  };
-
-  useEffect(() => {
-    GetCountries().then(
-      (results) => setCountries(parseResults(results))
-    );
-  }, []);
-
-  const onCountryChange = (countryId) => {
-    setCountryId(countryId);
-    GetState(countryId).then(
-      (results) => setStates(parseResults(results))
-    );
-  };
-
-  const onStateChange = (stateId) => {
-    GetCity(countryId, stateId).then(
-      (results) => setCities(parseResults(results))
-    );
-  };
-
-
-  const {isFetching: isUserFetching} = useQuery(
+  const {isFetching: isUserFetching} = useQueryWrapper(
     `user ${id}`,
     () => getUser(id),
     {
@@ -85,16 +55,17 @@ const ProfilePageContainer = () => {
         const {country_id, state_id} = data.data;
         country_id && onCountryChange(country_id);
         state_id && onStateChange(state_id);
-      },
-      ...refetchOff
+      }
     }
   );
-  const {isFetching: isRequestFetching} = useQuery(
+
+  const isCurrentUser = (user?.user_id === currentUser.user_id) && !isUserFetching;
+
+  const {isFetching: isRequestFetching} = useQueryWrapper(
     `request ${id}`,
     () => getRequest(id),
     {
-      onSuccess: (data) => setCurrentRequest(data?.data),
-      ...refetchOff
+      onSuccess: (data) => setCurrentRequest(data?.data)
     }
   );
 
@@ -195,16 +166,13 @@ const ProfilePageContainer = () => {
   return (
     <div key={id}>
       <ProfilePageComponent
-        isCurrentUser={user?.user_id === currentUser.user_id}
+        isCurrentUser={isCurrentUser}
         isLoading={isUserFetching}
         profileComponent={
           <ProfileComponent
             user={user}
             actions={{handleEdit, handleAddToFriends, handleAccept, handleDeleteFromFriends}}
-            flags={{
-              isCurrentUser: user?.user_id === currentUser.user_id,
-              isAdmin
-            }}
+            flags={{isCurrentUser, isAdmin}}
             currentRequest={currentRequest}
             loading={{
               isLoading: isAcceptLoading || isAddLoading || isDeleteLoading,
@@ -216,7 +184,7 @@ const ProfilePageContainer = () => {
           <EditProfileContainer
             isModalOpen={isEditProfileModalOpen}
             user={user}
-            locations={{countries, states, cities}}
+            locations={locations}
             actions={{setUser, onCountryChange, onStateChange, setIsModalOpen: setIsEditProfileModalOpen}}
           />
         }

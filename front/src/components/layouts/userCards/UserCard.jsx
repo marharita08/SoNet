@@ -103,7 +103,7 @@ const UserCard = ({user, isMenu, isRecommendation, actions}) => {
             title={
               <CardUsername username={user.name}/>
             }
-            subheader={user.city_name}
+            subheader={user.reason ? user.reason : user.city_name}
           />
           {
             isMenu &&

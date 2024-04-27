@@ -30,9 +30,14 @@ const ProfilePageComponent = ({
           <ErrorBoundary>
             {searchUsersComponent}
           </ErrorBoundary>
-          <ErrorBoundary>
-            {friendsComponent}
-          </ErrorBoundary>
+        </>
+      }
+      <ErrorBoundary>
+        {friendsComponent}
+      </ErrorBoundary>
+      {
+        isCurrentUser &&
+        <>
           <ErrorBoundary>
             {incomingRequestsComponent}
           </ErrorBoundary>

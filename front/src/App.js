@@ -20,9 +20,9 @@ import AdminRoute from "./components/routes/AdminRoute";
 import {useStyles} from "./components/style";
 import SNAlert from "./components/atoms/alert/SNAlert";
 import handleResponseContext from "./context/handleResponseContext";
-import {initAlertState} from "./config/initValues";
 import ResetPasswordPageContainer from "./containers/pages/restorePasswordPage/ResetPasswordPageContainer";
 import NewPasswordPageContainer from "./containers/pages/newPasswordPage/NewPasswordPageContainer";
+import {useAlertState} from "./hooks/useAlertState";
 
 const queryClient = new QueryClient();
 
@@ -32,14 +32,10 @@ function App() {
   const [authenticationContext, setAuthenticationContext] = useState(authInitialState);
   const [articleModalContext, setArticleModalContext] = useState(useContext(articleContext));
   const {isModalOpen: isAddOrEditArticleModalOpen} = articleModalContext;
-  const [alertState, setAlertState] = useState(initAlertState);
+  const {alertState, handleError, handleSuccess, showSuccessAlert, showErrorAlert, handleAlertClose} = useAlertState();
   const {authenticated} = authenticationContext;
   const [articles, setArticles] = useState([]);
   const [responseHandler, setResponseHandler] = useState(useContext(handleResponseContext));
-
-  const handleAlertClose = () => {
-    setAlertState(initAlertState);
-  };
 
   const setAuthContext = (data) => {
     window.localStorage.setItem("context", JSON.stringify(data));
@@ -57,32 +53,12 @@ function App() {
 
   useEffect(() => {
     setResponseHandler({
-      handleError: (err) => {
-        setAlertState({
-          message: err.response.data.message,
-          severity: "error"
-        });
-      },
-      handleSuccess: (res) => {
-        setAlertState({
-          message: res.data.message,
-          severity: "success"
-        });
-      },
-      showErrorAlert: (message) => {
-        setAlertState({
-          message,
-          severity: "error"
-        });
-      },
-      showSuccessAlert: (message) => {
-        setAlertState({
-          message,
-          severity: "success"
-        });
-      }
+      handleError,
+      handleSuccess,
+      showErrorAlert,
+      showSuccessAlert
     });
-  }, [setAlertState]);
+  }, []);
 
   return (
     <>
