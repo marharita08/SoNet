@@ -88,19 +88,6 @@ class UsersServices extends BaseService {
     return await this.getUserWithInterests(user);
   }
 
-  async getNotFriendsForRecommendations(id) {
-    const users = await this.storage.getNotFriendsForRecommendations(id);
-    return await Promise.all(
-      users.map(async (user) => {
-        return await this.getUserWithInterests(user);
-      })
-    );
-  }
-
-  async getNotFriendsIds(id) {
-    return await this.storage.getNotFriendsIds(id);
-  }
-
   async getAllUsersIds() {
     return await this.storage.getAllUsersIds();
   }
