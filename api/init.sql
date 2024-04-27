@@ -119,7 +119,8 @@ create table if not exists comments(
 insert into status (status)
 values ('Under consideration'),
        ('Accepted'),
-       ('Denied');
+       ('Denied'),
+       ('Hidden');
 
 insert into article_visibilities (visibility)
 values ('All'),

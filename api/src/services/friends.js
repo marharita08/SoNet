@@ -22,10 +22,10 @@ class FriendsService extends BaseService {
     return { ...row, is_incoming_request: true };
   }
 
-  async add(request) {
+  async add({statusId, ...request}) {
     const {request_id} = await super.add({
       ...request,
-      status_id: 1,
+      status_id: statusId || 1,
     });
     return { request: await this.storage.getRequestById(request_id) };
   }
