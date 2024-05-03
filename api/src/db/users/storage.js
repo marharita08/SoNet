@@ -210,7 +210,9 @@ class UsersStorage extends BaseStorage {
           .and.whereIn("from_user_id", getUserIdsOfAcceptedRequests)
           .andWhere("from_user_id", "!=", id)
           .andWhere("status_id", 2);
-      });
+      })
+      .orderByRaw("random()")
+      .limit(1000);
   }
 
   async getForCollaborativeFiltering(id) {
@@ -232,7 +234,9 @@ class UsersStorage extends BaseStorage {
               .andWhere("date", ">=", this.db.raw("CURRENT_DATE - INTERVAL '30 days'"));
           })
           .andWhere("date", ">=", this.db.raw("CURRENT_DATE - INTERVAL '30 days'"));
-      });
+      })
+      .orderBy("date", "desc")
+      .limit(1000);
   }
 
   async getForContentFiltering(user) {
