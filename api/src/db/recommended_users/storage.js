@@ -7,7 +7,7 @@ class RecommendedUsersStorage extends BaseStorage {
   }
 
   async getByToUserId(id) {
-    return this.db.select("recommended_user_id as user_id")
+    return this.db.select("recommended_user_id as user_id", "reason")
       .from(this.table)
       .where("to_user_id", id);
   }

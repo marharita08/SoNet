@@ -62,7 +62,8 @@ const getRecommendations = async (id, fn, name, country) => {
       performFiltering(id, fn, name, country);
     }
     const recommendedIds = recommended.map(r => r.user_id);
-    const reasons = recommended.map(r => r.reason)
+    const reasons = {};
+    recommended.forEach(r => reasons[r.user_id] = r.reason);
     return getRecommendedUsers(recommendedIds, reasons, id);
   } else {
     await recommendationsStorage.create({user_id: id});
