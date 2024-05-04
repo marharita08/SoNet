@@ -29,7 +29,8 @@ const ProfilePageContainer = () => {
   const status = {
     underConsideration: 1,
     accepted: 2,
-    denied: 3
+    denied: 3,
+    hidden: 4
   };
 
   const [isEditProfileModalOpen, setIsEditProfileModalOpen] = useState(false);
@@ -160,6 +161,11 @@ const ProfilePageContainer = () => {
   };
 
   const handleHideRecommendation = (id) => {
+    addMutate({
+      from_user_id: currentUser.user_id,
+      to_user_id: id,
+      status: status.hidden
+    })
     setRecommendations(recommendationsService.deleteUser(recommendations, id))
   }
 

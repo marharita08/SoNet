@@ -188,29 +188,35 @@ class UsersStorage extends BaseStorage {
       qb.select("user_id").from("user_requests").where("status_id", 2);
     }
 
-    return this.db.with("user_requests", (qb) => {
-      qb.select("from_user_id as user_id", "status_id")
-        .from("friends")
-        .where("to_user_id", id)
-        .union((qb) => {
-          qb.select("to_user_id as user_id", "status_id")
+    return db.select()
+      .from({
+        main:
+          db.with("user_requests", (qb) => {
+            qb.select("from_user_id as user_id", "status_id")
+              .from("friends")
+              .where("to_user_id", id)
+              .union((qb) => {
+                qb.select("to_user_id as user_id", "status_id")
+                  .from("friends")
+                  .where("from_user_id", id);
+              });
+          }).select("from_user_id as user_id")
             .from("friends")
-            .where("from_user_id", id);
-        });
-    }).select("from_user_id as user_id")
-      .from("friends")
-      .whereNotIn("from_user_id", getUserIdsOfAllRequests)
-      .and.whereIn("to_user_id", getUserIdsOfAcceptedRequests)
-      .andWhere("status_id", 2)
-      .andWhere("from_user_id", "!=", id)
-      .union((qb) => {
-        qb.select("to_user_id as user_id")
-          .from("friends")
-          .whereNotIn("to_user_id", getUserIdsOfAllRequests)
-          .and.whereIn("from_user_id", getUserIdsOfAcceptedRequests)
-          .andWhere("from_user_id", "!=", id)
-          .andWhere("status_id", 2);
-      });
+            .whereNotIn("from_user_id", getUserIdsOfAllRequests)
+            .and.whereIn("to_user_id", getUserIdsOfAcceptedRequests)
+            .andWhere("status_id", 2)
+            .andWhere("from_user_id", "!=", id)
+            .union((qb) => {
+              qb.select("to_user_id as user_id")
+                .from("friends")
+                .whereNotIn("to_user_id", getUserIdsOfAllRequests)
+                .and.whereIn("from_user_id", getUserIdsOfAcceptedRequests)
+                .andWhere("from_user_id", "!=", id)
+                .andWhere("status_id", 2);
+            })
+      })
+      .orderByRaw("random()")
+      .limit(1000);
   }
 
   async getForCollaborativeFiltering(id) {
@@ -232,7 +238,9 @@ class UsersStorage extends BaseStorage {
               .andWhere("date", ">=", this.db.raw("CURRENT_DATE - INTERVAL '30 days'"));
           })
           .andWhere("date", ">=", this.db.raw("CURRENT_DATE - INTERVAL '30 days'"));
-      });
+      })
+      .orderBy("date", "desc")
+      .limit(1000);
   }
 
   async getForContentFiltering(user) {

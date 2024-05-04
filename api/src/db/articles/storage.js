@@ -50,60 +50,52 @@ class ArticleStorage extends BaseStorage {
       .offset(page * limit - limit);
   }
 
-  joinFriends(th, userId) {
-    th.on(`${this.table}.user_id`, "friends.from_user_id")
-      .andOn("friends.to_user_id", userId)
-      .orOn("users.user_id", "friends.to_user_id")
-      .andOn("friends.from_user_id", userId);
+  getJoinFriendsFn(userId) {
+    return (qb) => {
+      qb.on(`${this.table}.user_id`, "friends.from_user_id")
+        .andOn("friends.to_user_id", userId)
+        .orOn("users.user_id", "friends.to_user_id")
+        .andOn("friends.from_user_id", userId);
+    }
   }
 
-  joinAcceptedStatus(th) {
-    th.on("status.status_id", "friends.status_id")
+  joinAcceptedStatus(qb) {
+    qb.on("status.status_id", "friends.status_id")
       .andOnVal("status.status", "Accepted");
   }
 
   async getByIdAndUserId(id, userId) {
-    const classThis = this;
     return this.getArticleFullData()
       .first()
-      .leftJoin("friends", function () {
-        classThis.joinFriends(this, userId);
-      })
-      .leftJoin("status", function () {
-        classThis.joinAcceptedStatus(this);
-      })
+      .leftJoin("friends", this.getJoinFriendsFn(userId))
+      .leftJoin("status", this.joinAcceptedStatus)
       .where(`${this.table}.${this.primaryKey}`, id)
-      .andWhere(function () {
-        this.where("articles.user_id", userId)
+      .andWhere((qb) => {
+        qb.where("articles.user_id", userId)
           .orWhere("article_visibilities.visibility", articleVisibilities.ALL)
-          .orWhere(function () {
-            this.where("article_visibilities.visibility", articleVisibilities.FRIENDS)
+          .orWhere((qb) => {
+            qb.where("article_visibilities.visibility", articleVisibilities.FRIENDS)
               .andWhere("status.status_id", "is not", null);
           });
       });
   }
 
   async getNewsByUserId(userId, page, limit) {
-    const classThis = this;
     return this.db
       .select()
       .from({
         main: this.getArticleFullData()
-          .join("friends", function () {
-            classThis.joinFriends(this, userId);
-          })
-          .join("status", function () {
-            classThis.joinAcceptedStatus(this);
-          })
+          .join("friends", this.getJoinFriendsFn(userId))
+          .join("status", this.joinAcceptedStatus)
           .where("article_visibilities.visibility", "in", [articleVisibilities.ALL, articleVisibilities.FRIENDS])
-          .unionAll(function () {
-            this.select(...classThis.getFullColumns())
-              .from(classThis.table)
-              .join("users", function () {
-                this.on("users.user_id", `${classThis.table}.user_id`)
+          .unionAll((qb) => {
+            qb.select(...this.getFullColumns())
+              .from(this.table)
+              .join("users", (qb) => {
+                qb.on("users.user_id", `${this.table}.user_id`)
                   .andOnVal("users.user_id", userId);
               })
-              .join("article_visibilities", `${classThis.table}.visibility_id`, "article_visibilities.visibility_id");
+              .join("article_visibilities", `${this.table}.visibility_id`, "article_visibilities.visibility_id");
           })
       })
       .orderBy("created_at_timestamp", "desc")
@@ -122,7 +114,6 @@ class ArticleStorage extends BaseStorage {
   }
 
   async getCountOfNewsByUserId(userId) {
-    const classThis = this;
     return this.db
       .count(this.primaryKey)
       .first()
@@ -131,23 +122,19 @@ class ArticleStorage extends BaseStorage {
           .select(`${this.table}.${this.primaryKey}`)
           .from(this.table)
           .join("users", `${this.table}.user_id`, "users.user_id")
-          .join("friends", function () {
-            classThis.joinFriends(this, userId);
-          })
-          .join("status", function () {
-            classThis.joinAcceptedStatus(this);
-          })
-          .join("article_visibilities", function () {
-            this.on("article_visibilities.visibility_id", `${classThis.table}.visibility_id`)
+          .join("friends", this.getJoinFriendsFn(userId))
+          .join("status", this.joinAcceptedStatus)
+          .join("article_visibilities",  (qb) => {
+            qb.on("article_visibilities.visibility_id", `${this.table}.visibility_id`)
               .andOnIn(
                 "article_visibilities.visibility",
                 [articleVisibilities.ALL, articleVisibilities.friends]
               );
           })
-          .unionAll(function () {
-            this.select(`${classThis.table}.${classThis.primaryKey}`)
-              .from(classThis.table)
-              .where(`${classThis.table}.user_id`, userId);
+          .unionAll((qb) => {
+            qb.select(`${this.table}.${this.primaryKey}`)
+              .from(this.table)
+              .where(`${this.table}.user_id`, userId);
           }),
       });
   }

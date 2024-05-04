@@ -119,7 +119,8 @@ create table if not exists comments(
 insert into status (status)
 values ('Under consideration'),
        ('Accepted'),
-       ('Denied');
+       ('Denied'),
+       ('Hidden');
 
 insert into article_visibilities (visibility)
 values ('All'),
@@ -172,4 +173,20 @@ create table if not exists reset_password_tokens(
  token      char(37) not null,
  expires_on timestamp not null default (NOW() + INTERVAL '1 hour'),
  foreign key (user_id) references users (user_id) on delete cascade
-)
+);
+
+create table if not exists recommendations(
+ user_id     int not null primary key,
+ updated_at  timestamp,
+ is_updating boolean default false,
+ foreign key (user_id) references users (user_id) on delete cascade
+);
+
+create table if not exists recommended_users(
+ to_user_id          int not null,
+ recommended_user_id int not null,
+ reason              varchar(100),
+ foreign key (recommended_user_id) references users (user_id) on delete cascade,
+ foreign key (to_user_id) references recommendations (user_id) on delete cascade
+);
+

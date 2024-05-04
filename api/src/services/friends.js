@@ -1,5 +1,13 @@
 const friendsStorage = require("../db/friends/storage");
+const recommendedUsersStorage = require("../db/recommended_users/storage");
 const BaseService = require("./base");
+
+const status = {
+  UNDER_CONSIDERATION: 1,
+  ACCEPTED: 2,
+  DENIED: 3,
+  HIDDEN: 4
+};
 
 class FriendsService extends BaseService {
 
@@ -13,7 +21,7 @@ class FriendsService extends BaseService {
       return { is_not_friends: true };
     }
     const { from_user_id: fromUserId, status_id: statusId } = row;
-    if (statusId === 2) {
+    if (statusId === status.ACCEPTED) {
       return { ...row, is_friends: true };
     }
     if (fromUserId === currentUserId) {
@@ -22,10 +30,11 @@ class FriendsService extends BaseService {
     return { ...row, is_incoming_request: true };
   }
 
-  async add(request) {
+  async add({statusId, ...request}) {
+    await recommendedUsersStorage.deleteByUserIds(...request);
     const {request_id} = await super.add({
       ...request,
-      status_id: 1,
+      status_id: statusId || status.UNDER_CONSIDERATION,
     });
     return { request: await this.storage.getRequestById(request_id) };
   }

@@ -9,7 +9,6 @@ const getCommonData = async (id) => {
   }
 
   const usersIds = await usersService.getForCollaborativeFiltering(id);
-  //const usersIds = await usersService.getNotFriendsIds(id);
   if (usersIds.length === 0) {
     return null;
   }
