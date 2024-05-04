@@ -2,15 +2,15 @@ const likesService = require("../likes");
 const usersService = require("../users");
 const collaborativeFilter = require("../../rs/collaborativeFilter");
 
-const getCommonData = async (id) => {
+const runFilter = async (id, filterFn) => {
   const userLikes = await likesService.getByUserId(id);
   if (userLikes.length === 0) {
-    return null;
+    return [];
   }
 
   const usersIds = await usersService.getForCollaborativeFiltering(id);
   if (usersIds.length === 0) {
-    return null;
+    return [];
   }
 
   const userLikesSet = new Set(userLikes.map(l => l.article_id));
@@ -23,26 +23,14 @@ const getCommonData = async (id) => {
     })
   );
 
-  return {userLikes: userLikesSet, usersLikes};
+  return filterFn(userLikesSet, usersLikes);
 }
 
 module.exports = {
   jaccard: async (id)=> {
-    const data = await getCommonData(id);
-    if (!data) {
-      return [];
-    }
-    const {userLikes, usersLikes} = data;
-
-    return collaborativeFilter.jaccard(userLikes, usersLikes);
+    return runFilter(id, collaborativeFilter.jaccard)
   },
   cosine: async (id) => {
-    const data = await getCommonData(id);
-    if (!data) {
-      return [];
-    }
-    const {userLikes, usersLikes} = data;
-
-    return collaborativeFilter.cosine(userLikes, usersLikes);
+    return runFilter(id, collaborativeFilter.cosine);
   }
 };
