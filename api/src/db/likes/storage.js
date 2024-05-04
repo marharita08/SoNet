@@ -48,7 +48,9 @@ class LikesStorage extends BaseStorage {
     return this.db(this.table)
       .select("article_id")
       .where("user_id", id)
-      .andWhere("date", ">=", db.raw("CURRENT_DATE - INTERVAL '90 days'"));
+      .andWhere("date", ">=", db.raw("CURRENT_DATE - INTERVAL '30 days'"))
+      .orderBy("date", "desc")
+      .limit(1000);
   }
 }
 
