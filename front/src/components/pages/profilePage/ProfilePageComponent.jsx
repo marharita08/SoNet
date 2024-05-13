@@ -30,6 +30,9 @@ const ProfilePageComponent = ({
           <ErrorBoundary>
             {searchUsersComponent}
           </ErrorBoundary>
+          <ErrorBoundary>
+            {recommendationsComponent}
+          </ErrorBoundary>
         </>
       }
       <ErrorBoundary>
@@ -43,9 +46,6 @@ const ProfilePageComponent = ({
           </ErrorBoundary>
           <ErrorBoundary>
             {outgoingRequestsComponent}
-          </ErrorBoundary>
-          <ErrorBoundary>
-            {recommendationsComponent}
           </ErrorBoundary>
         </>
       }

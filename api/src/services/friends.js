@@ -30,8 +30,9 @@ class FriendsService extends BaseService {
     return { ...row, is_incoming_request: true };
   }
 
-  async add({statusId, ...request}) {
-    await recommendedUsersStorage.deleteByUserIds(...request);
+  async add({status: statusId, ...request}) {
+    const {from_user_id, to_user_id} = request;
+    await recommendedUsersStorage.deleteByUserIds(from_user_id, to_user_id);
     const {request_id} = await super.add({
       ...request,
       status_id: statusId || status.UNDER_CONSIDERATION,

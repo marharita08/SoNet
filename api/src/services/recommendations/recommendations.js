@@ -30,10 +30,8 @@ const performHybridFilter = async (id, country) => {
   return hybridFilter(results, weights);
 }
 
-const performFiltering = async (id, fn, name, country) => {
+const performFiltering = async (id, fn, country) => {
   await recommendationsStorage.update(id, {is_updating: true});
-  const start = new Date();
-  console.log(`${name} filter starting ${start.toISOString()}`);
   const similarities = await fn(id, country);
   if (similarities.length === 0) {
     return await usersService.getRandomRecommendedUsers(id, recommendationsLength);
@@ -44,14 +42,11 @@ const performFiltering = async (id, fn, name, country) => {
     recommendedUsersStorage.create({to_user_id: id, recommended_user_id: r, reason: reasons[r]});
   });
   const recommendedUsers = await getRecommendedUsers(recommendedIds, reasons, id);
-  const end = new Date();
-  await recommendationsStorage.update(id, {is_updating: false, updated_at: end});
-  console.log(`${name} filter finishing ${end.toISOString()}`);
-  console.log(`Finished in ${((end.getTime() - start.getTime()) / 1000)} seconds`);
+  await recommendationsStorage.update(id, {is_updating: false, updated_at: new Date()});
   return recommendedUsers;
 };
 
-const getRecommendations = async (id, fn, name, country) => {
+const getRecommendations = async (id, fn, country) => {
   const now = new Date();
   const yesterday = new Date().setDate(now.getDate() - 1);
   const recommendations = await recommendationsStorage.getById(id);
@@ -59,7 +54,7 @@ const getRecommendations = async (id, fn, name, country) => {
     const {updated_at, is_updating} = recommendations;
     const recommended = await recommendedUsersStorage.getByToUserId(id);
     if ((updated_at < yesterday || recommended.length < recommendationsLength / 2) && !is_updating) {
-      performFiltering(id, fn, name, country);
+      performFiltering(id, fn, country);
     }
     const recommendedIds = recommended.map(r => r.user_id);
     const reasons = {};
@@ -67,36 +62,36 @@ const getRecommendations = async (id, fn, name, country) => {
     return getRecommendedUsers(recommendedIds, reasons, id);
   } else {
     await recommendationsStorage.create({user_id: id});
-    return await performFiltering(id, fn, name, country);
+    return await performFiltering(id, fn, country);
   }
 }
 
 module.exports = {
   jaccardContent: async (id) => {
-    return await getRecommendations(id, performContentFilter.jaccard, "Jaccard content");
+    return await getRecommendations(id, performContentFilter.jaccard);
   },
 
   jaccardCollaborative: async (id) => {
-    return await getRecommendations(id, performCollaborativeFilter.jaccard, "Jaccard collaborative");
+    return await getRecommendations(id, performCollaborativeFilter.jaccard);
   },
 
   jaccardTopology: async (id) => {
-    return await getRecommendations(id, performTopology.jaccard, "Jaccard topology");
+    return await getRecommendations(id, performTopology.jaccard);
   },
 
   adamicAdar: async (id) => {
-    return await getRecommendations(id, performTopology.adamicAdar, "Adamic-Adar topology");
+    return await getRecommendations(id, performTopology.adamicAdar);
   },
 
   cosineContent: async (id) => {
-    return await getRecommendations(id, performContentFilter.cosine, "Cosine content");
+    return await getRecommendations(id, performContentFilter.cosine);
   },
 
   cosineCollaborative: async (id) => {
-    return await getRecommendations(id, performCollaborativeFilter.cosine, "Cosine collaborative");
+    return await getRecommendations(id, performCollaborativeFilter.cosine);
   },
 
   general: async (id, country) => {
-    return await getRecommendations(id, performHybridFilter, "Hybrid", country);
+    return await getRecommendations(id, performHybridFilter, country);
   }
 };

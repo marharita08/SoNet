@@ -122,6 +122,13 @@ const ProfilePageContainer = () => {
     },
     onError: handleError
   });
+  const {mutate: hideMutate} = useMutation(insertRequest, {
+    onSuccess: (data) => {
+      const {data: {request}} = data;
+      setRecommendations(recommendationsService.deleteUser(recommendations, request.user_id));
+    },
+    onError: handleError
+  });
 
   const addToFriends = (fromUserId, toUserId) => {
     addMutate({
@@ -161,12 +168,11 @@ const ProfilePageContainer = () => {
   };
 
   const handleHideRecommendation = (id) => {
-    addMutate({
+    hideMutate({
       from_user_id: currentUser.user_id,
       to_user_id: id,
       status: status.hidden
-    })
-    setRecommendations(recommendationsService.deleteUser(recommendations, id))
+    });
   }
 
   return (
