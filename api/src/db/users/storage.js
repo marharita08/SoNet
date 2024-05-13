@@ -235,12 +235,14 @@ class UsersStorage extends BaseStorage {
             qb.select("article_id")
               .from("article_likes")
               .where("user_id", id)
-              .andWhere("date", ">=", this.db.raw("CURRENT_DATE - INTERVAL '30 days'"));
+              .andWhere("date", ">=", this.db.raw("CURRENT_DATE - INTERVAL '30 days'"))
+              .orderBy("date", "desc")
+              .limit(1000);
           })
-          .andWhere("date", ">=", this.db.raw("CURRENT_DATE - INTERVAL '30 days'"));
+          .andWhere("date", ">=", this.db.raw("CURRENT_DATE - INTERVAL '30 days'"))
+          .orderBy("date", "desc")
+          .limit(1000);
       })
-      .orderBy("date", "desc")
-      .limit(1000);
   }
 
   async getForContentFiltering(user) {
